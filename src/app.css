@@ -1,0 +1,11 @@
+html, body, #here-i-am {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+:root {
+  font-family: 'EB Garamond', serif;
+}
