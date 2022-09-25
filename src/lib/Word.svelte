@@ -1,9 +1,10 @@
 <script>
-  import { currentWord } from '../store.js';
+  import { currentWord, ellipsisMode } from '../store.js';
+  $: word = ($ellipsisMode ? "." : $currentWord);
 </script>
 
 <h1 class='word'>
-  { $currentWord }
+  { word }
 </h1>
 
 <style>

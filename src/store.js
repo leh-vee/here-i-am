@@ -3,6 +3,8 @@ import { POEM_PARSED } from './data/poem';
 
 const poem = readable(POEM_PARSED);
 
+export const ellipsisMode = writable(false);
+
 function createWordIndicesStore() {
   const { subscribe, update } = writable(
     {

@@ -1,7 +1,28 @@
 <script>
+  import { onMount } from 'svelte';
   import Word from "./lib/Word.svelte";
   import VerseMap from "./lib/VerseMap.svelte";
-  import { wordIndices } from './store.js';
+  import { wordIndices, ellipsisMode } from './store.js';
+
+  onMount(async () => {
+    console.log('mounted');
+		ellipsisMode.set(true);
+	});
+
+  function animateEllipsis(currentStep = 1, stepCount = 3) {
+    if (currentStep <= stepCount) {
+      setTimeout(() => {
+        wordIndices.nextWord()
+        animateEllipsis(currentStep + 1)
+      }, 1000)
+    } else {
+      ellipsisMode.set(false);
+    }
+  }
+
+  $: if ($ellipsisMode === true) {
+		animateEllipsis();
+	}
 </script>
 
 <div class='reader'>
