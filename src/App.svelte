@@ -7,7 +7,7 @@
 </script>
 
 <div class='reader'>
-  <div class='word-control previous'>&#8592;</div>
+  <div class='word-control previous' on:click={ wordIndices.previousWord }>&#8592;</div>
   <div class='word-control next' on:click={ wordIndices.nextWord }>&#8594;</div>
   <div class='magnifier'>  
     <Word />
