@@ -26,4 +26,8 @@
     height: 10px;
     width: 10px;
   }
+
+  .marker.selected {
+    opacity: 0.7;
+  }
 </style>
