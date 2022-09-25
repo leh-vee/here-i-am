@@ -11,7 +11,7 @@ const POEM = [
   },
   {
     piSlice: 1,
-    a: "Here I am the other white people, a new Israelite vector",
+    a: "Here I am the other white people , a new Israelite vector",
     b: "starting from the horrible reach of her empty touch" 
   }
 ];
