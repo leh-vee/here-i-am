@@ -44,12 +44,27 @@ function createWordIndicesStore() {
     }),
     nextWord: () => update(({verseIndex, line, wordIndex}) => {
       let nextWordIndex = wordIndex;
-      if (wordIndex < POEM_PARSED[verseIndex][line].length - 1) {
-        nextWordIndex = nextWordIndex + 1;
+      let nextLine = line;
+      let nextVerseIndex = verseIndex;
+
+      const isEndOfTheLine = wordIndex == POEM_PARSED[verseIndex][line].length - 1;
+      const isLineA = line == 'a';
+      const isLastVerse = verseIndex == POEM_PARSED.length - 1
+
+      if (!isEndOfTheLine) {
+        nextWordIndex += 1;
+      } else if (isLineA) {
+        nextLine = 'b';
+        nextWordIndex = 0;
+      } else if (!isLastVerse) {
+        nextVerseIndex += 1;
+        nextLine = 'a';
+        nextWordIndex = 0;
       }
+
       return {
-        verseIndex,
-        line,
+        verseIndex: nextVerseIndex,
+        line: nextLine,
         wordIndex: nextWordIndex
       }
     })
