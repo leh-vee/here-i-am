@@ -1,9 +1,14 @@
 <script>
   import Word from "./lib/Word.svelte";
   import VerseMap from "./lib/VerseMap.svelte";
+  import { wordIndices } from './store.js';
+
+
 </script>
 
 <div class='reader'>
+  <div class='word-control previous'>&#8592;</div>
+  <div class='word-control next' on:click={ wordIndices.nextWord }>&#8594;</div>
   <div class='magnifier'>  
     <Word />
   </div>
@@ -18,6 +23,21 @@
     display: flex;
 		flex-direction: column;
     text-align: center;
+  }
+
+  .word-control {
+    position: absolute;
+    top: 50%;
+    font-size: 50px;
+    border: 4px dotted black;
+  }
+
+  .previous {
+    left: 10px;
+  }
+
+  .next {
+    right: 10px;
   }
   
   .magnifier {

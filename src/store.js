@@ -55,7 +55,7 @@ function createWordIndicesStore() {
     })
   }
 }
-const wordIndices = createWordIndicesStore();
+export const wordIndices = createWordIndicesStore();
 
 export const currentWord = derived([poem, wordIndices], (
   [$poem, $wordIndices]) => {
