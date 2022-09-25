@@ -8,7 +8,7 @@
 
 <style>
   .word {
-    font-size: 100px;
+    font-size: 70px;
     margin-top: 50%;
   }
 </style>
