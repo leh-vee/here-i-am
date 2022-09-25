@@ -2,7 +2,6 @@ import { readable, writable, derived } from 'svelte/store';
 import { POEM_PARSED } from './data/poem';
 
 const poem = readable(POEM_PARSED);
-
 export const ellipsisMode = writable(false);
 
 function createWordIndicesStore() {
@@ -62,6 +61,7 @@ function createWordIndicesStore() {
         nextVerseIndex += 1;
         nextLine = 'a';
         nextWordIndex = 0;
+        ellipsisMode.set(true);
       }
 
       return {
