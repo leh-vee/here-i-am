@@ -67,6 +67,32 @@ function createWordIndicesStore() {
         line: nextLine,
         wordIndex: nextWordIndex
       }
+    }),
+    previousWord: () => update(({verseIndex, line, wordIndex}) => {
+      let prevWordIndex = wordIndex;
+      let prevLine = line;
+      let prevVerseIndex = verseIndex;
+
+      const isStartOfTheLine = wordIndex == 0;
+      const isLineB = line == 'b';
+      const isFirstVerse = verseIndex == 0
+
+      if (!isStartOfTheLine) {
+        prevWordIndex -= 1;
+      } else if (isLineB) {
+        prevLine = 'a';
+        prevWordIndex = POEM_PARSED[verseIndex][prevLine].length - 1;
+      } else if (!isFirstVerse) {
+        prevVerseIndex -= 1;
+        prevLine = 'b';
+        prevWordIndex = POEM_PARSED[prevVerseIndex][prevLine].length - 1;
+      }
+
+      return {
+        verseIndex: prevVerseIndex,
+        line: prevLine,
+        wordIndex: prevWordIndex
+      }
     })
   }
 }
