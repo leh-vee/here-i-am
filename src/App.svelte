@@ -5,7 +5,6 @@
   import { wordIndices, ellipsisMode } from './store.js';
 
   onMount(async () => {
-    console.log('mounted');
 		ellipsisMode.set(true);
 	});
 
