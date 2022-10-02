@@ -19,14 +19,24 @@
     }
   }
 
-  $: if ($ellipsisMode === true) {
+  function shiftWord(next=true) {
+    if (!$ellipsisMode) {
+      if (next) {
+        wordIndices.nextWord();
+      } else {
+        wordIndices.previousWord();
+      }
+    } 
+  }
+
+  $: if ($ellipsisMode) {
 		animateEllipsis();
 	}
 </script>
 
 <div class='reader'>
-  <div class='word-control previous' on:click={ wordIndices.previousWord }></div>
-  <div class='word-control next' on:click={ wordIndices.nextWord }></div>
+  <div class='word-control previous' on:click={ () => {shiftWord(false)} }></div>
+  <div class='word-control next' on:click={ () => {shiftWord()} }></div>
   <div class='magnifier'>  
     <Word />
   </div>
