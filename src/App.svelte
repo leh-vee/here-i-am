@@ -3,9 +3,16 @@
   import Word from "./lib/Word.svelte";
   import VerseMap from "./lib/VerseMap.svelte";
   import { wordIndices, ellipsisMode } from './store.js';
+  import * as d3 from "d3";
+
+  let torontoBlocks;
 
   onMount(async () => {
 		ellipsisMode.set(true);
+
+    d3.json("/toronto-centreline-simple.geojson").then(lines => {
+      torontoBlocks = lines.features;
+    });
 	});
 
   function animateEllipsis(currentStep = 1, stepCount = 3) {
