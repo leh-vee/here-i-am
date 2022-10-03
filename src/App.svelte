@@ -1,18 +1,12 @@
 <script>
   import { onMount } from 'svelte';
   import Word from "./lib/Word.svelte";
+  import Map from './lib/Map.svelte';
   import VerseMap from "./lib/VerseMap.svelte";
   import { wordIndices, ellipsisMode } from './store.js';
-  import * as d3 from "d3";
-
-  let torontoBlocks;
 
   onMount(async () => {
 		ellipsisMode.set(true);
-
-    d3.json("/toronto-centreline-simple.geojson").then(lines => {
-      torontoBlocks = lines.features;
-    });
 	});
 
   function animateEllipsis(currentStep = 1, stepCount = 3) {
@@ -46,6 +40,7 @@
   <div class='word-control next' on:click={ () => {shiftWord()} }></div>
   <div class='magnifier'>  
     <Word />
+    <Map />
   </div>
   <div class='verse-map'>
     <VerseMap />
