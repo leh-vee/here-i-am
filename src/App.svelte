@@ -5,8 +5,14 @@
   import VerseMap from "./lib/VerseMap.svelte";
   import { wordIndices, ellipsisMode } from './store.js';
 
+  let el;
+  let elDimensions;
+
   onMount(async () => {
 		ellipsisMode.set(true);
+
+    elDimensions = el.getBoundingClientRect();
+    inVertigo = true;
 	});
 
   function animateEllipsis(currentStep = 1, stepCount = 3) {
@@ -34,12 +40,12 @@
 		animateEllipsis();
 	}
 
-  let inVertigo = true;
+  let inVertigo = false;
 </script>
 
-<div class='reader'>  
+<div class='reader' bind:this={el}>  
     {#if inVertigo}
-      <VertigoMap />
+      <VertigoMap mapWidth={elDimensions.width} mapHeight={elDimensions.height} />
     {:else}
       <div class='word-control previous' on:click={ () => {shiftWord(false)} }></div>
       <div class='word-control next' on:click={ () => {shiftWord()} }></div>
@@ -54,6 +60,7 @@
 
 <style>
   .reader {
+    width: 100%;
     height: 100%;
     display: flex;
 		flex-direction: column;
