@@ -16,7 +16,7 @@
       .context(ctx);
 
     mercProjection.translate([mapWidth / 2, mapHeight / 2])
-    mercProjection.scale(300000);
+    mercProjection.scale(2000000);
     const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
     mercProjection.center(highParkAndHumberside);
     // mercProjection.clipExtent([
