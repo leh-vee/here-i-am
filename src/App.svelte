@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import Word from "./lib/Word.svelte";
-  import Map from './lib/Map.svelte';
+  import VertigoMap from './lib/VertigoMap.svelte';
   import VerseMap from "./lib/VerseMap.svelte";
   import { wordIndices, ellipsisMode } from './store.js';
 
@@ -33,18 +33,23 @@
   $: if ($ellipsisMode) {
 		animateEllipsis();
 	}
+
+  let inVertigo = true;
 </script>
 
-<div class='reader'>
-  <div class='word-control previous' on:click={ () => {shiftWord(false)} }></div>
-  <div class='word-control next' on:click={ () => {shiftWord()} }></div>
-  <div class='magnifier'>  
-    <Word />
-    <Map />
-  </div>
-  <div class='verse-map'>
-    <VerseMap />
-  </div>
+<div class='reader'>  
+    {#if inVertigo}
+      <VertigoMap />
+    {:else}
+      <div class='word-control previous' on:click={ () => {shiftWord(false)} }></div>
+      <div class='word-control next' on:click={ () => {shiftWord()} }></div>
+      <div class='magnifier'>
+        <Word />
+      </div>
+      <div class='verse-map'>
+        <VerseMap />
+      </div>
+    {/if}
 </div>
 
 <style>
