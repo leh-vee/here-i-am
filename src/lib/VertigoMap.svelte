@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import * as d3 from 'd3';
+  import CentrelineAnimator from './CentrelineAnimator.js';
 
   export let mapWidth; 
   export let mapHeight;
@@ -16,18 +17,17 @@
       .context(ctx);
 
     mercProjection.translate([mapWidth / 2, mapHeight / 2])
-    mercProjection.scale(2000000);
+    mercProjection.scale(2800000);
     const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
     mercProjection.center(highParkAndHumberside);
-    // mercProjection.clipExtent([
-    //   mercProjection([-79.48359489440918, 43.669113317468934]),
-    //   mercProjection([-79.4578456878662, 43.64949133795468])
-    // ]);
 
     d3.json("/toronto-centreline-simple.geojson").then(blocks => {
-      ctx.beginPath();
-      geoGenerator({type: 'FeatureCollection', features: blocks.features})
-      ctx.stroke();
+      CentrelineAnimator.blocksGeoJson = blocks;
+      let animator = new CentrelineAnimator(ctx, mercProjection);
+      animator.drawBlocksFromNode(13465772);
+      // ctx.beginPath();
+      // geoGenerator({type: 'FeatureCollection', features: blocks.features})
+      // ctx.stroke();
     });
 	});
 
