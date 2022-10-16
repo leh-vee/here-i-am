@@ -1,32 +1,36 @@
-export default class CentrelineAnimator {
+// @ts-nocheck
+import * as d3 from 'd3';
 
-  static blocksGeoJson = null;
-  static getBlocksAtNode(nodeId) {
-    const blocks = this.blocksGeoJson.features.filter(block => {
-      const blockProps = block.properties;
-      return blockProps.from_node_id === nodeId || blockProps.to_node_id === nodeId;
-    })
-    return blocks;
+const blocksGeoJson = await d3.json("/toronto-centreline-simple.geojson");
+
+export default class StreetIllustrator {
+
+  static BLOCKS_GEO_JSON = blocksGeoJson;
+  static SCALE = 2700000;
+
+  constructor(canvasEl, centrePoint) {
+    this.ctx = canvasEl.getContext('2d');
+
+    this.projection = d3.geoMercator();
+    this.projection.translate([canvasEl.width / 2, canvasEl.height / 2])
+    this.projection.scale(StreetIllustrator.SCALE);
+    this.projection.center(centrePoint);
+    this.projection.clipExtent([[0,0], [canvasEl.width, canvasEl.height]]);
+  }
+
+  renderGrid() {
+    const geoGenerator = d3.geoPath()
+      .projection(this.projection)
+      .context(this.ctx);
+    this.ctx.beginPath();
+    geoGenerator({type: 'FeatureCollection', features: StreetIllustrator.BLOCKS_GEO_JSON.features})
+    this.ctx.stroke();
   }
 
   blockDrawnIds = [];
 
-  constructor(canvas, projection) {
-    if (CentrelineAnimator.blocksGeoJson === null) {
-      throw('blocksGeoJson static member must be defined on class before instantiating objects');
-    }
-    this.ctx = canvas;
-    this.projection = projection;
-  }
-
-  drawAllBlocks(geoGenerator) {
-    this.ctx.beginPath();
-    geoGenerator({type: 'FeatureCollection', features: CentrelineAnimator.blocksGeoJson.features})
-    this.ctx.stroke();
-  }
-
   drawBlocksFromNode(nodeId) {
-    const blocks = CentrelineAnimator.getBlocksAtNode(nodeId);
+    const blocks = StreetIllustrator.getBlocksAtNode(nodeId);
     blocks.forEach(block => {
       this.drawBlock(block, nodeId);
     });
@@ -123,5 +127,13 @@ export default class CentrelineAnimator {
     }
   
     drawSegment();
+  }
+
+  static getBlocksAtNode(nodeId) {
+    const blocks = this.BLOCKS_GEO_JSON.features.filter(block => {
+      const blockProps = block.properties;
+      return blockProps.from_node_id === nodeId || blockProps.to_node_id === nodeId;
+    })
+    return blocks;
   }
 }
