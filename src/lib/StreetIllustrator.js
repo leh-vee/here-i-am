@@ -11,11 +11,31 @@ export default class StreetIllustrator {
   constructor(canvasEl, centrePoint) {
     this.ctx = canvasEl.getContext('2d');
 
+    this.canvasWidth = canvasEl.width;
+    this.canvasHeight = canvasEl.height;
+
     this.projection = d3.geoMercator();
     this.projection.translate([canvasEl.width / 2, canvasEl.height / 2])
     this.projection.scale(StreetIllustrator.SCALE);
     this.projection.center(centrePoint);
-    this.projection.clipExtent([[0,0], [canvasEl.width, canvasEl.height]]);
+    this.projection.clipExtent(this.clipExtentBounds());
+
+    this.centrePointLatLng = centrePoint;
+    this.canvasCentrePoint = this.projection(centrePoint);
+  }
+
+  renderSpiralBySteps(remainingSteps = 10) {
+    this.projection.scale(this.projection.scale() + 100000);
+    this.ctx.translate(...this.canvasCentrePoint);
+    this.ctx.rotate(52 * Math.PI / 180); 
+    this.ctx.translate(-this.canvasCentrePoint[0], -this.canvasCentrePoint[1]);
+
+    this.renderGrid();
+    if (remainingSteps > 0) {
+      setTimeout(() => {
+        this.renderSpiralBySteps(remainingSteps - 1);
+      }, 1000);
+    } 
   }
 
   renderGrid() {
@@ -69,8 +89,6 @@ export default class StreetIllustrator {
   
     const fromPoint = this.projection(lineCoordinates[pointIndex]);
     const toPoint = this.projection(lineCoordinates[pointIndex + 1]);
-
-    console.log('from point:', fromPoint)
  
     if (fromPoint[0] < 0 || fromPoint[0] > 390 || fromPoint[1] < 0 || fromPoint[1] > 844) {
       return null;
@@ -135,5 +153,14 @@ export default class StreetIllustrator {
       return blockProps.from_node_id === nodeId || blockProps.to_node_id === nodeId;
     })
     return blocks;
+  }
+
+  clipExtentBounds() {
+    const canvasWidthHeightDelta = this.canvasHeight - this.canvasWidth;
+    const x0 = -canvasWidthHeightDelta;
+    const y0 = 0;
+    const x1 = this.canvasHeight;
+    const y1 = this.canvasHeight;
+    return [[x0, y0],[x1, y1]];
   }
 }
