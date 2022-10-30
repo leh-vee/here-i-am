@@ -11,7 +11,10 @@
     const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
     const illustrator = new StreetIllustrator(canvas, highParkAndHumberside);
     illustrator.drawBlocksFromNode(13465772);
-    // illustrator.renderSpiralBySteps();
+    setTimeout(() => {
+      illustrator.renderSpiralBySteps();
+    }, 10000);
+    
 	});
 
 </script>
