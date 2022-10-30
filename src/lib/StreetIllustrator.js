@@ -21,17 +21,26 @@ export default class StreetIllustrator {
 
     this.centrePointLatLng = centrePoint;
     this.canvasCentrePoint = this.projection(centrePoint);
+
+    this.totalSpiralSteps = null;
   }
 
-  renderSpiralBySteps(remainingSteps = 1000) {
-    this.adjustScale(100000);
-    this.rotateCanvas(29);
+  renderSpiralBySteps(remainingSteps = 400) {
+    this.adjustScale(40000);
+    this.rotateCanvas(25);
     this.renderGrid();
+
+    if (this.totalSpiralSteps === null) this.totalSpiralSteps = remainingSteps;
+    const totalSteps = this.totalSpiralSteps;
+    const remainingStepsPercent = remainingSteps / totalSteps;
+
+    const maxDelay = 300;
+    const nextStepDelay = maxDelay * d3.easeExpIn(remainingStepsPercent); 
 
     if (remainingSteps > 0) {
       setTimeout(() => {
         this.renderSpiralBySteps(remainingSteps - 1);
-      }, 100);
+      }, nextStepDelay);
     } 
   }
 
