@@ -87,7 +87,7 @@ export default class StreetIllustrator {
     const fromPoint = this.projection(lineCoordinates[pointIndex]);
     const toPoint = this.projection(lineCoordinates[pointIndex + 1]);
  
-    if (fromPoint[0] < 0 || fromPoint[0] > 390 || fromPoint[1] < 0 || fromPoint[1] > 844) {
+    if (fromPoint[0] < 0 || fromPoint[0] > this.canvasWidth || fromPoint[1] < 0 || fromPoint[1] > this.canvasHeight) {
       return null;
     }
     const xDelta = toPoint[0] - fromPoint[0];
