@@ -25,15 +25,13 @@ export default class StreetIllustrator {
 
   renderSpiralBySteps(remainingSteps = 1000) {
     this.adjustScale(100000);
-    this.ctx.translate(...this.canvasCentrePoint);
-    this.ctx.rotate(29 * Math.PI / 180); 
-    this.ctx.translate(-this.canvasCentrePoint[0], -this.canvasCentrePoint[1]);
+    this.rotateCanvas(29);
     this.renderGrid();
 
     if (remainingSteps > 0) {
       setTimeout(() => {
         this.renderSpiralBySteps(remainingSteps - 1);
-      }, 1);
+      }, 100);
     } 
   }
 
@@ -169,5 +167,13 @@ export default class StreetIllustrator {
     let newScale = StreetIllustrator.DEFAULT_SCALE_FACTOR;
     if (adjustment != 0) newScale = this.projection.scale() + adjustment;
     this.projection.scale(newScale);
+  }
+
+  rotateCanvas(degrees, fulcrum = this.canvasCentrePoint) {
+    const fulcrumX = fulcrum[0];
+    const fulcrumY = fulcrum[1];
+    this.ctx.translate(fulcrumX, fulcrumY);
+    this.ctx.rotate(degrees * Math.PI / 180); 
+    this.ctx.translate(-fulcrumX, -fulcrumY);
   }
 }
