@@ -6,7 +6,6 @@ const blocksGeoJson = await d3.json("junction-and-environs-centreline.geojson");
 export default class StreetIllustrator {
 
   static BLOCKS_GEO_JSON = blocksGeoJson;
-  static SCALE = 2700000;
 
   constructor(canvasEl, centrePoint) {
     this.ctx = canvasEl.getContext('2d');
@@ -16,7 +15,7 @@ export default class StreetIllustrator {
 
     this.projection = d3.geoMercator();
     this.projection.translate([canvasEl.width / 2, canvasEl.height / 2])
-    this.projection.scale(StreetIllustrator.SCALE);
+    this.adjustScale();
     this.projection.center(centrePoint);
     this.projection.clipExtent(this.clipExtentBounds());
 
@@ -24,17 +23,17 @@ export default class StreetIllustrator {
     this.canvasCentrePoint = this.projection(centrePoint);
   }
 
-  renderSpiralBySteps(remainingSteps = 10) {
-    this.projection.scale(this.projection.scale() + 100000);
+  renderSpiralBySteps(remainingSteps = 1000) {
+    this.adjustScale(100000);
     this.ctx.translate(...this.canvasCentrePoint);
-    this.ctx.rotate(52 * Math.PI / 180); 
+    this.ctx.rotate(29 * Math.PI / 180); 
     this.ctx.translate(-this.canvasCentrePoint[0], -this.canvasCentrePoint[1]);
-
     this.renderGrid();
+
     if (remainingSteps > 0) {
       setTimeout(() => {
         this.renderSpiralBySteps(remainingSteps - 1);
-      }, 1000);
+      }, 1);
     } 
   }
 
@@ -162,5 +161,13 @@ export default class StreetIllustrator {
     const x1 = this.canvasHeight;
     const y1 = this.canvasHeight;
     return [[x0, y0],[x1, y1]];
+  }
+
+  static DEFAULT_SCALE_FACTOR = 2700000;
+
+  adjustScale(adjustment = 0) {
+    let newScale = StreetIllustrator.DEFAULT_SCALE_FACTOR;
+    if (adjustment != 0) newScale = this.projection.scale() + adjustment;
+    this.projection.scale(newScale);
   }
 }
