@@ -1,7 +1,7 @@
 // @ts-nocheck
 import * as d3 from 'd3';
 
-const blocksGeoJson = await d3.json("/toronto-centreline-simple.geojson");
+const blocksGeoJson = await d3.json("junction-and-environs-centreline.geojson");
 
 export default class StreetIllustrator {
 
