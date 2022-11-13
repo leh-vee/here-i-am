@@ -5,14 +5,13 @@
   import VerseMap from "./lib/VerseMap.svelte";
   import { wordIndices, ellipsisMode } from './store.js';
 
-  let el;
-  let elDimensions;
+  let readerEl;
+  let readerDimensions = null;
 
   onMount(async () => {
 		ellipsisMode.set(true);
-
-    elDimensions = el.getBoundingClientRect();
-    inVertigo = true;
+    readerDimensions = readerEl.getBoundingClientRect();
+    inVertigo = false;
 	});
 
   function animateEllipsis(currentStep = 1, stepCount = 3) {
@@ -20,7 +19,7 @@
       setTimeout(() => {
         wordIndices.nextWord()
         animateEllipsis(currentStep + 1)
-      }, 1000)
+      }, 5000)
     } else {
       ellipsisMode.set(false);
     }
@@ -43,19 +42,22 @@
   let inVertigo = false;
 </script>
 
-<div class='reader' bind:this={el}>  
-    {#if inVertigo}
-      <VertigoMap mapWidth={elDimensions.width} mapHeight={elDimensions.height} />
-    {:else}
-      <div class='word-control previous' on:click={ () => {shiftWord(false)} }></div>
-      <div class='word-control next' on:click={ () => {shiftWord()} }></div>
-      <div class='magnifier'>
-        <Word />
-      </div>
-      <div class='verse-map'>
-        <VerseMap />
-      </div>
-    {/if}
+<div class='reader' bind:this={readerEl}>
+  {#if inVertigo}
+    <VertigoMap mapWidth={readerDimensions.width} mapHeight={readerDimensions.height} />
+  {:else}
+    <div class='word-control previous' on:click={ () => {shiftWord(false)} }></div>
+    <div class='word-control next' on:click={ () => {shiftWord()} }></div>
+    
+    <div class='magnifier'>
+      {#if readerDimensions !== null}  
+        <Word canvasWidth={readerDimensions.width} canvasHeight={readerDimensions.height} />
+      {/if}
+    </div>
+    <div class='verse-map'>
+      <VerseMap />
+    </div>
+  {/if} 
 </div>
 
 <style>
@@ -80,11 +82,13 @@
   
   .magnifier {
     flex-grow: 1;
-  }
+  } 
 
   .verse-map {
     margin: 10px auto;
-    height: 80%;
-    height: 100px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
 </style>
