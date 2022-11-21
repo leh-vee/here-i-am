@@ -1,63 +1,65 @@
 <script>
   import { onMount } from 'svelte';
-  import Word from "./lib/Word.svelte";
-  import VertigoMap from './lib/VertigoMap.svelte';
+  import { wordIndices, currentWord, showVortex } from './store.js';
+  import WordIllustrator from './lib/WordIllustrator.js';
+  import StreetIllustrator from './lib/StreetIllustrator.js';
   import VerseMap from "./lib/VerseMap.svelte";
-  import { wordIndices, ellipsisMode } from './store.js';
 
   let readerEl;
-  let readerDimensions = null;
+  let readerDimensions;
+  let canvasEl;
+  let ctx;
+
+  let wordIllustrator;
 
   onMount(async () => {
-		ellipsisMode.set(true);
     readerDimensions = readerEl.getBoundingClientRect();
-    inVertigo = false;
 	});
 
-  function animateEllipsis(currentStep = 1, stepCount = 3) {
-    if (currentStep <= stepCount) {
-      setTimeout(() => {
-        wordIndices.nextWord()
-        animateEllipsis(currentStep + 1)
-      }, 5000)
-    } else {
-      ellipsisMode.set(false);
-    }
+  $: if (canvasEl) {
+    ctx = canvasEl.getContext('2d');
+    wordIllustrator = new WordIllustrator(ctx);
+  } 
+
+  $: if ($showVortex) {
+    const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
+    const vortexIllustrator = new StreetIllustrator(ctx, highParkAndHumberside);
+    vortexIllustrator.drawBlocksFromNode(13465772);
+    setTimeout(() => {
+      vortexIllustrator.renderSpiralBySteps();
+    }, 10000);
+  } else if (wordIllustrator && $currentWord) {
+    wordIllustrator.wordDrop($currentWord);
   }
 
-  function shiftWord(next=true) {
-    if (!$ellipsisMode) {
-      if (next) {
-        wordIndices.nextWord();
-      } else {
-        wordIndices.previousWord();
-      }
-    } 
-  }
+  // function animateEllipsis(currentStep = 1, stepCount = 3) {
+  //   if (currentStep <= stepCount) {
+  //     setTimeout(() => {
+  //       wordIndices.nextWord()
+  //       animateEllipsis(currentStep + 1)
+  //     }, 5000)
+  //   } else {
+  //     ellipsisMode.set(false);
+  //   }
+  // }
 
-  $: if ($ellipsisMode) {
-		animateEllipsis();
-	}
-
-  let inVertigo = false;
 </script>
 
 <div class='reader' bind:this={readerEl}>
-  {#if inVertigo}
-    <VertigoMap mapWidth={readerDimensions.width} mapHeight={readerDimensions.height} />
-  {:else}
-    <div class='word-control previous' on:click={ () => {shiftWord(false)} }></div>
-    <div class='word-control next' on:click={ () => {shiftWord()} }></div>
-    
-    <div class='magnifier'>
-      {#if readerDimensions !== null}  
-        <Word canvasWidth={readerDimensions.width} canvasHeight={readerDimensions.height} />
-      {/if}
-    </div>
+  <div class='word-control previous' on:click={ wordIndices.previousWord }></div>
+  <div class='word-control next' on:click={ wordIndices.nextWord }></div>
+  {#if readerDimensions}
+    <canvas
+      bind:this={canvasEl}
+      width={readerDimensions.width}
+      height={readerDimensions.height}
+    ></canvas>
+  {/if}
+  {#if !$showVortex}
     <div class='verse-map'>
       <VerseMap />
     </div>
-  {/if} 
+  {/if}
 </div>
 
 <style>
@@ -80,10 +82,6 @@
     right: 0;
   }
   
-  .magnifier {
-    flex-grow: 1;
-  } 
-
   .verse-map {
     margin: 10px auto;
     position: absolute;

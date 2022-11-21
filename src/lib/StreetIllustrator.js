@@ -7,20 +7,20 @@ export default class StreetIllustrator {
 
   static BLOCKS_GEO_JSON = blocksGeoJson;
 
-  constructor(canvasEl, centrePoint) {
-    this.ctx = canvasEl.getContext('2d');
-
-    this.canvasWidth = canvasEl.width;
-    this.canvasHeight = canvasEl.height;
+  constructor(ctx, centreCoordinates) {
+    const canvas = ctx.canvas;
+    this.canvasContext = ctx;
+    this.canvasWidth = canvas.clientWidth;
+    this.canvasHeight = canvas.clientHeight; 
 
     this.projection = d3.geoMercator();
-    this.projection.translate([canvasEl.width / 2, canvasEl.height / 2])
+    this.projection.translate([this.canvasWidth / 2, this.canvasHeight / 2])
     this.adjustScale();
-    this.projection.center(centrePoint);
+    this.projection.center(centreCoordinates);
     this.projection.clipExtent(this.clipExtentBounds());
 
-    this.centrePointLatLng = centrePoint;
-    this.canvasCentrePoint = this.projection(centrePoint);
+    this.centrePointLatLng = centreCoordinates;
+    this.canvasCentrePoint = this.projection(centreCoordinates);
 
     this.totalSpiralSteps = null;
   }
@@ -47,15 +47,18 @@ export default class StreetIllustrator {
   renderGrid() {
     const geoGenerator = d3.geoPath()
       .projection(this.projection)
-      .context(this.ctx);
-    this.ctx.beginPath();
+      .context(this.canvasContext);
+    this.canvasContext.beginPath();
     geoGenerator({type: 'FeatureCollection', features: StreetIllustrator.BLOCKS_GEO_JSON.features})
-    this.ctx.stroke();
+    this.canvasContext.stroke();
   }
 
   blockDrawnIds = [];
 
   drawBlocksFromNode(nodeId) {
+    if (this.blockDrawnIds.length === 0) {
+      this.canvasContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    }
     const blocks = StreetIllustrator.getBlocksAtNode(nodeId);
     blocks.forEach(block => {
       this.drawBlock(block, nodeId);
@@ -131,10 +134,10 @@ export default class StreetIllustrator {
         ]
       }
   
-      this.ctx.beginPath();
-      this.ctx.moveTo(...segmentStartPoint);
-      this.ctx.lineTo(...segmentEndPoint);
-      this.ctx.stroke();
+      this.canvasContext.beginPath();
+      this.canvasContext.moveTo(...segmentStartPoint);
+      this.canvasContext.lineTo(...segmentEndPoint);
+      this.canvasContext.stroke();
   
       if (isFinalFrame) {
         if (isLastLineInBlock) {
@@ -181,8 +184,8 @@ export default class StreetIllustrator {
   rotateCanvas(degrees, fulcrum = this.canvasCentrePoint) {
     const fulcrumX = fulcrum[0];
     const fulcrumY = fulcrum[1];
-    this.ctx.translate(fulcrumX, fulcrumY);
-    this.ctx.rotate(degrees * Math.PI / 180); 
-    this.ctx.translate(-fulcrumX, -fulcrumY);
+    this.canvasContext.translate(fulcrumX, fulcrumY);
+    this.canvasContext.rotate(degrees * Math.PI / 180); 
+    this.canvasContext.translate(-fulcrumX, -fulcrumY);
   }
 }
