@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { wordIndices, currentWord } from './store.js';
+  import { wordIndices, currentWord, isFirstWord, isEllipsisWord } from './store.js';
   import WordIllustrator from './lib/WordIllustrator.js';
   import StreetIllustrator from './lib/StreetIllustrator.js';
 
@@ -20,15 +20,19 @@
     wordIllustrator = new WordIllustrator(ctx);
   } 
 
-  $: if (false) {
-    const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
-    const vortexIllustrator = new StreetIllustrator(ctx, highParkAndHumberside);
-    vortexIllustrator.drawBlocksFromNode(13465772);
-    setTimeout(() => {
-      vortexIllustrator.renderSpiralBySteps();
-    }, 10000);
-  } else if (wordIllustrator && $currentWord) {
-    wordIllustrator.wordDrop($currentWord);
+  $: if ($currentWord && wordIllustrator) {
+    const wordToDrop = $isEllipsisWord ? '.' : $currentWord;
+    const wordDropPromise = wordIllustrator.wordDrop(wordToDrop);
+    wordDropPromise.then(_ => {
+      if ($isFirstWord) {
+        const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
+        const vortexIllustrator = new StreetIllustrator(ctx, highParkAndHumberside);
+        vortexIllustrator.drawBlocksFromNode(13465772);
+        setTimeout(() => {
+          vortexIllustrator.renderSpiralBySteps();
+        }, 10000);
+      }
+    });
   }
 
 </script>
@@ -47,19 +51,6 @@
   .reader {
     width: 100%;
     height: 100%;
-    display: flex;
-		flex-direction: column;
     text-align: center;
-  }
-
-  .word-control {
-    position: absolute;
-    height: 100%;
-    width: 50%;
-    font-size: 50px;
-  }
-
-  .next {
-    right: 0;
   }
 </style>
