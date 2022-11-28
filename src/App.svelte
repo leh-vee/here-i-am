@@ -31,17 +31,6 @@
     wordIllustrator.wordDrop($currentWord);
   }
 
-  // function animateEllipsis(currentStep = 1, stepCount = 3) {
-  //   if (currentStep <= stepCount) {
-  //     setTimeout(() => {
-  //       wordIndices.nextWord()
-  //       animateEllipsis(currentStep + 1)
-  //     }, 5000)
-  //   } else {
-  //     ellipsisMode.set(false);
-  //   }
-  // }
-
 </script>
 
 <div class='reader' bind:this={readerEl}>
