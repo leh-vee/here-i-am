@@ -15,7 +15,29 @@ export default class WordIllustrator {
     this.currentWord = null;
   }
 
+  fullStopDrop() {
+    const maxRadius = 750;
+    const maxRadiusStepDelta = 7;
+    let radius = maxRadius;
+    this.canvasContext.resetTransform();
+    return new Promise(resolve => {
+      const stepDown = () => {
+        this.clearCanvas();
+        this.drawFullStop(radius);
+        if (radius > 5) {
+          const nextRadiusStepDelta =  maxRadiusStepDelta * d3.easeExpOut(radius / maxRadius);
+          radius -= nextRadiusStepDelta;
+          requestAnimationFrame(stepDown);
+        } else {
+          resolve(true);
+        }
+      }
+      stepDown();
+    }); 
+  }
+
   wordDrop(nextWord) {
+    this.canvasContext.resetTransform();
     return new Promise(resolve => {
       const maxFontSizeDelta = WordIllustrator.MAX_FONT_STEP_DELTA;
       const maxFontSize = WordIllustrator.INITIAL_FONT_SIZE;
@@ -25,8 +47,8 @@ export default class WordIllustrator {
   
       const stepDown = () => {
         this.canvasContext.font = `${fontSize}px EB Garamond`;
-        this.canvasContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-        this.canvasContext.fillText(nextWord, this.canvasWidth / 2, this.canvasHeight / 2);
+        this.clearCanvas()
+        this.canvasContext.fillText(nextWord, ...this.canvasCentre());
       
         if (fontSize > 70) {
           const nextFontSizeDelta =  Math.round(maxFontSizeDelta * d3.easeSinOut(fontSize / maxFontSize));
@@ -36,8 +58,21 @@ export default class WordIllustrator {
           resolve(true);
         }
       }
-
       stepDown();
     });
+  }
+
+  drawFullStop(radius) {
+    this.canvasContext.beginPath();
+    this.canvasContext.arc(...this.canvasCentre(), radius, 0, 2 * Math.PI);
+    this.canvasContext.fill();
+  }
+
+  clearCanvas() {
+    this.canvasContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+  }
+
+  canvasCentre() {
+    return [this.canvasWidth / 2, this.canvasHeight / 2];
   }
 }

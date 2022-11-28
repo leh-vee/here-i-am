@@ -21,8 +21,9 @@
   } 
 
   $: if ($currentWord && wordIllustrator) {
-    const wordToDrop = $isEllipsisWord ? '.' : $currentWord;
-    const wordDropPromise = wordIllustrator.wordDrop(wordToDrop);
+    const wordDropPromise = $isEllipsisWord ?
+      wordIllustrator.fullStopDrop() : 
+      wordIllustrator.wordDrop($currentWord);
     wordDropPromise.then(_ => {
       if ($isFirstWord) {
         const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
