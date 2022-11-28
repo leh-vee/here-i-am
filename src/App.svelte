@@ -3,7 +3,6 @@
   import { wordIndices, currentWord, showVortex } from './store.js';
   import WordIllustrator from './lib/WordIllustrator.js';
   import StreetIllustrator from './lib/StreetIllustrator.js';
-  import VerseMap from "./lib/VerseMap.svelte";
 
   let readerEl;
   let readerDimensions;
@@ -55,11 +54,6 @@
       height={readerDimensions.height}
     ></canvas>
   {/if}
-  {#if !$showVortex}
-    <div class='verse-map'>
-      <VerseMap />
-    </div>
-  {/if}
 </div>
 
 <style>
@@ -79,14 +73,6 @@
   }
 
   .next {
-    right: 0;
-  }
-  
-  .verse-map {
-    margin: 10px auto;
-    position: absolute;
-    bottom: 0;
-    left: 0;
     right: 0;
   }
 </style>
