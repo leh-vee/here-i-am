@@ -33,9 +33,7 @@
 
 </script>
 
-<div class='reader' bind:this={readerEl}>
-  <div class='word-control previous' on:click={ wordIndices.previousWord }></div>
-  <div class='word-control next' on:click={ wordIndices.nextWord }></div>
+<div class='reader' bind:this={readerEl} on:click={ wordIndices.nextWord }>
   {#if readerDimensions}
     <canvas
       bind:this={canvasEl}
