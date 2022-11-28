@@ -16,24 +16,28 @@ export default class WordIllustrator {
   }
 
   wordDrop(nextWord) {
-    const maxFontSizeDelta = WordIllustrator.MAX_FONT_STEP_DELTA;
-    const maxFontSize = WordIllustrator.INITIAL_FONT_SIZE;
-    let fontSize = maxFontSize;
-    this.canvasContext.textAlign = 'center';
-    this.canvasContext.textBaseline = 'middle'
-
-    const stepDown = () => {
-      this.canvasContext.font = `${fontSize}px EB Garamond`;
-      this.canvasContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-      this.canvasContext.fillText(nextWord, this.canvasWidth / 2, this.canvasHeight / 2);
-    
-      if (fontSize > 70) {
-        const nextFontSizeDelta =  Math.round(maxFontSizeDelta * d3.easeSinOut(fontSize / maxFontSize));
-        fontSize -= nextFontSizeDelta;
-        requestAnimationFrame(stepDown);
+    return new Promise(resolve => {
+      const maxFontSizeDelta = WordIllustrator.MAX_FONT_STEP_DELTA;
+      const maxFontSize = WordIllustrator.INITIAL_FONT_SIZE;
+      let fontSize = maxFontSize;
+      this.canvasContext.textAlign = 'center';
+      this.canvasContext.textBaseline = 'middle'
+  
+      const stepDown = () => {
+        this.canvasContext.font = `${fontSize}px EB Garamond`;
+        this.canvasContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+        this.canvasContext.fillText(nextWord, this.canvasWidth / 2, this.canvasHeight / 2);
+      
+        if (fontSize > 70) {
+          const nextFontSizeDelta =  Math.round(maxFontSizeDelta * d3.easeSinOut(fontSize / maxFontSize));
+          fontSize -= nextFontSizeDelta;
+          requestAnimationFrame(stepDown);
+        } else {
+          resolve(true);
+        }
       }
-    }
 
-    stepDown();
+      stepDown();
+    });
   }
 }
