@@ -56,9 +56,6 @@ export default class StreetIllustrator {
   blockDrawnIds = [];
 
   drawBlocksFromNode(nodeId) {
-    if (this.blockDrawnIds.length === 0) {
-      this.canvasContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-    }
     const blocks = StreetIllustrator.getBlocksAtNode(nodeId);
     blocks.forEach(block => {
       this.drawBlock(block, nodeId);
