@@ -111,3 +111,23 @@ export const currentVerse = derived([poem, wordIndices], (
     return $poem[verseIndex];
   } 
 );
+
+export const isFirstWord = derived([wordIndices], (
+  [$wordIndices]) => {
+    let isFirstWord = false;
+    if ($wordIndices.line === 'a' && $wordIndices.wordIndex === 0) {
+      isFirstWord = true;
+    }
+    return isFirstWord;
+  }
+);
+
+export const isEllipsisWord = derived([wordIndices], (
+  [$wordIndices]) => {
+    let isFirstWord = false;
+    if ($wordIndices.line === 'a' && $wordIndices.wordIndex < 3) {
+      isFirstWord = true;
+    }
+    return isFirstWord;
+  }
+);
