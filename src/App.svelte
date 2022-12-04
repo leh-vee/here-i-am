@@ -6,8 +6,10 @@
 
   let readerEl;
   let readerDimensions;
-  let canvasEl;
-  let ctx;
+  let streetLayerEl;
+  let fullstopLayerEl;
+  let streetLayerCtx;
+  let fullstopLayerCtx;
 
   let wordIllustrator;
 
@@ -15,9 +17,10 @@
     readerDimensions = readerEl.getBoundingClientRect();
 	});
 
-  $: if (canvasEl) {
-    ctx = canvasEl.getContext('2d');
-    wordIllustrator = new WordIllustrator(ctx);
+  $: if (streetLayerEl) {
+    fullstopLayerCtx = fullstopLayerEl.getContext('2d');
+    streetLayerCtx = streetLayerEl.getContext('2d');
+    wordIllustrator = new WordIllustrator(fullstopLayerCtx);
   } 
 
   $: if ($currentWord && wordIllustrator) {
@@ -27,7 +30,7 @@
     wordDropPromise.then(_ => {
       if ($isFirstWord) {
         const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
-        const vortexIllustrator = new StreetIllustrator(ctx, highParkAndHumberside);
+        const vortexIllustrator = new StreetIllustrator(streetLayerCtx, highParkAndHumberside);
         vortexIllustrator.drawBlocksFromNode(13465772);
         setTimeout(() => {
           vortexIllustrator.renderSpiralBySteps();
@@ -41,7 +44,14 @@
 <div class='reader' bind:this={readerEl} on:click={ wordIndices.nextWord }>
   {#if readerDimensions}
     <canvas
-      bind:this={canvasEl}
+      class='street-layer'
+      bind:this={streetLayerEl}
+      width={readerDimensions.width}
+      height={readerDimensions.height}
+    ></canvas>
+    <canvas
+      class='full-stop-layer'
+      bind:this={fullstopLayerEl}
       width={readerDimensions.width}
       height={readerDimensions.height}
     ></canvas>
@@ -53,5 +63,16 @@
     width: 100%;
     height: 100%;
     text-align: center;
+  }
+  canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .street-layer {
+    z-index: 0;
+  }
+  .full-stop-layer {
+    z-index: 1;
   }
 </style>
