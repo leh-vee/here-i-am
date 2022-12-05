@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import { wordIndices, currentWord, isFirstWord, isEllipsisWord } from './store.js';
-  import WordIllustrator from './lib/WordIllustrator.js';
+  // import WordIllustrator from './lib/WordIllustrator.js';
   import StreetIllustrator from './lib/StreetIllustrator.js';
   import FullstopIllustrator from './lib/FullstopIllustrator.js';
   
@@ -12,14 +12,15 @@
     readerDimensions = readerEl.getBoundingClientRect();
 	});
 
-  let streetLayerEl;
-  let streetLayerCtx;
-  let streetIllustrator;
+  let streetLayerEls = [];
+  let streetIllustrators = [];
   const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
 
-  $: if (streetLayerEl) {
-    streetLayerCtx = streetLayerEl.getContext('2d');
-    streetIllustrator = new StreetIllustrator(streetLayerCtx, highParkAndHumberside);
+  $: if (streetLayerEls.length === 3) {
+    streetLayerEls.forEach((layerEl, i) => {
+      const ctx = layerEl.getContext('2d');
+      streetIllustrators.push(new StreetIllustrator(ctx, highParkAndHumberside));
+    });
   }
   
   let fullstopLayerEl;
@@ -35,7 +36,7 @@
   $: if ($currentWord && $isEllipsisWord && fullstopIllustrator) {
     const fullstopDropPromise = fullstopIllustrator.fullStopDrop(); 
     fullstopDropPromise.then(_ => {
-      streetIllustrator.drawBlocksFromNode(13465772);
+      streetIllustrators[$wordIndices.wordIndex].drawBlocksFromNode(13465772);
     });    
   }
 
@@ -44,8 +45,20 @@
 <div class='reader' bind:this={readerEl} on:click={ wordIndices.nextWord }>
   {#if readerDimensions}
     <canvas
-      class='street-layer'
-      bind:this={streetLayerEl}
+      class='street-layer one'
+      bind:this={streetLayerEls[0]}
+      width={readerDimensions.width}
+      height={readerDimensions.height}
+    ></canvas>
+    <canvas
+      class='street-layer two'
+      bind:this={streetLayerEls[1]}
+      width={readerDimensions.width}
+      height={readerDimensions.height}
+    ></canvas>
+    <canvas
+      class='street-layer three'
+      bind:this={streetLayerEls[2]}
       width={readerDimensions.width}
       height={readerDimensions.height}
     ></canvas>
