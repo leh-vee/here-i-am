@@ -15,27 +15,6 @@ export default class WordIllustrator {
     this.currentWord = null;
   }
 
-  fullStopDrop() {
-    const maxRadius = 750;
-    const maxRadiusStepDelta = 7;
-    let radius = maxRadius;
-    this.canvasContext.resetTransform();
-    return new Promise(resolve => {
-      const stepDown = () => {
-        this.clearCanvas();
-        this.drawFullStop(radius);
-        if (radius > 5) {
-          const nextRadiusStepDelta =  maxRadiusStepDelta * d3.easeExpOut(radius / maxRadius);
-          radius -= nextRadiusStepDelta;
-          requestAnimationFrame(stepDown);
-        } else {
-          resolve(true);
-        }
-      }
-      stepDown();
-    }); 
-  }
-
   wordDrop(nextWord) {
     this.canvasContext.resetTransform();
     return new Promise(resolve => {
@@ -60,12 +39,6 @@ export default class WordIllustrator {
       }
       stepDown();
     });
-  }
-
-  drawFullStop(radius) {
-    this.canvasContext.beginPath();
-    this.canvasContext.arc(...this.canvasCentre(), radius, 0, 2 * Math.PI);
-    this.canvasContext.fill();
   }
 
   clearCanvas() {
