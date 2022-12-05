@@ -3,40 +3,40 @@
   import { wordIndices, currentWord, isFirstWord, isEllipsisWord } from './store.js';
   import WordIllustrator from './lib/WordIllustrator.js';
   import StreetIllustrator from './lib/StreetIllustrator.js';
-
+  import FullstopIllustrator from './lib/FullstopIllustrator.js';
+  
   let readerEl;
   let readerDimensions;
-  let streetLayerEl;
-  let fullstopLayerEl;
-  let streetLayerCtx;
-  let fullstopLayerCtx;
-
-  let wordIllustrator;
 
   onMount(async () => {
     readerDimensions = readerEl.getBoundingClientRect();
 	});
 
-  $: if (streetLayerEl) {
-    fullstopLayerCtx = fullstopLayerEl.getContext('2d');
-    streetLayerCtx = streetLayerEl.getContext('2d');
-    wordIllustrator = new WordIllustrator(fullstopLayerCtx);
-  } 
+  let streetLayerEl;
+  let streetLayerCtx;
+  let streetIllustrator;
+  const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
 
-  $: if ($currentWord && wordIllustrator) {
-    const wordDropPromise = $isEllipsisWord ?
-      wordIllustrator.fullStopDrop() : 
-      wordIllustrator.wordDrop($currentWord);
-    wordDropPromise.then(_ => {
-      if ($isFirstWord) {
-        const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
-        const vortexIllustrator = new StreetIllustrator(streetLayerCtx, highParkAndHumberside);
-        vortexIllustrator.drawBlocksFromNode(13465772);
-        setTimeout(() => {
-          vortexIllustrator.renderSpiralBySteps();
-        }, 10000);
-      }
-    });
+  $: if (streetLayerEl) {
+    streetLayerCtx = streetLayerEl.getContext('2d');
+    streetIllustrator = new StreetIllustrator(streetLayerCtx, highParkAndHumberside);
+  }
+  
+  let fullstopLayerEl;
+  let fullstopLayerCtx;
+  let fullstopIllustrator;
+  
+  $: if (fullstopLayerEl) {
+    fullstopLayerCtx = fullstopLayerEl.getContext('2d');
+    fullstopIllustrator = new FullstopIllustrator(fullstopLayerCtx);
+  }
+ 
+
+  $: if ($currentWord && $isEllipsisWord && fullstopIllustrator) {
+    const fullstopDropPromise = fullstopIllustrator.fullStopDrop(); 
+    fullstopDropPromise.then(_ => {
+      streetIllustrator.drawBlocksFromNode(13465772);
+    });    
   }
 
 </script>
