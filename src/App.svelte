@@ -19,7 +19,9 @@
   $: if (streetLayerEls.length === 3) {
     streetLayerEls.forEach((layerEl, i) => {
       const ctx = layerEl.getContext('2d');
-      streetIllustrators.push(new StreetIllustrator(ctx, highParkAndHumberside));
+      streetIllustrators.push(
+        new StreetIllustrator(ctx, highParkAndHumberside, i*120+180)
+      );
     });
   }
   

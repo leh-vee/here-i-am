@@ -7,7 +7,7 @@ export default class StreetIllustrator {
 
   static BLOCKS_GEO_JSON = blocksGeoJson;
 
-  constructor(ctx, centreCoordinates) {
+  constructor(ctx, centreCoordinates, degreesRotation=0) {
     const canvas = ctx.canvas;
     this.canvasContext = ctx;
     this.canvasWidth = canvas.clientWidth;
@@ -18,9 +18,10 @@ export default class StreetIllustrator {
     this.adjustScale();
     this.projection.center(centreCoordinates);
     this.projection.clipExtent(this.clipExtentBounds());
-
+    
     this.centrePointLatLng = centreCoordinates;
     this.canvasCentrePoint = this.projection(centreCoordinates);
+    this.rotateCanvas(degreesRotation);
 
     this.totalSpiralSteps = null;
   }
@@ -96,14 +97,14 @@ export default class StreetIllustrator {
     const fromPoint = this.projection(lineCoordinates[pointIndex]);
     const toPoint = this.projection(lineCoordinates[pointIndex + 1]);
  
-    if (fromPoint[0] < 0 || fromPoint[0] > this.canvasWidth || fromPoint[1] < 0 || fromPoint[1] > this.canvasHeight) {
-      return null;
-    }
+    // if (fromPoint[0] < 0 || fromPoint[0] > this.canvasWidth || fromPoint[1] < 0 || fromPoint[1] > this.canvasHeight) {
+    //   return null;
+    // }
     const xDelta = toPoint[0] - fromPoint[0];
     const yDelta = toPoint[1] - fromPoint[1];
     
     const lineLength = Math.sqrt(xDelta ** 2 + yDelta ** 2);
-    const segmentLength = 1;
+    const segmentLength = 0.5;
     const segmentPercentOfLineLength = segmentLength / lineLength;
   
     const xSegmentDelta = xDelta * segmentPercentOfLineLength;
