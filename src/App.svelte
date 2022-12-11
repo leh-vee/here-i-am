@@ -1,9 +1,27 @@
 <script>
   import { onMount } from 'svelte';
-  import { wordIndices, currentWord, isFirstWord, isEllipsisWord } from './store.js';
+  import { wordIndices, currentPiSlice } from './store.js';
   // import WordIllustrator from './lib/WordIllustrator.js';
   import StreetIllustrator from './lib/StreetIllustrator.js';
   import FullstopIllustrator from './lib/FullstopIllustrator.js';
+  import VerseNumberIllustrator from './lib/VerseNumberIllustrator.js';
+
+  const ANIME_SEQUENCE = [
+    'verse-number',
+    'ellipsis',
+    'word-drop'
+  ]
+  let sequneceIndex = 0;
+
+  $: animeState = ANIME_SEQUENCE[sequneceIndex];
+
+  function nextAnimeState() {
+    if (sequneceIndex < ANIME_SEQUENCE.length - 1) {
+      sequneceIndex += 1;
+    } else {
+      sequneceIndex = 0;
+    }
+  }
   
   let readerEl;
   let readerDimensions;
@@ -12,19 +30,6 @@
     readerDimensions = readerEl.getBoundingClientRect();
 	});
 
-  let streetLayerEls = [];
-  let streetIllustrators = [];
-  const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
-
-  $: if (streetLayerEls.length === 3) {
-    streetLayerEls.forEach((layerEl, i) => {
-      const ctx = layerEl.getContext('2d');
-      streetIllustrators.push(
-        new StreetIllustrator(ctx, highParkAndHumberside, i*120+180)
-      );
-    });
-  }
-  
   let fullstopLayerEl;
   let fullstopLayerCtx;
   let fullstopIllustrator;
@@ -33,13 +38,45 @@
     fullstopLayerCtx = fullstopLayerEl.getContext('2d');
     fullstopIllustrator = new FullstopIllustrator(fullstopLayerCtx);
   }
- 
 
-  $: if ($currentWord && $isEllipsisWord && fullstopIllustrator) {
-    const fullstopDropPromise = fullstopIllustrator.fullStopDrop(); 
-    fullstopDropPromise.then(_ => {
-      streetIllustrators[$wordIndices.wordIndex].drawBlocksFromNode(13465772);
-    });    
+  let verseNumberLayerEl;
+  let verseNumberLayerCtx;
+  let verseNumberIllustrator;
+  
+  $: if (verseNumberLayerEl) {
+    verseNumberLayerCtx = verseNumberLayerEl.getContext('2d');
+    verseNumberIllustrator = new VerseNumberIllustrator(verseNumberLayerCtx);
+  }
+
+  let streetLayerEl;
+  let streetLayerCtx;
+  let streetIllustrator;
+  const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
+
+  $: if (streetLayerEl) {
+    streetLayerCtx = streetLayerEl.getContext('2d');
+    streetIllustrator = new StreetIllustrator(streetLayerCtx, highParkAndHumberside);
+  }
+
+  $: if (animeState === 'verse-number' && verseNumberIllustrator) {
+    verseNumberIllustrator.showNumber($currentPiSlice); 
+    setTimeout(() => {
+      nextAnimeState();
+      verseNumberIllustrator.clearCanvas();
+    }, 3000)
+  } else if (animeState === 'ellipsis' && fullstopIllustrator) {
+    fullstopIllustrator.fullStopDrop().then(() => {
+      setTimeout(() => {  
+        fullstopIllustrator.fullStopDrop().then(() => {
+          setTimeout(() => {
+            fullstopIllustrator.fullStopDrop().then(() => {
+              streetIllustrator.drawBlocksFromNode(13465772);
+              nextAnimeState();
+            })
+          }, 3000);
+        });
+      }, 3000);
+    }); 
   }
 
 </script>
@@ -47,25 +84,19 @@
 <div class='reader' bind:this={readerEl} on:click={ wordIndices.nextWord }>
   {#if readerDimensions}
     <canvas
-      class='street-layer one'
-      bind:this={streetLayerEls[0]}
+      class='street layer'
+      bind:this={streetLayerEl}
       width={readerDimensions.width}
       height={readerDimensions.height}
     ></canvas>
     <canvas
-      class='street-layer two'
-      bind:this={streetLayerEls[1]}
+      class='verse-number layer'
+      bind:this={verseNumberLayerEl}
       width={readerDimensions.width}
       height={readerDimensions.height}
     ></canvas>
     <canvas
-      class='street-layer three'
-      bind:this={streetLayerEls[2]}
-      width={readerDimensions.width}
-      height={readerDimensions.height}
-    ></canvas>
-    <canvas
-      class='full-stop-layer'
+      class='full-stop layer'
       bind:this={fullstopLayerEl}
       width={readerDimensions.width}
       height={readerDimensions.height}
@@ -79,15 +110,18 @@
     height: 100%;
     text-align: center;
   }
-  canvas {
+  canvas.layer {
     position: absolute;
     left: 0;
     top: 0;
   }
-  .street-layer {
+  .street.layer {
     z-index: 0;
   }
-  .full-stop-layer {
+  .verse-number.layer {
     z-index: 1;
+  }
+  .full-stop.layer {
+    z-index: 2;
   }
 </style>

@@ -98,6 +98,13 @@ function createWordIndicesStore() {
 }
 export const wordIndices = createWordIndicesStore();
 
+export const currentPiSlice = derived([poem, wordIndices], (
+  [$poem, $wordIndices]) => {
+    const { verseIndex } = $wordIndices;
+    return $poem[verseIndex].piSlice;
+  }
+);
+
 export const currentWord = derived([poem, wordIndices], (
   [$poem, $wordIndices]) => {
     const { verseIndex, line, wordIndex } = $wordIndices;
