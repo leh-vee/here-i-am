@@ -61,10 +61,13 @@
   $: if (animeState === 'verse-number' && verseNumberIllustrator) {
     verseNumberIllustrator.showNumber($currentPiSlice); 
     setTimeout(() => {
-      nextAnimeState();
-      verseNumberIllustrator.clearCanvas();
+      fullstopIllustrator.leaderAnimation().then(() => {
+        nextAnimeState();
+        verseNumberIllustrator.clearCanvas();
+      });
     }, 3000)
   } else if (animeState === 'ellipsis' && fullstopIllustrator) {
+    fullstopIllustrator.clearCanvas();
     fullstopIllustrator.ellipsisAnimation().then(() => {
       streetIllustrator.drawBlocksFromNode(13465772);
       nextAnimeState();

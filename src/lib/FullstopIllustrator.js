@@ -3,6 +3,8 @@ import * as d3 from 'd3';
 
 export default class FullstopIllustrator {
 
+  static MAX_RADIUS = 750;
+
   constructor(ctx) {
     const canvas = ctx.canvas;
     this.canvasContext = ctx;
@@ -10,7 +12,7 @@ export default class FullstopIllustrator {
     this.canvasHeight = canvas.clientHeight; 
   } 
 
-  async ellipsisAnimation(delay=2000) {
+  async ellipsisAnimation(delay=Math.PI*200) {
     await this.fullStopDrop();
     await pause(delay);
     await this.fullStopDrop();
@@ -19,16 +21,14 @@ export default class FullstopIllustrator {
   }
 
   fullStopDrop() {
-    const maxRadius = 750;
-    const maxRadiusStepDelta = 7;
-    let radius = maxRadius;
+    let step = 100;
     return new Promise(resolve => {
       const stepDown = () => {
+        const stepRaius =  FullstopIllustrator.MAX_RADIUS * d3.easeSinInOut(step / 100);
         this.clearCanvas();
-        this.drawFullStop(radius);
-        if (radius > 5) {
-          const nextRadiusStepDelta =  maxRadiusStepDelta * d3.easeExpOut(radius / maxRadius);
-          radius -= nextRadiusStepDelta;
+        this.drawFullStop(stepRaius);
+        if (step > 5) {
+          step -= 1;
           requestAnimationFrame(stepDown);
         } else {
           resolve(true);
@@ -36,6 +36,28 @@ export default class FullstopIllustrator {
       }
       stepDown();
     }); 
+  }
+
+  leaderAnimation() {
+    let endDegree = 270;
+    return new Promise(resolve => {
+      const step = () => {
+        this.canvasContext.beginPath();
+        this.canvasContext.arc(
+          ...this.canvasCentre(), FullstopIllustrator.MAX_RADIUS, 
+          degreesToRadians(270), degreesToRadians(endDegree)
+        );
+        this.canvasContext.lineTo(...this.canvasCentre());
+        this.canvasContext.fill();
+        if (endDegree >= 270 && endDegree < 630) {
+          endDegree += 5;
+          requestAnimationFrame(step);
+        } else {
+          resolve(true);
+        }
+      }
+      step();
+    });
   }
 
   drawFullStop(radius) {
@@ -51,6 +73,10 @@ export default class FullstopIllustrator {
   canvasCentre() {
     return [this.canvasWidth / 2, this.canvasHeight / 2];
   }
+}
+
+const degreesToRadians = function(degrees) {
+  return degrees * Math.PI/180;
 }
 
 const pause = function(duration=1000) {
