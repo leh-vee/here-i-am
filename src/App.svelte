@@ -65,18 +65,10 @@
       verseNumberIllustrator.clearCanvas();
     }, 3000)
   } else if (animeState === 'ellipsis' && fullstopIllustrator) {
-    fullstopIllustrator.fullStopDrop().then(() => {
-      setTimeout(() => {  
-        fullstopIllustrator.fullStopDrop().then(() => {
-          setTimeout(() => {
-            fullstopIllustrator.fullStopDrop().then(() => {
-              streetIllustrator.drawBlocksFromNode(13465772);
-              nextAnimeState();
-            })
-          }, 3000);
-        });
-      }, 3000);
-    }); 
+    fullstopIllustrator.ellipsisAnimation().then(() => {
+      streetIllustrator.drawBlocksFromNode(13465772);
+      nextAnimeState();
+    });
   }
 
 </script>

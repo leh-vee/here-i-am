@@ -8,13 +8,20 @@ export default class FullstopIllustrator {
     this.canvasContext = ctx;
     this.canvasWidth = canvas.clientWidth;
     this.canvasHeight = canvas.clientHeight; 
+  } 
+
+  async ellipsisAnimation(delay=2000) {
+    await this.fullStopDrop();
+    await pause(delay);
+    await this.fullStopDrop();
+    await pause(delay);
+    return this.fullStopDrop();
   }
 
   fullStopDrop() {
     const maxRadius = 750;
     const maxRadiusStepDelta = 7;
     let radius = maxRadius;
-    this.canvasContext.resetTransform();
     return new Promise(resolve => {
       const stepDown = () => {
         this.clearCanvas();
@@ -44,4 +51,12 @@ export default class FullstopIllustrator {
   canvasCentre() {
     return [this.canvasWidth / 2, this.canvasHeight / 2];
   }
+}
+
+const pause = function(duration=1000) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(true);
+    }, duration);
+  }); 
 }
