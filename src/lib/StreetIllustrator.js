@@ -105,7 +105,7 @@ export default class StreetIllustrator {
     const yDelta = toPoint[1] - fromPoint[1];
     
     const lineLength = Math.sqrt(xDelta ** 2 + yDelta ** 2);
-    const segmentLength = 0.2;
+    const segmentLength = Math.random();
     const segmentPercentOfLineLength = segmentLength / lineLength;
   
     const xSegmentDelta = xDelta * segmentPercentOfLineLength;
