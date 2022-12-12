@@ -50,7 +50,7 @@ export default class FullstopIllustrator {
         this.canvasContext.lineTo(...this.canvasCentre());
         this.canvasContext.fill();
         if (endDegree >= 270 && endDegree < 630) {
-          endDegree += 5;
+          endDegree += 0.5;
           requestAnimationFrame(step);
         } else {
           resolve(true);
