@@ -13,10 +13,10 @@ export default class FullstopIllustrator {
   } 
 
   async ellipsisAnimation(delay=Math.PI*200) {
-    await this.fullStopDrop();
-    await pause(delay);
-    await this.fullStopDrop();
-    await pause(delay);
+    // await this.fullStopDrop();
+    // await pause(delay);
+    // await this.fullStopDrop();
+    // await pause(delay);
     return this.fullStopDrop();
   }
 
@@ -24,11 +24,11 @@ export default class FullstopIllustrator {
     let step = 100;
     return new Promise(resolve => {
       const stepDown = () => {
-        const stepRaius =  FullstopIllustrator.MAX_RADIUS * d3.easeSinInOut(step / 100);
+        const stepRaius =  FullstopIllustrator.MAX_RADIUS * d3.easeBounceIn(step / 100);
         this.clearCanvas();
         this.drawFullStop(stepRaius);
-        if (step > 5) {
-          step -= 1;
+        if (step > 1) {
+          step -= 0.25;
           requestAnimationFrame(stepDown);
         } else {
           resolve(true);
