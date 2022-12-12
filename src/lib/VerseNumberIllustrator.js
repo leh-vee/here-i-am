@@ -1,7 +1,7 @@
 // @ts-nocheck
 export default class VerseNumberIllustrator {
 
-  static FONT_SIZE = 600;
+  static FONT_SIZE = 400;
 
   constructor(ctx) {
     const canvas = ctx.canvas;
@@ -10,7 +10,7 @@ export default class VerseNumberIllustrator {
     this.canvasHeight = canvas.clientHeight;
 
     const fontSize = VerseNumberIllustrator.FONT_SIZE;
-    this.canvasContext.font = `${fontSize}px sans-serif`;
+    this.canvasContext.font = `${fontSize}px Source Code Pro`;
     this.canvasContext.textAlign = 'center';
     this.canvasContext.textBaseline = 'middle'
   }
