@@ -12,6 +12,7 @@ export default class StreetIllustrator {
     this.canvasContext = ctx;
     this.canvasWidth = canvas.clientWidth;
     this.canvasHeight = canvas.clientHeight; 
+    this.canvasContext.lineWidth = 2;
 
     this.projection = d3.geoMercator();
     this.projection.translate([this.canvasWidth / 2, this.canvasHeight / 2])
@@ -97,14 +98,14 @@ export default class StreetIllustrator {
     const fromPoint = this.projection(lineCoordinates[pointIndex]);
     const toPoint = this.projection(lineCoordinates[pointIndex + 1]);
  
-    // if (fromPoint[0] < 0 || fromPoint[0] > this.canvasWidth || fromPoint[1] < 0 || fromPoint[1] > this.canvasHeight) {
-    //   return null;
-    // }
+    if (fromPoint[0] < 0 || fromPoint[0] > this.canvasWidth || fromPoint[1] < 0 || fromPoint[1] > this.canvasHeight) {
+      return null;
+    }
     const xDelta = toPoint[0] - fromPoint[0];
     const yDelta = toPoint[1] - fromPoint[1];
     
     const lineLength = Math.sqrt(xDelta ** 2 + yDelta ** 2);
-    const segmentLength = 0.5;
+    const segmentLength = 0.2;
     const segmentPercentOfLineLength = segmentLength / lineLength;
   
     const xSegmentDelta = xDelta * segmentPercentOfLineLength;
