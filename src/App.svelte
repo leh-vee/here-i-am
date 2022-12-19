@@ -61,17 +61,15 @@
   $: if (animeState === 'verse-number' && verseNumberIllustrator) {
     verseNumberIllustrator.showNumber($currentPiSlice); 
     setTimeout(() => {
-      fullstopIllustrator.leaderAnimation().then(() => {
-        nextAnimeState();
-        verseNumberIllustrator.clearCanvas();
-      });
-    }, 3000)
-  } else if (animeState === 'ellipsis' && fullstopIllustrator) {
-    fullstopIllustrator.clearCanvas();
-    fullstopIllustrator.ellipsisAnimation().then(() => {
-      streetIllustrator.drawBlocksFromNode(13465772);
       nextAnimeState();
-    });
+      verseNumberIllustrator.clearCanvas();
+    }, 0)
+  } else if (animeState === 'ellipsis' && fullstopIllustrator) {
+    fullstopIllustrator.drawEllipsis();
+    // fullstopIllustrator.ellipsisAnimation().then(() => {
+    //   streetIllustrator.drawBlocksFromNode(13465772);
+    //   nextAnimeState();
+    // });
   }
 
 </script>
