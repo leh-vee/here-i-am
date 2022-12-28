@@ -14,7 +14,7 @@
   
   $: if (screen.el) {
     ellipsisPainter = new EllipsisPainter(screen);
-    ellipsisPainter.agogsCollapseAnime();
+    ellipsisPainter.anime();
   }
   
   // screenDimension = screenEl.getBoundingClientRect();
