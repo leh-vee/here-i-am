@@ -7,12 +7,14 @@ export default class StreetPainter {
 
   static BLOCKS_GEO_JSON = blocksGeoJson;
 
-  constructor(ctx, centreCoordinates, degreesRotation=0) {
-    const canvas = ctx.canvas;
-    this.canvasContext = ctx;
+  constructor(canvasEl, centreCoordinates, degreesRotation=0) {
+    this.canvasContext = canvasEl.getContext('2d');
+    this.canvasContext.lineWidth = 2;
+    this.canvasContext.strokeStyle = '#9E9EA1';
+
+    const canvas = this.canvasContext.canvas;
     this.canvasWidth = canvas.clientWidth;
     this.canvasHeight = canvas.clientHeight; 
-    this.canvasContext.lineWidth = 2;
 
     this.projection = d3.geoMercator();
     this.projection.translate([this.canvasWidth / 2, this.canvasHeight / 2])
@@ -105,7 +107,7 @@ export default class StreetPainter {
     const yDelta = toPoint[1] - fromPoint[1];
     
     const lineLength = Math.sqrt(xDelta ** 2 + yDelta ** 2);
-    const segmentLength = Math.random();
+    const segmentLength = Math.random() * (0.5 - 0.2) + 0.2;
     const segmentPercentOfLineLength = segmentLength / lineLength;
   
     const xSegmentDelta = xDelta * segmentPercentOfLineLength;

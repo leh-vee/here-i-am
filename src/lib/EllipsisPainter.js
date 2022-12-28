@@ -9,42 +9,46 @@ export default class EllipsisPainter {
     colour: '#9E9EA1'
   }
   
-  constructor(screen) {
+  constructor(containerEl, width, height) {
     this.stage = new Konva.Stage({
-			container: screen.el,
-			width: screen.width,
-			height: screen.height
+			container: containerEl, width, height
 		});
     this.layer = new Konva.Layer();
+    this.stage.add(this.layer);
     this.collapsed = false;
   }
 
-  anime() {
-    const ellipsis = this.getEllipsis();
-
-    this.layer.add(...ellipsis);
-    this.stage.add(this.layer);
-
-    this.incomingTextAnime(ellipsis);
-    setTimeout(() => {
-      this.collapseAnime(ellipsis);
-    }, 20000)
+  animate() {
+    return new Promise(resolve => {
+      const ellipsis = this.getEllipsis();
+      this.layer.add(...ellipsis);
+      this.incomingTextAnime(ellipsis);
+      setTimeout(async () => {
+        await this.collapseAnime(ellipsis);
+        resolve(true);
+      }, 20000);
+    });
   }
 
   collapseAnime(ellipsis) {
-    const x = this.stage.width() / 2;
-    const duration = 10;
-    const easing = Konva.Easings.StrongEaseOut;
-    ellipsis[0].to({
-      x,
-      duration,
-      easing
-    });
-    ellipsis[2].to({
-      x,
-      duration,
-      easing,
-      onFinish: () => this.collapsed = true
+    return new Promise(resolve => {
+      const x = this.stage.width() / 2;
+      const duration = 10;
+      const easing = Konva.Easings.StrongEaseOut;
+      ellipsis[0].to({
+        x,
+        duration,
+        easing
+      });
+      ellipsis[2].to({
+        x,
+        duration,
+        easing,
+        onFinish: () => {
+          this.collapsed = true;
+          resolve(true);
+        }
+      });
     });
   }
 
@@ -87,7 +91,6 @@ export default class EllipsisPainter {
     ]
     return ellipsis;
   }
-
 
   getDot(id, x, y) {
     const { radius, colour: fill, opacity } = EllipsisPainter.DOT_ATTRS

@@ -1,29 +1,38 @@
 <script>
   import EllipsisPainter from './lib/EllipsisPainter.js';
+  import StreetPainter from './lib/StreetPainter.js';
   // import { onMount } from 'svelte';
   // import { wordIndices, currentPiSlice } from './store.js';
   // import WordIllustrator from './lib/WordIllustrator.js';
   // import VerseNumberIllustrator from './lib/VerseNumberIllustrator.js';
   
   const screen = { 
-    el: null,
+    konvaEl: null,
+    streetCanvasEl: null,
     width: window.innerWidth,
     height: window.innerHeight
   };
-  let ellipsisPainter;
-  
-  $: if (screen.el) {
-    ellipsisPainter = new EllipsisPainter(screen);
-    ellipsisPainter.anime();
+
+  const animate = {
+    streetCrawl: false
+  } 
+
+  $: if (screen.konvaEl) {
+    const { konvaEl: el, width, height } = screen;
+    const ellipsisPainter = new EllipsisPainter(el, width, height);
+    ellipsisPainter.animate().then(complete => {
+      animate.streetCrawl = true;
+    });
+  }
+
+  $: if (animate.streetCrawl && screen.streetCanvasEl) {
+    const { streetCanvasEl: el } = screen;
+    const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
+    const streetPainter = new StreetPainter(el, highParkAndHumberside);
+    streetPainter.drawBlocksFromNode(13465772);
   }
   
   // screenDimension = screenEl.getBoundingClientRect();
-  // const ANIME_SEQUENCE = [
-  //   'verse-number',
-  //   'ellipsis',
-  //   'word-drop'
-  // ]
-  // let sequneceIndex = 0;
 
   // $: animeState = ANIME_SEQUENCE[sequneceIndex];
 
@@ -70,38 +79,31 @@
 
 </script>
 
-<div class='screen' bind:this={screen.el} >
-  <!-- {#if readerDimensions}
-    <canvas
-      class='street layer'
-      bind:this={streetLayerEl}
-      width={readerDimensions.width}
-      height={readerDimensions.height}
-    ></canvas>
-    <canvas
-      class='verse-number layer'
-      bind:this={verseNumberLayerEl}
-      width={readerDimensions.width}
-      height={readerDimensions.height}
-    ></canvas>
-  {/if} -->
+<div class='screen'>
+  <div class='konva-container' bind:this={screen.konvaEl}></div>
+  <canvas
+    class='street layer'
+    bind:this={screen.streetCanvasEl}
+    width={screen.width}
+    height={screen.height}
+  ></canvas>
 </div>
 
 <style>
-  .screen {
+  .screen, .konva-container {
     width: 100%;
     height: 100%;
     text-align: center;
   }
-  /* canvas.layer {
+  canvas.layer {
     position: absolute;
     left: 0;
     top: 0;
   }
   .street.layer {
-    z-index: 0;
+    z-index: -1;
   }
-  .verse-number.layer {
+  /* .verse-number.layer {
     z-index: 1;
   } */
 </style>
