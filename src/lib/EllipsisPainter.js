@@ -58,7 +58,9 @@ export default class EllipsisPainter {
       ellipsis[index].to({
         opacity: 1,
         duration,
-        onFinish: () => eDotFadeOut(index)
+        onFinish: () => {
+          if (!this.collapsed) eDotFadeOut(index);
+        }
       });
     }
 
@@ -69,7 +71,7 @@ export default class EllipsisPainter {
         onFinish: () => {
           if (index < ellipsis.length - 1) {
             eDotFadeIn(index + 1);
-          } else if (!this.collapsed) {
+          } else {
             eDotFadeIn(0);
           }
         }

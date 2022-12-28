@@ -107,7 +107,7 @@ export default class StreetPainter {
     const yDelta = toPoint[1] - fromPoint[1];
     
     const lineLength = Math.sqrt(xDelta ** 2 + yDelta ** 2);
-    const segmentLength = Math.random() * (0.5 - 0.2) + 0.2;
+    const segmentLength = Math.random() * (0.9 - 0.1) + 0.1;
     const segmentPercentOfLineLength = segmentLength / lineLength;
   
     const xSegmentDelta = xDelta * segmentPercentOfLineLength;
