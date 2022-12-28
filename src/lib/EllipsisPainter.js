@@ -28,12 +28,12 @@ export default class EllipsisPainter {
     this.incomingTextAnime(ellipsis);
     setTimeout(() => {
       this.collapseAnime(ellipsis);
-    }, 10000)
+    }, 20000)
   }
 
   collapseAnime(ellipsis) {
     const x = this.stage.width() / 2;
-    const duration = 30;
+    const duration = 10;
     const easing = Konva.Easings.StrongEaseOut;
     ellipsis[0].to({
       x,
