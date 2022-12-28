@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 
 const blocksGeoJson = await d3.json("junction-and-environs-centreline.geojson");
 
-export default class StreetIllustrator {
+export default class StreetPainter {
 
   static BLOCKS_GEO_JSON = blocksGeoJson;
 
@@ -51,14 +51,14 @@ export default class StreetIllustrator {
       .projection(this.projection)
       .context(this.canvasContext);
     this.canvasContext.beginPath();
-    geoGenerator({type: 'FeatureCollection', features: StreetIllustrator.BLOCKS_GEO_JSON.features})
+    geoGenerator({type: 'FeatureCollection', features: StreetPainter.BLOCKS_GEO_JSON.features})
     this.canvasContext.stroke();
   }
 
   blockDrawnIds = [];
 
   drawBlocksFromNode(nodeId) {
-    const blocks = StreetIllustrator.getBlocksAtNode(nodeId);
+    const blocks = StreetPainter.getBlocksAtNode(nodeId);
     blocks.forEach(block => {
       this.drawBlock(block, nodeId);
     });
@@ -175,7 +175,7 @@ export default class StreetIllustrator {
   static DEFAULT_SCALE_FACTOR = 2700000;
 
   adjustScale(adjustment = 0) {
-    let newScale = StreetIllustrator.DEFAULT_SCALE_FACTOR;
+    let newScale = StreetPainter.DEFAULT_SCALE_FACTOR;
     if (adjustment != 0) newScale = this.projection.scale() + adjustment;
     this.projection.scale(newScale);
   }
