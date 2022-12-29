@@ -4,7 +4,7 @@ import { Circle } from "konva/lib/shapes/Circle";
 export default class EllipsisPainter {
 
   static DOT_ATTRS = {
-    radius: 10,
+    radius: 5,
     opacity: 0.4, 
     colour: '#9E9EA1'
   }
