@@ -1,9 +1,9 @@
 <script>
   import EllipsisPainter from './lib/EllipsisPainter.js';
   import StreetPainter from './lib/StreetPainter.js';
+  // import WordPainter from './lib/WordPainter.js';
   // import { onMount } from 'svelte';
   // import { wordIndices, currentPiSlice } from './store.js';
-  // import WordIllustrator from './lib/WordIllustrator.js';
   // import VerseNumberIllustrator from './lib/VerseNumberIllustrator.js';
   
   const screen = { 

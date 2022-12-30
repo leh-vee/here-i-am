@@ -1,7 +1,7 @@
 // @ts-nocheck
 import * as d3 from 'd3';
 
-export default class WordIllustrator {
+export default class WordPainter {
 
   static INITIAL_FONT_SIZE = 4000;
   static MAX_FONT_STEP_DELTA = 100;
@@ -18,8 +18,8 @@ export default class WordIllustrator {
   wordDrop(nextWord) {
     this.canvasContext.resetTransform();
     return new Promise(resolve => {
-      const maxFontSizeDelta = WordIllustrator.MAX_FONT_STEP_DELTA;
-      const maxFontSize = WordIllustrator.INITIAL_FONT_SIZE;
+      const maxFontSizeDelta = WordPainter.MAX_FONT_STEP_DELTA;
+      const maxFontSize = WordPainter.INITIAL_FONT_SIZE;
       let fontSize = maxFontSize;
       this.canvasContext.textAlign = 'center';
       this.canvasContext.textBaseline = 'middle'
