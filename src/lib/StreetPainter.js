@@ -12,9 +12,8 @@ export default class StreetPainter {
     this.canvasContext.lineWidth = 2;
     this.canvasContext.strokeStyle = '#9E9EA1';
 
-    const canvas = this.canvasContext.canvas;
-    this.canvasWidth = canvas.clientWidth;
-    this.canvasHeight = canvas.clientHeight; 
+    this.canvasWidth = this.canvasContext.canvas.clientWidth;
+    this.canvasHeight = this.canvasContext.canvas.clientHeight; 
 
     this.projection = d3.geoMercator();
     this.projection.translate([this.canvasWidth / 2, this.canvasHeight / 2])

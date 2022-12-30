@@ -1,20 +1,23 @@
 <script>
   import EllipsisPainter from './lib/EllipsisPainter.js';
   import StreetPainter from './lib/StreetPainter.js';
-  // import WordPainter from './lib/WordPainter.js';
-  // import { onMount } from 'svelte';
+  import WordPainter from './lib/WordPainter.js';
+  import { currentWord, wordIndices } from './store.js';
   // import { wordIndices, currentPiSlice } from './store.js';
+  // import { onMount } from 'svelte';
   // import VerseNumberIllustrator from './lib/VerseNumberIllustrator.js';
   
   const screen = { 
     konvaEl: null,
     streetCanvasEl: null,
+    textCanvasEl: null,
     width: window.innerWidth,
     height: window.innerHeight
   };
 
   const animate = {
-    streetCrawl: false
+    streetCrawl: false,
+    wordDrop: false,
   } 
 
   $: if (screen.konvaEl) {
@@ -22,6 +25,9 @@
     const ellipsisPainter = new EllipsisPainter(el, width, height);
     ellipsisPainter.animate().then(complete => {
       animate.streetCrawl = true;
+      setTimeout(() => {
+        animate.wordDrop = true;
+      }, 5000);
     });
   }
 
@@ -31,56 +37,25 @@
     const streetPainter = new StreetPainter(el, highParkAndHumberside);
     streetPainter.drawBlocksFromNode(13465772);
   }
-  
-  // screenDimension = screenEl.getBoundingClientRect();
 
-  // $: animeState = ANIME_SEQUENCE[sequneceIndex];
-
-  // function nextAnimeState() {
-  //   if (sequneceIndex < ANIME_SEQUENCE.length - 1) {
-  //     sequneceIndex += 1;
-  //   } else {
-  //     sequneceIndex = 0;
-  //   }
-  // }
-
-  // let verseNumberLayerEl;
-  // let verseNumberLayerCtx;
-  // let verseNumberIllustrator;
-  
-  // $: if (verseNumberLayerEl) {
-  //   verseNumberLayerCtx = verseNumberLayerEl.getContext('2d');
-  //   verseNumberIllustrator = new VerseNumberIllustrator(verseNumberLayerCtx);
-  // }
-
-  // let streetLayerEl;
-  // let streetLayerCtx;
-  // let streetIllustrator;
-  // const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
-
-  // $: if (streetLayerEl) {
-  //   streetLayerCtx = streetLayerEl.getContext('2d');
-  //   streetIllustrator = new StreetIllustrator(streetLayerCtx, highParkAndHumberside);
-  // }
-
-  // $: if (animeState === 'verse-number' && verseNumberIllustrator) {
-  //   verseNumberIllustrator.showNumber($currentPiSlice); 
-  //   setTimeout(() => {
-  //     nextAnimeState();
-  //     verseNumberIllustrator.clearCanvas();
-  //   }, 0)
-  // } else if (animeState === 'ellipsis' && fullstopIllustrator) {
-    // fullstopIllustrator.drawEllipsis();
-    // fullstopIllustrator.ellipsisAnimation().then(() => {
-    //   streetIllustrator.drawBlocksFromNode(13465772);
-    //   nextAnimeState();
-    // });
-  // }
+  $: if ($currentWord && animate.wordDrop && screen.textCanvasEl) {
+    const { textCanvasEl: el } = screen;
+    const wordPainter = new WordPainter(el);
+    wordPainter.wordDrop($currentWord).then(hasDropped => {
+      if (hasDropped) wordIndices.nextWord();
+    });
+  }
 
 </script>
 
 <div class='screen'>
   <div class='konva-container' bind:this={screen.konvaEl}></div>
+  <canvas
+    class='text layer'
+    bind:this={screen.textCanvasEl}
+    width={screen.width}
+    height={screen.height}
+  ></canvas>
   <canvas
     class='street layer'
     bind:this={screen.streetCanvasEl}
@@ -100,10 +75,10 @@
     left: 0;
     top: 0;
   }
+  .text.layer {
+    z-index: 1;
+  }
   .street.layer {
     z-index: -1;
   }
-  /* .verse-number.layer {
-    z-index: 1;
-  } */
 </style>

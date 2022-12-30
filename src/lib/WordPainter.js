@@ -6,11 +6,10 @@ export default class WordPainter {
   static INITIAL_FONT_SIZE = 4000;
   static MAX_FONT_STEP_DELTA = 100;
 
-  constructor(ctx) {
-    const canvas = ctx.canvas;
-    this.canvasContext = ctx;
-    this.canvasWidth = canvas.clientWidth;
-    this.canvasHeight = canvas.clientHeight; 
+  constructor(canvasEl) {
+    this.canvasContext = canvasEl.getContext('2d');
+    this.canvasWidth = this.canvasContext.canvas.clientWidth;
+    this.canvasHeight = this.canvasContext.canvas.clientHeight; 
 
     this.currentWord = null;
   }
@@ -27,7 +26,7 @@ export default class WordPainter {
       const stepDown = () => {
         this.canvasContext.font = `${fontSize}px EB Garamond`;
         this.clearCanvas()
-        this.canvasContext.fillText(nextWord, ...this.canvasCentre());
+        this.canvasContext.strokeText(nextWord, ...this.canvasCentre());
       
         if (fontSize > 70) {
           const nextFontSizeDelta =  Math.round(maxFontSizeDelta * d3.easeSinOut(fontSize / maxFontSize));
