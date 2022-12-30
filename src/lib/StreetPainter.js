@@ -106,8 +106,9 @@ export default class StreetPainter {
     const xDelta = toPoint[0] - fromPoint[0];
     const yDelta = toPoint[1] - fromPoint[1];
     
-    const lineLength = Math.sqrt(xDelta ** 2 + yDelta ** 2);
-    const segmentLength = Math.random() * (0.9 - 0.1) + 0.1;
+    const lineLength = Math.sqrt(xDelta ** 2 + yDelta ** 2);;
+    const drawSpeed = d3.easeExpIn(1 - this.blockDrawnIds.length / 200);
+    const segmentLength = drawSpeed;
     const segmentPercentOfLineLength = segmentLength / lineLength;
   
     const xSegmentDelta = xDelta * segmentPercentOfLineLength;
