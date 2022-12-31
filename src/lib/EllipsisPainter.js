@@ -26,15 +26,15 @@ export default class EllipsisPainter {
       setTimeout(async () => {
         await this.collapseAnime(ellipsis);
         resolve(true);
-      }, 20000);
+      }, 10); // 20000
     });
   }
 
   collapseAnime(ellipsis) {
     return new Promise(resolve => {
       const x = this.stage.width() / 2;
-      const duration = 10;
-      const easing = Konva.Easings.StrongEaseOut;
+      const duration = 1; // 10
+      const easing = Konva.Easings.StrongEaseIn;
       ellipsis[0].to({
         x,
         duration,

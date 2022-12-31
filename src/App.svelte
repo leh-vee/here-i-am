@@ -41,9 +41,10 @@
   $: if ($currentWord && animate.wordDrop && screen.textCanvasEl) {
     const { textCanvasEl: el } = screen;
     const wordPainter = new WordPainter(el);
-    wordPainter.wordDrop($currentWord).then(hasDropped => {
-      if (hasDropped) wordIndices.nextWord();
-    });
+    wordPainter.simpleText('face');
+    // wordPainter.wordDrop($currentWord).then(hasDropped => {
+    //   if (hasDropped) wordIndices.nextWord();
+    // });
   }
 
 </script>
