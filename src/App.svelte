@@ -1,7 +1,7 @@
 <script>
   import EllipsisPainter from './lib/EllipsisPainter.js';
   import StreetPainter from './lib/StreetPainter.js';
-  import WordPainter from './lib/WordPainter.js';
+  import LetterPainter from './lib/LetterPainter.js';
   import { currentWord, wordIndices } from './store.js';
   // import { wordIndices, currentPiSlice } from './store.js';
   // import { onMount } from 'svelte';
@@ -10,14 +10,14 @@
   const screen = { 
     konvaEl: null,
     streetCanvasEl: null,
-    textCanvasEl: null,
+    letterCanvasEl: null,
     width: window.innerWidth,
     height: window.innerHeight
   };
 
   const animate = {
     streetCrawl: false,
-    wordDrop: false,
+    abcRollCall: false,
   } 
 
   $: if (screen.konvaEl) {
@@ -26,7 +26,7 @@
     ellipsisPainter.animate().then(complete => {
       animate.streetCrawl = true;
       setTimeout(() => {
-        animate.wordDrop = true;
+        animate.abcRollCall = true;
       }, 5000);
     });
   }
@@ -38,13 +38,10 @@
     streetPainter.drawBlocksFromNode(13465772);
   }
 
-  $: if ($currentWord && animate.wordDrop && screen.textCanvasEl) {
-    const { textCanvasEl: el } = screen;
-    const wordPainter = new WordPainter(el);
-    wordPainter.simpleText('face');
-    // wordPainter.wordDrop($currentWord).then(hasDropped => {
-    //   if (hasDropped) wordIndices.nextWord();
-    // });
+  $: if (animate.abcRollCall && screen.letterCanvasEl) {
+    const { letterCanvasEl: el } = screen;
+    const letterPainter = new LetterPainter(el);
+    letterPainter.rollCall();
   }
 
 </script>
@@ -52,8 +49,8 @@
 <div class='screen'>
   <div class='konva-container' bind:this={screen.konvaEl}></div>
   <canvas
-    class='text layer'
-    bind:this={screen.textCanvasEl}
+    class='letter layer'
+    bind:this={screen.letterCanvasEl}
     width={screen.width}
     height={screen.height}
   ></canvas>
