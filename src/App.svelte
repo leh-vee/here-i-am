@@ -73,10 +73,48 @@
     left: 0;
     top: 0;
   }
-  .text.layer {
+  .letter.layer {
     z-index: 1;
   }
   .street.layer {
     z-index: -1;
   }
+
+  /* .verse {
+    position: absolute;
+    font-size: 20px;
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 10px;
+    padding: 5px 0 0 15px;
+    top: 0;
+    bottom: 50%;
+    border: 1px dotted black;
+    left: 0;
+    right: 0;
+    text-align: left;
+    font-family: 'EB Garamond', serif;
+  } */
+
+  .line {
+    font-family: 'EB Garamond', serif;
+    position: absolute;
+    height: 200px;
+    background-color: white;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 50px;
+  }
+  
+  .line.a {
+    /* border-bottom: 1px dotted black; */
+    top: 0px;
+  }
+  
+  .line.b {
+    /* border-top: 1px dotted black; */
+    bottom: 0px;
+  } 
 </style>

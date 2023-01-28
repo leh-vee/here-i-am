@@ -9,7 +9,7 @@ export default class StreetPainter {
 
   constructor(canvasEl, centreCoordinates, degreesRotation=0) {
     this.canvasContext = canvasEl.getContext('2d');
-    this.canvasContext.lineWidth = 2;
+    this.canvasContext.lineWidth = 1;
     this.canvasContext.strokeStyle = '#9E9EA1';
 
     this.canvasWidth = this.canvasContext.canvas.clientWidth;
@@ -107,7 +107,7 @@ export default class StreetPainter {
     
     const lineLength = Math.sqrt(xDelta ** 2 + yDelta ** 2);;
     const drawSpeed = d3.easeQuadIn(1 - this.blockDrawnIds.length / 200);
-    const segmentLength = drawSpeed;
+    const segmentLength = 1;
     const segmentPercentOfLineLength = segmentLength / lineLength;
   
     const xSegmentDelta = xDelta * segmentPercentOfLineLength;
