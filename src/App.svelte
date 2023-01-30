@@ -41,10 +41,8 @@
     const { trailCanvasEl: el } = screen;
     const shipmanAndMaria = [ -79.475580356435302, 43.666354317159403 ];
     const breadcrumbPainter = new BreadcrumbPainter(el, shipmanAndMaria);
+    breadcrumbPainter.renderTrail();
     breadcrumbPainter.renderGrid();
-    // 13464314 
-    // 13464237 
-    // [ -79.475737962051795, 43.666806955878599 ]
   }
 
 </script>
