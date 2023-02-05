@@ -36,9 +36,7 @@ export default class BreadcrumbPainter {
         });
         return isNotTraveled;
       }); 
-      console.log("possible paths", possiblePaths);
       let nPossiblePaths = possiblePaths.length;
-      console.log("n", nPossiblePaths);
       if (nPossiblePaths > 0) {
         const chosenPath = possiblePaths[C.getRandomInt(nPossiblePaths - 1)];
         trail.push(chosenPath);
@@ -50,9 +48,8 @@ export default class BreadcrumbPainter {
       } else {
         nodeId = null;
       }
-      console.log("trail", trail);
     }
-    return trail;
+    return C.trailFromIds([8023417, 14015158, 30074200, 20120203, 20120256, 20120237, 30105828, 30105829, 30105825, 8023090, 14020650, 14045961, 14045985, 14045806, 14044933, 14044932, 14015266, 3959496, 14020744, 30074184]);
   }
 
   renderTrail() {
@@ -75,7 +72,6 @@ export default class BreadcrumbPainter {
     this.canvasContext.setLineDash([]);
     this.canvasContext.lineWidth = 1;
     this.canvasContext.beginPath();
-    const trail = this.blazeTrail(13464314);
     geoGenerator({type: 'FeatureCollection', features: BreadcrumbPainter.BLOCKS_GEO_JSON.features})
     this.canvasContext.stroke();
   }
@@ -88,9 +84,18 @@ export default class BreadcrumbPainter {
     return blocks;
   }
 
+  static trailFromIds(ids) {
+    const trail = ids.map(id => {
+      const block = this.BLOCKS_GEO_JSON.features.filter(block => {
+        return block.properties.id === id;
+      });
+      return block[0];
+    }); 
+    return trail;
+  }
+
   static getRandomInt(max) {
     let rando = Math.floor(Math.random() * (max + 1));
-    console.log('rando', rando);
     return rando;
   }
 }

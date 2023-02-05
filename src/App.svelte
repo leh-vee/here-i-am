@@ -42,7 +42,7 @@
     const shipmanAndMaria = [ -79.475580356435302, 43.666354317159403 ];
     const breadcrumbPainter = new BreadcrumbPainter(el, shipmanAndMaria);
     breadcrumbPainter.renderTrail();
-    breadcrumbPainter.renderGrid();
+    // breadcrumbPainter.renderGrid();
   }
 
 </script>
