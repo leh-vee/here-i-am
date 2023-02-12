@@ -19,6 +19,10 @@ export default class BreadcrumbPainter {
     this.projection.translate([this.canvasWidth / 2, this.canvasHeight / 2])
     this.projection.scale(BreadcrumbPainter.SCALE_FACTOR);
     this.projection.center(centreCoordinates);
+
+    this.geoGenerator = d3.geoPath()
+      .projection(this.projection)
+      .context(this.canvasContext);
     
     this.centrePointLatLng = centreCoordinates;
     this.canvasCentrePoint = this.projection(centreCoordinates);
@@ -52,27 +56,106 @@ export default class BreadcrumbPainter {
     return C.trailFromIds([8023417, 14015158, 30074200, 20120203, 20120256, 20120237, 30105828, 30105829, 30105825, 8023090, 14020650, 14045961, 14045985, 14045806, 14044933, 14044932, 14015266, 3959496, 14020744, 30074184]);
   }
 
-  renderTrail() {
-    const geoGenerator = d3.geoPath()
-      .projection(this.projection)
-      .context(this.canvasContext);
-    this.canvasContext.setLineDash([1, 5]);
-    this.canvasContext.lineWidth = 5;
-    this.canvasContext.beginPath();
+  getTrailGeoJson() {
     const trail = this.blazeTrail(13464314);
-    geoGenerator({type: 'FeatureCollection', features: trail})
+    const atomicTrail = [];
+    let totalLength = 0;
+    trail.forEach(block => {
+      const nCoordinates = block.geometry.coordinates.length;
+      if (nCoordinates > 2) {
+        const blockCoordinates = block.geometry.coordinates;
+        for (let index = 0; index < nCoordinates - 1; index++) {
+          let blockCopy = structuredClone(block);
+          blockCopy.geometry.coordinates = [blockCoordinates[index], blockCoordinates[index + 1]];
+          blockCopy.properties.name += ` block ${index + 1} of ${nCoordinates - 1}`;
+          let length = this.geoGenerator.measure(blockCopy);
+          blockCopy.properties.length = this.geoGenerator.measure(blockCopy);
+          totalLength += length;
+          blockCopy.properties.totalLength = totalLength;
+          atomicTrail.push(blockCopy);
+        }
+      } else {
+        let length = this.geoGenerator.measure(block);
+        block.properties.length = length;
+        totalLength += length;
+        block.properties.totalLength = totalLength; 
+        atomicTrail.push(block);
+      }
+    });
+    return atomicTrail;
+  }
+
+  getLetterCanvasFeatures(words, trailGeoJson) {
+    const letterFeatures = [];
+    const trail = trailGeoJson;
+    console.log('trail geo json', trail)
+    words.forEach((word, wordIndex) => {
+      let letters = word.split('');
+      letters.forEach((letter, letterIndex) => {
+        let letterFeature = {
+          word,
+          wordIndex,
+          letter,
+          letterIndex,
+          canvasCoordinates:  [100, 200]
+        };
+        letterFeatures.push(letterFeature);
+      });
+    });
+    const nLetters = letterFeatures.length;
+    // this should be a getter after the constructor creates the trail
+    const pxTrailLength = trailGeoJson[trailGeoJson.length - 1].properties.totalLength;
+    const pxDeltaBetweenLetters = pxTrailLength / nLetters;
+    letterFeatures.forEach((letterFeature, index) => {
+      let pxDistanceTravelled = index * pxDeltaBetweenLetters;
+      let letterBlock = trailGeoJson.find(block => {
+        let { totalLength } = block.properties;
+        return pxDistanceTravelled <= totalLength;   
+      });
+      let pxTrailDistanceAtBlocksEnds = letterBlock.properties.totalLength;
+      let pxBlockLength = letterBlock.properties.length;
+      let pxBlockRemainder = pxTrailDistanceAtBlocksEnds - pxDistanceTravelled; 
+      let percentBlockRemainder = pxBlockRemainder / pxBlockLength;
+      let [pointA, pointB] = letterBlock.geometry.coordinates; 
+      let interpolator = d3.geoInterpolate(pointA, pointB);
+      let letterPointGeoCoords = interpolator(1 - percentBlockRemainder);
+      letterFeature.geometry = {
+        type: "Point",
+        coordinates: letterPointGeoCoords
+      }
+      letterFeature.canvasCoordinates = this.projection(letterPointGeoCoords);
+    });
+    console.log('letter canvas features', letterFeatures); 
+    return letterFeatures;
+  }
+
+  getCrumbCanvasCoordinates(trail, nCrumbs) {
+    const trailLength = trail.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue.properties.length;
+    }, 0);
+    const crumbDelta = trailLength / nCrumbs; 
+    // console.log('trail length', trailLength);
+    // console.log('distance between crumbs', crumbDelta);
+  } 
+
+  renderTrail(verseWords) {
+    this.canvasContext.setLineDash([]);
+    this.canvasContext.lineWidth = 1;
+    // this.canvasContext.lineCap = 'round';
+    const trailGeoJson = this.getTrailGeoJson();
+    const letterFeatures = this.getLetterCanvasFeatures(verseWords, trailGeoJson);
+
+    this.canvasContext.beginPath();
+    this.geoGenerator({type: 'FeatureCollection', features: letterFeatures})
     this.canvasContext.stroke();
   }
 
   renderGrid() {
-    const geoGenerator = d3.geoPath()
-      .projection(this.projection)
-      .context(this.canvasContext);
     this.canvasContext.strokeStyle = 'purple';
     this.canvasContext.setLineDash([]);
     this.canvasContext.lineWidth = 1;
     this.canvasContext.beginPath();
-    geoGenerator({type: 'FeatureCollection', features: BreadcrumbPainter.BLOCKS_GEO_JSON.features})
+    this.geoGenerator({type: 'FeatureCollection', features: BreadcrumbPainter.BLOCKS_GEO_JSON.features})
     this.canvasContext.stroke();
   }
 

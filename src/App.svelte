@@ -2,7 +2,7 @@
   import EllipsisPainter from './lib/EllipsisPainter.js';
   import StreetPainter from './lib/StreetPainter.js';
   import BreadcrumbPainter from './lib/BreadcrumbPainter.js';
-  import { currentWord, wordIndices } from './store.js';
+  import { currentVerse } from './store.js';
   // import LetterPainter from './lib/LetterPainter.js';
   // import { wordIndices, currentPiSlice } from './store.js';
   // import { onMount } from 'svelte';
@@ -41,7 +41,10 @@
     const { trailCanvasEl: el } = screen;
     const shipmanAndMaria = [ -79.475580356435302, 43.666354317159403 ];
     const breadcrumbPainter = new BreadcrumbPainter(el, shipmanAndMaria);
-    breadcrumbPainter.renderTrail();
+    const verseWords = [...$currentVerse.a, ...$currentVerse.b];
+    breadcrumbPainter.renderTrail(verseWords);
+    // const nVerseWords = $currentVerse.a.length + $currentVerse.b.length;
+    // breadcrumbPainter.getLetterCanvasFeatures(verseWords);
     // breadcrumbPainter.renderGrid();
   }
 
