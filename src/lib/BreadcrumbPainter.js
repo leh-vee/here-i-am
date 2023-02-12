@@ -42,18 +42,19 @@ export default class BreadcrumbPainter {
       }); 
       let nPossiblePaths = possiblePaths.length;
       if (nPossiblePaths > 0) {
-        const chosenPath = possiblePaths[C.getRandomInt(nPossiblePaths - 1)];
-        trail.push(chosenPath);
+        let chosenPath = structuredClone(possiblePaths[C.getRandomInt(nPossiblePaths - 1)]);
         if (chosenPath.properties.from_node_id === nodeId) {
           nodeId = chosenPath.properties.to_node_id;
         } else {
+          chosenPath.geometry.coordinates.reverse();
           nodeId = chosenPath.properties.from_node_id;
         }
+        trail.push(chosenPath);
       } else {
         nodeId = null;
       }
     }
-    return C.trailFromIds([8023417, 14015158, 30074200, 20120203, 20120256, 20120237, 30105828, 30105829, 30105825, 8023090, 14020650, 14045961, 14045985, 14045806, 14044933, 14044932, 14015266, 3959496, 14020744, 30074184]);
+    return C.trailFromNodeIds([13464314, 13464315, 14015159, 20120199, 20120204, 20120212, 13464450, 30105826, 30105823, 13464565, 13464610, 14020651, 14045962, 14045808, 14020651, 14044934, 14015268, 13465149, 13465205, 14020747, 14672870]);
   }
 
   getTrailGeoJson() {
@@ -129,15 +130,6 @@ export default class BreadcrumbPainter {
     return letterFeatures;
   }
 
-  getCrumbCanvasCoordinates(trail, nCrumbs) {
-    const trailLength = trail.reduce((accumulator, currentValue) => {
-      return accumulator + currentValue.properties.length;
-    }, 0);
-    const crumbDelta = trailLength / nCrumbs; 
-    // console.log('trail length', trailLength);
-    // console.log('distance between crumbs', crumbDelta);
-  } 
-
   renderTrail(verseWords) {
     this.canvasContext.setLineDash([]);
     this.canvasContext.lineWidth = 1;
@@ -145,9 +137,17 @@ export default class BreadcrumbPainter {
     const trailGeoJson = this.getTrailGeoJson();
     const letterFeatures = this.getLetterCanvasFeatures(verseWords, trailGeoJson);
 
-    this.canvasContext.beginPath();
-    this.geoGenerator({type: 'FeatureCollection', features: letterFeatures})
-    this.canvasContext.stroke();
+    letterFeatures.forEach(letter => {
+      let xCoord = Math.round(letter.canvasCoordinates[0]);
+      let yCoord = Math.round(letter.canvasCoordinates[1]);
+      this.canvasContext.beginPath();
+      this.canvasContext.arc(xCoord, yCoord, 2, 0, 2 * Math.PI);
+      this.canvasContext.fill();
+    });
+
+    // this.canvasContext.beginPath();
+    // this.geoGenerator({type: 'FeatureCollection', features: trailGeoJson})
+    // this.canvasContext.stroke();
   }
 
   renderGrid() {
@@ -167,13 +167,28 @@ export default class BreadcrumbPainter {
     return blocks;
   }
 
-  static trailFromIds(ids) {
-    const trail = ids.map(id => {
-      const block = this.BLOCKS_GEO_JSON.features.filter(block => {
-        return block.properties.id === id;
+  static trailFromNodeIds(ids) {
+    const trail = [];
+    const nNodes = ids.length;
+    for (let i = 0; i < nNodes - 1; i++) {
+      let fromNodeId = ids[i];
+      let toNodeId = ids[i + 1];
+      let reverseCoords = false;
+      let block = this.BLOCKS_GEO_JSON.features.find(block => {
+        let bProps = block.properties;
+        let found = false;
+        if (bProps.from_node_id === fromNodeId && bProps.to_node_id === toNodeId) {
+          found = true;
+        } else if (bProps.from_node_id === toNodeId && bProps.to_node_id === fromNodeId) {
+          found = true;
+          reverseCoords = true;
+        }
+        return found;
       });
-      return block[0];
-    }); 
+      let blockCopy = structuredClone(block);
+      if (reverseCoords) blockCopy.geometry.coordinates.reverse();
+      trail.push(blockCopy);
+    }
     return trail;
   }
 
