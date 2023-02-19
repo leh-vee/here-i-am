@@ -39,13 +39,11 @@
   
   $: if (animate.breadcrumbTrail && screen.trailCanvasEl) {
     const { trailCanvasEl: el } = screen;
-    const shipmanAndMaria = [ -79.475580356435302, 43.666354317159403 ];
-    const breadcrumbPainter = new BreadcrumbPainter(el, shipmanAndMaria);
+    const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
+    // const shipmanAndMaria = [ -79.475580356435302, 43.666354317159403 ];
+    const breadcrumbPainter = new BreadcrumbPainter(el, highParkAndHumberside);
     const verseWords = [...$currentVerse.a, ...$currentVerse.b];
     breadcrumbPainter.renderTrail(verseWords);
-    // const nVerseWords = $currentVerse.a.length + $currentVerse.b.length;
-    // breadcrumbPainter.getLetterCanvasFeatures(verseWords);
-    // breadcrumbPainter.renderGrid();
   }
 
 </script>

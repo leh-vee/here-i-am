@@ -54,11 +54,12 @@ export default class BreadcrumbPainter {
         nodeId = null;
       }
     }
-    return C.trailFromNodeIds([13464314, 13464315, 14015159, 20120199, 20120204, 20120212, 13464450, 30105826, 30105823, 13464565, 13464610, 14020651, 14045962, 14045808, 14020651, 14044934, 14015268, 13465149, 13465205, 14020747, 14672870]);
+    // return C.trailFromNodeIds([13464314, 13464315, 14015159, 20120199, 20120204, 20120212, 13464450, 30105826, 30105823, 13464565, 13464610, 14020651, 14045962, 14045808, 14020651, 14044934, 14015268, 13465149, 13465205, 14020747, 14672870]);
+    return trail;
   }
 
   getTrailGeoJson() {
-    const trail = this.blazeTrail(13464314);
+    const trail = this.blazeTrail(13465772);
     const atomicTrail = [];
     let totalLength = 0;
     trail.forEach(block => {
@@ -89,7 +90,6 @@ export default class BreadcrumbPainter {
   getLetterCanvasFeatures(words, trailGeoJson) {
     const letterFeatures = [];
     const trail = trailGeoJson;
-    console.log('trail geo json', trail)
     words.forEach((word, wordIndex) => {
       let letters = word.split('');
       letters.forEach((letter, letterIndex) => {
@@ -131,23 +131,22 @@ export default class BreadcrumbPainter {
   }
 
   renderTrail(verseWords) {
-    this.canvasContext.setLineDash([]);
-    this.canvasContext.lineWidth = 1;
-    // this.canvasContext.lineCap = 'round';
     const trailGeoJson = this.getTrailGeoJson();
     const letterFeatures = this.getLetterCanvasFeatures(verseWords, trailGeoJson);
-
-    letterFeatures.forEach(letter => {
-      let xCoord = Math.round(letter.canvasCoordinates[0]);
-      let yCoord = Math.round(letter.canvasCoordinates[1]);
+    const nCrumbsTotal = letterFeatures.length;
+    let nCrumbsToDrop = nCrumbsTotal;
+    
+    const dropCrumb = () => {
+      let alphaCrumb = letterFeatures[nCrumbsTotal - nCrumbsToDrop];
+      let xCoord = Math.round(alphaCrumb.canvasCoordinates[0]);
+      let yCoord = Math.round(alphaCrumb.canvasCoordinates[1]);
       this.canvasContext.beginPath();
       this.canvasContext.arc(xCoord, yCoord, 2, 0, 2 * Math.PI);
       this.canvasContext.fill();
-    });
-
-    // this.canvasContext.beginPath();
-    // this.geoGenerator({type: 'FeatureCollection', features: trailGeoJson})
-    // this.canvasContext.stroke();
+      nCrumbsToDrop--;
+      if (nCrumbsToDrop > 1) setTimeout(() => { dropCrumb() }, 50);
+    }
+    dropCrumb();
   }
 
   renderGrid() {
