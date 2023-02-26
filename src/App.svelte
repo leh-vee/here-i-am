@@ -8,6 +8,15 @@
   // import { onMount } from 'svelte';
   // import VerseNumberIllustrator from './lib/VerseNumberIllustrator.js';
   
+  const verseMovements = {
+    indexLeader: false,
+    alphabetRoad: false,
+    poeticContraction: false,
+    wordByWord: false,
+    ellipticalCollapse: false, 
+    subLinearCrawl: false,
+  } 
+
   const screen = { 
     konvaEl: null,
     streetCanvasEl: null,
@@ -16,28 +25,23 @@
     height: window.innerHeight
   };
 
-  const animate = {
-    streetCrawl: false,
-    breadcrumbTrail: false,
-  } 
-
   $: if (screen.konvaEl) {
     const { konvaEl: el, width, height } = screen;
     const ellipsisPainter = new EllipsisPainter(el, width, height);
     ellipsisPainter.animate().then(complete => {
-      animate.streetCrawl = true;
+      verseMovements.subLinearCrawl = true;
     });
   }
 
-  $: if (animate.streetCrawl && screen.streetCanvasEl) {
+  $: if (verseMovements.subLinearCrawl && screen.streetCanvasEl) {
     const { streetCanvasEl: el } = screen;
     const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
     const streetPainter = new StreetPainter(el, highParkAndHumberside);
     streetPainter.drawBlocksFromNode(13465772);
-    animate.breadcrumbTrail = true;
+    verseMovements.alphabetRoad = true;
   }
   
-  $: if (animate.breadcrumbTrail && screen.trailCanvasEl) {
+  $: if (verseMovements.alphabetRoad && screen.trailCanvasEl) {
     const { trailCanvasEl: el } = screen;
     const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
     // const shipmanAndMaria = [ -79.475580356435302, 43.666354317159403 ];
