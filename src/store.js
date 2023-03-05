@@ -98,13 +98,6 @@ function createWordIndicesStore() {
 }
 export const wordIndices = createWordIndicesStore();
 
-export const currentPiSlice = derived([poem, wordIndices], (
-  [$poem, $wordIndices]) => {
-    const { verseIndex } = $wordIndices;
-    return $poem[verseIndex].piSlice;
-  }
-);
-
 export const currentWord = derived([poem, wordIndices], (
   [$poem, $wordIndices]) => {
     const { verseIndex, line, wordIndex } = $wordIndices;
@@ -117,6 +110,14 @@ export const currentVerse = derived([poem, wordIndices], (
     const { verseIndex } = $wordIndices;
     return $poem[verseIndex];
   } 
+);
+
+export const isFirstVerseTriad = derived([wordIndices], (
+  [$wordIndices]) => {
+    let isFirstVerse = false;
+    if ($wordIndices.verseIndex < 3) isFirstVerse = true;
+    return isFirstVerse;
+  }
 );
 
 export const isFirstWord = derived([wordIndices], (

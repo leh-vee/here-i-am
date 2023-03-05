@@ -1,12 +1,11 @@
 <script>
-  import { currentVerse } from './store.js';
+  import { currentVerse, isFirstVerseTriad } from './store.js';
   import VerseNumberIllustrator from './lib/VerseNumberIllustrator.js';
-  // import EllipsisPainter from './lib/EllipsisPainter.js';
   // import EllipsisPainter from './lib/EllipsisPainter.js';
   // import StreetPainter from './lib/StreetPainter.js';
   // import BreadcrumbPainter from './lib/BreadcrumbPainter.js';
   // import LetterPainter from './lib/LetterPainter.js';
-  // import { wordIndices, currentPiSlice } from './store.js';
+  // import { wordIndices } from './store.js';
   // import { onMount } from 'svelte';
   
   const verseMovements = {
@@ -26,7 +25,7 @@
 
   $: if (screenProps.canvasEl) {
     const verseNumberIllustrator = new VerseNumberIllustrator(screenProps.canvasEl);
-    verseNumberIllustrator.showNumber('III');
+    verseNumberIllustrator.showNumber($currentVerse.piSlice, $isFirstVerseTriad);
   }
 
   // $: if (screen.konvaEl) {

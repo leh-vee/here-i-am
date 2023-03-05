@@ -14,8 +14,14 @@ export default class VerseNumberIllustrator {
     this.canvasContext.textBaseline = 'middle'
   }
 
-  showNumber(number) {
-    this.canvasContext.fillText(number, ...this.canvasCentre());
+  showNumber(number, asRoman=false) {
+    if (asRoman) {
+      let romanNumeral = "";
+      for (let i = 0; i < number; i++) romanNumeral += "I";
+      this.canvasContext.fillText(romanNumeral, ...this.canvasCentre());
+    } else {
+      this.canvasContext.fillText(number, ...this.canvasCentre());
+    }
   };
 
   clearCanvas() {
