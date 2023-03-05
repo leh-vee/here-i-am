@@ -1,13 +1,12 @@
 // @ts-nocheck
 export default class VerseNumberIllustrator {
 
-  static FONT_SIZE = 400;
+  static FONT_SIZE = 200;
 
-  constructor(ctx) {
-    const canvas = ctx.canvas;
-    this.canvasContext = ctx;
-    this.canvasWidth = canvas.clientWidth;
-    this.canvasHeight = canvas.clientHeight;
+  constructor(canvasEl) {
+    this.canvasContext = canvasEl.getContext('2d');
+    this.canvasWidth = this.canvasContext.canvas.clientWidth;
+    this.canvasHeight = this.canvasContext.canvas.clientHeight;
 
     const fontSize = VerseNumberIllustrator.FONT_SIZE;
     this.canvasContext.font = `${fontSize}px Source Code Pro`;

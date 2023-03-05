@@ -1,15 +1,16 @@
 <script>
-  import EllipsisPainter from './lib/EllipsisPainter.js';
-  import StreetPainter from './lib/StreetPainter.js';
-  import BreadcrumbPainter from './lib/BreadcrumbPainter.js';
   import { currentVerse } from './store.js';
+  import VerseNumberIllustrator from './lib/VerseNumberIllustrator.js';
+  // import EllipsisPainter from './lib/EllipsisPainter.js';
+  // import EllipsisPainter from './lib/EllipsisPainter.js';
+  // import StreetPainter from './lib/StreetPainter.js';
+  // import BreadcrumbPainter from './lib/BreadcrumbPainter.js';
   // import LetterPainter from './lib/LetterPainter.js';
   // import { wordIndices, currentPiSlice } from './store.js';
   // import { onMount } from 'svelte';
-  // import VerseNumberIllustrator from './lib/VerseNumberIllustrator.js';
   
   const verseMovements = {
-    indexLeader: false,
+    countDown: false,
     alphabetRoad: false,
     poeticContraction: false,
     wordByWord: false,
@@ -17,42 +18,53 @@
     subLinearCrawl: false,
   } 
 
-  const screen = { 
-    konvaEl: null,
-    streetCanvasEl: null,
-    trailCanvasEl: null,
+  const screenProps = {
     width: window.innerWidth,
-    height: window.innerHeight
+    height: window.innerHeight,
+    canvasEl: null
   };
 
-  $: if (screen.konvaEl) {
-    const { konvaEl: el, width, height } = screen;
-    const ellipsisPainter = new EllipsisPainter(el, width, height);
-    ellipsisPainter.animate().then(complete => {
-      verseMovements.subLinearCrawl = true;
-    });
+  $: if (screenProps.canvasEl) {
+    const verseNumberIllustrator = new VerseNumberIllustrator(screenProps.canvasEl);
+    verseNumberIllustrator.showNumber('III');
   }
 
-  $: if (verseMovements.subLinearCrawl && screen.streetCanvasEl) {
-    const { streetCanvasEl: el } = screen;
-    const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
-    const streetPainter = new StreetPainter(el, highParkAndHumberside);
-    streetPainter.drawBlocksFromNode(13465772);
-    verseMovements.alphabetRoad = true;
-  }
+  // $: if (screen.konvaEl) {
+  //   const { konvaEl: el, width, height } = screen;
+  //   const ellipsisPainter = new EllipsisPainter(el, width, height);
+  //   ellipsisPainter.animate().then(complete => {
+  //     verseMovements.subLinearCrawl = true;
+  //   });
+  // }
+
+  // $: if (verseMovements.subLinearCrawl && screen.streetCanvasEl) {
+  //   const { streetCanvasEl: el } = screen;
+  //   const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
+  //   const streetPainter = new StreetPainter(el, highParkAndHumberside);
+  //   streetPainter.drawBlocksFromNode(13465772);
+  //   verseMovements.alphabetRoad = true;
+  // }
   
-  $: if (verseMovements.alphabetRoad && screen.trailCanvasEl) {
-    const { trailCanvasEl: el } = screen;
-    const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
-    // const shipmanAndMaria = [ -79.475580356435302, 43.666354317159403 ];
-    const breadcrumbPainter = new BreadcrumbPainter(el, highParkAndHumberside);
-    const verseWords = [...$currentVerse.a, ...$currentVerse.b];
-    breadcrumbPainter.renderTrail(verseWords);
-  }
+  // $: if (verseMovements.alphabetRoad && screen.trailCanvasEl) {
+  //   const { trailCanvasEl: el } = screen;
+  //   const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
+  //   // const shipmanAndMaria = [ -79.475580356435302, 43.666354317159403 ];
+  //   const breadcrumbPainter = new BreadcrumbPainter(el, highParkAndHumberside);
+  //   const verseWords = [...$currentVerse.a, ...$currentVerse.b];
+  //   breadcrumbPainter.renderTrail(verseWords);
+  // }
 
 </script>
 
 <div class='screen'>
+  <canvas
+    bind:this={screenProps.canvasEl}
+    width={screenProps.width}
+    height={screenProps.height}
+  ></canvas>
+</div>
+
+<!-- div class='screen'>
   <div class='breadcrumb layer' bind:this={screen.konvaEl}></div>
   <canvas
     class='street layer'
@@ -66,26 +78,17 @@
     width={screen.width}
     height={screen.height}
   ></canvas>
-</div>
+</div -->
 
 <style>
-  .screen, .breadcrumb.layer {
+  .screen {
     width: 100%;
     height: 100%;
-    text-align: center;
   }
 
-  canvas.layer {
+  canvas {
     position: absolute;
     left: 0;
     top: 0;
-  }
-
-  .street.layer {
-    z-index: -1;
-  }
-
-  .trail.layer {
-    z-index: 2;
   }
 </style>
