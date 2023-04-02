@@ -112,12 +112,30 @@ export const currentVerse = derived([poem, wordIndices], (
   } 
 );
 
+export const currentVerseIndex = derived([wordIndices], (
+  [$wordIndices]) => {
+    return $wordIndices.verseIndex;
+  } 
+);
+
 export const isFirstVerseTriad = derived([wordIndices], (
   [$wordIndices]) => {
     let isFirstVerse = false;
     if ($wordIndices.verseIndex < 3) isFirstVerse = true;
     return isFirstVerse;
   }
+);
+
+export const lastPiSlice = derived([poem, wordIndices], (
+  [$poem, $wordIndices]) => {
+    let piSlice = 0;
+    const { verseIndex } = $wordIndices;
+    if (verseIndex > 0) {
+      piSlice = $poem[verseIndex - 1].piSlice;
+    }
+    return piSlice; 
+  }
+
 );
 
 export const isFirstWord = derived([wordIndices], (

@@ -1,20 +1,29 @@
 <script>
-  import { currentVerse, isFirstVerseTriad } from './store.js';
-  import VerseNumberIllustrator from './lib/VerseNumberIllustrator.js';
-  // import EllipsisPainter from './lib/EllipsisPainter.js';
-  // import StreetPainter from './lib/StreetPainter.js';
-  // import BreadcrumbPainter from './lib/BreadcrumbPainter.js';
-  // import LetterPainter from './lib/LetterPainter.js';
-  // import { wordIndices } from './store.js';
-  // import { onMount } from 'svelte';
-  
-  const verseMovements = {
-    countDown: false,
+  import { currentVerseIndex, currentVerse, lastPiSlice, wordIndices } from './store.js';
+  import CityBlockGeoJsonGenerator from './lib/CityBlockGeoJsonGenerator.js';
+
+  const blockGenerator = new CityBlockGeoJsonGenerator();
+  $: if (blockGenerator) {
+    console.log("Enter verse (at index)", $currentVerseIndex);
+    let fromSefirotId = $lastPiSlice;
+    let toSefirotId = $currentVerse.piSlice;
+    let trail = blockGenerator.blazeTrail(fromSefirotId, toSefirotId);
+  }
+
+  $: if ($currentVerseIndex > -1) {
+    // const toCrossroadsIndex = $currentVerse.piSlice;
+    // const fromCrossRoadsIndex = $lastPiSlice;
+    // const trailGeoJson = BlockGeoGenerator.blazeTrail(fromCrossRoadsIndex, toCrossroadsIndex);
+    // breadcrumbGeoJson = BreadcrumbGenerator(trailGeoJson, verse);
+  }
+
+  const movements = {
+    countDown: true,
     alphabetRoad: false,
     poeticContraction: false,
     wordByWord: false,
-    ellipticalCollapse: false, 
-    subLinearCrawl: false,
+    ellipsis: false, 
+    subLinearCrawl: false
   } 
 
   const screenProps = {
@@ -23,34 +32,39 @@
     canvasEl: null
   };
 
-  $: if (screenProps.canvasEl) {
-    const verseNumberIllustrator = new VerseNumberIllustrator(screenProps.canvasEl);
-    verseNumberIllustrator.showNumber($currentVerse.piSlice, $isFirstVerseTriad);
+  // $: if (movements.countDown && screenProps.canvasEl) {
+  //   // const verseNumberIllustrator = new VerseNumberIllustrator(screenProps.canvasEl);
+  //   verseNumberIllustrator.render($currentVerse.piSlice, $isFirstVerseTriad);
+  //   setTimeout(() => {
+  //     verseNumberIllustrator.clearCanvas();
+  //     movements.countDown = false;
+  //     movements.alphabetRoad = true;
+  //   }, 1000);
+  // }
+
+  $: if (movements.alphabetRoad) {
+    const { canvasEl: el } = screenProps;
+    debugger;
+
+    // const AlphabetRoadGenerator = new BreadcrumbPainter(intersectionCoordinates);
+    // const verseWords = [...$currentVerse.a, ...$currentVerse.b];
+    // breadcrumbPainter.renderTrail(verseWords)
   }
 
   // $: if (screen.konvaEl) {
   //   const { konvaEl: el, width, height } = screen;
   //   const ellipsisPainter = new EllipsisPainter(el, width, height);
   //   ellipsisPainter.animate().then(complete => {
-  //     verseMovements.subLinearCrawl = true;
+  //     movements.subLinearCrawl = true;
   //   });
   // }
 
-  // $: if (verseMovements.subLinearCrawl && screen.streetCanvasEl) {
+  // $: if (movements.subLinearCrawl && screen.streetCanvasEl) {
   //   const { streetCanvasEl: el } = screen;
   //   const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
   //   const streetPainter = new StreetPainter(el, highParkAndHumberside);
   //   streetPainter.drawBlocksFromNode(13465772);
   //   verseMovements.alphabetRoad = true;
-  // }
-  
-  // $: if (verseMovements.alphabetRoad && screen.trailCanvasEl) {
-  //   const { trailCanvasEl: el } = screen;
-  //   const highParkAndHumberside = [ -79.466850201826219, 43.657227646269199 ];
-  //   // const shipmanAndMaria = [ -79.475580356435302, 43.666354317159403 ];
-  //   const breadcrumbPainter = new BreadcrumbPainter(el, highParkAndHumberside);
-  //   const verseWords = [...$currentVerse.a, ...$currentVerse.b];
-  //   breadcrumbPainter.renderTrail(verseWords);
   // }
 
 </script>
