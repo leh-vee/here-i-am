@@ -101,4 +101,8 @@ export default class EllipsisPainter {
     );
     return newDot;
   }
+
+  clearCanvas() {
+    this.stage.clear();
+  }
 }

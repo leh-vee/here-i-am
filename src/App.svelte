@@ -34,14 +34,15 @@
 
   $: if (blockGenerator && screenProps.frameEl) { 
     movements.elliplitcalCollapse = true; 
-    console.log("Enter verse (at index)", $currentVerseIndex);
+    console.log("Enter verse", $currentVerseIndex);
     stateOfEscape.fromSefirot = treeOfLife.getSefirotByIndex($lastPiSlice);
     stateOfEscape.toSefirot = treeOfLife.getSefirotByIndex($currentVerse.piSlice);
   }
 
+  let ellipsisPainter;
   $: if (movements.elliplitcalCollapse && screenProps.konvaEl) {
     const { konvaEl: el, width, height } = screenProps;
-    const ellipsisPainter = new EllipsisPainter(el, width, height);
+    ellipsisPainter = new EllipsisPainter(el, width, height);
     ellipsisPainter.animate().then(complete => {
       movements.elliplitcalCollapse = false;
       movements.subLinearCrawl = true;
@@ -55,6 +56,7 @@
     streetPainter.drawBlocksFromNode(nodeId);
     setTimeout(() => {
       streetPainter.clearCanvas();
+      ellipsisPainter.clearCanvas();
       movements.subLinearCrawl = false;
       movements.countDown = true;
     }, 15000);
@@ -67,7 +69,7 @@
       verseNumberIllustrator.clearCanvas();
       movements.countDown = false;
       movements.alphabetRoad = true;
-    }, 1000);
+    }, 5000);
   }
 
   // $: if (blockGenerator) {
