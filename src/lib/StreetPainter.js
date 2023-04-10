@@ -189,4 +189,8 @@ export default class StreetPainter {
     this.canvasContext.rotate(degrees * Math.PI / 180); 
     this.canvasContext.translate(-fulcrumX, -fulcrumY);
   }
+  
+  clearCanvas() {
+    this.canvasContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+  }
 }

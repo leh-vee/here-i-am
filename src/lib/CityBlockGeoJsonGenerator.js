@@ -5,13 +5,12 @@ const toronto = await d3.json("toronto-centreline-simple.geojson");
 const junction = await d3.json("junction-and-environs-centreline.geojson");
 
 export default class CityBlockGeoJsonGenerator {
-  constructor() {
-    this.K = CityBlockGeoJsonGenerator;
-    this.treeOfLifeMap = this.K.TREE_OF_LIFE_IN_MEMORY_OF_REGIS;
+  constructor(treeOfLifeNodes) {
+    this.treeOfLifeNodes = this.treeOfLifeNodes;
   } 
 
   blazeTrail(fromSefirotId, toSefirotId) {
-    const mockTrailNodeIds = this.K.TREE_OF_LIFE_IN_MEMORY_OF_REGIS[toSefirotId].mock_trail_node_sequence;
+    const mockTrailNodeIds = this.treeOfLifeMap[toSefirotId].mock_trail_node_sequence;
     const streetTrail = this.routeFromNodeIds(mockTrailNodeIds);
     const blockTrail = this.K.splitMultiLineFeatures(streetTrail);
     const trail = this.K.computeLineLengths(blockTrail);
@@ -73,18 +72,8 @@ export default class CityBlockGeoJsonGenerator {
     return splitGeoJson;
   }
 
-  static TREE_OF_LIFE_IN_MEMORY_OF_REGIS = {
-    0: { 
-      name: "High Park and Humberside", 
-      coordinates: [ -79.466850201826219, 43.657227646269199 ],
-      nodeId: 13465772
-    },
-    3: {
-      name: "Shipman and Maria", 
-      coordinates: [ -79.475580356435302, 43.666354317159403 ],
-      nodeId: 13464314,
-      mock_trail_node_sequence: [14672870, 14020747, 13465205, 13465149, 14015268, 14044934, 14020651, 14045808, 14045962, 14020651, 13464610, 13464565, 30105823, 30105826, 13464450, 20120212, 20120204, 20120199, 14015159, 13464315, 13464314]
-    }
+  static mockTrailsByEndNode = {
+    3: [14672870, 14020747, 13465205, 13465149, 14015268, 14044934, 14020651, 14045808, 14045962, 14020651, 13464610, 13464565, 30105823, 30105826, 13464450, 20120212, 20120204, 20120199, 14015159, 13464315, 13464314]
   }
 }
  
