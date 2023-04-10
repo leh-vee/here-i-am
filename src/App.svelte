@@ -5,6 +5,7 @@
   import EllipsisPainter from './lib/EllipsisPainter.js';
   import StreetPainter from './lib/StreetPainter.js';
   import VerseNumberIllustrator from './lib/VerseNumberIllustrator.js';
+  import CrumbAnimator from './lib/CrumbAnimator.js';
 
   const currentLocation = null;
   const treeOfLife = new TreeOfLifeJsonGenerator(currentLocation);
@@ -29,14 +30,18 @@
 
   const stateOfEscape = {
     fromSefirot: null,
-    toSefirot: null 
+    toSefirot: null,
+    trail: null
   }
 
   $: if (blockGenerator && screenProps.frameEl) { 
     movements.elliplitcalCollapse = true; 
     console.log("Enter verse", $currentVerseIndex);
-    stateOfEscape.fromSefirot = treeOfLife.getSefirotByIndex($lastPiSlice);
-    stateOfEscape.toSefirot = treeOfLife.getSefirotByIndex($currentVerse.piSlice);
+    const fromSefirotId = $lastPiSlice;
+    const toSefirotId = $currentVerse.piSlice;
+    stateOfEscape.fromSefirot = treeOfLife.getSefirotByIndex(fromSefirotId);
+    stateOfEscape.toSefirot = treeOfLife.getSefirotByIndex(toSefirotId);
+    stateOfEscape.trail = blockGenerator.blazeTrail(fromSefirotId, toSefirotId);
   }
 
   let ellipsisPainter;
@@ -72,16 +77,13 @@
     }, 5000);
   }
 
-  // $: if (blockGenerator) {
-  //   let trail = blockGenerator.blazeTrail(fromSefirotId, toSefirotId);
-  // }
-
-  // $: if (movements.alphabetRoad) {
-    // const { canvasEl: el } = screenProps;
-    // const AlphabetRoadGenerator = new BreadcrumbPainter(intersectionCoordinates);
-    // const verseWords = [...$currentVerse.a, ...$currentVerse.b];
-    // breadcrumbPainter.renderTrail(verseWords)
-  // }
+  $: if (movements.alphabetRoad) {
+    const { canvasEl: el } = screenProps;
+    const { toSefirot, trail } = stateOfEscape;
+    const crumbAnimator = new CrumbAnimator(
+      el, toSefirot.coordinates, trail, $currentVerse);
+    crumbAnimator.renderTrail();
+  }
 
 </script>
 
@@ -93,22 +95,6 @@
     height={screenProps.height}
   ></canvas>
 </div>
-
-<!-- div class='screen'>
-  <div class='breadcrumb layer' bind:this={screen.konvaEl}></div>
-  <canvas
-    class='street layer'
-    bind:this={screen.streetCanvasEl}
-    width={screen.width}
-    height={screen.height}
-  ></canvas>
-  <canvas
-    class='trail layer'
-    bind:this={screen.trailCanvasEl}
-    width={screen.width}
-    height={screen.height}
-  ></canvas>
-</div -->
 
 <style>
   .screen {
