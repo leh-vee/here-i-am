@@ -6,6 +6,7 @@
   import StreetPainter from './lib/StreetPainter.js';
   import VerseNumberIllustrator from './lib/VerseNumberIllustrator.js';
   import CrumbAnimator from './lib/CrumbAnimator.js';
+  import Konva from 'konva/lib/Core';
 
   const currentLocation = null;
   const treeOfLife = new TreeOfLifeJsonGenerator(currentLocation);
@@ -24,8 +25,9 @@
     width: window.innerWidth,
     height: window.innerHeight,
     frameEl: null,
+    canvasEl: null,
     konvaEl: null,
-    canvasEl: null
+    konvaStage: null
   };
 
   const stateOfEscape = {
@@ -35,6 +37,10 @@
   }
 
   $: if (blockGenerator && screenProps.frameEl) { 
+    const { konvaEl, width, height } = screenProps;
+    screenProps.konvaStage = new Konva.Stage({
+      container: konvaEl, width, height
+    });
     movements.elliplitcalCollapse = true; 
     console.log("Enter verse", $currentVerseIndex);
     const fromSefirotId = $lastPiSlice;
@@ -46,8 +52,9 @@
 
   let ellipsisPainter;
   $: if (movements.elliplitcalCollapse && screenProps.konvaEl) {
-    const { konvaEl: el, width, height } = screenProps;
-    ellipsisPainter = new EllipsisPainter(el, width, height);
+    const konvaLayer = new Konva.Layer();
+    screenProps.konvaStage.add(konvaLayer);
+    ellipsisPainter = new EllipsisPainter(konvaLayer);
     ellipsisPainter.animate().then(complete => {
       movements.elliplitcalCollapse = false;
       movements.subLinearCrawl = true;

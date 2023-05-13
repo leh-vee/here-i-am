@@ -1,4 +1,4 @@
-import Konva from 'konva/lib/Core'
+import Konva from 'konva/lib/Core';
 import { Circle } from "konva/lib/shapes/Circle";
 
 export default class EllipsisPainter {
@@ -9,12 +9,8 @@ export default class EllipsisPainter {
     colour: '#9E9EA1'
   }
   
-  constructor(containerEl, width, height) {
-    this.stage = new Konva.Stage({
-			container: containerEl, width, height
-		});
-    this.layer = new Konva.Layer();
-    this.stage.add(this.layer);
+  constructor(konvaLayer) {
+    this.layer = konvaLayer;
     this.collapsed = false;
   }
 
@@ -32,7 +28,7 @@ export default class EllipsisPainter {
 
   collapseAnime(ellipsis) {
     return new Promise(resolve => {
-      const x = this.stage.width() / 2;
+      const x = this.layer.width() / 2;
       const duration = 1; // duration of collapse
       const easing = Konva.Easings.StrongEaseIn;
       ellipsis[0].to({
@@ -82,8 +78,8 @@ export default class EllipsisPainter {
   } 
 
   getEllipsis() {
-    const xCentre = this.stage.width() / 2;
-    const yCentre = this.stage.height() / 2;
+    const xCentre = this.layer.width() / 2;
+    const yCentre = this.layer.height() / 2;
     const dotDistance = EllipsisPainter.DOT_ATTRS.radius * 3;
 
     const ellipsis = [
@@ -103,6 +99,6 @@ export default class EllipsisPainter {
   }
 
   clearCanvas() {
-    this.stage.clear();
+    this.layer.clear();
   }
 }
