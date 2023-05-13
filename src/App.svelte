@@ -42,7 +42,7 @@
       container: konvaEl, width, height
     });
     movements.elliplitcalCollapse = true; 
-    console.log("Enter verse", $currentVerseIndex);
+    console.info("Enter verse", $currentVerseIndex);
     const fromSefirotId = $lastPiSlice;
     const toSefirotId = $currentVerse.piSlice;
     stateOfEscape.fromSefirot = treeOfLife.getSefirotByIndex(fromSefirotId);
