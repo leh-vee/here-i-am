@@ -1,28 +1,24 @@
 // @ts-nocheck
 import * as d3 from 'd3';
+import { Circle } from "konva/lib/shapes/Circle";
 
 export default class CrumbAnimator {
 
+  static DOT_ATTRS = {
+    radius: 2,
+    opacity: 1, 
+    colour: 'black'
+  }
+
   static SCALE_FACTOR = 2700000;
 
-  constructor(canvasEl, centreCoordinates, trailGeoJson, verse) {
-    this.canvasContext = canvasEl.getContext('2d');
-    this.canvasContext.lineWidth = 1;
-
-    this.canvasWidth = this.canvasContext.canvas.clientWidth;
-    this.canvasHeight = this.canvasContext.canvas.clientHeight; 
+  constructor(konvaLayer, centreCoordinates, trailGeoJson, verse) {
+    this.layer = konvaLayer;
 
     this.projection = d3.geoMercator();
-    this.projection.translate([this.canvasWidth / 2, this.canvasHeight / 2])
+    this.projection.translate([this.layer.width() / 2, this.layer.height() / 2])
     this.projection.scale(CrumbAnimator.SCALE_FACTOR);
     this.projection.center(centreCoordinates);
-
-    this.geoGenerator = d3.geoPath()
-      .projection(this.projection)
-      .context(this.canvasContext);
-    
-    this.centrePointLatLng = centreCoordinates;
-    this.canvasCentrePoint = this.projection(centreCoordinates);
 
     this.trail = trailGeoJson;
     this.words = [...verse.a, ...verse.b];
@@ -47,7 +43,7 @@ export default class CrumbAnimator {
     const radianTrailLength = this.trail[this.trail.length - 1].properties.totalLengthRad;
     const radDistanceBetweenLetters = radianTrailLength / nLetters;
     letterFeatures.forEach((letterFeature, index) => {
-      let radianDistanceTravelled = index * radDistanceBetweenLetters;
+      let radianDistanceTravelled = (index + 1) * radDistanceBetweenLetters;
       let letterBlock = this.trail.find(block => {
         let { totalLengthRad } = block.properties;
         return radianDistanceTravelled <= totalLengthRad;   
@@ -65,6 +61,7 @@ export default class CrumbAnimator {
       }
       letterFeature.canvasCoordinates = this.projection(letterPointGeoCoords);
     });
+    console.log('letter features', letterFeatures);
     return letterFeatures;
   }
 
@@ -77,12 +74,19 @@ export default class CrumbAnimator {
       let alphaCrumb = letterFeatures[nCrumbsTotal - nCrumbsToDrop];
       let xCoord = Math.round(alphaCrumb.canvasCoordinates[0]);
       let yCoord = Math.round(alphaCrumb.canvasCoordinates[1]);
-      this.canvasContext.beginPath();
-      this.canvasContext.arc(xCoord, yCoord, 2, 0, 2 * Math.PI);
-      this.canvasContext.fill();
+      const newMarker = this.createMarker(alphaCrumb.letter, xCoord, yCoord);
+      this.layer.add(newMarker);
       nCrumbsToDrop--;
-      if (nCrumbsToDrop > 1) setTimeout(() => { dropCrumb() }, 50);
+      if (nCrumbsToDrop > 0) setTimeout(() => { dropCrumb() }, 50);
     }
     dropCrumb();
+  }
+
+  createMarker(id, x, y) {
+    const { radius, colour: fill, opacity } = CrumbAnimator.DOT_ATTRS
+    const newMarker = new Circle(
+      { name: 'marker', id, x, y, radius, fill, opacity }
+    );
+    return newMarker;
   }
 }

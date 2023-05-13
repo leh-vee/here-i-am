@@ -85,10 +85,11 @@
   }
 
   $: if (movements.alphabetRoad) {
-    const { canvasEl: el } = screenProps;
+    const konvaLayer = new Konva.Layer();
+    screenProps.konvaStage.add(konvaLayer);
     const { toSefirot, trail } = stateOfEscape;
     const crumbAnimator = new CrumbAnimator(
-      el, toSefirot.coordinates, trail, $currentVerse);
+      konvaLayer, toSefirot.coordinates, trail, $currentVerse);
     crumbAnimator.renderTrail();
   }
 
