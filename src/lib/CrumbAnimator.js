@@ -5,7 +5,6 @@ import { Circle } from "konva/lib/shapes/Circle";
 export default class CrumbAnimator {
 
   static DOT_ATTRS = {
-    radius: 2,
     opacity: 1, 
     colour: 'black'
   }
@@ -21,6 +20,7 @@ export default class CrumbAnimator {
     this.projection.center(centreCoordinates);
 
     this.trail = trailGeoJson;
+    this.verse = verse;
     this.words = [...verse.a, ...verse.b];
   }
 
@@ -82,8 +82,47 @@ export default class CrumbAnimator {
     dropCrumb();
   }
 
-  createMarker(id, x, y) {
-    const { radius, colour: fill, opacity } = CrumbAnimator.DOT_ATTRS
+  getWordCanvasFeaturesForLine(lineIndex='a') {
+    const line = this.verse[lineIndex];
+    
+    let yOffset = 25;
+    let wordIndexOffset = 0;
+    if (lineIndex === 'b') {
+      yOffset = yOffset * 2;
+      wordIndexOffset = this.verse.a.length;
+    }
+    
+    const yCentre = this.layer.height() / 2;
+    const yCoord = yCentre + yOffset;
+
+    const nWords = line.length;
+    const xDelta = this.layer.width() / nWords;
+    const xOffset = xDelta / 2;
+
+    const wordFeatures = [];    
+    
+    line.forEach((word, wordIndex) => {
+      let xCoord = (xDelta * wordIndex) + xOffset;
+      let wordFeature = {
+        word,
+        wordIndex: wordIndex + wordIndexOffset,
+        lineIndex,
+        canvasCoordinates: [xCoord, yCoord]
+      }
+      wordFeatures.push(wordFeature);
+    });
+    return wordFeatures;
+  }
+
+  getWordCanvasFeatures() {
+    const aLineWordFeatures = this.getWordCanvasFeaturesForLine();
+    const bLineWordFeatures = this.getWordCanvasFeaturesForLine('b');
+    const features = [...aLineWordFeatures, ...bLineWordFeatures];
+    return features;
+  }
+
+  createMarker(id, x, y, radius=2) {
+    const { colour: fill, opacity } = CrumbAnimator.DOT_ATTRS
     const newMarker = new Circle(
       { name: 'marker', id, x, y, radius, fill, opacity }
     );
