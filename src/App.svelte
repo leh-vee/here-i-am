@@ -41,7 +41,7 @@
     screenProps.konvaStage = new Konva.Stage({
       container: konvaEl, width, height
     });
-    movements.elliplitcalCollapse = true; 
+    movements.elliplitcalCollapse = true;
     console.info("Enter verse", $currentVerseIndex);
     const fromSefirotId = $lastPiSlice;
     const toSefirotId = $currentVerse.piSlice;
@@ -84,13 +84,21 @@
     }, 5000);
   }
 
+  let crumbAnimator;
   $: if (movements.alphabetRoad) {
     const konvaLayer = new Konva.Layer();
     screenProps.konvaStage.add(konvaLayer);
     const { toSefirot, trail } = stateOfEscape;
-    const crumbAnimator = new CrumbAnimator(
+    crumbAnimator = new CrumbAnimator(
       konvaLayer, toSefirot.coordinates, trail, $currentVerse);
-    crumbAnimator.renderTrail();
+    crumbAnimator.renderTrail().then(complete => {
+      movements.alphabetRoad = false;
+      movements.poeticContraction = true;
+    });
+  }
+
+  $: if (movements.poeticContraction) {
+    crumbAnimator.contract();
   }
 
 </script>

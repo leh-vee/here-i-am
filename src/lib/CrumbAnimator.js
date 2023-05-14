@@ -66,20 +66,28 @@ export default class CrumbAnimator {
   }
 
   renderTrail() {
-    const letterFeatures = this.getLetterCanvasFeatures();
-    const nCrumbsTotal = letterFeatures.length;
-    let nCrumbsToDrop = nCrumbsTotal;
-    
-    const dropCrumb = () => {
-      let alphaCrumb = letterFeatures[nCrumbsTotal - nCrumbsToDrop];
-      let xCoord = Math.round(alphaCrumb.canvasCoordinates[0]);
-      let yCoord = Math.round(alphaCrumb.canvasCoordinates[1]);
-      const newMarker = this.createMarker(alphaCrumb.letter, xCoord, yCoord);
-      this.layer.add(newMarker);
-      nCrumbsToDrop--;
-      if (nCrumbsToDrop > 0) setTimeout(() => { dropCrumb() }, 50);
-    }
-    dropCrumb();
+    return new Promise(resolve => {
+      const letterFeatures = this.getLetterCanvasFeatures();
+      const nCrumbsTotal = letterFeatures.length;
+      let nCrumbsToDrop = nCrumbsTotal;
+      
+      const dropCrumb = () => {
+        let alphaCrumb = letterFeatures[nCrumbsTotal - nCrumbsToDrop];
+        const [ xCoordLong, yCoordLong ] = alphaCrumb.canvasCoordinates;
+        const { wordIndex } = alphaCrumb;
+        let xCoord = Math.round(xCoordLong);
+        let yCoord = Math.round(yCoordLong);
+        const newMarker = this.createLetterCrumbMarker(wordIndex, xCoord, yCoord);
+        this.layer.add(newMarker);
+        nCrumbsToDrop--;
+        if (nCrumbsToDrop > 0) {
+          setTimeout(() => { dropCrumb() }, 50);
+        } else {
+          resolve(true);
+        }
+      }
+      dropCrumb();
+    });
   }
 
   getWordCanvasFeaturesForLine(lineIndex='a') {
@@ -118,13 +126,28 @@ export default class CrumbAnimator {
     const aLineWordFeatures = this.getWordCanvasFeaturesForLine();
     const bLineWordFeatures = this.getWordCanvasFeaturesForLine('b');
     const features = [...aLineWordFeatures, ...bLineWordFeatures];
+    console.log('word features', features);
     return features;
   }
 
-  createMarker(id, x, y, radius=2) {
+  contract() {
+    const wordFeatures = this.getWordCanvasFeatures();
+    this.layer.children.forEach(circle => {
+      let wordIndex = Number(circle.attrs.name);
+      let toWordFeature = wordFeatures.find(f => f.wordIndex === wordIndex);
+      let [ xToCoord, yToCoord ] = toWordFeature.canvasCoordinates;
+      circle.to({
+        x: xToCoord,
+        y: yToCoord,
+        duration: 10
+      })
+    });
+  }
+
+  createLetterCrumbMarker(wordIndex, x, y, radius=2) {
     const { colour: fill, opacity } = CrumbAnimator.DOT_ATTRS
     const newMarker = new Circle(
-      { name: 'marker', id, x, y, radius, fill, opacity }
+      { name: String(wordIndex), x, y, radius, fill, opacity }
     );
     return newMarker;
   }
