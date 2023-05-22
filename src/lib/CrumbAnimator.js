@@ -21,12 +21,12 @@ export default class CrumbAnimator {
 
     this.trail = trailGeoJson;
     this.verse = verse;
-    this.words = [...verse.a, ...verse.b];
   }
 
   getLetterCanvasFeatures() {
     const letterFeatures = [];
-    this.words.forEach((word, wordIndex) => {
+    const verseWords = [...this.verse.a, ...this.verse.b];
+    verseWords.forEach((word, wordIndex) => {
       let letters = word.split('');
       letters.forEach((letter, letterIndex) => {
         let letterFeature = {
