@@ -141,7 +141,7 @@ export default class CrumbAnimator {
       letterCrumb.to({
         x: xToCoord,
         y: yToCoord,
-        duration: 10,
+        duration: Math.floor(Math.random() * 10),
         onFinish: () => {
           toWordFeature.nLettersContracted++;
           if (toWordFeature.nLettersContracted > 1) {
