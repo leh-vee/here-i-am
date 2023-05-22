@@ -115,7 +115,8 @@ export default class CrumbAnimator {
         word,
         wordIndex: wordIndex + wordIndexOffset,
         lineIndex,
-        canvasCoordinates: [xCoord, yCoord]
+        canvasCoordinates: [xCoord, yCoord],
+        nLettersContracted: 0
       }
       wordFeatures.push(wordFeature);
     });
@@ -132,14 +133,26 @@ export default class CrumbAnimator {
 
   contract() {
     const wordFeatures = this.getWordCanvasFeatures();
-    this.layer.children.forEach(circle => {
-      let wordIndex = Number(circle.attrs.name);
+    const letterCrumbMarkers = this.layer.children;
+    letterCrumbMarkers.forEach(letterCrumb => {
+      let wordIndex = Number(letterCrumb.attrs.name);
       let toWordFeature = wordFeatures.find(f => f.wordIndex === wordIndex);
       let [ xToCoord, yToCoord ] = toWordFeature.canvasCoordinates;
-      circle.to({
+      letterCrumb.to({
         x: xToCoord,
         y: yToCoord,
-        duration: 10
+        duration: 10,
+        onFinish: () => {
+          toWordFeature.nLettersContracted++;
+          if (toWordFeature.nLettersContracted > 1) {
+            letterCrumb.destroy();
+          } else {
+            letterCrumb.setAttrs({
+              id: letterCrumb.name(), // id becomes the index of the word in the verse
+              name: toWordFeature.word
+            });
+          }
+        }
       })
     });
   }
