@@ -145,7 +145,9 @@ export default class CrumbAnimator {
         onFinish: () => {
           toWordFeature.nLettersContracted++;
           if (toWordFeature.nLettersContracted > 1) {
+            let wordCrumb = this.layer.findOne(`#${letterCrumb.name()}`);
             letterCrumb.destroy();
+            wordCrumb.radius(wordCrumb.radius() * 1.2);
           } else {
             letterCrumb.setAttrs({
               id: letterCrumb.name(), // id becomes the index of the word in the verse
