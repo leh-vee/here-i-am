@@ -99,6 +99,6 @@ export default class EllipsisPainter {
   }
 
   clearCanvas() {
-    this.layer.clear();
+    this.layer.destroyChildren();
   }
 }
