@@ -98,7 +98,14 @@
   }
 
   $: if (movements.poeticContraction) {
-    crumbAnimator.contract();
+    crumbAnimator.contract().then(complete => {
+      movements.poeticContraction = false;
+      movements.wordByWord = true;
+    });
+  }
+
+  $: if (movements.wordByWord) {
+    console.log('Word by word...')
   }
 
 </script>

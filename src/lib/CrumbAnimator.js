@@ -132,30 +132,38 @@ export default class CrumbAnimator {
   }
 
   contract() {
-    const wordFeatures = this.getWordCanvasFeatures();
-    const letterCrumbMarkers = this.layer.children;
-    letterCrumbMarkers.forEach(letterCrumb => {
-      let wordIndex = Number(letterCrumb.attrs.name);
-      let toWordFeature = wordFeatures.find(f => f.wordIndex === wordIndex);
-      let [ xToCoord, yToCoord ] = toWordFeature.canvasCoordinates;
-      letterCrumb.to({
-        x: xToCoord,
-        y: yToCoord,
-        duration: Math.floor(Math.random() * 10),
-        onFinish: () => {
-          toWordFeature.nLettersContracted++;
-          if (toWordFeature.nLettersContracted > 1) {
-            let wordCrumb = this.layer.findOne(`#${letterCrumb.name()}`);
-            letterCrumb.destroy();
-            wordCrumb.radius(wordCrumb.radius() * 1.2);
-          } else {
-            letterCrumb.setAttrs({
-              id: letterCrumb.name(), // id becomes the index of the word in the verse
-              name: toWordFeature.word
-            });
+    return new Promise(resolve => {
+      const wordFeatures = this.getWordCanvasFeatures();
+      const letterCrumbMarkers = this.layer.children;
+      const nLettersTotal = letterCrumbMarkers.length;
+      let nLettersContractedTotal = 0;
+      letterCrumbMarkers.forEach(letterCrumb => {
+        let wordIndex = Number(letterCrumb.attrs.name);
+        let toWordFeature = wordFeatures.find(f => f.wordIndex === wordIndex);
+        let [ xToCoord, yToCoord ] = toWordFeature.canvasCoordinates;
+        letterCrumb.to({
+          x: xToCoord,
+          y: yToCoord,
+          duration: Math.floor(Math.random() * 10),
+          onFinish: () => {
+            toWordFeature.nLettersContracted++;
+            if (toWordFeature.nLettersContracted > 1) {
+              let wordCrumb = this.layer.findOne(`#${letterCrumb.name()}`);
+              letterCrumb.destroy();
+              wordCrumb.radius(wordCrumb.radius() * 1.2);
+            } else {
+              letterCrumb.setAttrs({
+                id: letterCrumb.name(), // id becomes the index of the word in the verse
+                name: toWordFeature.word
+              });
+            }
+            nLettersContractedTotal++;
+            if (nLettersContractedTotal === nLettersTotal) {
+              resolve(true);
+            } 
           }
-        }
-      })
+        })
+      });
     });
   }
 
