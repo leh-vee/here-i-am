@@ -7,6 +7,7 @@
   import VerseNumberIllustrator from './lib/VerseNumberIllustrator.js';
   import CrumbAnimator from './lib/CrumbAnimator.js';
   import Konva from 'konva/lib/Core';
+  import Word from './lib/Word.svelte';
 
   const currentLocation = null;
   const treeOfLife = new TreeOfLifeJsonGenerator(currentLocation);
@@ -117,6 +118,9 @@
     width={screenProps.width}
     height={screenProps.height}
   ></canvas>
+  {#if movements.wordByWord}
+    <Word />
+  {/if} 
 </div>
 
 <style>

@@ -1,0 +1,16 @@
+<script>
+    import { currentWord } from '../store.js';
+</script>
+
+<p class='word'>{ $currentWord }</p>
+
+<style>
+  .word {
+    text-align: center;
+    position: absolute;
+    top: 30%;
+    width: 100%;
+    font-size: 70px;
+  }
+
+</style>
