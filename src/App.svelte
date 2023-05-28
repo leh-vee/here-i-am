@@ -8,6 +8,7 @@
   import CrumbAnimator from './lib/CrumbAnimator.js';
   import Konva from 'konva/lib/Core';
   import Word from './lib/Word.svelte';
+  import Controller from './lib/Controller.svelte';
 
   const currentLocation = null;
   const treeOfLife = new TreeOfLifeJsonGenerator(currentLocation);
@@ -37,7 +38,8 @@
     trail: null
   }
 
-  $: if (blockGenerator && screenProps.frameEl) { 
+  let isInitialMount = true;
+  $: if (blockGenerator && screenProps.frameEl && isInitialMount) { 
     const { konvaEl, width, height } = screenProps;
     screenProps.konvaStage = new Konva.Stage({
       container: konvaEl, width, height
@@ -49,6 +51,7 @@
     stateOfEscape.fromSefirot = treeOfLife.getSefirotByIndex(fromSefirotId);
     stateOfEscape.toSefirot = treeOfLife.getSefirotByIndex(toSefirotId);
     stateOfEscape.trail = blockGenerator.blazeTrail(fromSefirotId, toSefirotId);
+    isInitialMount = false;
   }
 
   let ellipsisPainter;
@@ -120,6 +123,7 @@
   ></canvas>
   {#if movements.wordByWord}
     <Word />
+    <Controller />
   {/if} 
 </div>
 
