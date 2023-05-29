@@ -144,7 +144,7 @@ export default class CrumbAnimator {
         letterCrumb.to({
           x: xToCoord,
           y: yToCoord,
-          duration: Math.floor(Math.random() * 10),
+          duration: Math.floor(Math.random() * 2),
           onFinish: () => {
             toWordFeature.nLettersContracted++;
             if (toWordFeature.nLettersContracted > 1) {
@@ -165,6 +165,17 @@ export default class CrumbAnimator {
         })
       });
     });
+  }
+
+  highlightWordCrumb(wordIndex, isLineB) {
+    let index = wordIndex;
+    if (isLineB) {
+      const nWordsLineA = this.verse.a.length;
+      index += nWordsLineA;
+    } 
+    const wordCrumb = this.layer.findOne(`#${index}`);
+    this.layer.children.forEach(crumb => crumb.fill('black'));
+    wordCrumb.fill('red');
   }
 
   createLetterCrumbMarker(wordIndex, x, y, radius=2) {

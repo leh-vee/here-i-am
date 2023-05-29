@@ -1,5 +1,5 @@
 <script>
-  import { currentVerseIndex, currentVerse, lastPiSlice, isFirstVerseTriad } from './store.js';
+  import { currentVerseIndex, currentVerse, lastPiSlice, isFirstVerseTriad, wordIndices } from './store.js';
   import TreeOfLifeJsonGenerator from './lib/TreeOfLifeJsonGenerator.js';
   import CityBlockGeoJsonGenerator from './lib/CityBlockGeoJsonGenerator.js';
   import EllipsisPainter from './lib/EllipsisPainter.js';
@@ -108,8 +108,10 @@
     });
   }
 
-  $: if (movements.wordByWord) {
-    console.log('Word by word...')
+  $: if (movements.wordByWord && $wordIndices) {
+    console.log('wordIndices updated...', $wordIndices);
+    let { wordIndex, line } = $wordIndices;
+    crumbAnimator.highlightWordCrumb(wordIndex, line === 'b');
   }
 
 </script>
