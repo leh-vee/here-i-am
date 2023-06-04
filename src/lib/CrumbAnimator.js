@@ -175,8 +175,11 @@ export default class CrumbAnimator {
       index += nWordsLineA;
     } 
     const wordCrumb = this.layer.findOne(`#${index}`);
-    this.layer.children.forEach(crumb => crumb.fill('black'));
-    wordCrumb.fill('red');
+    this.layer.children.forEach(crumb => { 
+      crumb.radius(2);
+    });
+    wordCrumb.radius(4);
+    
   }
 
   createLetterCrumbMarker(wordIndex, x, y, radius=2) {
