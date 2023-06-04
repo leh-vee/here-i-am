@@ -1,8 +1,10 @@
 <script>
-    import { currentWord } from '../store.js';
+    import { currentWord, isEllipsisWord } from '../store.js';
+
+    $: word = ($isEllipsisWord ? '.' : $currentWord);
 </script>
 
-<p class='word'>{ $currentWord }</p>
+<p class='word'>{ word }</p>
 
 <style>
   .word {
