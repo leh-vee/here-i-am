@@ -95,7 +95,7 @@
     screenProps.konvaStage.add(konvaLayer);
     const { toSefirot, trail } = stateOfEscape;
     crumbAnimator = new CrumbAnimator(
-      konvaLayer, toSefirot.coordinates, trail, $currentVerse);
+      konvaLayer, toSefirot.coordinates, trail, $currentVerse, $currentVerseIndex);
     crumbAnimator.renderTrail().then(complete => {
       movements.alphabetRoad = false;
       movements.poeticContraction = true;
@@ -110,16 +110,17 @@
   }
 
   $: if (movements.wordByWord && $wordIndices) {
+    const crumbVerseIndex = crumbAnimator.getVerseIndex();
     let { wordIndex, line } = $wordIndices;
-    crumbAnimator.highlightWordCrumb(wordIndex, line === 'b');
-  }
-
-  $: if ($currentVerseIndex && movements.wordByWord) {
-    setTimeout(() => {
-      movements.wordByWord = false;
-      crumbAnimator.clearCanvas();
-      movements.elliplitcalCollapse = true;
-    }, 0);
+    if ($currentVerseIndex === crumbVerseIndex) {
+      crumbAnimator.highlightWordCrumb(wordIndex, line === 'b');
+    } else {
+      setTimeout(() => {
+        movements.wordByWord = false;
+        crumbAnimator.clearCanvas();
+        movements.elliplitcalCollapse = true;
+      }, 0);
+    }
   }
 
 </script>

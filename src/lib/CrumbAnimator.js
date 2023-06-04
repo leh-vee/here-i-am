@@ -11,7 +11,7 @@ export default class CrumbAnimator {
 
   static SCALE_FACTOR = 2700000;
 
-  constructor(konvaLayer, centreCoordinates, trailGeoJson, verse) {
+  constructor(konvaLayer, centreCoordinates, trailGeoJson, verse, verseIndex) {
     this.layer = konvaLayer;
 
     this.projection = d3.geoMercator();
@@ -21,6 +21,7 @@ export default class CrumbAnimator {
 
     this.trail = trailGeoJson;
     this.verse = verse;
+    this.verseIndex = verseIndex;
   }
 
   getLetterCanvasFeatures() {
@@ -184,6 +185,10 @@ export default class CrumbAnimator {
       { name: String(wordIndex), x, y, radius, fill, opacity }
     );
     return newMarker;
+  }
+
+  getVerseIndex() {
+    return this.verseIndex;
   }
 
   clearCanvas() {
