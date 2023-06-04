@@ -114,6 +114,14 @@
     crumbAnimator.highlightWordCrumb(wordIndex, line === 'b');
   }
 
+  $: if ($currentVerseIndex && movements.wordByWord) {
+    setTimeout(() => {
+      movements.wordByWord = false;
+      crumbAnimator.clearCanvas();
+      movements.elliplitcalCollapse = true;
+    }, 0);
+  }
+
 </script>
 
 <div class='screen' bind:this={screenProps.frameEl}>
