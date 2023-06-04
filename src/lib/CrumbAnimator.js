@@ -185,4 +185,8 @@ export default class CrumbAnimator {
     );
     return newMarker;
   }
+
+  clearCanvas() {
+    this.layer.destroyChildren();
+  }
 }
