@@ -1,5 +1,5 @@
 <script>
-  import { currentVerseIndex, currentVerse, lastPiSlice, isFirstVerseTriad, wordIndices } from './store.js';
+  import { currentPiSlice, currentVerse, currentVerseIndex, lastPiSlice, isFirstVerseTriad, wordIndices } from './store.js';
   import TreeOfLifeJsonGenerator from './lib/TreeOfLifeJsonGenerator.js';
   import CityBlockGeoJsonGenerator from './lib/CityBlockGeoJsonGenerator.js';
   import EllipsisPainter from './lib/EllipsisPainter.js';
@@ -38,26 +38,27 @@
     trail: null
   }
 
-  let isInitialMount = true;
-  $: if (blockGenerator && screenProps.frameEl && isInitialMount) { 
+  const konvaLayer = new Konva.Layer();
+  $: if (blockGenerator && screenProps.frameEl) { 
     const { konvaEl, width, height } = screenProps;
     screenProps.konvaStage = new Konva.Stage({
       container: konvaEl, width, height
     });
+    screenProps.konvaStage.add(konvaLayer);
     movements.elliplitcalCollapse = true;
-    console.info("Enter verse", $currentVerseIndex);
+    updateStateOfEscape();
+  }
+
+  function updateStateOfEscape() {
     const fromSefirotId = $lastPiSlice;
-    const toSefirotId = $currentVerse.piSlice;
+    const toSefirotId = $currentPiSlice;
     stateOfEscape.fromSefirot = treeOfLife.getSefirotByIndex(fromSefirotId);
     stateOfEscape.toSefirot = treeOfLife.getSefirotByIndex(toSefirotId);
     stateOfEscape.trail = blockGenerator.blazeTrail(fromSefirotId, toSefirotId);
-    isInitialMount = false;
   }
 
   let ellipsisPainter;
-  $: if (movements.elliplitcalCollapse && screenProps.konvaEl) {
-    const konvaLayer = new Konva.Layer();
-    screenProps.konvaStage.add(konvaLayer);
+  $: if (movements.elliplitcalCollapse) {
     ellipsisPainter = new EllipsisPainter(konvaLayer);
     ellipsisPainter.animate().then(complete => {
       movements.elliplitcalCollapse = false;
@@ -65,7 +66,7 @@
     });
   }
 
-  $: if (movements.subLinearCrawl && screenProps.canvasEl) {
+  $: if (movements.subLinearCrawl) {
     const { canvasEl: el } = screenProps;
     const { coordinates, nodeId } = stateOfEscape.fromSefirot;
     const streetPainter = new StreetPainter(el, coordinates);
@@ -80,7 +81,7 @@
 
   $: if (movements.countDown) {
     const verseNumberIllustrator = new VerseNumberIllustrator(screenProps.canvasEl);
-    verseNumberIllustrator.render($currentVerse.piSlice, $isFirstVerseTriad);
+    verseNumberIllustrator.render($currentPiSlice, $isFirstVerseTriad);
     setTimeout(() => {
       verseNumberIllustrator.clearCanvas();
       movements.countDown = false;
@@ -109,7 +110,6 @@
   }
 
   $: if (movements.wordByWord && $wordIndices) {
-    console.log('wordIndices updated...', $wordIndices);
     let { wordIndex, line } = $wordIndices;
     crumbAnimator.highlightWordCrumb(wordIndex, line === 'b');
   }
