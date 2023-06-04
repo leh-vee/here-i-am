@@ -126,6 +126,12 @@ export const isFirstVerseTriad = derived([wordIndices], (
   }
 );
 
+export const currentPiSlice = derived([poem, wordIndices], (
+  [$poem, $wordIndices]) => {
+    return $poem[$wordIndices.verseIndex].piSlice;
+  }
+);
+
 export const lastPiSlice = derived([poem, wordIndices], (
   [$poem, $wordIndices]) => {
     let piSlice = 0;
@@ -134,17 +140,6 @@ export const lastPiSlice = derived([poem, wordIndices], (
       piSlice = $poem[verseIndex - 1].piSlice;
     }
     return piSlice; 
-  }
-
-);
-
-export const isFirstWord = derived([wordIndices], (
-  [$wordIndices]) => {
-    let isFirstWord = false;
-    if ($wordIndices.line === 'a' && $wordIndices.wordIndex === 0) {
-      isFirstWord = true;
-    }
-    return isFirstWord;
   }
 );
 
@@ -155,5 +150,17 @@ export const isEllipsisWord = derived([wordIndices], (
       isFirstWord = true;
     }
     return isFirstWord;
+  }
+);
+
+export const isLastVerseWord = derived([poem, wordIndices], (
+  [$poem, $wordIndices]) => {
+    const { verseIndex, line, wordIndex } = $wordIndices;
+    const nWords = $poem[verseIndex][line].length;
+    let isLastVerseWord = false;
+    if (line === 'b' && wordIndex === nWords - 1) {
+      isLastVerseWord = true;
+    }
+    return isLastVerseWord;
   }
 );
