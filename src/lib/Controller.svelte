@@ -3,8 +3,8 @@
 </script>
 
 <div class='controller'>
-  <span class='back button' on:click={ wordIndices.previousWord } >&#10594;</span>
-  <span class='forward button' on:click={ wordIndices.nextWord } >&#10596;</span>
+  <span class='back button' on:click={ wordIndices.previousWord } >&#9756;</span>
+  <span class='forward button' on:click={ wordIndices.nextWord } >&#9758;</span>
 </div>
 
 <style>
