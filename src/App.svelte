@@ -9,6 +9,7 @@
   import Konva from 'konva/lib/Core';
   import Word from './lib/Word.svelte';
   import Controller from './lib/Controller.svelte';
+  import Timer from './lib/Timer.svelte';
 
   const currentLocation = null;
   const treeOfLife = new TreeOfLifeJsonGenerator(currentLocation);
@@ -133,6 +134,7 @@
     height={screenProps.height}
   ></canvas>
   {#if movements.wordByWord}
+    <Timer /> 
     <Word />
     <Controller />
   {/if} 
