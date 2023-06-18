@@ -177,3 +177,13 @@ function createCountdown() {
 }
 
 export const countdown = createCountdown();
+
+export const hasMadeTime = derived([countdown], (
+  [$countdown]) => {
+    let hasMadeTime = false;
+    if ($countdown >= 194) {
+      hasMadeTime = true;
+    }
+    return hasMadeTime;
+  }
+);

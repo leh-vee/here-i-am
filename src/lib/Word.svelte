@@ -1,7 +1,7 @@
 <script>
-    import { currentWord, isEllipsisWord } from '../store.js';
+    import { currentWord, isEllipsisWord, hasMadeTime } from '../store.js';
 
-    $: word = ($isEllipsisWord ? '.' : $currentWord);
+    $: word = ($isEllipsisWord && !$hasMadeTime ? '.' : $currentWord);
 </script>
 
 <p class='word'>{ word }</p>
