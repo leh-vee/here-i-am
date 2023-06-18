@@ -1,13 +1,12 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
-  import { countdown, wordIndices } from '../store.js';
+  import { countdown, doomCountdown, wordIndices } from '../store.js';
 
   let oneSecondInterval;
-  let doomCountdown;
 
   onMount(() => {
     countdown.reset();
-    doomCountdown = 3;
+    doomCountdown.reset();
     oneSecondInterval = setInterval(() => {
       if ($countdown > 0) {
         countdown.decrement();
@@ -16,14 +15,15 @@
           wordIndices.nextVerse();
         }, 141);
       }
-      if (doomCountdown > 0) {
-        doomCountdown -= 1;
+      if ($doomCountdown > 0) {
+        doomCountdown.decrement();
         wordIndices.nextWord();
       } 
     }, 1000);
 	});
   
   onDestroy(() => {
+    doomCountdown.clear();
     clearInterval(oneSecondInterval);
 	});
 

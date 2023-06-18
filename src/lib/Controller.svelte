@@ -1,14 +1,18 @@
 <script>
-    import { wordIndices, countdown } from '../store.js';
+    import { wordIndices, countdown, doomCountdown } from '../store.js';
 
     function next() {
-      countdown.increment();
-      wordIndices.nextWord();
+      if ($doomCountdown === 0) {
+        countdown.increment();
+        wordIndices.nextWord();
+      }
     } 
     
     function previous() {
-      countdown.increment();
-      wordIndices.previousWord();
+      if ($doomCountdown === 0) {
+        countdown.increment();
+        wordIndices.previousWord();
+      }
     }
 </script>
 

@@ -187,3 +187,16 @@ export const hasMadeTime = derived([countdown], (
     return hasMadeTime;
   }
 );
+
+function createDoomCountdown() {
+	const { subscribe, set, update } = writable(0);
+
+	return {
+		subscribe,
+		decrement: () => update(n => n - 1),
+		reset: () => set(3),
+		clear: () => set(0)
+	};
+}
+
+export const doomCountdown = createDoomCountdown();
