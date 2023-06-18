@@ -1,24 +1,23 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
-  import { wordIndices } from '../store.js';
+  import { countdown, wordIndices } from '../store.js';
 
   let oneSecondInterval;
-  let secondsRemaining;
-  let doomSecondsRemaining;
+  let doomCountdown;
 
   onMount(() => {
-    secondsRemaining = 3;
-    doomSecondsRemaining = 3;
+    countdown.reset();
+    doomCountdown = 3;
     oneSecondInterval = setInterval(() => {
-      if (secondsRemaining > 0) {
-        secondsRemaining -= 1;
+      if ($countdown > 0) {
+        countdown.decrement();
       } else {
         setTimeout(() => {
           wordIndices.nextVerse();
         }, 141);
       }
-      if (doomSecondsRemaining > 0) {
-        doomSecondsRemaining -= 1;
+      if (doomCountdown > 0) {
+        doomCountdown -= 1;
         wordIndices.nextWord();
       } 
     }, 1000);
@@ -29,8 +28,8 @@
 	});
 
   let timerStr = "0:00";
-  $: timerMinutes = Math.floor(secondsRemaining / 60);
-  $: timerSeconds = secondsRemaining % 60;
+  $: timerMinutes = Math.floor($countdown / 60);
+  $: timerSeconds = $countdown % 60;
   $: {
     if (timerSeconds < 10) {
       timerStr = `${timerMinutes}:0${timerSeconds}`;

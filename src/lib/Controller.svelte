@@ -1,10 +1,20 @@
 <script>
-    import { wordIndices } from '../store.js';
+    import { wordIndices, countdown } from '../store.js';
+
+    function next() {
+      countdown.increment();
+      wordIndices.nextWord();
+    } 
+    
+    function previous() {
+      countdown.increment();
+      wordIndices.previousWord();
+    }
 </script>
 
 <div class='controller'>
-  <span class='back button' on:click={ wordIndices.previousWord } >&#9756;</span>
-  <span class='forward button' on:click={ wordIndices.nextWord } >&#9758;</span>
+  <span class='back button' on:click={ previous } >&#9756;</span>
+  <span class='forward button' on:click={ next } >&#9758;</span>
 </div>
 
 <style>

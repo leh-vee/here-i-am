@@ -164,3 +164,16 @@ export const isLastVerseWord = derived([poem, wordIndices], (
     return isLastVerseWord;
   }
 );
+
+function createCountdown() {
+	const { subscribe, set, update } = writable(0);
+
+	return {
+		subscribe,
+		increment: () => update(n => n + 3),
+		decrement: () => update(n => n - 1),
+		reset: () => set(3)
+	};
+}
+
+export const countdown = createCountdown();
