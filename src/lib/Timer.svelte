@@ -44,10 +44,14 @@
 <style>
   .timer {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    width: 100%;
+    top: 12vh;
+    left: 0;
     margin: 0;
     font-family: sans-serif;
     font-weight: normal;
+    font-size: 40vw;
+    font-family: 'Inconsolata', monospace;
+    text-align: center;
   }
 </style>
