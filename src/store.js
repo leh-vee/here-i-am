@@ -82,11 +82,11 @@ function createWordIndicesStore() {
       } else if (isLineB) {
         prevLine = 'a';
         prevWordIndex = POEM_PARSED[verseIndex][prevLine].length - 1;
-      } else if (!isFirstVerse) {
-        prevVerseIndex -= 1;
-        prevLine = 'b';
-        prevWordIndex = POEM_PARSED[prevVerseIndex][prevLine].length - 1;
-      }
+      } // else if (!isFirstVerse) {
+      //   prevVerseIndex -= 1;
+      //   prevLine = 'b';
+      //   prevWordIndex = POEM_PARSED[prevVerseIndex][prevLine].length - 1;
+      // }
 
       return {
         verseIndex: prevVerseIndex,
@@ -123,6 +123,15 @@ export const isFirstVerseTriad = derived([wordIndices], (
     let isFirstVerse = false;
     if ($wordIndices.verseIndex < 3) isFirstVerse = true;
     return isFirstVerse;
+  }
+);
+
+export const isFirstVerseWord = derived([wordIndices], (
+  [$wordIndices]) => {
+    let isFirstVerseWord = false;
+    let { wordIndex, line } = $wordIndices; 
+    if (wordIndex === 0 && line === 'a') isFirstVerseWord = true;
+    return isFirstVerseWord;
   }
 );
 
