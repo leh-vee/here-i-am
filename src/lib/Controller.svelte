@@ -2,21 +2,23 @@
     import { wordIndices, countdown, doomCountdown } from '../store.js';
 
     function next() {
-      if ($doomCountdown === 0) {
+      if (!isDoomNigh) {
         countdown.increment();
         wordIndices.nextWord();
       }
     } 
     
     function previous() {
-      if ($doomCountdown === 0) {
+      if (!isDoomNigh) {
         countdown.increment();
         wordIndices.previousWord();
       }
     }
+
+    $: isDoomNigh = ($doomCountdown > 0) ? true : false;
 </script>
 
-<div class='controller'>
+<div class='controller' class:disabled="{ isDoomNigh }">
   <span class='back button' on:click={ previous } >&#9756;</span>
   <span class='forward button' on:click={ next } >&#9758;</span>
 </div>
@@ -28,6 +30,10 @@
     height: 35%;
     width: 100%;
     display: flex;
+  }
+
+  .controller.disabled {
+    opacity: 0.5;
   }
 
   .controller .button {
