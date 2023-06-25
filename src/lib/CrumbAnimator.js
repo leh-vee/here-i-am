@@ -11,14 +11,13 @@ export default class CrumbAnimator {
 
   static SCALE_FACTOR = 2700000;
 
-  constructor(konvaLayer, centreCoordinates, trailGeoJson, verse, verseIndex) {
+  constructor(konvaLayer, trailGeoJson, verse, verseIndex) {
     this.layer = konvaLayer;
 
-    this.projection = d3.geoMercator();
-    this.projection.translate([this.layer.width() / 2, this.layer.height() / 2])
-    this.projection.scale(CrumbAnimator.SCALE_FACTOR);
-    this.projection.center(centreCoordinates);
-
+    this.projection = d3.geoMercator().fitSize(
+      [this.layer.width(), this.layer.height()], 
+      { "type": "FeatureCollection", "features": trailGeoJson }
+    );
     this.trail = trailGeoJson;
     this.verse = verse;
     this.verseIndex = verseIndex;

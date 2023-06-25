@@ -94,9 +94,9 @@
   $: if (movements.alphabetRoad) {
     const konvaLayer = new Konva.Layer();
     screenProps.konvaStage.add(konvaLayer);
-    const { toSefirot, trail } = stateOfEscape;
+    const { fromSefirot, trail } = stateOfEscape;
     crumbAnimator = new CrumbAnimator(
-      konvaLayer, toSefirot.coordinates, trail, $currentVerse, $currentVerseIndex);
+      konvaLayer, trail, $currentVerse, $currentVerseIndex);
     crumbAnimator.renderTrail().then(complete => {
       movements.alphabetRoad = false;
       movements.poeticContraction = true;
