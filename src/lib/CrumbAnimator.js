@@ -65,6 +65,17 @@ export default class CrumbAnimator {
     return letterFeatures;
   }
 
+  moveLayerTo(coordinates) {
+    const { x: xDeltaFromOrigin, y: yDeltaFromOrigin } = this.layer.position();
+    const xFrom = (this.layer.width() / 2) - xDeltaFromOrigin; 
+    const yFrom = (this.layer.height() / 2) - yDeltaFromOrigin; 
+    const { x: xTo, y: yTo } = coordinates; 
+    const xMoveBy = xFrom - xTo; 
+    const yMoveBy = yFrom - yTo;     
+    this.layer.move({ x: xMoveBy, y: yMoveBy });
+    return true;
+  }
+
   renderTrail() {
     return new Promise(resolve => {
       const letterFeatures = this.getLetterCanvasFeatures();
@@ -81,7 +92,10 @@ export default class CrumbAnimator {
         this.layer.add(newMarker);
         nCrumbsToDrop--;
         if (nCrumbsToDrop > 0) {
-          setTimeout(() => { dropCrumb() }, 50);
+          setTimeout(() => { 
+            dropCrumb();
+            this.moveLayerTo({ x: xCoord, y: yCoord });
+          }, 50);
         } else {
           resolve(true);
         }
