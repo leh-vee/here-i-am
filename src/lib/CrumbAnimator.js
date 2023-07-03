@@ -9,8 +9,6 @@ export default class CrumbAnimator {
     colour: 'black'
   }
 
-  static SCALE_FACTOR = 2700000;
-
   constructor(konvaLayer, trailGeoJson, verse, verseIndex) {
     this.layer = konvaLayer;
 
@@ -21,6 +19,7 @@ export default class CrumbAnimator {
     this.trail = trailGeoJson;
     this.verse = verse;
     this.verseIndex = verseIndex;
+    this.letterFeatures = this.getLetterCanvasFeatures();
   }
 
   getLetterCanvasFeatures() {
@@ -78,12 +77,11 @@ export default class CrumbAnimator {
 
   renderTrail() {
     return new Promise(resolve => {
-      const letterFeatures = this.getLetterCanvasFeatures();
-      const nCrumbsTotal = letterFeatures.length;
+      const nCrumbsTotal = this.letterFeatures.length;
       let nCrumbsToDrop = nCrumbsTotal;
       
       const dropCrumb = () => {
-        let alphaCrumb = letterFeatures[nCrumbsTotal - nCrumbsToDrop];
+        let alphaCrumb = this.letterFeatures[nCrumbsTotal - nCrumbsToDrop];
         const [ xCoordLong, yCoordLong ] = alphaCrumb.canvasCoordinates;
         const { wordIndex } = alphaCrumb;
         let xCoord = Math.round(xCoordLong);
@@ -113,10 +111,12 @@ export default class CrumbAnimator {
       yOffset = yOffset * 2;
       wordIndexOffset = this.verse.a.length;
     }
-    
-    const yCentre = this.layer.height() / 2;
-    const yCoord = yCentre + yOffset;
 
+    const { x: xDeltaFromOrigin, y: yDeltaFromOrigin } = this.layer.position();
+    const yCentreCoord = (this.layer.height() / 2) - yDeltaFromOrigin;
+    const yCoord = yCentreCoord + yOffset;
+    
+    const xLeftMargin = -xDeltaFromOrigin; 
     const nWords = line.length;
     const xDelta = this.layer.width() / nWords;
     const xOffset = xDelta / 2;
@@ -124,7 +124,7 @@ export default class CrumbAnimator {
     const wordFeatures = [];    
     
     line.forEach((word, wordIndex) => {
-      let xCoord = (xDelta * wordIndex) + xOffset;
+      let xCoord = xLeftMargin + (xDelta * wordIndex) + xOffset;
       let wordFeature = {
         word,
         wordIndex: wordIndex + wordIndexOffset,
