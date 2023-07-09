@@ -64,7 +64,7 @@ export default class CrumbAnimator {
     return letterFeatures;
   }
 
-  moveLayerTo(coordinates) {
+  centrePointOnStage(coordinates) {
     const { x: xDeltaFromOrigin, y: yDeltaFromOrigin } = this.layer.position();
     const xFrom = (this.layer.width() / 2) - xDeltaFromOrigin; 
     const yFrom = (this.layer.height() / 2) - yDeltaFromOrigin; 
@@ -92,7 +92,7 @@ export default class CrumbAnimator {
         if (nCrumbsToDrop > 0) {
           setTimeout(() => { 
             dropCrumb();
-            this.moveLayerTo({ x: xCoord, y: yCoord });
+            this.centrePointOnStage({ x: xCoord, y: yCoord });
           }, 50);
         } else {
           resolve(true);
