@@ -11,6 +11,8 @@ export default class CrumbAnimator {
 
   constructor(konvaLayer, trailGeoJson, verse, verseIndex) {
     this.layer = konvaLayer;
+    this.layerScale = 3;
+    this.layer.scale({x: this.layerScale, y: this.layerScale });
 
     this.projection = d3.geoMercator().fitSize(
       [this.layer.width(), this.layer.height()], 
@@ -65,12 +67,13 @@ export default class CrumbAnimator {
   }
 
   centrePointOnStage(coordinates) {
+    const scale = this.layerScale;
     const { x: xDeltaFromOrigin, y: yDeltaFromOrigin } = this.layer.position();
     const xFrom = (this.layer.width() / 2) - xDeltaFromOrigin; 
     const yFrom = (this.layer.height() / 2) - yDeltaFromOrigin; 
     const { x: xTo, y: yTo } = coordinates; 
-    const xMoveBy = xFrom - xTo; 
-    const yMoveBy = yFrom - yTo;     
+    const xMoveBy = (xFrom - (xTo * scale)); 
+    const yMoveBy = (yFrom - (yTo * scale));  
     this.layer.move({ x: xMoveBy, y: yMoveBy });
     return true;
   }
@@ -93,7 +96,7 @@ export default class CrumbAnimator {
           setTimeout(() => { 
             dropCrumb();
             this.centrePointOnStage({ x: xCoord, y: yCoord });
-          }, 50);
+          }, 1000);
         } else {
           resolve(true);
         }
@@ -105,7 +108,7 @@ export default class CrumbAnimator {
   getWordCanvasFeaturesForLine(lineIndex='a') {
     const line = this.verse[lineIndex];
     
-    let yOffset = 25;
+    let yOffset = 25 / this.layerScale;
     let wordIndexOffset = 0;
     if (lineIndex === 'b') {
       yOffset = yOffset * 2;
@@ -113,12 +116,12 @@ export default class CrumbAnimator {
     }
 
     const { x: xDeltaFromOrigin, y: yDeltaFromOrigin } = this.layer.position();
-    const yCentreCoord = (this.layer.height() / 2) - yDeltaFromOrigin;
+    const yCentreCoord = ((this.layer.height() / 2) - yDeltaFromOrigin) / this.layerScale;
     const yCoord = yCentreCoord + yOffset;
     
-    const xLeftMargin = -xDeltaFromOrigin; 
+    const xLeftMargin = -xDeltaFromOrigin / this.layerScale; 
     const nWords = line.length;
-    const xDelta = this.layer.width() / nWords;
+    const xDelta = (this.layer.width() / this.layerScale) / nWords;
     const xOffset = xDelta / 2;
 
     const wordFeatures = [];    
@@ -162,8 +165,6 @@ export default class CrumbAnimator {
           onFinish: () => {
             toWordFeature.nLettersContracted++;
             if (toWordFeature.nLettersContracted > 1) {
-              // let wordCrumb = this.layer.findOne(`#${letterCrumb.name()}`);
-              // wordCrumb.radius(wordCrumb.radius() * 1.2);
               letterCrumb.destroy();
             } else {
               letterCrumb.setAttrs({
@@ -189,16 +190,16 @@ export default class CrumbAnimator {
     } 
     const wordCrumb = this.layer.findOne(`#${index}`);
     this.layer.children.forEach(crumb => { 
-      crumb.radius(2);
+      crumb.radius(2 / this.layerScale);
     });
-    wordCrumb.radius(4);
-    
+    wordCrumb.radius(4 / this.layerScale);
   }
 
   createLetterCrumbMarker(wordIndex, x, y, radius=2) {
+    const scaledRadius = radius / this.layerScale;
     const { colour: fill, opacity } = CrumbAnimator.DOT_ATTRS
     const newMarker = new Circle(
-      { name: String(wordIndex), x, y, radius, fill, opacity }
+      { name: String(wordIndex), x, y, radius: scaledRadius, fill, opacity }
     );
     return newMarker;
   }
