@@ -3,21 +3,25 @@ import * as d3 from 'd3';
 import { Circle } from "konva/lib/shapes/Circle";
 
 export default class CrumbAnimator {
-
+  
   static DOT_ATTRS = {
     opacity: 1, 
     colour: 'black'
   }
 
+  static DEFAULT_SCALE_FACTOR = 2700000;
+
   constructor(konvaLayer, trailGeoJson, verse, verseIndex) {
     this.layer = konvaLayer;
-    this.layerScale = 3;
-    this.layer.scale({x: this.layerScale, y: this.layerScale });
 
     this.projection = d3.geoMercator().fitSize(
       [this.layer.width(), this.layer.height()], 
       { "type": "FeatureCollection", "features": trailGeoJson }
     );
+
+    this.layerScale = CrumbAnimator.DEFAULT_SCALE_FACTOR / this.projection.scale();
+    this.layer.scale({x: this.layerScale, y: this.layerScale });
+
     this.trail = trailGeoJson;
     this.verse = verse;
     this.verseIndex = verseIndex;
@@ -96,7 +100,7 @@ export default class CrumbAnimator {
           setTimeout(() => { 
             dropCrumb();
             this.centrePointOnStage({ x: xCoord, y: yCoord });
-          }, 1000);
+          }, 100);
         } else {
           resolve(true);
         }
@@ -148,10 +152,14 @@ export default class CrumbAnimator {
     return features;
   }
 
+  getAllLayerCrumbs() {
+    return this.layer.getChildren(node => node.getClassName() === 'Circle');
+  }
+
   contract() {
     return new Promise(resolve => {
       const wordFeatures = this.getWordCanvasFeatures();
-      const letterCrumbMarkers = this.layer.children;
+      const letterCrumbMarkers = this.getAllLayerCrumbs();
       const nLettersTotal = letterCrumbMarkers.length;
       let nLettersContractedTotal = 0;
       letterCrumbMarkers.forEach(letterCrumb => {
@@ -189,7 +197,7 @@ export default class CrumbAnimator {
       index += nWordsLineA;
     } 
     const wordCrumb = this.layer.findOne(`#${index}`);
-    this.layer.children.forEach(crumb => { 
+    this.getAllLayerCrumbs().forEach(crumb => { 
       crumb.radius(2 / this.layerScale);
     });
     wordCrumb.radius(4 / this.layerScale);
