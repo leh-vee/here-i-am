@@ -19,13 +19,17 @@ export default class CrumbAnimator {
       { "type": "FeatureCollection", "features": trailGeoJson }
     );
 
-    this.layerScale = CrumbAnimator.DEFAULT_SCALE_FACTOR / this.projection.scale();
-    this.layer.scale({x: this.layerScale, y: this.layerScale });
+    this.zoomLayer(3);
 
     this.trail = trailGeoJson;
     this.verse = verse;
     this.verseIndex = verseIndex;
     this.letterFeatures = this.getLetterCanvasFeatures();
+  }
+
+  zoomLayer(zoomScale) {
+    this.layer.scale({x: zoomScale, y: zoomScale });
+    this.currentLayerZoomScale = zoomScale;
   }
 
   getLetterCanvasFeatures() {
@@ -70,12 +74,12 @@ export default class CrumbAnimator {
     return letterFeatures;
   }
 
-  centrePointOnStage(coordinates) {
-    const scale = this.layerScale;
+  pinLayerPointToCentreStage(pointCoordinates) {
+    const scale = this.currentLayerZoomScale;
     const { x: xDeltaFromOrigin, y: yDeltaFromOrigin } = this.layer.position();
     const xFrom = (this.layer.width() / 2) - xDeltaFromOrigin; 
     const yFrom = (this.layer.height() / 2) - yDeltaFromOrigin; 
-    const { x: xTo, y: yTo } = coordinates; 
+    const { x: xTo, y: yTo } = pointCoordinates; 
     const xMoveBy = (xFrom - (xTo * scale)); 
     const yMoveBy = (yFrom - (yTo * scale));  
     this.layer.move({ x: xMoveBy, y: yMoveBy });
@@ -85,6 +89,8 @@ export default class CrumbAnimator {
   renderTrail() {
     return new Promise(resolve => {
       const nCrumbsTotal = this.letterFeatures.length;
+      const escapeSpeed = 100;
+      const godSpeed = 400; 
       let nCrumbsToDrop = nCrumbsTotal;
       
       const dropCrumb = () => {
@@ -99,10 +105,27 @@ export default class CrumbAnimator {
         if (nCrumbsToDrop > 0) {
           setTimeout(() => { 
             dropCrumb();
-            this.centrePointOnStage({ x: xCoord, y: yCoord });
-          }, 100);
+            setTimeout(() => { 
+              this.pinLayerPointToCentreStage({ x: xCoord, y: yCoord });
+            }, godSpeed);
+          }, escapeSpeed);
         } else {
-          resolve(true);
+          setTimeout(() => {
+            const tween = new Konva.Tween({
+              node: this.layer,
+              duration: 3,
+              easing: Konva.Easings.EaseOut,
+              onFinish: () => {
+                this.currentLayerZoomScale = 1;
+                // resolve(true);
+              },
+              scaleX: 1,
+              scaleY: 1,
+              x: 0, 
+              y: 0,
+            });
+            tween.play();
+          }, 2000);
         }
       }
       dropCrumb();
@@ -112,7 +135,7 @@ export default class CrumbAnimator {
   getWordCanvasFeaturesForLine(lineIndex='a') {
     const line = this.verse[lineIndex];
     
-    let yOffset = 25 / this.layerScale;
+    let yOffset = 25 / this.currentLayerZoomScale;
     let wordIndexOffset = 0;
     if (lineIndex === 'b') {
       yOffset = yOffset * 2;
@@ -120,12 +143,12 @@ export default class CrumbAnimator {
     }
 
     const { x: xDeltaFromOrigin, y: yDeltaFromOrigin } = this.layer.position();
-    const yCentreCoord = ((this.layer.height() / 2) - yDeltaFromOrigin) / this.layerScale;
+    const yCentreCoord = ((this.layer.height() / 2) - yDeltaFromOrigin) / this.currentLayerZoomScale;
     const yCoord = yCentreCoord + yOffset;
     
-    const xLeftMargin = -xDeltaFromOrigin / this.layerScale; 
+    const xLeftMargin = -xDeltaFromOrigin / this.currentLayerZoomScale; 
     const nWords = line.length;
-    const xDelta = (this.layer.width() / this.layerScale) / nWords;
+    const xDelta = (this.layer.width() / this.currentLayerZoomScale) / nWords;
     const xOffset = xDelta / 2;
 
     const wordFeatures = [];    
@@ -198,13 +221,13 @@ export default class CrumbAnimator {
     } 
     const wordCrumb = this.layer.findOne(`#${index}`);
     this.getAllLayerCrumbs().forEach(crumb => { 
-      crumb.radius(2 / this.layerScale);
+      crumb.radius(2 / this.currentLayerZoomScale);
     });
-    wordCrumb.radius(4 / this.layerScale);
+    wordCrumb.radius(4 / this.currentLayerZoomScale);
   }
 
   createLetterCrumbMarker(wordIndex, x, y, radius=2) {
-    const scaledRadius = radius / this.layerScale;
+    const scaledRadius = radius / this.currentLayerZoomScale;
     const { colour: fill, opacity } = CrumbAnimator.DOT_ATTRS
     const newMarker = new Circle(
       { name: String(wordIndex), x, y, radius: scaledRadius, fill, opacity }
