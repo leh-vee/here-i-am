@@ -1,15 +1,19 @@
 // @ts-nocheck
 import * as d3 from 'd3';
 import { Circle } from "konva/lib/shapes/Circle";
+import { Image } from "konva/lib/shapes/Image";
+
+const blocksGeoJson = await d3.json("junction-and-environs-centreline.geojson");
 
 export default class CrumbAnimator {
-  
   static DOT_ATTRS = {
     opacity: 1, 
     colour: 'black'
   }
 
   static DEFAULT_SCALE_FACTOR = 2700000;
+
+  static BLOCKS_GEO_JSON = blocksGeoJson;
 
   constructor(konvaLayer, trailGeoJson, verse, verseIndex) {
     this.layer = konvaLayer;
@@ -20,6 +24,24 @@ export default class CrumbAnimator {
     );
 
     this.zoomLayer(3);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = this.layer.width();
+    canvas.height = this.layer.height();
+    const ctx = canvas.getContext('2d');
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#9E9EA1';
+
+    this.centrelineImage = new Image({ image: canvas });
+    this.centrelineImage.opacity(0);
+    this.layer.add(this.centrelineImage);
+
+    const geoGenerator = d3.geoPath()
+      .projection(this.projection)
+      .context(ctx);
+    ctx.beginPath();
+    geoGenerator({type: 'FeatureCollection', features: CrumbAnimator.BLOCKS_GEO_JSON.features})
+    ctx.stroke();
 
     this.trail = trailGeoJson;
     this.verse = verse;
@@ -117,7 +139,11 @@ export default class CrumbAnimator {
               easing: Konva.Easings.EaseOut,
               onFinish: () => {
                 this.currentLayerZoomScale = 1;
-                // resolve(true);
+                this.centrelineImage.opacity(1);
+                setTimeout(() => {
+                  this.centrelineImage.opacity(0);
+                  resolve(true);
+                }, 2000);
               },
               scaleX: 1,
               scaleY: 1,
