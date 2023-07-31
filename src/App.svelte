@@ -97,14 +97,14 @@
     const { fromSefirot, trail } = stateOfEscape;
     crumbAnimator = new CrumbAnimator(
       konvaLayer, trail, $currentVerse, $currentVerseIndex);
-    crumbAnimator.renderTrail().then(complete => {
+    crumbAnimator.dropLetterCrumbs().then(complete => {
       movements.alphabetRoad = false;
       movements.poeticContraction = true;
     });
   }
 
   $: if (movements.poeticContraction) {
-    crumbAnimator.contract().then(complete => {
+    crumbAnimator.gatherLetterCrumbs().then(complete => {
       movements.poeticContraction = false;
       movements.wordByWord = true;
     });
