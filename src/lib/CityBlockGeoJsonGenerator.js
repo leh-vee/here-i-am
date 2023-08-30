@@ -7,7 +7,7 @@ const junction = await d3.json("junction-and-environs-centreline.geojson");
 export default class CityBlockGeoJsonGenerator {
   constructor(treeOfLifeNodes) {
     this.K = CityBlockGeoJsonGenerator;
-    this.treeOfLifeNodes = this.treeOfLifeNodes;
+    this.treeOfLifeNodes = treeOfLifeNodes;
   } 
 
   blazeTrail(fromSefirotId, toSefirotId) {

@@ -1,6 +1,6 @@
 <script>
   import { currentPiSlice, currentVerse, currentVerseIndex, lastPiSlice, isFirstVerseTriad, wordIndices } from './store.js';
-  import TreeOfLifeJsonGenerator from './lib/TreeOfLifeJsonGenerator.js';
+  // import TreeOfLifeJsonGenerator from './lib/TreeOfLifeJsonGenerator.js';
   import CityBlockGeoJsonGenerator from './lib/CityBlockGeoJsonGenerator.js';
   import EllipsisPainter from './lib/EllipsisPainter.js';
   import StreetPainter from './lib/StreetPainter.js';
@@ -10,10 +10,6 @@
   import Word from './lib/Word.svelte';
   import Controller from './lib/Controller.svelte';
   import Timer from './lib/Timer.svelte';
-
-  const currentLocation = null;
-  const treeOfLife = new TreeOfLifeJsonGenerator(currentLocation);
-  const blockGenerator = new CityBlockGeoJsonGenerator(treeOfLife);
 
   const movements = {
     countDown: false,
@@ -40,21 +36,38 @@
   }
 
   const konvaLayer = new Konva.Layer();
-  $: if (blockGenerator && screenProps.frameEl) { 
+  $: if (screenProps.frameEl) { 
     const { konvaEl, width, height } = screenProps;
     screenProps.konvaStage = new Konva.Stage({
       container: konvaEl, width, height
     });
     screenProps.konvaStage.add(konvaLayer);
     movements.elliplitcalCollapse = true;
+    getSefirotLocations();
+  }
+
+  let treeOfLife;
+  let blockGenerator;
+  async function getSefirotLocations() {
+    const response = await fetch('http://127.0.0.1:8000/here-i-am/data/sefirot/');
+    const jsonStr = await response.json();
+    const features = JSON.parse(jsonStr).features;
+    treeOfLife = features.map(feature => {
+      return {
+        name: feature.properties.description,
+        coordinates: feature.geometry.coordinates,
+        nodeId: feature.id
+      }
+    });
+    blockGenerator = new CityBlockGeoJsonGenerator(treeOfLife);
     updateStateOfEscape();
   }
 
   function updateStateOfEscape() {
     const fromSefirotId = $lastPiSlice;
     const toSefirotId = $currentPiSlice;
-    stateOfEscape.fromSefirot = treeOfLife.getSefirotByIndex(fromSefirotId);
-    stateOfEscape.toSefirot = treeOfLife.getSefirotByIndex(toSefirotId);
+    stateOfEscape.fromSefirot = treeOfLife[fromSefirotId];
+    stateOfEscape.toSefirot = treeOfLife[toSefirotId];
     stateOfEscape.trail = blockGenerator.blazeTrail(fromSefirotId, toSefirotId);
   }
 
