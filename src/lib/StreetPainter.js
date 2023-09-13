@@ -1,13 +1,11 @@
 // @ts-nocheck
 import * as d3 from 'd3';
 
-const blocksGeoJson = await d3.json("junction-and-environs-centreline.geojson");
-
 export default class StreetPainter {
 
-  static BLOCKS_GEO_JSON = blocksGeoJson;
+  constructor(canvasEl, centreCoordinates, blocks, degreesRotation=0) {
+    this.blocks = blocks;
 
-  constructor(canvasEl, centreCoordinates, degreesRotation=0) {
     this.canvasContext = canvasEl.getContext('2d');
     this.canvasContext.lineWidth = 1;
     this.canvasContext.strokeStyle = '#9E9EA1';
@@ -19,8 +17,7 @@ export default class StreetPainter {
     this.projection.translate([this.canvasWidth / 2, this.canvasHeight / 2])
     this.adjustScale();
     this.projection.center(centreCoordinates);
-    this.projection.clipExtent(this.clipExtentBounds());
-    
+  
     this.centrePointLatLng = centreCoordinates;
     this.canvasCentrePoint = this.projection(centreCoordinates);
     this.rotateCanvas(degreesRotation);
@@ -52,14 +49,14 @@ export default class StreetPainter {
       .projection(this.projection)
       .context(this.canvasContext);
     this.canvasContext.beginPath();
-    geoGenerator({type: 'FeatureCollection', features: StreetPainter.BLOCKS_GEO_JSON.features})
+    geoGenerator({type: 'FeatureCollection', features: this.blocks.features})
     this.canvasContext.stroke();
   }
 
   blockDrawnIds = [];
 
   drawBlocksFromNode(nodeId) {
-    const blocks = StreetPainter.getBlocksAtNode(nodeId);
+    const blocks = this.getBlocksAtNode(nodeId);
     blocks.forEach(block => {
       this.drawBlock(block, nodeId);
     });
@@ -68,27 +65,27 @@ export default class StreetPainter {
   drawBlock(blockFeature, startNodeId) {
     const blockProps = blockFeature.properties;
     
-    if (this.blockDrawnIds.includes(blockProps.id)) return null;
+    if (this.blockDrawnIds.includes(blockFeature.id)) return null;
   
     let lineCoordinates = blockFeature.geometry.coordinates;
-    const drawBackwards = startNodeId === blockProps.to_node_id;
-    let endNodeId = blockProps.to_node_id;
+    const drawBackwards = startNodeId === blockProps.to_street_node_id;
+    let endNodeId = blockProps.to_street_node_id;
   
     if (drawBackwards) {
       const lineCoordinatesCopy = [...lineCoordinates];
       lineCoordinates = [...lineCoordinatesCopy.reverse()];
-      endNodeId = blockProps.from_node_id;
+      endNodeId = blockProps.from_street_node_id;
     }
   
     const blockAnimeProps = {
-      id: blockProps.id,
+      id: blockFeature.id,
       coordinates: lineCoordinates,
       endNodeId: endNodeId
     }
   
     this.animateBlockLine(blockAnimeProps)
   
-    this.blockDrawnIds.push(blockProps.id);
+    this.blockDrawnIds.push(blockFeature.id);
   }
 
   animateBlockLine(blockAnimeProps, pointIndex = 0) {
@@ -157,10 +154,10 @@ export default class StreetPainter {
     drawSegment();
   }
 
-  static getBlocksAtNode(nodeId) {
-    const blocks = this.BLOCKS_GEO_JSON.features.filter(block => {
+  getBlocksAtNode(nodeId) {
+    const blocks = this.blocks.features.filter(block => {
       const blockProps = block.properties;
-      return blockProps.from_node_id === nodeId || blockProps.to_node_id === nodeId;
+      return blockProps.from_street_node_id === nodeId || blockProps.to_street_node_id === nodeId;
     })
     return blocks;
   }

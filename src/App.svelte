@@ -1,6 +1,5 @@
 <script>
   import { currentPiSlice, currentVerse, currentVerseIndex, lastPiSlice, isFirstVerseTriad, wordIndices } from './store.js';
-  // import TreeOfLifeJsonGenerator from './lib/TreeOfLifeJsonGenerator.js';
   import CityBlockGeoJsonGenerator from './lib/CityBlockGeoJsonGenerator.js';
   import EllipsisPainter from './lib/EllipsisPainter.js';
   import StreetPainter from './lib/StreetPainter.js';
@@ -10,6 +9,9 @@
   import Word from './lib/Word.svelte';
   import Controller from './lib/Controller.svelte';
   import Timer from './lib/Timer.svelte';
+  import Ilan from './lib/Ilan.js';
+
+  const PROJECTION_SCALE = 2700000;
 
   const movements = {
     countDown: false,
@@ -29,46 +31,17 @@
     konvaStage: null
   };
 
-  const stateOfEscape = {
-    fromSefirot: null,
-    toSefirot: null,
-    trail: null
-  }
-
   const konvaLayer = new Konva.Layer();
+  const blockGenerator = new CityBlockGeoJsonGenerator();
+  let ilan;
   $: if (screenProps.frameEl) { 
     const { konvaEl, width, height } = screenProps;
     screenProps.konvaStage = new Konva.Stage({
       container: konvaEl, width, height
     });
+    ilan = new Ilan(screenProps.width, screenProps.height, PROJECTION_SCALE); 
     screenProps.konvaStage.add(konvaLayer);
-    movements.elliplitcalCollapse = true;
-    getSefirotLocations();
-  }
-
-  let treeOfLife;
-  let blockGenerator;
-  async function getSefirotLocations() {
-    const response = await fetch('http://127.0.0.1:8000/here-i-am/data/sefirot/');
-    const jsonStr = await response.json();
-    const features = JSON.parse(jsonStr).features;
-    treeOfLife = features.map(feature => {
-      return {
-        name: feature.properties.description,
-        coordinates: feature.geometry.coordinates,
-        nodeId: feature.id
-      }
-    });
-    blockGenerator = new CityBlockGeoJsonGenerator(treeOfLife);
-    updateStateOfEscape();
-  }
-
-  function updateStateOfEscape() {
-    const fromSefirotId = $lastPiSlice;
-    const toSefirotId = $currentPiSlice;
-    stateOfEscape.fromSefirot = treeOfLife[fromSefirotId];
-    stateOfEscape.toSefirot = treeOfLife[toSefirotId];
-    stateOfEscape.trail = blockGenerator.blazeTrail(fromSefirotId, toSefirotId);
+    movements.elliplitcalCollapse = true; // don't start collapse until the sefirot locations are set
   }
 
   let ellipsisPainter;
@@ -82,8 +55,9 @@
 
   $: if (movements.subLinearCrawl) {
     const { canvasEl: el } = screenProps;
-    const { coordinates, nodeId } = stateOfEscape.fromSefirot;
-    const streetPainter = new StreetPainter(el, coordinates);
+    const { coordinates, nodeId } = ilan.sephira($lastPiSlice);
+    let channels = ilan.channelsForSephira($lastPiSlice);
+    const streetPainter = new StreetPainter(el, coordinates, channels);
     streetPainter.drawBlocksFromNode(nodeId);
     setTimeout(() => {
       streetPainter.clearCanvas();
@@ -107,9 +81,8 @@
   $: if (movements.alphabetRoad) {
     const konvaLayer = new Konva.Layer();
     screenProps.konvaStage.add(konvaLayer);
-    const { fromSefirot, trail } = stateOfEscape;
     crumbAnimator = new CrumbAnimator(
-      konvaLayer, trail, $currentVerse, $currentVerseIndex);
+      konvaLayer, blockGenerator.blazeTrail(), $currentVerse, $currentVerseIndex);
     crumbAnimator.dropLetterCrumbs().then(complete => {
       movements.alphabetRoad = false;
       movements.poeticContraction = true;

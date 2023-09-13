@@ -5,12 +5,11 @@ const toronto = await d3.json("toronto-centreline-simple.geojson");
 const junction = await d3.json("junction-and-environs-centreline.geojson");
 
 export default class CityBlockGeoJsonGenerator {
-  constructor(treeOfLifeNodes) {
+  constructor() {
     this.K = CityBlockGeoJsonGenerator;
-    this.treeOfLifeNodes = treeOfLifeNodes;
   } 
 
-  blazeTrail(fromSefirotId, toSefirotId) {
+  blazeTrail(fromSefirotId, toSefirotId = 3) {
     const mockTrailNodeIds = this.K.mockTrailsByEndNode[toSefirotId];
     const streetTrail = this.routeFromNodeIds(mockTrailNodeIds);
     const blockTrail = this.K.splitMultiLineFeatures(streetTrail);
