@@ -1,6 +1,5 @@
 <script>
   import { currentPiSlice, currentVerse, currentVerseIndex, lastPiSlice, isFirstVerseTriad, wordIndices } from './store.js';
-  import CityBlockGeoJsonGenerator from './lib/CityBlockGeoJsonGenerator.js';
   import EllipsisPainter from './lib/EllipsisPainter.js';
   import StreetPainter from './lib/StreetPainter.js';
   import VerseNumberIllustrator from './lib/VerseNumberIllustrator.js';
@@ -9,117 +8,113 @@
   import Word from './lib/Word.svelte';
   import Controller from './lib/Controller.svelte';
   import Timer from './lib/Timer.svelte';
-  import Ilan from './lib/Ilan.js';
+  import { onMount } from 'svelte';
+  import { fetchSefirot, fetchBlocksForProjection, fetchBlocksForSefirotProjections } from './api/client.js';
+  import { newIlanProjection, newBaseSefirahProjection } from './lib/projections.js';
 
-  const PROJECTION_SCALE = 2700000;
-
-  const movements = {
-    countDown: false,
-    alphabetRoad: false,
-    poeticContraction: false,
-    wordByWord: false,
-    elliplitcalCollapse: false, 
-    subLinearCrawl: false
+  const v = {
+    isMovementWordByWord: null,
+    screenProps: {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      frameEl: null,
+      canvasEl: null,
+      konvaEl: null,
+      konvaStage: null
+    }
   }; 
 
-  const screenProps = {
-    width: window.innerWidth,
-    height: window.innerHeight,
-    frameEl: null,
-    canvasEl: null,
-    konvaEl: null,
-    konvaStage: null
-  };
-
-  const konvaLayer = new Konva.Layer();
-  const blockGenerator = new CityBlockGeoJsonGenerator();
-  let ilan;
-  $: if (screenProps.frameEl) { 
-    const { konvaEl, width, height } = screenProps;
-    screenProps.konvaStage = new Konva.Stage({
+  onMount(async () => {
+    const { konvaEl, width, height } = v.screenProps;
+    const screenPx = { width, height };
+    
+    v.screenProps.konvaStage = new Konva.Stage({
       container: konvaEl, width, height
+    }); 
+    v.konvaLayer = new Konva.Layer();
+    v.screenProps.konvaStage.add(v.konvaLayer);
+
+    v.sefirot = await fetchSefirot();
+    
+    v.ilanProjection = newIlanProjection(v.sefirot, screenPx);
+    v.baseSefirahProjection = newBaseSefirahProjection(screenPx);
+    
+    fetchBlocksForProjection(v.ilanProjection).then(blocks => {
+      v.ilanBlocks = blocks;
+      console.log('ilan blocks fetched');
     });
-    ilan = new Ilan(screenProps.width, screenProps.height, PROJECTION_SCALE); 
-    screenProps.konvaStage.add(konvaLayer);
-    movements.elliplitcalCollapse = true; // don't start collapse until the sefirot locations are set
+    fetchBlocksForSefirotProjections(v.sefirot, v.baseSefirahProjection).then(blocks => {
+      v.sefirotBlocks = blocks;
+      console.log('sefirot blocks fetched');
+    });
+
+    elliplitcalCollapse();
+  });
+
+  function elliplitcalCollapse() {
+    v.ellipsisPainter = new EllipsisPainter(v.konvaLayer);
+    v.ellipsisPainter.animate().then(_ => subLinearCrawl()); 
   }
 
-  let ellipsisPainter;
-  $: if (movements.elliplitcalCollapse) {
-    ellipsisPainter = new EllipsisPainter(konvaLayer);
-    ellipsisPainter.animate().then(complete => {
-      movements.elliplitcalCollapse = false;
-      movements.subLinearCrawl = true;
-    });
-  }
-
-  $: if (movements.subLinearCrawl) {
-    const { canvasEl: el } = screenProps;
-    const { coordinates, nodeId } = ilan.sephira($lastPiSlice);
-    let channels = ilan.channelsForSephira($lastPiSlice);
-    const streetPainter = new StreetPainter(el, coordinates, channels);
-    streetPainter.drawBlocksFromNode(nodeId);
+  function subLinearCrawl() {
+    const { canvasEl: el } = v.screenProps;
+    let sefirah = v.sefirot.features[$lastPiSlice];
+    let blocks = v.sefirotBlocks[$lastPiSlice];
+    v.streetPainter = new StreetPainter(el, sefirah.geometry.coordinates, blocks);
+    v.streetPainter.drawBlocksFromNode(sefirah.id);
     setTimeout(() => {
-      streetPainter.clearCanvas();
-      ellipsisPainter.clearCanvas();
-      movements.subLinearCrawl = false;
-      movements.countDown = true;
+      v.streetPainter.clearCanvas();
+      v.ellipsisPainter.clearCanvas();
+      countDown();
     }, 15000);
   }
 
-  $: if (movements.countDown) {
-    const verseNumberIllustrator = new VerseNumberIllustrator(screenProps.canvasEl);
-    verseNumberIllustrator.render($currentPiSlice, $isFirstVerseTriad);
+  function countDown() {
+    v.verseNumberIllustrator = new VerseNumberIllustrator(v.screenProps.canvasEl);
+    v.verseNumberIllustrator.render($currentPiSlice, $isFirstVerseTriad);
     setTimeout(() => {
-      verseNumberIllustrator.clearCanvas();
-      movements.countDown = false;
-      movements.alphabetRoad = true;
+      v.verseNumberIllustrator.clearCanvas();
+      alphabetRoad();
     }, 5000);
   }
 
-  let crumbAnimator;
-  $: if (movements.alphabetRoad) {
+  function alphabetRoad() {
     const konvaLayer = new Konva.Layer();
-    screenProps.konvaStage.add(konvaLayer);
-    crumbAnimator = new CrumbAnimator(
-      konvaLayer, blockGenerator.blazeTrail(), $currentVerse, $currentVerseIndex);
-    crumbAnimator.dropLetterCrumbs().then(complete => {
-      movements.alphabetRoad = false;
-      movements.poeticContraction = true;
-    });
+    v.screenProps.konvaStage.add(konvaLayer);
+    v.crumbAnimator = new CrumbAnimator(konvaLayer, v.sefirot, v.ilanBlocks, v.ilanProjection);
   }
 
-  $: if (movements.poeticContraction) {
-    crumbAnimator.gatherLetterCrumbs().then(complete => {
-      movements.poeticContraction = false;
-      movements.wordByWord = true;
-    });
-  }
+  // $: if (movements.poeticContraction) {
+  //   crumbAnimator.gatherLetterCrumbs().then(complete => {
+  //     movements.poeticContraction = false;
+  //     movements.wordByWord = true;
+  //   });
+  // }
 
-  $: if (movements.wordByWord && $wordIndices) {
-    const crumbVerseIndex = crumbAnimator.getVerseIndex();
-    let { wordIndex, line } = $wordIndices;
-    if ($currentVerseIndex === crumbVerseIndex) {
-      crumbAnimator.highlightWordCrumb(wordIndex, line === 'b');
-    } else {
-      setTimeout(() => {
-        movements.wordByWord = false;
-        crumbAnimator.clearCanvas();
-        movements.elliplitcalCollapse = true;
-      }, 0);
-    }
-  }
+  // $: if (movements.wordByWord && $wordIndices) {
+  //   const crumbVerseIndex = crumbAnimator.getVerseIndex();
+  //   let { wordIndex, line } = $wordIndices;
+  //   if ($currentVerseIndex === crumbVerseIndex) {
+  //     crumbAnimator.highlightWordCrumb(wordIndex, line === 'b');
+  //   } else {
+  //     setTimeout(() => {
+  //       movements.wordByWord = false;
+  //       crumbAnimator.clearCanvas();
+  //       movements.elliplitcalCollapse = true;
+  //     }, 0);
+  //   }
+  // }
 
 </script>
 
-<div class='screen' bind:this={screenProps.frameEl}>
-  <div bind:this={screenProps.konvaEl}></div>
+<div class='screen' bind:this={v.screenProps.frameEl}>
+  <div bind:this={v.screenProps.konvaEl}></div>
   <canvas
-    bind:this={screenProps.canvasEl}
-    width={screenProps.width}
-    height={screenProps.height}
+    bind:this={v.screenProps.canvasEl}
+    width={v.screenProps.width}
+    height={v.screenProps.height}
   ></canvas>
-  {#if movements.wordByWord}
+  {#if v.isMovementWordByWord}
     <Timer /> 
     <Word />
     <Controller />

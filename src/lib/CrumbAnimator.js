@@ -3,25 +3,16 @@ import * as d3 from 'd3';
 import { Circle } from "konva/lib/shapes/Circle";
 import { Image } from "konva/lib/shapes/Image";
 
-const blocksGeoJson = await d3.json("junction-and-environs-centreline.geojson");
-
 export default class CrumbAnimator {
   static DOT_ATTRS = {
     opacity: 1, 
     colour: 'black'
   }
 
-  static BLOCKS_GEO_JSON = blocksGeoJson;
-
-  constructor(konvaLayer, trailGeoJson, verse, verseIndex) {
+  constructor(konvaLayer, ilan, streets, projection) {
     this.layer = konvaLayer;
 
-    this.projection = d3.geoMercator().fitSize(
-      [this.layer.width(), this.layer.height()], 
-      { "type": "FeatureCollection", "features": trailGeoJson }
-    );
-
-    this.#zoomLayer(3);
+    this.projection = projection;
 
     const canvas = document.createElement('canvas');
     canvas.width = this.layer.width();
@@ -31,20 +22,18 @@ export default class CrumbAnimator {
     ctx.strokeStyle = '#9E9EA1';
 
     this.centrelineImage = new Image({ image: canvas });
-    this.centrelineImage.opacity(0);
+    this.centrelineImage.opacity(1);
     this.layer.add(this.centrelineImage);
 
     const geoGenerator = d3.geoPath()
       .projection(this.projection)
       .context(ctx);
     ctx.beginPath();
-    geoGenerator({type: 'FeatureCollection', features: CrumbAnimator.BLOCKS_GEO_JSON.features})
+    geoGenerator({type: 'FeatureCollection', features: streets.features})
+    geoGenerator({type: 'FeatureCollection', features: ilan.features})
     ctx.stroke();
 
-    this.trail = trailGeoJson;
-    this.verse = verse;
-    this.verseIndex = verseIndex;
-    this.letterFeatures = this.#getLetterCanvasFeatures();
+    // this.letterFeatures = this.#getLetterCanvasFeatures();
   }
 
   dropLetterCrumbs() {
