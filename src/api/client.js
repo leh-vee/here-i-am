@@ -6,17 +6,17 @@ export async function fetchSefirot() {
   return JSON.parse(sefirotJson);
 }
 
-export async function fetchBlocksForProjection(projection) {
-  const projectionCoords = projectionBoundingBoxCoords(projection);
+export async function fetchBlocksForProjection(projection, screenPx) {
+  const projectionCoords = projectionBoundingBoxCoords(projection, screenPx);
   const blocksJson = await fetchProjectionBlocks(projectionCoords);
   return JSON.parse(blocksJson);
 }
 
-export async function fetchBlocksForSefirotProjections(sefirot, projection) {
+export async function fetchBlocksForSefirotProjections(sefirot, projection, screenPx) {
   const blocks = [];
   for (let i = 0; i < 10; i++) {
     projection.center(sefirot.features[i].geometry.coordinates);
-    let projectionCoords = projectionBoundingBoxCoords(projection);
+    let projectionCoords = projectionBoundingBoxCoords(projection, screenPx);
     fetchProjectionBlocks(projectionCoords).then(blocksJson => {
       blocks[i] = JSON.parse(blocksJson);
     });
@@ -30,11 +30,10 @@ async function fetchProjectionBlocks(projectionCoords) {
   );
 }
 
-function projectionBoundingBoxCoords(projection) {
-  const pWidth = projection.translate()[0] * 2;
-  const pHeight = projection.translate()[1] * 2;
+function projectionBoundingBoxCoords(projection, screenPx) {
+  const  { width, height } = screenPx;
   const minCoords = projection.invert([0, 0]);
-  const maxCoords = projection.invert([pWidth, pHeight]);
+  const maxCoords = projection.invert([width, height]);
   const coords = [...minCoords, ...maxCoords];
   return coords;
 } 

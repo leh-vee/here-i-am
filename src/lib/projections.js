@@ -6,13 +6,13 @@ const BASE_PROJECTION_FN = d3.geoMercator;
 export function newIlanProjection(sefirot, screenPx) {
   const p = BASE_PROJECTION_FN();
   const { width, height } = screenPx;
+  p.center(sefirot.features[6].geometry.coordinates);
   p.fitSize([width, height], { 
       "type": "FeatureCollection", 
       "features": sefirot.features 
     }
   );
   p.translate([width / 2, height / 2]);
-  p.center(sefirot.features[6].geometry.coordinates);
   p.scale(p.scale() / 1.5);
   return p;
 }

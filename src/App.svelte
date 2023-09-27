@@ -39,11 +39,11 @@
     v.ilanProjection = newIlanProjection(v.sefirot, screenPx);
     v.baseSefirahProjection = newBaseSefirahProjection(screenPx);
     
-    fetchBlocksForProjection(v.ilanProjection).then(blocks => {
+    fetchBlocksForProjection(v.ilanProjection, screenPx).then(blocks => {
       v.ilanBlocks = blocks;
       console.log('ilan blocks fetched');
     });
-    fetchBlocksForSefirotProjections(v.sefirot, v.baseSefirahProjection).then(blocks => {
+    fetchBlocksForSefirotProjections(v.sefirot, v.baseSefirahProjection, screenPx).then(blocks => {
       v.sefirotBlocks = blocks;
       console.log('sefirot blocks fetched');
     });
