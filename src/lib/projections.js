@@ -4,18 +4,37 @@ const SEFIRAH_VIEW_SCALE = 2700000;
 const BASE_PROJECTION_FN = d3.geoMercator;
 
 export function newIlanProjection(sefirot, screenPx) {
-  const p = BASE_PROJECTION_FN();
+  const projection = BASE_PROJECTION_FN();
+  const coordIlanBounds = d3.geoPath().bounds(sefirot);
+  const pxIlanBounds = coordIlanBounds.map(c => projection(c));
+  
+  const { frameWidthPx, frameHeightPx } = ilanFramePx(screenPx);
+  const boundsFrameRatio = boundsToFrameRatio(pxIlanBounds, frameWidthPx, frameHeightPx)
+
   const { width, height } = screenPx;
-  p.center(sefirot.features[6].geometry.coordinates);
-  p.fitSize([width, height], { 
-      "type": "FeatureCollection", 
-      "features": sefirot.features 
-    }
-  );
-  p.translate([width / 2, height / 2]);
-  p.scale(p.scale() / 1.5);
-  return p;
+  projection
+    .center(sefirot.features[6].geometry.coordinates)
+    .translate([width / 2, height / 2])
+    .scale(projection.scale() * boundsFrameRatio);
+
+  return projection;
 }
+
+function ilanFramePx(screenPx, frameToScreenRatio = 0.5) {
+  const { width, height } = screenPx;
+  return { 
+    frameWidthPx: width * frameToScreenRatio,
+    frameHeightPx: height * frameToScreenRatio
+  }
+}
+
+function boundsToFrameRatio(bounds, fWidth, fHeight) {
+  const ratio = Math.min(
+    fWidth / Math.abs(bounds[1][0] - bounds[0][0]),
+    fHeight / Math.abs(bounds[1][1] - bounds[0][1])
+  );
+  return ratio;
+} 
 
 export function newBaseSefirahProjection(screenPx) {
   const p = BASE_PROJECTION_FN();
