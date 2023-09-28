@@ -1,9 +1,8 @@
 <script>
-  import { currentPiSlice, currentVerse, currentVerseIndex, lastPiSlice, isFirstVerseTriad, wordIndices } from './store.js';
+  import { currentPiSlice, lastPiSlice, currentVerse, currentVerseIndex, isFirstVerseTriad, wordIndices } from './store.js';
   import EllipsisPainter from './lib/EllipsisPainter.js';
   import StreetPainter from './lib/StreetPainter.js';
   import VerseNumberIllustrator from './lib/VerseNumberIllustrator.js';
-  import CrumbAnimator from './lib/CrumbAnimator.js';
   import Konva from 'konva/lib/Core';
   import Word from './lib/Word.svelte';
   import Controller from './lib/Controller.svelte';
@@ -11,6 +10,9 @@
   import { onMount } from 'svelte';
   import { fetchSefirot, fetchBlocksForProjection, fetchBlocksForSefirotProjections } from './api/client.js';
   import { newIlanProjection, newBaseSefirahProjection } from './lib/projections.js';
+  import { renderBlocksAsBackground } from './lib/illustrators/streetBlocks.js';
+  import { channelFeatures, wordCrumbFeatures } from './lib/geoJsonUtilities.js';
+  import { dropCrumbsOnLayer } from './lib/illustrators/wordCrumbs.js';
 
   const v = {
     isMovementWordByWord: null,
@@ -21,7 +23,8 @@
       canvasEl: null,
       konvaEl: null,
       konvaStage: null
-    }
+    },
+    channels: []
   }; 
 
   onMount(async () => {
@@ -35,6 +38,10 @@
     v.screenProps.konvaStage.add(v.konvaLayer);
 
     v.sefirot = await fetchSefirot();
+    channelFeatures(v.sefirot).then(channels => {
+      v.channels = channels;
+      console.log('all tree of life channel permutations composed')
+    });
     
     v.ilanProjection = newIlanProjection(v.sefirot, screenPx);
     v.baseSefirahProjection = newBaseSefirahProjection(screenPx);
@@ -74,14 +81,18 @@
     v.verseNumberIllustrator.render($currentPiSlice, $isFirstVerseTriad);
     setTimeout(() => {
       v.verseNumberIllustrator.clearCanvas();
-      alphabetRoad();
+      letterTrail();
     }, 5000);
   }
 
-  function alphabetRoad() {
+  function letterTrail() {
     const konvaLayer = new Konva.Layer();
     v.screenProps.konvaStage.add(konvaLayer);
-    v.crumbAnimator = new CrumbAnimator(konvaLayer, v.sefirot, v.ilanBlocks, v.ilanProjection);
+    renderBlocksAsBackground(konvaLayer, v.ilanProjection, v.ilanBlocks);
+    let channel = v.channels[$lastPiSlice].features[$currentPiSlice]; 
+    let crumbs = wordCrumbFeatures($currentVerse, channel); // should do this right at the beginning of the movement / in an conductor object or module
+    // dropLetterCrumbs(verse, fromSefirot, toSefirot); 
+    // v.crumbAnimator = new CrumbAnimator(konvaLayer, v.sefirot, v.ilanBlocks, v.ilanProjection);
   }
 
   // $: if (movements.poeticContraction) {
