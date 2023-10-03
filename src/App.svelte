@@ -9,9 +9,9 @@
   import Timer from './lib/Timer.svelte';
   import { onMount } from 'svelte';
   import { fetchSefirot, fetchBlocksForProjection, fetchBlocksForSefirotProjections } from './api/client.js';
-  import { newIlanProjection, newBaseSefirahProjection } from './lib/projections.js';
+  import { newIlanProjection, newBaseSefirahProjection } from './lib/utils/projections.js';
   import { renderBlocksAsBackground } from './lib/illustrators/streetBlocks.js';
-  import { channelFeatures, wordCrumbFeatures } from './lib/geoJsonUtilities.js';
+  import { channelFeatures, wordCrumbFeatures } from './lib/utils/geoJson.js';
   import { dropCrumbsOnLayer } from './lib/illustrators/wordCrumbs.js';
 
   const v = {
