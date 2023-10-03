@@ -91,6 +91,7 @@
     renderBlocksAsBackground(konvaLayer, v.ilanProjection, v.ilanBlocks);
     let channel = v.channels[$lastPiSlice].features[$currentPiSlice]; 
     let crumbs = wordCrumbFeatures($currentVerse, channel); // should do this right at the beginning of the movement / in an conductor object or module
+    dropCrumbsOnLayer(crumbs, konvaLayer, v.ilanProjection);
     // dropLetterCrumbs(verse, fromSefirot, toSefirot); 
     // v.crumbAnimator = new CrumbAnimator(konvaLayer, v.sefirot, v.ilanBlocks, v.ilanProjection);
   }
