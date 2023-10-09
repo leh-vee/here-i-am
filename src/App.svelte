@@ -8,49 +8,59 @@
   import Controller from './lib/Controller.svelte';
   import Timer from './lib/Timer.svelte';
   import { onMount } from 'svelte';
-  import { fetchSefirot, fetchBlocksForProjection, fetchBlocksForSefirotProjections } from './api/client.js';
-  import { newIlanProjection, newBaseSefirahProjection } from './lib/utils/projections.js';
+  import { fetchSefirot, fetchBlocksForProjection, fetchBlocksForSefirotProjections, fetchBlocksWithinRadius } from './api/client.js';
+  import { projectionForIlan, projectionBaseForSefirah, projectionsForChannels } from './lib/utils/projections.js';
   import { renderBlocksAsBackground } from './lib/illustrators/streetBlocks.js';
   import { channelFeatures, wordCrumbFeatures } from './lib/utils/geoJson.js';
   import { dropCrumbsOnLayer } from './lib/illustrators/wordCrumbs.js';
+  import { tenByTenArray } from './lib/utils/base.js';
+  import distance from "@turf/distance";
+
 
   const v = {
     isMovementWordByWord: null,
-    screenProps: {
+    screenPx: {
       width: window.innerWidth,
-      height: window.innerHeight,
+      height: window.innerHeight
+    },
+    screenProps: {
       frameEl: null,
       canvasEl: null,
       konvaEl: null,
       konvaStage: null
     },
-    channels: []
+    channels: {
+      geoJson: undefined,
+      projections: undefined,
+      blocks: undefined
+    }
   }; 
 
   onMount(async () => {
-    const { konvaEl, width, height } = v.screenProps;
-    const screenPx = { width, height };
-    
     v.screenProps.konvaStage = new Konva.Stage({
-      container: konvaEl, width, height
+      container: v.screenProps.konvaEl, width: v.screenPx.width, height: v.screenPx.height
     }); 
     v.konvaLayer = new Konva.Layer();
     v.screenProps.konvaStage.add(v.konvaLayer);
 
     v.sefirot = await fetchSefirot();
+
     channelFeatures(v.sefirot).then(channels => {
-      v.channels = channels;
-      console.log('all tree of life channel permutations composed')
+      v.channels.geoJson = channels;
+      console.log('channel feature data set ready');
+      v.channels.projections = projectionsForChannels(channels, v.screenPx);
+      console.log('all channel projections ready');
+      v.channels.blocks = tenByTenArray();
     });
     
-    v.ilanProjection = newIlanProjection(v.sefirot, screenPx);
-    v.baseSefirahProjection = newBaseSefirahProjection(screenPx);
+    v.ilanProjection = projectionForIlan(v.sefirot, v.screenPx);
+    v.baseSefirahProjection = projectionBaseForSefirah(v.screenPx);
     
-    fetchBlocksForProjection(v.ilanProjection, screenPx).then(blocks => {
+    fetchBlocksForProjection(v.ilanProjection, v.screenPx).then(blocks => {
       v.ilanBlocks = blocks;
       console.log('ilan blocks fetched');
     });
-    fetchBlocksForSefirotProjections(v.sefirot, v.baseSefirahProjection, screenPx).then(blocks => {
+    fetchBlocksForSefirotProjections(v.sefirot, v.baseSefirahProjection, v.screenPx).then(blocks => {
       v.sefirotBlocks = blocks;
       console.log('sefirot blocks fetched');
     });
@@ -58,7 +68,7 @@
     elliplitcalCollapse();
   });
 
-  function elliplitcalCollapse() {
+  function elliplitcalCollapse() {    
     v.ellipsisPainter = new EllipsisPainter(v.konvaLayer);
     v.ellipsisPainter.animate().then(_ => subLinearCrawl()); 
   }
@@ -77,6 +87,7 @@
   }
 
   function countDown() {
+    fetchBlocksForCurrentChannelProjection();
     v.verseNumberIllustrator = new VerseNumberIllustrator(v.screenProps.canvasEl);
     v.verseNumberIllustrator.render($currentPiSlice, $isFirstVerseTriad);
     setTimeout(() => {
@@ -85,14 +96,27 @@
     }, 5000);
   }
 
+  function fetchBlocksForCurrentChannelProjection() {
+    const projection = v.channels.projections[$lastPiSlice][$currentPiSlice];
+    let projectionRadius = distance(projection.center(), projection.invert([0,0]));
+    fetchBlocksWithinRadius(projection.center(), projectionRadius).then(blocks => {
+      v.channels.blocks[$lastPiSlice][$currentPiSlice] = blocks;
+      console.log('blocks for current channel projection fetched');
+    });
+  }
+
   function letterTrail() {
     const konvaLayer = new Konva.Layer();
     v.screenProps.konvaStage.add(konvaLayer);
-    renderBlocksAsBackground(konvaLayer, v.ilanProjection, v.ilanBlocks);
-    let channel = v.channels[$lastPiSlice].features[$currentPiSlice]; 
-    let crumbs = wordCrumbFeatures($currentVerse, channel); // should do this right at the beginning of the movement / in an conductor object or module
-    dropCrumbsOnLayer(crumbs, konvaLayer, v.ilanProjection);
-    // dropLetterCrumbs(verse, fromSefirot, toSefirot); 
+
+    const projection = v.channels.projections[$lastPiSlice][$currentPiSlice];
+    const blocks = v.channels.blocks[$lastPiSlice][$currentPiSlice];
+    const channel = v.channels.geoJson[$lastPiSlice].features[$currentPiSlice];
+    renderBlocksAsBackground(konvaLayer, projection, blocks);
+    let crumbs = wordCrumbFeatures($currentVerse, channel);
+    dropCrumbsOnLayer(crumbs, konvaLayer, projection);
+
+  
     // v.crumbAnimator = new CrumbAnimator(konvaLayer, v.sefirot, v.ilanBlocks, v.ilanProjection);
   }
 
@@ -123,8 +147,8 @@
   <div bind:this={v.screenProps.konvaEl}></div>
   <canvas
     bind:this={v.screenProps.canvasEl}
-    width={v.screenProps.width}
-    height={v.screenProps.height}
+    width={v.screenPx.width}
+    height={v.screenPx.height}
   ></canvas>
   {#if v.isMovementWordByWord}
     <Timer /> 
