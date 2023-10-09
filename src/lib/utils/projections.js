@@ -17,11 +17,11 @@ export function projectionsForChannels(channels, screenPx) {
 function projectionForChannel(channel, screenPx) {
   const projection = geoMercator();
   const channelCoordsGcs = channel.geometry.coordinates;
-  const channelCoordsPx = channelCoordsGcs.map(c => projection(c)); 
-
+  let channelCoordsPx = channelCoordsGcs.map(c => projection(c)); 
   setChannelAsProjectionHorizion(projection, channelCoordsPx);
   
-  const boundsFrameRatio = boundsToFrameRatio(channelCoordsPx, screenPx, 0.5);
+  channelCoordsPx = channelCoordsGcs.map(c => projection(c));
+  const boundsFrameRatio = boundsToFrameRatio(channelCoordsPx, screenPx, 0.9);
   
   centreProjection(projection, geoPath().centroid(channel));
   translateProjection(projection, screenPx);
