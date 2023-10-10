@@ -34,17 +34,3 @@ export async function channelFeatures(sefirot) {
   } 
   return channels; 
 }
-
-export function wordCrumbFeatures(verse, channel) {
-  const words = structuredClone(GEO_JSON_TEMPLATES.collection);
-  const verseWords = [...verse.a, ...verse.b];
-  const interpolator = geoInterpolate(...channel.geometry.coordinates);
-  const nWords = verseWords.length;
-  for (let i = 0; i < nWords; i++) {
-    let feature = structuredClone(GEO_JSON_TEMPLATES.wordCrumbFeature);
-    feature.properties.word = verseWords[i];
-    feature.geometry.coordinates = interpolator(1 / nWords * i);
-    words.features[i] = feature;
-  }
-  return words;
-}

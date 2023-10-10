@@ -11,10 +11,10 @@
   import { fetchSefirot, fetchBlocksForProjection, fetchBlocksForSefirotProjections, fetchBlocksWithinRadius } from './api/client.js';
   import { projectionForIlan, projectionBaseForSefirah, projectionsForChannels } from './lib/utils/projections.js';
   import { renderBlocksAsBackground } from './lib/illustrators/streetBlocks.js';
-  import { channelFeatures, wordCrumbFeatures } from './lib/utils/geoJson.js';
-  import { dropCrumbsOnLayer } from './lib/illustrators/wordCrumbs.js';
+  import { channelFeatures } from './lib/utils/geoJson.js';
   import { tenByTenArray } from './lib/utils/base.js';
   import distance from "@turf/distance";
+  import ChannelMakers from './lib/illustrators/ChannelMarkers.js';
 
 
   const v = {
@@ -105,18 +105,25 @@
     });
   }
 
-  function letterTrail() {
+  async function letterTrail() { //this function should be more to do with the channel
     const konvaLayer = new Konva.Layer();
     v.screenProps.konvaStage.add(konvaLayer);
 
     const projection = v.channels.projections[$lastPiSlice][$currentPiSlice];
     const blocks = v.channels.blocks[$lastPiSlice][$currentPiSlice];
-    const channel = v.channels.geoJson[$lastPiSlice].features[$currentPiSlice];
     renderBlocksAsBackground(konvaLayer, projection, blocks);
-    let crumbs = wordCrumbFeatures($currentVerse, channel);
-    dropCrumbsOnLayer(crumbs, konvaLayer, projection);
+    
+    const channel = v.channels.geoJson[$lastPiSlice].features[$currentPiSlice];
+    const markerIllustrator = new ChannelMakers($currentVerse, konvaLayer, channel, projection);
+    markerIllustrator.markSefirah();
+    setTimeout(() => {
+      markerIllustrator.markVerseWords();
+    }, 0);
 
-  
+    // dropSefirahMarker(channelLineCoords[0], konvaLayer, projection);
+
+    // dropVerseCrumbsOnLayer($currentVerse, konvaLayer, projection, channel);
+
     // v.crumbAnimator = new CrumbAnimator(konvaLayer, v.sefirot, v.ilanBlocks, v.ilanProjection);
   }
 
