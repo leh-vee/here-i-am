@@ -1,8 +1,8 @@
 const POEM = [
   {
     piSlice: 3,
-    a: "Here I am a wet, market smile on your forgettable face",
-    b: "still delivering that special something in the neighborhood" 
+    a: "Here I am a wet, market smile on her forgotten face still",
+    b: "spreading our neighbourly chill around the ward" 
   },
   {
     piSlice: 2,
