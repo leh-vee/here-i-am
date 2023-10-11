@@ -117,8 +117,9 @@
     const markerIllustrator = new ChannelMakers($currentVerse, konvaLayer, channel, projection);
     markerIllustrator.markSefirah();
     setTimeout(() => {
+      markerIllustrator.removeFromSefirahMarker();
       markerIllustrator.markVerseWords();
-    }, 0);
+    }, 1000);
 
     // dropSefirahMarker(channelLineCoords[0], konvaLayer, projection);
 

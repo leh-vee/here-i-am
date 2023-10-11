@@ -8,10 +8,22 @@ export default class ChannelMarkers {
     this.projection = projection;
   }
 
-  markSefirah(isStartingPoint=true) {
-    const coordsPx = this.#channelCoordsPx()[isStartingPoint ? 0 : 1];
-    const marker = sefirahMarker(...coordsPx);
+  static #fromSefirahMarkerId = 'fromSefirah';
+  static #toSefirahMarkerId = 'toSefirah';
+
+  markSefirah(isFromSefirah=true) {
+    const k = ChannelMarkers;
+    const coordsPx = this.#channelCoordsPx()[isFromSefirah ? 0 : 1];
+    const marker = this.#sefirahMarker(...coordsPx);
     this.layer.add(marker);
+    marker.id(isFromSefirah ? k.#fromSefirahMarkerId : k.#toSefirahMarkerId );
+    return true;
+  }
+
+  removeFromSefirahMarker() {
+    const k = ChannelMarkers;
+    const marker = this.layer.findOne(`#${k.#fromSefirahMarkerId}`);
+    marker.destroy();
     return true;
   }
 
@@ -36,7 +48,7 @@ export default class ChannelMarkers {
         lineCoordsPx[0][0] + xWordDeltaPx * nMarked,
         yCoordPx
       ]
-      const marker = wordMarker(...markerCoordsPx);
+      const marker = this.#wordMarker(...markerCoordsPx);
       this.layer.add(marker);
       nMarked += 1;
       if (nMarked < nWords) setTimeout(() => mark(), tBetweenMarks);
@@ -78,22 +90,26 @@ export default class ChannelMarkers {
   #yLineOffsetPx() {
     return Math.round(this.layer.height() * 0.02);
   }
-}
 
-function sefirahMarker(x, y) {
-  return new Circle({ 
-    x, y, 
-    radius: 5, 
-    fill: '#9E9EA1', 
-    opacity: 1 
-  });
-}
-
-function wordMarker(x, y) {
-  return new Circle({ 
-    x, y, 
-    radius: 3, 
-    fill: 'black', 
-    opacity: 1 
-  });
+  #sefirahMarker(x, y) {
+    const markerAttrs = { 
+      x, y, 
+      radius: 5, 
+      fill: '#9E9EA1', 
+      opacity: 1 
+    };
+    const marker = new Circle(markerAttrs);
+    return marker;
+  }
+  
+  #wordMarker(x, y) {
+    const markerAttrs = { 
+      x, y, 
+      radius: 3, 
+      fill: 'black', 
+      opacity: 1 
+    };
+    const marker = new Circle(markerAttrs);
+    return marker;
+  }
 }
