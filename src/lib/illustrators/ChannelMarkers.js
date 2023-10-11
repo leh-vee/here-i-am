@@ -48,7 +48,7 @@ export default class ChannelMarkers {
     const chCoordsPx = this.#channelCoordsPx();
     const xBufferPx = this.#xLineBufferPx();
     const absoluteOffset = this.#yLineOffsetPx();
-    const yOffset = isLineA ? absoluteOffset : -absoluteOffset;  
+    const yOffset = isLineA ? -absoluteOffset : absoluteOffset;  
     const lineCoordsPx = [
       [
         chCoordsPx[0][0] + xBufferPx,
@@ -76,7 +76,7 @@ export default class ChannelMarkers {
   }
 
   #yLineOffsetPx() {
-    return Math.round(this.layer.height() * 0.04);
+    return Math.round(this.layer.height() * 0.02);
   }
 }
 
