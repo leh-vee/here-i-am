@@ -1,6 +1,6 @@
 import { Circle } from "konva/lib/shapes/Circle";
 
-export default class ChannelMarkers {
+export default class VerseChart {
   constructor(verse, konvaLayer, channelFeature, projection) {
     this.verse = verse;
     this.layer = konvaLayer;
@@ -12,7 +12,7 @@ export default class ChannelMarkers {
   static #toSefirahMarkerId = 'toSefirah';
 
   markSefirah(isFromSefirah=true) {
-    const k = ChannelMarkers;
+    const k = VerseChart;
     const coordsPx = this.#channelCoordsPx()[isFromSefirah ? 0 : 1];
     const marker = this.#sefirahMarker(...coordsPx);
     this.layer.add(marker);
@@ -21,7 +21,7 @@ export default class ChannelMarkers {
   }
 
   removeFromSefirahMarker() {
-    const k = ChannelMarkers;
+    const k = VerseChart;
     const marker = this.layer.findOne(`#${k.#fromSefirahMarkerId}`);
     marker.destroy();
     return true;

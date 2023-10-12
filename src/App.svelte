@@ -14,7 +14,7 @@
   import { channelFeatures } from './lib/utils/geoJson.js';
   import { tenByTenArray } from './lib/utils/base.js';
   import distance from "@turf/distance";
-  import ChannelMakers from './lib/illustrators/ChannelMarkers.js';
+  import VerseChart from './lib/illustrators/VerseChart.js';
 
 
   const v = {
@@ -114,11 +114,11 @@
     renderBlocksAsBackground(konvaLayer, projection, blocks);
     
     const channel = v.channels.geoJson[$lastPiSlice].features[$currentPiSlice];
-    const markerIllustrator = new ChannelMakers($currentVerse, konvaLayer, channel, projection);
-    markerIllustrator.markSefirah();
+    const verseChart = new VerseChart($currentVerse, konvaLayer, channel, projection);
+    verseChart.markSefirah();
     setTimeout(() => {
-      markerIllustrator.removeFromSefirahMarker();
-      markerIllustrator.markVerseWords();
+      verseChart.removeFromSefirahMarker();
+      verseChart.markVerseWords();
     }, 1000);
 
     // dropSefirahMarker(channelLineCoords[0], konvaLayer, projection);
