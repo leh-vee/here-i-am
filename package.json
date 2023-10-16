@@ -16,6 +16,7 @@
   "dependencies": {
     "@turf/distance": "^6.5.0",
     "d3": "^7.6.1",
-    "konva": "^9.0.1"
+    "konva": "^9.0.1",
+    "svelte-konva": "^0.3.1"
   }
 }

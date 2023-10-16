@@ -3,10 +3,8 @@
   import EllipsisPainter from './lib/EllipsisPainter.js';
   import StreetPainter from './lib/StreetPainter.js';
   import VerseNumberIllustrator from './lib/VerseNumberIllustrator.js';
-  import Konva from 'konva/lib/Core';
-  import Word from './lib/Word.svelte';
-  import Controller from './lib/Controller.svelte';
-  import Timer from './lib/Timer.svelte';
+  import Konva from 'konva';
+  import VerseExplorer from './lib/VerseExplorer.svelte';
   import { onMount } from 'svelte';
   import { fetchSefirot, fetchBlocksForProjection, fetchBlocksForSefirotProjections, fetchBlocksWithinRadius } from './api/client.js';
   import { projectionForIlan, projectionBaseForSefirah, projectionsForChannels } from './lib/utils/projections.js';
@@ -15,7 +13,6 @@
   import { tenByTenArray } from './lib/utils/base.js';
   import distance from "@turf/distance";
   import VerseChart from './lib/illustrators/VerseChart.js';
-
 
   const v = {
     isMovementWordByWord: null,
@@ -33,7 +30,8 @@
       geoJson: undefined,
       projections: undefined,
       blocks: undefined
-    }
+    },
+    isReader: false
   }; 
 
   onMount(async () => {
@@ -51,6 +49,7 @@
       v.channels.projections = projectionsForChannels(channels, v.screenPx);
       console.log('all channel projections ready');
       v.channels.blocks = tenByTenArray();
+      fetchBlocksForCurrentChannelProjection();
     });
     
     v.ilanProjection = projectionForIlan(v.sefirot, v.screenPx);
@@ -65,7 +64,7 @@
       console.log('sefirot blocks fetched');
     });
 
-    elliplitcalCollapse();
+    // elliplitcalCollapse();
   });
 
   function elliplitcalCollapse() {    
@@ -102,6 +101,7 @@
     fetchBlocksWithinRadius(projection.center(), projectionRadius).then(blocks => {
       v.channels.blocks[$lastPiSlice][$currentPiSlice] = blocks;
       console.log('blocks for current channel projection fetched');
+      v.isReader = true;
     });
   }
 
@@ -128,41 +128,21 @@
     // v.crumbAnimator = new CrumbAnimator(konvaLayer, v.sefirot, v.ilanBlocks, v.ilanProjection);
   }
 
-  // $: if (movements.poeticContraction) {
-  //   crumbAnimator.gatherLetterCrumbs().then(complete => {
-  //     movements.poeticContraction = false;
-  //     movements.wordByWord = true;
-  //   });
-  // }
-
-  // $: if (movements.wordByWord && $wordIndices) {
-  //   const crumbVerseIndex = crumbAnimator.getVerseIndex();
-  //   let { wordIndex, line } = $wordIndices;
-  //   if ($currentVerseIndex === crumbVerseIndex) {
-  //     crumbAnimator.highlightWordCrumb(wordIndex, line === 'b');
-  //   } else {
-  //     setTimeout(() => {
-  //       movements.wordByWord = false;
-  //       crumbAnimator.clearCanvas();
-  //       movements.elliplitcalCollapse = true;
-  //     }, 0);
-  //   }
-  // }
-
 </script>
 
 <div class='screen' bind:this={v.screenProps.frameEl}>
+  {#if v.isReader}
+    <VerseExplorer 
+      blocks = { v.channels.blocks[$lastPiSlice][$currentPiSlice] } 
+      projection = { v.channels.projections[$lastPiSlice][$currentPiSlice] }
+    />
+  {/if}
   <div bind:this={v.screenProps.konvaEl}></div>
   <canvas
     bind:this={v.screenProps.canvasEl}
     width={v.screenPx.width}
     height={v.screenPx.height}
   ></canvas>
-  {#if v.isMovementWordByWord}
-    <Timer /> 
-    <Word />
-    <Controller />
-  {/if} 
 </div>
 
 <style>
