@@ -1,5 +1,5 @@
 <script>
-    import { wordIndices, countdown, doomCountdown, isFirstVerseWord } from '../store.js';
+    import { wordIndices, countdown, doomCountdown, isFirstVerseWord } from '../stores/text.js';
 
     function next() {
       if (!isDoomNigh) {

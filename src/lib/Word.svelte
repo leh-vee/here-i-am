@@ -1,5 +1,5 @@
 <script>
-    import { currentWord, isEllipsisWord, hasMadeTime } from '../store.js';
+    import { currentWord, isEllipsisWord, hasMadeTime } from '../stores/text.js';
 
     $: word = ($isEllipsisWord && !$hasMadeTime ? '.' : $currentWord);
 </script>

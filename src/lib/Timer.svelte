@@ -1,6 +1,6 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
-  import { countdown, doomCountdown, wordIndices } from '../store.js';
+  import { countdown, doomCountdown, wordIndices } from '../stores/text.js';
 
   let oneSecondInterval;
 

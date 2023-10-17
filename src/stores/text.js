@@ -1,5 +1,5 @@
 import { readable, writable, derived } from 'svelte/store';
-import { POEM_PARSED } from './data/poem';
+import { POEM_PARSED } from '../data/poem';
 
 const poem = readable(POEM_PARSED);
 
