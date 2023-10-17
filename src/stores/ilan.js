@@ -22,10 +22,6 @@ function createChannelBlocksStore() {
 }
 export const channelBlocks = createChannelBlocksStore();
 
-const data = {
-  channelLines: undefined,
-}
-
 export async function setIlanData(screenPx) {
   const sefirotGeoJson = await fetchSefirot();
   sefirotPoints.set(sefirotGeoJson);
