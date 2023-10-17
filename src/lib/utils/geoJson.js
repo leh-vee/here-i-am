@@ -1,6 +1,3 @@
-// @ts-nocheck
-import { geoInterpolate } from "d3";
-
 const GEO_JSON_TEMPLATES = {
   collection: {
     type: "FeatureCollection", 
@@ -19,7 +16,7 @@ const GEO_JSON_TEMPLATES = {
   }  
 } 
 
-export async function channelFeatures(sefirot) {
+export function channelFeatures(sefirot) {
   const channels = new Array(10);
   for (let fromSefirahIndex = 0; fromSefirahIndex < 10; fromSefirahIndex++) {
     channels[fromSefirahIndex] = structuredClone(GEO_JSON_TEMPLATES.collection);
