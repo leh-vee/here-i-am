@@ -1,18 +1,16 @@
 <script>
-  import { currentPiSlice, lastPiSlice, currentVerse, currentVerseIndex, isFirstVerseTriad, wordIndices } from './store.js';
+  import { currentPiSlice, lastPiSlice, isFirstVerseTriad } from './stores/text.js';
   import EllipsisPainter from './lib/EllipsisPainter.js';
   import StreetPainter from './lib/StreetPainter.js';
   import VerseNumberIllustrator from './lib/VerseNumberIllustrator.js';
   import Konva from 'konva';
   import VerseExplorer from './lib/VerseExplorer.svelte';
   import { onMount } from 'svelte';
-  import { fetchSefirot, fetchBlocksForProjection, fetchBlocksForSefirotProjections, fetchBlocksWithinRadius } from './api/client.js';
+  import { fetchBlocksForProjection, fetchBlocksForSefirotProjections, fetchBlocksWithinRadius } from './api/client.js';
   import { projectionForIlan, projectionBaseForSefirah, projectionsForChannels } from './lib/utils/projections.js';
   import { renderBlocksAsBackground } from './lib/illustrators/streetBlocks.js';
-  import { channelFeatures } from './lib/utils/geoJson.js';
-  import { tenByTenArray } from './lib/utils/base.js';
   import distance from "@turf/distance";
-  import VerseChart from './lib/illustrators/VerseChart.js';
+  import { setIlanData } from './stores/ilan.js';
 
   const v = {
     isMovementWordByWord: null,
@@ -26,11 +24,6 @@
       konvaEl: null,
       konvaStage: null
     },
-    channels: {
-      geoJson: undefined,
-      projections: undefined,
-      blocks: undefined
-    },
     isReader: false
   }; 
 
@@ -41,28 +34,21 @@
     v.konvaLayer = new Konva.Layer();
     v.screenProps.konvaStage.add(v.konvaLayer);
 
-    v.sefirot = await fetchSefirot();
+    await setIlanData(v.screenPx);
+    console.log('ilan data set');
+    v.isReader = true;
 
-    channelFeatures(v.sefirot).then(channels => {
-      v.channels.geoJson = channels;
-      console.log('channel feature data set ready');
-      v.channels.projections = projectionsForChannels(channels, v.screenPx);
-      console.log('all channel projections ready');
-      v.channels.blocks = tenByTenArray();
-      fetchBlocksForCurrentChannelProjection();
-    });
+    // v.ilanProjection = projectionForIlan($sefirotPoints, v.screenPx);
+    // v.baseSefirahProjection = projectionBaseForSefirah(v.screenPx);
     
-    v.ilanProjection = projectionForIlan(v.sefirot, v.screenPx);
-    v.baseSefirahProjection = projectionBaseForSefirah(v.screenPx);
-    
-    fetchBlocksForProjection(v.ilanProjection, v.screenPx).then(blocks => {
-      v.ilanBlocks = blocks;
-      console.log('ilan blocks fetched');
-    });
-    fetchBlocksForSefirotProjections(v.sefirot, v.baseSefirahProjection, v.screenPx).then(blocks => {
-      v.sefirotBlocks = blocks;
-      console.log('sefirot blocks fetched');
-    });
+    // fetchBlocksForProjection(v.ilanProjection, v.screenPx).then(blocks => {
+    //   v.ilanBlocks = blocks;
+    //   console.log('ilan blocks fetched');
+    // });
+    // fetchBlocksForSefirotProjections(v.sefirot, v.baseSefirahProjection, v.screenPx).then(blocks => {
+    //   v.sefirotBlocks = blocks;
+    //   console.log('sefirot blocks fetched');
+    // });
 
     // elliplitcalCollapse();
   });
@@ -86,23 +72,12 @@
   }
 
   function countDown() {
-    fetchBlocksForCurrentChannelProjection();
     v.verseNumberIllustrator = new VerseNumberIllustrator(v.screenProps.canvasEl);
     v.verseNumberIllustrator.render($currentPiSlice, $isFirstVerseTriad);
     setTimeout(() => {
       v.verseNumberIllustrator.clearCanvas();
       letterTrail();
     }, 5000);
-  }
-
-  function fetchBlocksForCurrentChannelProjection() {
-    const projection = v.channels.projections[$lastPiSlice][$currentPiSlice];
-    let projectionRadius = distance(projection.center(), projection.invert([0,0]));
-    fetchBlocksWithinRadius(projection.center(), projectionRadius).then(blocks => {
-      v.channels.blocks[$lastPiSlice][$currentPiSlice] = blocks;
-      console.log('blocks for current channel projection fetched');
-      v.isReader = true;
-    });
   }
 
   async function letterTrail() { //this function should be more to do with the channel
@@ -113,13 +88,13 @@
     const blocks = v.channels.blocks[$lastPiSlice][$currentPiSlice];
     renderBlocksAsBackground(konvaLayer, projection, blocks);
     
-    const channel = v.channels.geoJson[$lastPiSlice].features[$currentPiSlice];
-    const verseChart = new VerseChart($currentVerse, konvaLayer, channel, projection);
-    verseChart.markSefirah();
-    setTimeout(() => {
-      verseChart.removeFromSefirahMarker();
-      verseChart.markVerseWords();
-    }, 1000);
+    // const channel = $chLines[$lastPiSlice].features[$currentPiSlice];
+    // const verseChart = new VerseChart($currentVerse, konvaLayer, channel, projection);
+    // verseChart.markSefirah();
+    // setTimeout(() => {
+    //   verseChart.removeFromSefirahMarker();
+    //   verseChart.markVerseWords();
+    // }, 1000);
 
     // dropSefirahMarker(channelLineCoords[0], konvaLayer, projection);
 
@@ -132,10 +107,7 @@
 
 <div class='screen' bind:this={v.screenProps.frameEl}>
   {#if v.isReader}
-    <VerseExplorer 
-      blocks = { v.channels.blocks[$lastPiSlice][$currentPiSlice] } 
-      projection = { v.channels.projections[$lastPiSlice][$currentPiSlice] }
-    />
+    <VerseExplorer />
   {/if}
   <div bind:this={v.screenProps.konvaEl}></div>
   <canvas
