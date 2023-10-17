@@ -3,6 +3,7 @@ import { fetchData } from './interface.js';
 
 export async function fetchSefirot() {
   const sefirotJson = await fetchData('street-nodes/tree-of-life');
+  console.log('sefirot locations fetched');
   return JSON.parse(sefirotJson);
 }
 
