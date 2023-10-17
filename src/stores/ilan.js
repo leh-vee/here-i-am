@@ -5,7 +5,10 @@ import { channelFeatures } from '../lib/utils/geoJson.js';
 import { projectionsForChannels } from '../lib/utils/projections.js';
 import { tenByTenArray } from '../lib/utils/base.js';
 
+export const sefirotPoints = writable(undefined);
+export const channelLines = writable(undefined);
 export const channelProjections = writable(undefined);
+
 function createChannelBlocksStore() {
   const { subscribe, update } = writable(tenByTenArray());
 
@@ -20,12 +23,13 @@ function createChannelBlocksStore() {
 export const channelBlocks = createChannelBlocksStore();
 
 const data = {
-  sefirotPoints: undefined,
   channelLines: undefined,
 }
 
 export async function setIlanData(screenPx) {
-  data.sefirotPoints = await fetchSefirot();
-  data.channelLines = channelFeatures(data.sefirotPoints);
-  channelProjections.set(projectionsForChannels(data.channelLines, screenPx));
+  const sefirotGeoJson = await fetchSefirot();
+  sefirotPoints.set(sefirotGeoJson);
+  const channelLinesGeoJson = channelFeatures(sefirotGeoJson);
+  channelLines.set(channelLinesGeoJson);
+  channelProjections.set(projectionsForChannels(channelLinesGeoJson, screenPx));
 }

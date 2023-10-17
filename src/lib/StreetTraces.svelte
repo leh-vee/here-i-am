@@ -22,7 +22,7 @@
   const data = {};
 
   $: {
-    console.log('drawing channel street traces for verse', $currentVerseIndex);
+    console.log('drawing street traces for verse', $currentVerseIndex);
     loadStoreData();
   }
 
