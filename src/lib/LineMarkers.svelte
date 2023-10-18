@@ -1,22 +1,24 @@
 <script>
   import { Circle } from 'svelte-konva';
   import { currentChannelCoordsPx } from '../stores/ilan';
+  import { currentVerse } from '../stores/text.js';
 
-  export let words;
-  export let yOffset;
+  export let isLineA = true;
 
-  const marginWidth = Math.round(window.innerWidth * 0.1);
+  const yOffsetAbsolute = Math.round(window.innerHeight * 0.02);
+  const yLineOffsetPx = isLineA ? -yOffsetAbsolute : yOffsetAbsolute;
+  const xLineBufferPx = Math.round(window.innerWidth * 0.1);
 
-  $: chCoordsPx = $currentChannelCoordsPx;
+  const words = isLineA ? $currentVerse['a'] : $currentVerse['b'];
 
   $: lineCoordsPx = [
     [
-      chCoordsPx[0][0] + marginWidth,
-      chCoordsPx[0][1] + yOffset
+      $currentChannelCoordsPx[0][0] + xLineBufferPx,
+      $currentChannelCoordsPx[0][1] + yLineOffsetPx
     ],
     [
-      chCoordsPx[1][0] - marginWidth,
-      chCoordsPx[1][1] + yOffset
+      $currentChannelCoordsPx[1][0] - xLineBufferPx,
+      $currentChannelCoordsPx[1][1] + yLineOffsetPx
     ]
   ]
 
