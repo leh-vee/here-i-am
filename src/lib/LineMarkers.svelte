@@ -1,21 +1,13 @@
 <script>
   import { Circle } from 'svelte-konva';
-  import { currentVerse, currentPiSlice, lastPiSlice } from '../stores/text';
-  import { channelLines, channelProjections } from '../stores/ilan';
+  import { currentChannelCoordsPx } from '../stores/ilan';
 
   export let words;
   export let yOffset;
 
   const marginWidth = Math.round(window.innerWidth * 0.1);
 
-  $: projection = $channelProjections[$lastPiSlice][$currentPiSlice];
-  $: channelFeature = $channelLines[$lastPiSlice].features[$currentPiSlice];
-  $: chCoordsGsc = channelFeature.geometry.coordinates;
-  $: chCoordsPx = chCoordsGsc.map(cGsc => { 
-    const coordsPx = projection(cGsc);
-    const roundCoordsPx = coordsPx.map(coord => Math.round(coord));
-    return roundCoordsPx;
-  });
+  $: chCoordsPx = $currentChannelCoordsPx;
 
   $: lineCoordsPx = [
     [

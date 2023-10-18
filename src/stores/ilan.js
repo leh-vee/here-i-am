@@ -1,9 +1,10 @@
 // @ts-nocheck
-import { writable } from 'svelte/store';
-import { fetchSefirot, fetchBlocksWithinRadius } from '../api/client.js';
+import { writable, get, derived } from 'svelte/store';
+import { fetchSefirot } from '../api/client.js';
 import { channelFeatures } from '../lib/utils/geoJson.js';
 import { projectionsForChannels } from '../lib/utils/projections.js';
 import { tenByTenArray } from '../lib/utils/base.js';
+import { lastPiSlice, currentPiSlice } from '../stores/text';
 
 export const sefirotPoints = writable(undefined);
 export const channelLines = writable(undefined);
@@ -21,6 +22,31 @@ function createChannelBlocksStore() {
   };
 }
 export const channelBlocks = createChannelBlocksStore();
+
+export const currentChannelProjection = derived(
+  [channelProjections], ([$channelProjections]) => {
+    return $channelProjections[get(lastPiSlice)][get(currentPiSlice)];
+  }
+);
+
+export const currentChannelLine = derived(
+  [channelLines], ([$channelLines]) => {
+    return $channelLines[get(lastPiSlice)].features[get(currentPiSlice)];
+  }
+);
+
+export const currentChannelCoordsPx = derived(
+  [currentChannelProjection, currentChannelLine], 
+  ([$currentChannelProjection, $currentChannelLine]) => {
+    const chCoordsGsc = $currentChannelLine.geometry.coordinates;
+    const chCoordsPx = chCoordsGsc.map(cGsc => {
+      const coordsPx = $currentChannelProjection(cGsc);
+      const roundCoordsPx = coordsPx.map(coord => Math.round(coord));
+      return roundCoordsPx;
+    });
+    return chCoordsPx;
+  }
+);
 
 export async function setIlanData(screenPx) {
   const sefirotGeoJson = await fetchSefirot();
