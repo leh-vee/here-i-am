@@ -1,4 +1,5 @@
 <script>
+  import { sefirotPoints, channelLines, channelProjections } from './stores/ilan.js';
   import { currentPiSlice, lastPiSlice, isFirstVerseTriad } from './stores/text.js';
   import EllipsisPainter from './lib/EllipsisPainter.js';
   import StreetPainter from './lib/StreetPainter.js';
@@ -6,11 +7,11 @@
   import Konva from 'konva';
   import VerseExplorer from './lib/VerseExplorer.svelte';
   import { onMount } from 'svelte';
-  import { fetchBlocksForProjection, fetchBlocksForSefirotProjections, fetchBlocksWithinRadius } from './api/client.js';
-  import { projectionForIlan, projectionBaseForSefirah, projectionsForChannels } from './lib/utils/projections.js';
   import { renderBlocksAsBackground } from './lib/illustrators/streetBlocks.js';
-  import distance from "@turf/distance";
-  import { setIlanData } from './stores/ilan.js';
+  import { fetchSefirot } from './api/client.js';
+  import { channelFeatures } from './lib/utils/geoJson.js';
+  import { projectionsForChannels } from './lib/utils/projections.js';
+
 
   const v = {
     isMovementWordByWord: null,
@@ -35,7 +36,6 @@
     v.screenProps.konvaStage.add(v.konvaLayer);
 
     await setIlanData(v.screenPx);
-    console.log('ilan data set');
     v.isReader = true;
 
     // v.ilanProjection = projectionForIlan($sefirotPoints, v.screenPx);
@@ -52,6 +52,15 @@
 
     // elliplitcalCollapse();
   });
+
+  async function setIlanData(screenPx) {
+    const sefirotGeoJson = await fetchSefirot();
+    sefirotPoints.set(sefirotGeoJson);
+    const channelLinesGeoJson = channelFeatures(sefirotGeoJson);
+    channelLines.set(channelLinesGeoJson);
+    channelProjections.set(projectionsForChannels(channelLinesGeoJson, screenPx));
+    console.log('ilan data set');
+  }
 
   function elliplitcalCollapse() {    
     v.ellipsisPainter = new EllipsisPainter(v.konvaLayer);

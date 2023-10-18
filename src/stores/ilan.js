@@ -1,8 +1,5 @@
 // @ts-nocheck
 import { writable, get, derived } from 'svelte/store';
-import { fetchSefirot } from '../api/client.js';
-import { channelFeatures } from '../lib/utils/geoJson.js';
-import { projectionsForChannels } from '../lib/utils/projections.js';
 import { tenByTenArray } from '../lib/utils/base.js';
 import { lastPiSlice, currentPiSlice } from '../stores/text';
 
@@ -65,11 +62,3 @@ export const currentChannelToSefirahCoordsPx = derived(
     return $currentChannelProjection(fromSefirahCoordsGcs);
   }
 );
-
-export async function setIlanData(screenPx) {
-  const sefirotGeoJson = await fetchSefirot();
-  sefirotPoints.set(sefirotGeoJson);
-  const channelLinesGeoJson = channelFeatures(sefirotGeoJson);
-  channelLines.set(channelLinesGeoJson);
-  channelProjections.set(projectionsForChannels(channelLinesGeoJson, screenPx));
-}
