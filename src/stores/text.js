@@ -173,39 +173,3 @@ export const isLastVerseWord = derived([poem, wordIndices], (
     return isLastVerseWord;
   }
 );
-
-function createCountdown() {
-	const { subscribe, set, update } = writable(0);
-
-	return {
-		subscribe,
-		increment: () => update(n => n + 3),
-		decrement: () => update(n => n - 1),
-		reset: () => set(3)
-	};
-}
-
-export const countdown = createCountdown();
-
-export const hasMadeTime = derived([countdown], (
-  [$countdown]) => {
-    let hasMadeTime = false;
-    if ($countdown >= 194) {
-      hasMadeTime = true;
-    }
-    return hasMadeTime;
-  }
-);
-
-function createDoomCountdown() {
-	const { subscribe, set, update } = writable(0);
-
-	return {
-		subscribe,
-		decrement: () => update(n => n - 1),
-		reset: () => set(3),
-		clear: () => set(0)
-	};
-}
-
-export const doomCountdown = createDoomCountdown();

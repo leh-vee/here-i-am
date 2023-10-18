@@ -1,30 +1,13 @@
 <script>
-    import { wordIndices, countdown, doomCountdown, isFirstVerseWord } from '../stores/text.js';
-
-    function next() {
-      if (!isDoomNigh) {
-        countdown.increment();
-        wordIndices.nextWord();
-      }
-    } 
-    
-    function previous() {
-      if (!isDoomNigh) {
-        countdown.increment();
-        wordIndices.previousWord();
-      }
-    }
-
-    $: isDoomNigh = ($doomCountdown > 0) ? true : false;
+    import { wordIndices, isFirstVerseWord } from '../stores/text.js';
 </script>
 
 <div class='controller'>
   <span class='back button'
-    class:disabled="{ isDoomNigh || $isFirstVerseWord }" 
-    on:click={ previous } >&#9756;</span>
+    class:disabled="{ $isFirstVerseWord }" 
+    on:click={ wordIndices.previousWord } >&#9756;</span>
   <span class='forward button'
-    class:disabled="{ isDoomNigh }"
-    on:click={ next } >&#9758;</span>
+    on:click={ wordIndices.nextWord } >&#9758;</span>
 </div>
 
 <style>
@@ -34,6 +17,7 @@
     height: 35%;
     width: 100%;
     display: flex;
+    z-index: 1;
   }
 
   .disabled {

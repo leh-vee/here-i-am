@@ -1,7 +1,7 @@
 <script>
-    import { currentWord, isEllipsisWord, hasMadeTime } from '../stores/text.js';
+    import { currentWord, isEllipsisWord } from '../stores/text.js';
 
-    $: word = ($isEllipsisWord && !$hasMadeTime ? '.' : $currentWord);
+    $: word = ($isEllipsisWord ? '.' : $currentWord);
 </script>
 
 <p class='word'>{ word }</p>
@@ -10,7 +10,7 @@
   .word {
     text-align: center;
     position: absolute;
-    top: 30%;
+    top: 25%;
     width: 100%;
     font-size: 70px;
   }

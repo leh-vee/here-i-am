@@ -29,11 +29,11 @@
   }; 
 
   onMount(async () => {
-    v.screenProps.konvaStage = new Konva.Stage({
-      container: v.screenProps.konvaEl, width: v.screenPx.width, height: v.screenPx.height
-    }); 
-    v.konvaLayer = new Konva.Layer();
-    v.screenProps.konvaStage.add(v.konvaLayer);
+    // v.screenProps.konvaStage = new Konva.Stage({
+    //   container: v.screenProps.konvaEl, width: v.screenPx.width, height: v.screenPx.height
+    // }); 
+    // v.konvaLayer = new Konva.Layer();
+    // v.screenProps.konvaStage.add(v.konvaLayer);
 
     await setIlanData(v.screenPx);
     v.isReader = true;
@@ -118,23 +118,11 @@
   {#if v.isReader}
     <VerseExplorer />
   {/if}
-  <div bind:this={v.screenProps.konvaEl}></div>
-  <canvas
-    bind:this={v.screenProps.canvasEl}
-    width={v.screenPx.width}
-    height={v.screenPx.height}
-  ></canvas>
 </div>
 
 <style>
   .screen {
     width: 100%;
     height: 100%;
-  }
-
-  canvas {
-    position: absolute;
-    left: 0;
-    top: 0;
   }
 </style>

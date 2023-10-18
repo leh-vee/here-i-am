@@ -5,8 +5,12 @@
   import LineMarkers from './LineMarkers.svelte';
   import { currentChannelFromSefirahCoordsPx, 
     currentChannelToSefirahCoordsPx } from '../stores/ilan';
+  import Controller from './Controller.svelte';
+  import Word from './Word.svelte';
 </script>
 
+<Word />
+<Controller />
 <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
   <Layer>
     <StreetTraces /> 
