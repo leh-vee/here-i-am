@@ -3,18 +3,16 @@
   import StreetTraces from './StreetTraces.svelte';
   import SefirahMarker from './SefirahMarker.svelte';
   import LineMarkers from './LineMarkers.svelte';
-  import { channelProjections, sefirotPoints } from '../stores/ilan';
-  import { currentPiSlice, lastPiSlice } from '../stores/text.js';
-
-  $: projection = $channelProjections[$lastPiSlice][$currentPiSlice]; 
-  $: fromSefirah = $sefirotPoints.features[$lastPiSlice];
+  import { currentChannelFromSefirahCoordsPx, 
+    currentChannelToSefirahCoordsPx } from '../stores/ilan';
 </script>
 
 <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
   <Layer>
     <StreetTraces /> 
-    <SefirahMarker coordsPx={projection(fromSefirah.geometry.coordinates)} />
+    <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
     <LineMarkers />
     <LineMarkers isLineA={false} />
+    <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } />
   </Layer>
 </Stage>

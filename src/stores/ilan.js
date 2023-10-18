@@ -48,6 +48,24 @@ export const currentChannelCoordsPx = derived(
   }
 );
 
+export const currentChannelFromSefirahCoordsPx = derived(
+  [currentChannelProjection, sefirotPoints], 
+  ([$currentChannelProjection, $sefirotPoints]) => {
+    const fromSefirah = $sefirotPoints.features[get(lastPiSlice)];
+    const fromSefirahCoordsGcs = fromSefirah.geometry.coordinates;
+    return $currentChannelProjection(fromSefirahCoordsGcs);
+  }
+);
+
+export const currentChannelToSefirahCoordsPx = derived(
+  [currentChannelProjection, sefirotPoints], 
+  ([$currentChannelProjection, $sefirotPoints]) => {
+    const fromSefirah = $sefirotPoints.features[get(currentPiSlice)];
+    const fromSefirahCoordsGcs = fromSefirah.geometry.coordinates;
+    return $currentChannelProjection(fromSefirahCoordsGcs);
+  }
+);
+
 export async function setIlanData(screenPx) {
   const sefirotGeoJson = await fetchSefirot();
   sefirotPoints.set(sefirotGeoJson);
