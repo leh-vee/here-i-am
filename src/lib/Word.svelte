@@ -1,16 +1,17 @@
 <script>
-    import { currentWord } from '../stores/text.js';
+  import { Text } from 'svelte-konva';
+  import { currentWord } from '../stores/text.js';
 </script>
 
-<p class='word'>{ $currentWord }</p>
-
-<style>
-  .word {
-    text-align: center;
-    position: absolute;
-    top: 25%;
-    width: 100%;
-    font-size: 70px;
-  }
-
-</style>
+<Text config={{
+  text: $currentWord,
+  width: window.innerWidth,
+  height: window.innerHeight,
+  align: 'center',
+  verticalAlign: 'middle',
+  fontSize: 60,
+  fillEnabled: false,
+  fill: 'white',
+  stroke: '#9E9EA1',
+  strokeWidth: 1
+}} />

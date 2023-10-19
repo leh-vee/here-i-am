@@ -9,12 +9,12 @@
   import Word from './Word.svelte';
 </script>
 
-<Word />
 <Controller />
 <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
   <Layer>
     <StreetTraces /> 
     <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
+    <Word />
     <LineMarkers />
     <LineMarkers line={'b'} />
     <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } />
