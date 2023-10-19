@@ -1,10 +1,8 @@
 <script>
-    import { currentWord, isEllipsisWord } from '../stores/text.js';
-
-    $: word = ($isEllipsisWord ? '.' : $currentWord);
+    import { currentWord } from '../stores/text.js';
 </script>
 
-<p class='word'>{ word }</p>
+<p class='word'>{ $currentWord }</p>
 
 <style>
   .word {

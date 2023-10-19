@@ -152,16 +152,6 @@ export const lastPiSlice = derived([poem, wordIndices], (
   }
 );
 
-export const isEllipsisWord = derived([wordIndices], (
-  [$wordIndices]) => {
-    let isFirstWord = false;
-    if ($wordIndices.line === 'a' && $wordIndices.wordIndex < 3) {
-      isFirstWord = true;
-    }
-    return isFirstWord;
-  }
-);
-
 export const isLastVerseWord = derived([poem, wordIndices], (
   [$poem, $wordIndices]) => {
     const { verseIndex, line, wordIndex } = $wordIndices;
