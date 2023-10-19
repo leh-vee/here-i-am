@@ -31,10 +31,10 @@
 <div class='controller'>
   <span class='back button'
     class:disabled="{ $isFirstVerseWord || isAutoScanningVerse }" 
-    on:click={ wordIndices.previousWord } >&#9756;</span>
+    on:click={ wordIndices.previousWord } >&#8406;</span>
   <span class='forward button'
     class:disabled="{ isAutoScanningVerse }"
-    on:click={ wordIndices.nextWord } >&#9758;</span>
+    on:click={ wordIndices.nextWord } >&#8407;</span>
 </div>
 
 <style>
@@ -51,12 +51,10 @@
   }
 
   .controller .button {
-    width: 50vw;
-    height: 50vw;
+    width: 50%;
     text-align: center;
     vertical-align: baseline;
-    font-size: 15vw;
-    border-radius: 50%;
+    font-size: 5vw;
   }
 
 </style>
