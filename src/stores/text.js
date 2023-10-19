@@ -118,6 +118,12 @@ export const currentVerseIndex = derived([wordIndices], (
   } 
 );
 
+export const nVerseWords = derived(
+  [currentVerse], ([$currentVerse]) => {
+    return $currentVerse['a'].length + $currentVerse['b'].length;
+  }
+);
+
 export const isFirstVerseTriad = derived([wordIndices], (
   [$wordIndices]) => {
     let isFirstVerse = false;
