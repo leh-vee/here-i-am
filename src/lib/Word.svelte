@@ -10,8 +10,8 @@
   align: 'center',
   verticalAlign: 'middle',
   fontSize: 60,
-  fillEnabled: false,
-  fill: 'white',
-  stroke: '#9E9EA1',
+  fillEnabled: true,
+  fill: '#9E9EA1',
+  stroke: 'black',
   strokeWidth: 1
 }} />
