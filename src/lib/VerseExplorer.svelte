@@ -16,7 +16,7 @@
     <StreetTraces /> 
     <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
     <LineMarkers />
-    <LineMarkers isLineA={false} />
+    <LineMarkers line={'b'} />
     <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } />
   </Layer>
 </Stage>
