@@ -5,7 +5,7 @@
 
   $: {
     console.log('scanning verse', $currentVerseIndex);
-    scanVerse();
+    setTimeout(() => scanVerse(), 200);
   }
 
   function scanVerse() {

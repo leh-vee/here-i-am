@@ -1,7 +1,7 @@
 <script>
-  import { Circle } from 'svelte-konva';
   import { currentChannelCoordsPx } from '../stores/ilan';
-  import { currentVerse, wordIndices } from '../stores/text.js';
+  import { currentVerse } from '../stores/text.js';
+  import WordMarker from './WordMarker.svelte';
 
   export let line = 'a';
 
@@ -26,24 +26,19 @@
   $: xLineDeltaPx = lineCoordsPx[1][0] - lineCoordsPx[0][0];
   $: xCoordDelta = Math.round(xLineDeltaPx / (words.length - 1));
   $: yCoordPx = lineCoordsPx[0][1];
-
-  $: isCurrentLine = line === $wordIndices['line'];
-
-  function markerRadius(wordIndex) {
-    const isCurrentWord = isCurrentLine && $wordIndices.wordIndex === wordIndex;
-    return isCurrentWord ? 5 : 3;
-  }
   
 </script>
 
 {#each words as word, i}
-  <Circle config={{
-    name: word,
-    x: lineCoordsPx[0][0] + xCoordDelta * i,
-    y: yCoordPx,
-    radius: markerRadius(i),
-    fill: 'black',
-  }} />
+  {#key word}
+    <WordMarker
+      word={word} 
+      line={line}
+      wordIndexInLine={i}
+      x={lineCoordsPx[0][0] + xCoordDelta * i}
+      y={yCoordPx}
+    />
+  {/key}
 {/each}
 
 
