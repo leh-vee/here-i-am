@@ -13,6 +13,21 @@ const POEM = [
     piSlice: 1,
     a: "the other white people, a new Israelite vector",
     b: "starting from the horrible reach of her empty touch" 
+  },
+  {
+    piSlice: 5,
+    a: "this bird I torture, aflutter over the azure",
+    b: "promise again, smack into its glassy brilliance" 
+  },
+  {
+    piSlice: 9,
+    a: "a headless extrusion on the verge wailing",
+    b: "peacably on behalf of an unlimited injury" 
+  },
+  {
+    piSlice: 2,
+    a: "the man waving to my woman as she rides me",
+    b: "like a mare, down May's flowery avenues" 
   }
 ];
 
