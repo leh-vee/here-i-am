@@ -2,7 +2,7 @@
   import { Text } from 'svelte-konva';
   import { currentPiSlice, isFirstVerseTriad } from '../stores/text.js';
 
-  $: verseNumber = isFirstVerseTriad ? asRomanNumeral($currentPiSlice) : String($currentPiSlice);
+  $: verseNumber = $isFirstVerseTriad ? asRomanNumeral($currentPiSlice) : String($currentPiSlice);
 
   function asRomanNumeral(n) {
     let romanNumeral = "";
