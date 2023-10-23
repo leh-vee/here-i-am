@@ -1,39 +1,13 @@
 <script>
-  import { wordIndices, isFirstVerseWord, currentVerseIndex, nVerseWords } from '../stores/text.js';
-  
-  let isAutoScanningVerse = false;
-
-  $: {
-    console.log('scanning verse', $currentVerseIndex);
-    setTimeout(() => scanVerse(), 200);
-  }
-
-  function scanVerse() {
-    isAutoScanningVerse = true;
-    const piSecondsInMilliseconds = Math.PI * 1000;
-    const t = piSecondsInMilliseconds / $nVerseWords;
-    const totalScans = $nVerseWords - 1;
-    let nWordsScanned = 0;
-    const scanNextWord = () => {
-      wordIndices.nextWord();
-      nWordsScanned += 1;
-      if (nWordsScanned < totalScans) {
-        setTimeout(() => { scanNextWord() }, t);
-      } else {
-        isAutoScanningVerse = false;
-      }
-    }
-    scanNextWord()
-  } 
+  import { wordIndices, isFirstVerseWord } from '../stores/text.js';
 </script>
 
 
 <div class='controller'>
   <span class='back button'
-    class:disabled="{ $isFirstVerseWord || isAutoScanningVerse }" 
+    class:disabled="{ $isFirstVerseWord }" 
     on:click={ wordIndices.previousWord } >&#8406;</span>
   <span class='forward button'
-    class:disabled="{ isAutoScanningVerse }"
     on:click={ wordIndices.nextWord } >&#8407;</span>
 </div>
 

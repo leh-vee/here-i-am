@@ -1,9 +1,8 @@
 <script>
   import { sefirotPoints, channelLines, channelProjections } from './stores/ilan.js';
-  import { currentPiSlice, lastPiSlice, isFirstVerseTriad } from './stores/text.js';
+  import { currentPiSlice, lastPiSlice } from './stores/text.js';
   import EllipsisPainter from './lib/EllipsisPainter.js';
   import StreetPainter from './lib/StreetPainter.js';
-  import VerseNumberIllustrator from './lib/VerseNumberIllustrator.js';
   import Konva from 'konva';
   import VerseExplorer from './lib/VerseExplorer.svelte';
   import { onMount } from 'svelte';
@@ -11,7 +10,6 @@
   import { fetchSefirot } from './api/client.js';
   import { channelFeatures } from './lib/utils/geoJson.js';
   import { projectionsForChannels } from './lib/utils/projections.js';
-
 
   const v = {
     isMovementWordByWord: null,
@@ -76,17 +74,7 @@
     setTimeout(() => {
       v.streetPainter.clearCanvas();
       v.ellipsisPainter.clearCanvas();
-      countDown();
     }, 15000);
-  }
-
-  function countDown() {
-    v.verseNumberIllustrator = new VerseNumberIllustrator(v.screenProps.canvasEl);
-    v.verseNumberIllustrator.render($currentPiSlice, $isFirstVerseTriad);
-    setTimeout(() => {
-      v.verseNumberIllustrator.clearCanvas();
-      letterTrail();
-    }, 5000);
   }
 
   async function letterTrail() { //this function should be more to do with the channel
@@ -114,7 +102,7 @@
 
 </script>
 
-<div class='screen' bind:this={v.screenProps.frameEl}>
+<div class='screen'>
   {#if v.isReader}
     <VerseExplorer />
   {/if}
