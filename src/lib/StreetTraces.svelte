@@ -22,9 +22,9 @@
   $: if ($blocksForCurrentChannel === undefined) {
     fetchBlocksForProjection();
   } else {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     console.log('updating street traces...');
     let geoGenerator = geoPath().projection($currentChannelProjection).context(ctx);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.beginPath();
     geoGenerator({type: 'FeatureCollection', features: $blocksForCurrentChannel.features })
     ctx.stroke();

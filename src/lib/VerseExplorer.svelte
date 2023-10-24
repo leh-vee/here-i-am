@@ -5,25 +5,26 @@
   import LineMarkers from './LineMarkers.svelte';
   import VerseNumber from './VerseNumber.svelte';
   import { currentChannelFromSefirahCoordsPx, 
-    currentChannelToSefirahCoordsPx } from '../stores/ilan';
+    currentChannelToSefirahCoordsPx, blocksForCurrentChannel } from '../stores/ilan';
   import Controller from './Controller.svelte';
   import Word from './Word.svelte';
   import { currentVerseIndex, nVerseWords, wordIndices } from '../stores/text.js';
 
-  let isCountingDown = true;
-  let isAutoScanningVerse = false; 
+  let showCountdown = true;
+  let showControls = false; 
 
   $: {
     console.log('countdown for verse', $currentVerseIndex);
-    isCountingDown = true;
-    setTimeout(() => {
-      isCountingDown = false;
-      setTimeout(() => { scanVerse() }, 1000);
-    }, Math.PI * 1000);
+    showControls = false;
+    showCountdown = true;
+    setTimeout(() => { showCountdown = false }, Math.PI * 1000);
   }
 
+  $: showExplorer = !showCountdown && $blocksForCurrentChannel !== undefined;
+
+  $: if (showExplorer) setTimeout(scanVerse, 1000);
+
   function scanVerse() {
-    isAutoScanningVerse = true;
     const piSecondsInMilliseconds = Math.PI * 1000;
     const t = piSecondsInMilliseconds / $nVerseWords;
     const totalScans = $nVerseWords - 1;
@@ -34,21 +35,22 @@
       if (nWordsScanned < totalScans) {
         setTimeout(() => { scanNextWord() }, t);
       } else {
-        isAutoScanningVerse = false;
+        showControls = true;
       }
     }
-    scanNextWord()
+    scanNextWord();
   }
+
 </script>
 
-{#if !isCountingDown && !isAutoScanningVerse}
+{#if showControls }
   <Controller />
 {/if}
 <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
-  <Layer config={{ visible: isCountingDown }} >
+  <Layer config={{ visible: !showExplorer }} >
     <VerseNumber />
   </Layer>
-  <Layer config={{ visible: !isCountingDown }} >
+  <Layer config={{ visible: showExplorer }} >
     <StreetTraces /> 
     <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
     <Word />
