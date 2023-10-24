@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { writable, get, derived } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 import { tenByTenArray } from '../lib/utils/base.js';
 import { lastPiSlice, currentPiSlice } from '../stores/text';
 
@@ -21,14 +21,16 @@ function createChannelBlocksStore() {
 export const channelBlocks = createChannelBlocksStore();
 
 export const currentChannelProjection = derived(
-  [channelProjections], ([$channelProjections]) => {
-    return $channelProjections[get(lastPiSlice)][get(currentPiSlice)];
+  [channelProjections, lastPiSlice, currentPiSlice], 
+  ([$channelProjections, $lastPiSlice, $currentPiSlice]) => {
+    return $channelProjections[$lastPiSlice][$currentPiSlice];
   }
 );
 
 export const currentChannelLine = derived(
-  [channelLines], ([$channelLines]) => {
-    return $channelLines[get(lastPiSlice)].features[get(currentPiSlice)];
+  [channelLines, lastPiSlice, currentPiSlice], 
+  ([$channelLines, $lastPiSlice, $currentPiSlice]) => {
+    return $channelLines[$lastPiSlice].features[$currentPiSlice];
   }
 );
 
@@ -46,18 +48,18 @@ export const currentChannelCoordsPx = derived(
 );
 
 export const currentChannelFromSefirahCoordsPx = derived(
-  [currentChannelProjection, sefirotPoints], 
-  ([$currentChannelProjection, $sefirotPoints]) => {
-    const fromSefirah = $sefirotPoints.features[get(lastPiSlice)];
+  [currentChannelProjection, sefirotPoints, lastPiSlice], 
+  ([$currentChannelProjection, $sefirotPoints, $lastPiSlice]) => {
+    const fromSefirah = $sefirotPoints.features[$lastPiSlice];
     const fromSefirahCoordsGcs = fromSefirah.geometry.coordinates;
     return $currentChannelProjection(fromSefirahCoordsGcs);
   }
 );
 
 export const currentChannelToSefirahCoordsPx = derived(
-  [currentChannelProjection, sefirotPoints], 
-  ([$currentChannelProjection, $sefirotPoints]) => {
-    const fromSefirah = $sefirotPoints.features[get(currentPiSlice)];
+  [currentChannelProjection, sefirotPoints, currentPiSlice], 
+  ([$currentChannelProjection, $sefirotPoints, $currentPiSlice]) => {
+    const fromSefirah = $sefirotPoints.features[$currentPiSlice];
     const fromSefirahCoordsGcs = fromSefirah.geometry.coordinates;
     return $currentChannelProjection(fromSefirahCoordsGcs);
   }
