@@ -27,6 +27,13 @@ export const currentChannelProjection = derived(
   }
 );
 
+export const blocksForCurrentChannel = derived(
+  [channelBlocks, lastPiSlice, currentPiSlice], 
+  ([$channelBlocks, $lastPiSlice, $currentPiSlice]) => {
+    return $channelBlocks[$lastPiSlice][$currentPiSlice];
+  }
+);
+
 export const currentChannelLine = derived(
   [channelLines, lastPiSlice, currentPiSlice], 
   ([$channelLines, $lastPiSlice, $currentPiSlice]) => {
