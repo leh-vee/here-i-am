@@ -6,7 +6,7 @@
 
   function asRomanNumeral(n) {
     let romanNumeral = "";
-    for (let i = 0; i < n; i++) romanNumeral += "I";
+    for (let i = 0; i < n; i++) romanNumeral += "i";
     return romanNumeral;
   }
 </script>
@@ -17,8 +17,8 @@
   height: window.innerHeight,
   align: 'center',
   verticalAlign: 'middle',
-  fontSize: 200,
-  fontFamily: 'Source Code Pro',
+  fontSize: 250,
+  fontFamily: 'Reenie Beanie',
   fillEnabled: true,
   fill: 'black',
   stroke: 'black',

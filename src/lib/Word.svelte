@@ -10,10 +10,10 @@
   height: window.innerHeight,
   align: 'center',
   verticalAlign: 'middle',
-  fontSize: 60,
-  fontFamily: 'EB Garamond',
+  fontSize: 80,
+  fontFamily: 'Reenie Beanie',
   fillEnabled: true,
-  fill: '#9E9EA1',
+  fill: 'black',
   stroke: 'black',
-  strokeWidth: 1
+  strokeWidth: 0
 }} />
