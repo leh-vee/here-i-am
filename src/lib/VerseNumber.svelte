@@ -18,7 +18,7 @@
   align: 'center',
   verticalAlign: 'middle',
   fontSize: 250,
-  fontFamily: 'Reenie Beanie',
+  fontFamily: 'Indie Flower',
   fillEnabled: true,
   fill: 'black',
   stroke: 'black',

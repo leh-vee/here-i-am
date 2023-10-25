@@ -16,7 +16,7 @@
     canvas.height = window.innerHeight;
 
     ctx.lineWidth = 1;
-    ctx.strokeStyle = '#303030';
+    ctx.strokeStyle = '#505050';
   });
 
   $: if ($blocksForCurrentChannel === undefined) {
