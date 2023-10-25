@@ -15,14 +15,14 @@
   $: if (isCurrentWord) hasBeenCurrentWord = true;
   
   let markerRadius = 0;
-  let fillColour = '#303030';
+  let fillColour = 'dimgray';
   $: {
     if (isCurrentWord) {
       markerRadius = 5;
-      fillColour = 'black';
+      fillColour = 'dimgray';
     } else if (hasBeenCurrentWord) {
       markerRadius = 3;
-      fillColour = '#303030';
+      fillColour = 'dimgray';
     }
   }
   

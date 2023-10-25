@@ -66,9 +66,8 @@
   </Layer>
   <Layer config={{ visible: !isCountdown }} >
     <StreetTraces /> 
-    {#if isEllipsis}
-      <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
-    {/if}
+    <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } 
+      radius={ isEllipsis ? 5 : 3 } />
     <Word currentWord={ isEllipsis ? '...' : $currentWord } />
     {#if isFlight || isRecall}
       {#key currentVerseIndex}
@@ -76,6 +75,7 @@
         <LineMarkers line={'b'} />
       {/key}
     {/if}
-    <!-- <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } /> -->
+    <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
+      fillColour={ 'black' } />
   </Layer>
 </Stage>
