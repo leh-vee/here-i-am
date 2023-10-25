@@ -30,15 +30,13 @@
 </script>
 
 {#each words as word, i}
-  {#key word}
-    <WordMarker
-      word={word} 
-      line={line}
-      wordIndexInLine={i}
-      x={lineCoordsPx[0][0] + xCoordDelta * i}
-      y={yCoordPx}
-    />
-  {/key}
+  <WordMarker
+    word={word} 
+    line={line}
+    wordIndexInLine={i}
+    x={lineCoordsPx[0][0] + xCoordDelta * i}
+    y={yCoordPx}
+  />
 {/each}
 
 

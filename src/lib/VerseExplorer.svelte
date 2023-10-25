@@ -5,57 +5,77 @@
   import LineMarkers from './LineMarkers.svelte';
   import VerseNumber from './VerseNumber.svelte';
   import { currentChannelFromSefirahCoordsPx, 
-    currentChannelToSefirahCoordsPx, blocksForCurrentChannel } from '../stores/ilan';
+    currentChannelToSefirahCoordsPx, 
+    blocksForCurrentChannel } from '../stores/ilan';
   import Controller from './Controller.svelte';
   import Word from './Word.svelte';
-  import { currentVerseIndex, nVerseWords, wordIndices } from '../stores/text.js';
+  import { currentVerseIndex, nVerseWords, wordIndices, currentWord } from '../stores/text.js';
 
-  let showCountdown = true;
-  let showControls = false; 
+  const movements = ['countdown', 'ellipsis', 'flight', 'recall'];
+  let currentMovementIndex;
+  const piTime = Math.PI * 1000;
 
-  $: {
-    console.log('countdown for verse', $currentVerseIndex);
-    showControls = false;
-    showCountdown = true;
-    setTimeout(() => { showCountdown = false }, Math.PI * 1000);
+  function startMovementTimer() {
+    setTimeout(() => { currentMovementIndex += 1 }, piTime);
   }
 
-  $: showExplorer = !showCountdown && $blocksForCurrentChannel !== undefined;
+  $: isMapRendered = $blocksForCurrentChannel !== undefined;
+  
+  $: {
+    console.log('starting movement cascade for verse at index', $currentVerseIndex);
+    currentMovementIndex = 0;
+  }
 
-  $: if (showExplorer) setTimeout(scanVerse, 1000);
+  $: currentMovement = movements[currentMovementIndex];
+
+  $: isCountdown = currentMovement === 'countdown';
+  $: isEllipsis = currentMovement === 'ellipsis';
+  $: isFlight = currentMovement === 'flight';
+  $: isRecall = currentMovement === 'recall';
+  
+  $: if (isCountdown && isMapRendered) startMovementTimer();
+  $: if (isEllipsis) startMovementTimer();
+  $: if (isFlight) scanVerse();
 
   function scanVerse() {
-    const piSecondsInMilliseconds = Math.PI * 1000;
-    const t = piSecondsInMilliseconds / $nVerseWords;
+    const t = piTime / $nVerseWords;
     const totalScans = $nVerseWords - 1;
     let nWordsScanned = 0;
     const scanNextWord = () => {
-      wordIndices.nextWord();
-      nWordsScanned += 1;
-      if (nWordsScanned < totalScans) {
-        setTimeout(() => { scanNextWord() }, t);
-      } else {
-        showControls = true;
-      }
+      setTimeout(() => { 
+        wordIndices.nextWord();
+        nWordsScanned += 1;
+        if (nWordsScanned < totalScans) {
+          scanNextWord();
+        } else {
+          currentMovementIndex += 1;
+        }
+      }, t);
     }
     scanNextWord();
   }
 
 </script>
 
-{#if showControls }
+{#if isRecall }
   <Controller />
 {/if}
 <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
-  <Layer config={{ visible: !showExplorer }} >
+  <Layer config={{ visible: isCountdown }} >
     <VerseNumber />
   </Layer>
-  <Layer config={{ visible: showExplorer }} >
+  <Layer config={{ visible: !isCountdown }} >
     <StreetTraces /> 
-    <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
-    <Word />
-    <LineMarkers />
-    <LineMarkers line={'b'} />
-    <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } />
+    {#if isEllipsis}
+      <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
+    {/if}
+    <Word currentWord={ isEllipsis ? '...' : $currentWord } />
+    {#if isFlight || isRecall}
+      {#key currentVerseIndex}
+        <LineMarkers />
+        <LineMarkers line={'b'} />
+      {/key}
+    {/if}
+    <!-- <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } /> -->
   </Layer>
 </Stage>

@@ -8,6 +8,6 @@
     x: coordsPx[0],
     y: coordsPx[1],
     radius: 5,
-    fill: '#9E9EA1',
+    fill: 'black',
   }}
 />
