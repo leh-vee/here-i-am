@@ -15,11 +15,14 @@
   $: if (isCurrentWord) hasBeenCurrentWord = true;
   
   let markerRadius = 0;
+  let fillColour = '#303030';
   $: {
     if (isCurrentWord) {
       markerRadius = 5;
+      fillColour = 'black';
     } else if (hasBeenCurrentWord) {
       markerRadius = 3;
+      fillColour = '#303030';
     }
   }
   
@@ -27,6 +30,6 @@
 
 <Circle config={{
   x, y, name: word, 
-  fill: 'black', 
+  fill: fillColour, 
   radius: markerRadius
 }} />
