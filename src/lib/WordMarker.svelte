@@ -13,23 +13,11 @@
   
   let hasBeenCurrentWord = isCurrentWord;
   $: if (isCurrentWord) hasBeenCurrentWord = true;
-  
-  let markerRadius = 0;
-  let fillColour = 'dimgray';
-  $: {
-    if (isCurrentWord) {
-      markerRadius = 5;
-      fillColour = 'black';
-    } else if (hasBeenCurrentWord) {
-      markerRadius = 3;
-      fillColour = 'dimgray';
-    }
-  }
+
+  $: fill = isCurrentWord ? 'black' : 'dimgray';
+  $: visible = (isCurrentWord || hasBeenCurrentWord) ? true : false;
+  $: radius = isCurrentWord ? 5 : 3;
   
 </script>
 
-<Circle config={{
-  x, y, name: word, 
-  fill: fillColour, 
-  radius: markerRadius
-}} />
+<Circle config={{ x, y, name: word, radius, visible, fill }} />
