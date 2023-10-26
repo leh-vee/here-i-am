@@ -82,12 +82,8 @@ function createWordIndicesStore() {
       } else if (isLineB) {
         prevLine = 'a';
         prevWordIndex = POEM_PARSED[verseIndex][prevLine].length - 1;
-      } // else if (!isFirstVerse) {
-      //   prevVerseIndex -= 1;
-      //   prevLine = 'b';
-      //   prevWordIndex = POEM_PARSED[prevVerseIndex][prevLine].length - 1;
-      // }
-
+      }
+      
       return {
         verseIndex: prevVerseIndex,
         line: prevLine,

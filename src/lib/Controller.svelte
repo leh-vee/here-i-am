@@ -1,5 +1,16 @@
 <script>
-  import { wordIndices, isFirstVerseWord } from '../stores/text.js';
+  import { wordIndices, isFirstVerseWord, isLastVerseWord } from '../stores/text.js';
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
+
+  function next() {
+    if ($isLastVerseWord) {
+      dispatch('coda');
+    } else {
+      wordIndices.nextWord();
+    }
+  }
 </script>
 
 
@@ -8,7 +19,7 @@
     class:disabled="{ $isFirstVerseWord }" 
     on:click={ wordIndices.previousWord } ></span>
   <span class='forward button'
-    on:click={ wordIndices.nextWord } ></span>
+    on:click={ next } ></span>
 </div>
 
 <style>

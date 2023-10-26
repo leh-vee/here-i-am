@@ -9,33 +9,29 @@
     blocksForCurrentChannel } from '../stores/ilan';
   import Controller from './Controller.svelte';
   import Word from './Word.svelte';
-  import { currentVerseIndex, nVerseWords, wordIndices, currentWord, currentVerse } from '../stores/text.js';
+  import { nVerseWords, wordIndices, currentWord, currentVerse } from '../stores/text.js';
 
-  const movements = ['countdown', 'ellipsis', 'flight', 'recall'];
-  let currentMovementIndex;
+  const movements = ['countdown', 'fromEllipsis', 'flight', 'recall', 'toEllipsis'];
+  let currentMovementIndex = 0;
   const piTime = Math.PI * 1000;
+
+  $: isMapRendered = $blocksForCurrentChannel !== undefined;
+  $: currentMovement = movements[currentMovementIndex];
+
+  $: isCountdown = currentMovement === 'countdown';
+  $: isFromEllipsis = currentMovement === 'fromEllipsis';
+  $: isFlight = currentMovement === 'flight';
+  $: isRecall = currentMovement === 'recall';
+  $: isToEllipsis = currentMovement === 'toEllipsis';
+  $: isEllipsis = isFromEllipsis || isToEllipsis;
+  
+  $: if (isCountdown && isMapRendered) startMovementTimer();
+  $: if (isFromEllipsis) startMovementTimer();
+  $: if (isFlight) scanVerse();
 
   function startMovementTimer() {
     setTimeout(() => { currentMovementIndex += 1 }, piTime);
   }
-
-  $: isMapRendered = $blocksForCurrentChannel !== undefined;
-  
-  $: {
-    console.log('starting movement cascade for verse at index', $currentVerseIndex);
-    currentMovementIndex = 0;
-  }
-
-  $: currentMovement = movements[currentMovementIndex];
-
-  $: isCountdown = currentMovement === 'countdown';
-  $: isEllipsis = currentMovement === 'ellipsis';
-  $: isFlight = currentMovement === 'flight';
-  $: isRecall = currentMovement === 'recall';
-  
-  $: if (isCountdown && isMapRendered) startMovementTimer();
-  $: if (isEllipsis) startMovementTimer();
-  $: if (isFlight) scanVerse();
 
   function scanVerse() {
     const t = piTime / $nVerseWords;
@@ -55,10 +51,18 @@
     scanNextWord();
   }
 
+  function codaSequence() {
+    currentMovementIndex += 1;
+    setTimeout(() => {
+      wordIndices.nextVerse();
+      currentMovementIndex = 0;
+    }, piTime);
+  }
+
 </script>
 
 {#if isRecall }
-  <Controller />
+  <Controller on:coda={codaSequence} />
 {/if}
 <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
   <Layer config={{ visible: isCountdown }} >
@@ -66,7 +70,7 @@
   </Layer>
   <Layer config={{ visible: !isCountdown }} >
     <StreetTraces /> 
-    {#if isEllipsis }
+    {#if isFromEllipsis }
       <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
     {/if}
     <Word currentWord={ isEllipsis ? '...' : $currentWord } />
@@ -74,6 +78,8 @@
       <LineMarkers words={ $currentVerse['a'] } line={'a'} />
       <LineMarkers words={ $currentVerse['b'] } line={'b'} />
     {/if}
-    <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } />
+    {#if isToEllipsis }
+      <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } />
+    {/if}
   </Layer>
 </Stage>
