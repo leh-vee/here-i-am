@@ -66,14 +66,14 @@
   </Layer>
   <Layer config={{ visible: !isCountdown }} >
     <StreetTraces /> 
-    <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } 
-      radius={ isEllipsis ? 5 : 3 } />
+    {#if isEllipsis }
+      <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
+    {/if}
     <Word currentWord={ isEllipsis ? '...' : $currentWord } />
     {#if isFlight || isRecall}
       <LineMarkers words={ $currentVerse['a'] } line={'a'} />
       <LineMarkers words={ $currentVerse['b'] } line={'b'} />
     {/if}
-    <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
-      fillColour={ 'black' } />
+    <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } />
   </Layer>
 </Stage>
