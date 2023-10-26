@@ -9,7 +9,7 @@
     blocksForCurrentChannel } from '../stores/ilan';
   import Controller from './Controller.svelte';
   import Word from './Word.svelte';
-  import { currentVerseIndex, nVerseWords, wordIndices, currentWord } from '../stores/text.js';
+  import { currentVerseIndex, nVerseWords, wordIndices, currentWord, currentVerse } from '../stores/text.js';
 
   const movements = ['countdown', 'ellipsis', 'flight', 'recall'];
   let currentMovementIndex;
@@ -70,10 +70,8 @@
       radius={ isEllipsis ? 5 : 3 } />
     <Word currentWord={ isEllipsis ? '...' : $currentWord } />
     {#if isFlight || isRecall}
-      {#key currentVerseIndex}
-        <LineMarkers />
-        <LineMarkers line={'b'} />
-      {/key}
+      <LineMarkers words={ $currentVerse['a'] } line={'a'} />
+      <LineMarkers words={ $currentVerse['b'] } line={'b'} />
     {/if}
     <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
       fillColour={ 'black' } />

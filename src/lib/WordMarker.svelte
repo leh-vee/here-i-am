@@ -1,6 +1,6 @@
 <script>
   import { Circle } from 'svelte-konva';
-  import { wordIndices, currentVerseIndex } from '../stores/text.js';
+  import { wordIndices } from '../stores/text.js';
 
   export let word;
   export let line;
@@ -19,7 +19,7 @@
   $: {
     if (isCurrentWord) {
       markerRadius = 5;
-      fillColour = 'dimgray';
+      fillColour = 'black';
     } else if (hasBeenCurrentWord) {
       markerRadius = 3;
       fillColour = 'dimgray';

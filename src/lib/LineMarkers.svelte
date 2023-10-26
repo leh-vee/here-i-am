@@ -1,16 +1,14 @@
 <script>
   import { currentChannelCoordsPx } from '../stores/ilan';
-  import { currentVerse } from '../stores/text.js';
   import WordMarker from './WordMarker.svelte';
 
+  export let words;
   export let line = 'a';
 
   const yOffsetAbsolute = Math.round(window.innerHeight * 0.02);
   const isLineA = line === 'a';
   const yLineOffsetPx = isLineA ? -yOffsetAbsolute : yOffsetAbsolute;
   const xLineBufferPx = Math.round(window.innerWidth * 0.1);
-  
-  $: words = $currentVerse[line];
   
   $: lineCoordsPx = [
     [
