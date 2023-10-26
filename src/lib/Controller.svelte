@@ -6,9 +6,9 @@
 <div class='controller'>
   <span class='back button'
     class:disabled="{ $isFirstVerseWord }" 
-    on:click={ wordIndices.previousWord } >&#8406;</span>
+    on:click={ wordIndices.previousWord } ></span>
   <span class='forward button'
-    on:click={ wordIndices.nextWord } >&#8407;</span>
+    on:click={ wordIndices.nextWord } ></span>
 </div>
 
 <style>
@@ -16,12 +16,9 @@
     position: absolute;
     bottom: 0;
     width: 100%;
+    height: 25%;
     display: flex;
     z-index: 1;
-  }
-
-  .disabled {
-    opacity: 0.5;
   }
 
   .controller .button {
