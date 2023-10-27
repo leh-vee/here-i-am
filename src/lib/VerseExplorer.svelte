@@ -34,14 +34,14 @@
   }
 
   function scanVerse() {
-    const t = piTime / $nVerseWords;
-    const totalScans = $nVerseWords - 1;
+    const nScans = $nVerseWords - 1;
+    const t = piTime / nScans;
     let nWordsScanned = 0;
     const scanNextWord = () => {
       setTimeout(() => { 
         wordIndices.nextWord();
         nWordsScanned += 1;
-        if (nWordsScanned < totalScans) {
+        if (nWordsScanned < nScans) {
           scanNextWord();
         } else {
           currentMovementIndex += 1;
