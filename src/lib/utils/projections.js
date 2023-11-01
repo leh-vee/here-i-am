@@ -8,7 +8,9 @@ export function projectionsForChannels(channels, screenPx) {
   channels.forEach((geoJson, fromIndex) => {
     const lineFeatures = geoJson.features;
     lineFeatures.forEach((channel, toIndex) => {
-      projections[fromIndex][toIndex] = projectionForChannel(channel, screenPx);
+      if (fromIndex !== toIndex) {
+        projections[fromIndex][toIndex] = projectionForChannel(channel, screenPx);
+      } 
     });
   });
   return projections;
