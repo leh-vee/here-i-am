@@ -1,4 +1,5 @@
 <script>
+  import { currentPiSlicesMatch } from '../stores/text';
   import { currentChannelCoordsPx } from '../stores/ilan';
   import WordMarker from './WordMarker.svelte';
 
@@ -24,6 +25,17 @@
   $: xLineDeltaPx = lineCoordsPx[1][0] - lineCoordsPx[0][0];
   $: xCoordDelta = Math.round(xLineDeltaPx / (words.length - 1));
   $: yCoordPx = lineCoordsPx[0][1];
+  $: rightToLeft = $currentPiSlicesMatch && !isLineA;
+
+  function xCoordPxForIndex(i) {
+    let xCoordPx;
+    if (rightToLeft) {
+      xCoordPx = lineCoordsPx[1][0] - xCoordDelta * i;
+    } else {
+      xCoordPx = lineCoordsPx[0][0] + xCoordDelta * i;    
+    }
+    return xCoordPx;
+  }
   
 </script>
 
@@ -32,7 +44,7 @@
     word={word} 
     line={line}
     wordIndexInLine={i}
-    x={lineCoordsPx[0][0] + xCoordDelta * i}
+    x={xCoordPxForIndex(i)}
     y={yCoordPx}
   />
 {/each}
