@@ -15,6 +15,21 @@ const POEM = [
     b: "starting from the horrible reach of her empty touch" 
   },
   {
+    piSlice: 1,
+    a: "the superstitious cleaving to silence’s rift",
+    b: "stuttered into being before the first, broken word" 
+  },
+  {
+    piSlice: 4,
+    a: "too openly expectant and bright yellow for",
+    b: "a blossom jumping out between concrete slabs" 
+  },
+  {
+    piSlice: 1,
+    a: "never honestly small enough to – like dust",
+    b: "the ashen toss and turn – sink into the nothing special" 
+  },
+  {
     piSlice: 5,
     a: "this bird I torture, aflutter over the azure",
     b: "promise again, smack into its glassy brilliance" 
