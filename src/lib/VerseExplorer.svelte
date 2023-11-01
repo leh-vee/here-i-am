@@ -61,7 +61,7 @@
 
 </script>
 
-{#if isRecall }
+{#if isRecall}
   <Controller on:coda={codaSequence} />
 {/if}
 <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
