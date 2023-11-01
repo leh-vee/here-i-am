@@ -154,6 +154,13 @@ export const lastPiSlice = derived([poem, wordIndices], (
   }
 );
 
+export const currentPiSlicesMatch = derived(
+  [lastPiSlice, currentPiSlice],
+  ([$lastPiSlice, $currentPiSlice]) => {
+    return $lastPiSlice === $currentPiSlice;
+  }
+);
+
 export const isLastVerseWord = derived([poem, wordIndices], (
   [$poem, $wordIndices]) => {
     const { verseIndex, line, wordIndex } = $wordIndices;
