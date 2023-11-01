@@ -36,7 +36,11 @@
     const pRadius = distance(pCentre, $currentChannelProjection.invert([0,0]));
     fetchBlocksWithinRadius(pCentre, pRadius).then(blocks => {
       console.log('blocks for current channel projection fetched');
-      channelBlocks.setForIndices($lastPiSlice, $currentPiSlice, blocks);
+      if ($lastPiSlice !== $currentPiSlice) {
+        channelBlocks.setForIndices($lastPiSlice, $currentPiSlice, blocks);
+      } else if ($lastPiSlice !== 0) {
+        channelBlocks.setForIndices($lastPiSlice, 0, blocks);
+      }
     });
     return true;
   }

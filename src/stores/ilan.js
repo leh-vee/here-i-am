@@ -23,21 +23,39 @@ export const channelBlocks = createChannelBlocksStore();
 export const currentChannelProjection = derived(
   [channelProjections, lastPiSlice, currentPiSlice], 
   ([$channelProjections, $lastPiSlice, $currentPiSlice]) => {
-    return $channelProjections[$lastPiSlice][$currentPiSlice];
+    let projection;
+    if ($lastPiSlice !== $currentPiSlice) {
+      projection = $channelProjections[$lastPiSlice][$currentPiSlice];
+    } else if ($lastPiSlice !== 0) {
+      projection = $channelProjections[$lastPiSlice][0];
+    }
+    return projection;
   }
 );
 
 export const blocksForCurrentChannel = derived(
   [channelBlocks, lastPiSlice, currentPiSlice], 
   ([$channelBlocks, $lastPiSlice, $currentPiSlice]) => {
-    return $channelBlocks[$lastPiSlice][$currentPiSlice];
+    let blocks;
+    if ($lastPiSlice !== $currentPiSlice) {
+      blocks = $channelBlocks[$lastPiSlice][$currentPiSlice];
+    } else if ($lastPiSlice !== 0) {
+      blocks = $channelBlocks[$lastPiSlice][0];
+    }
+    return blocks;
   }
 );
 
 export const currentChannelLine = derived(
   [channelLines, lastPiSlice, currentPiSlice], 
   ([$channelLines, $lastPiSlice, $currentPiSlice]) => {
-    return $channelLines[$lastPiSlice].features[$currentPiSlice];
+    let line;
+    if ($lastPiSlice !== $currentPiSlice) {
+      line = $channelLines[$lastPiSlice].features[$currentPiSlice];
+    } else if ($lastPiSlice !== 0) {
+      line = $channelLines[$lastPiSlice].features[0];
+    }
+    return line;
   }
 );
 
