@@ -72,6 +72,14 @@ export const currentChannelCoordsPx = derived(
   }
 );
 
+export const currentFromSefirahCoordsGcs = derived(
+  [sefirotPoints, lastPiSlice],
+  ([$sefirotPoints, $lastPiSlice]) => {
+    const fromSefirah = $sefirotPoints.features[$lastPiSlice];
+    return fromSefirah.geometry.coordinates;
+  }
+);
+
 export const currentChannelFromSefirahCoordsPx = derived(
   [currentChannelProjection, sefirotPoints, lastPiSlice], 
   ([$currentChannelProjection, $sefirotPoints, $lastPiSlice]) => {
