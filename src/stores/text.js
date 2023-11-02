@@ -120,6 +120,18 @@ export const nVerseWords = derived(
   }
 );
 
+export const percentVerseRead = derived(
+  [poem, nVerseWords, wordIndices], 
+  ([$poem, $nVerseWords, $wordIndices]) => {
+    let nWordsRead = 0;
+    if ($wordIndices.line === 'b') {
+      nWordsRead = nWordsRead + $poem[$wordIndices.verseIndex]['a'].length;
+    }
+    nWordsRead = nWordsRead + $wordIndices.wordIndex;
+    return nWordsRead / $nVerseWords;
+  }
+);
+
 export const isFirstVerseTriad = derived([wordIndices], (
   [$wordIndices]) => {
     let isFirstVerse = false;
@@ -161,8 +173,8 @@ export const currentPiSlicesMatch = derived(
   }
 );
 
-export const isLastVerseWord = derived([poem, wordIndices], (
-  [$poem, $wordIndices]) => {
+export const isLastVerseWord = derived(
+  [poem, wordIndices], ([$poem, $wordIndices]) => {
     const { verseIndex, line, wordIndex } = $wordIndices;
     const nWords = $poem[verseIndex][line].length;
     let isLastVerseWord = false;
