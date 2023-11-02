@@ -27,22 +27,17 @@
   }; 
 
   onMount(async () => {
+    await setIlanData(v.screenPx);
+    v.isReader = true;
+
     // v.screenProps.konvaStage = new Konva.Stage({
     //   container: v.screenProps.konvaEl, width: v.screenPx.width, height: v.screenPx.height
     // }); 
     // v.konvaLayer = new Konva.Layer();
     // v.screenProps.konvaStage.add(v.konvaLayer);
 
-    await setIlanData(v.screenPx);
-    v.isReader = true;
-
-    // v.ilanProjection = projectionForIlan($sefirotPoints, v.screenPx);
     // v.baseSefirahProjection = projectionBaseForSefirah(v.screenPx);
     
-    // fetchBlocksForProjection(v.ilanProjection, v.screenPx).then(blocks => {
-    //   v.ilanBlocks = blocks;
-    //   console.log('ilan blocks fetched');
-    // });
     // fetchBlocksForSefirotProjections(v.sefirot, v.baseSefirahProjection, v.screenPx).then(blocks => {
     //   v.sefirotBlocks = blocks;
     //   console.log('sefirot blocks fetched');
@@ -57,6 +52,7 @@
     const channelLinesGeoJson = channelFeatures(sefirotGeoJson);
     channelLines.set(channelLinesGeoJson);
     channelProjections.set(projectionsForChannels(channelLinesGeoJson, screenPx));
+    
     console.log('ilan data set');
   }
 
