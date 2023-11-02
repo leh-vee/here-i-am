@@ -9,6 +9,7 @@
     blocksForCurrentChannel } from '../stores/ilan';
   import Controller from './Controller.svelte';
   import Word from './Word.svelte';
+  import LocatorIlan from './LocatorIlan.svelte';
   import { nVerseWords, wordIndices, currentWord, currentVerse } from '../stores/text.js';
 
   const movements = ['countdown', 'fromEllipsis', 'flight', 'recall', 'toEllipsis'];
@@ -69,7 +70,8 @@
     <VerseNumber />
   </Layer>
   <Layer config={{ visible: !isCountdown }} >
-    <StreetTraces /> 
+    <StreetTraces />
+    <LocatorIlan />
     {#if isFromEllipsis }
       <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
     {/if}
