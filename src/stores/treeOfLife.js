@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { writable, derived } from 'svelte/store';
 import { tenByTenArray } from '../lib/utils/base.js';
-import { lastPiSlice, currentPiSlice } from '../stores/text';
+import { lastPiSlice, currentPiSlice } from './text.js';
 
 export const ilanProjection = writable(undefined);
 export const ilanBlocks = writable(undefined);

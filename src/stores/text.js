@@ -94,22 +94,22 @@ function createWordIndicesStore() {
 }
 export const wordIndices = createWordIndicesStore();
 
-export const currentWord = derived([poem, wordIndices], (
-  [$poem, $wordIndices]) => {
+export const currentWord = derived(
+  [poem, wordIndices], ([$poem, $wordIndices]) => {
     const { verseIndex, line, wordIndex } = $wordIndices;
     return $poem[verseIndex][line][wordIndex];
   }
 );
 
-export const currentVerse = derived([poem, wordIndices], (
-  [$poem, $wordIndices]) => {
+export const currentVerse = derived(
+  [poem, wordIndices], ([$poem, $wordIndices]) => {
     const { verseIndex } = $wordIndices;
     return $poem[verseIndex];
   } 
 );
 
-export const currentVerseIndex = derived([wordIndices], (
-  [$wordIndices]) => {
+export const currentVerseIndex = derived(
+  [wordIndices], ([$wordIndices]) => {
     return $wordIndices.verseIndex;
   } 
 );

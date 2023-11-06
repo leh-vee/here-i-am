@@ -1,6 +1,6 @@
 <script>
-  import { currentPiSlicesMatch } from '../stores/text';
-  import { currentChannelCoordsPx } from '../stores/ilan';
+  import { currentPiSlicesMatch } from '../stores/text.js';
+  import { currentChannelCoordsPx } from '../stores/treeOfLife.js';
   import WordMarker from './WordMarker.svelte';
 
   export let words;

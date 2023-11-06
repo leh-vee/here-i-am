@@ -5,7 +5,7 @@
   import LineMarkers from './LineMarkers.svelte';
   import VerseNumber from './VerseNumber.svelte';
   import { currentChannelFromSefirahCoordsPx, 
-    currentChannelToSefirahCoordsPx } from '../stores/ilan';
+    currentChannelToSefirahCoordsPx } from '../stores/treeOfLife.js';
   import Controller from './Controller.svelte';
   import Word from './Word.svelte';
   import Ilan from './Ilan.svelte';

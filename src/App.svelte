@@ -1,5 +1,6 @@
 <script>
-  import { sefirotPoints, channelLines, channelProjections, ilanProjection, ilanBlocks } from './stores/ilan.js';
+  import { sefirotPoints, channelLines, channelProjections, 
+    ilanProjection, ilanBlocks } from './stores/treeOfLife.js';
   import { currentPiSlice, lastPiSlice } from './stores/text.js';
   import EllipsisPainter from './lib/EllipsisPainter.js';
   import StreetPainter from './lib/StreetPainter.js';
