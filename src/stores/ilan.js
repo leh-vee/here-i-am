@@ -3,6 +3,9 @@ import { writable, derived } from 'svelte/store';
 import { tenByTenArray } from '../lib/utils/base.js';
 import { lastPiSlice, currentPiSlice } from '../stores/text';
 
+export const ilanProjection = writable(undefined);
+export const ilanBlocks = writable(undefined);
+
 export const sefirotPoints = writable(undefined);
 export const channelLines = writable(undefined);
 export const channelProjections = writable(undefined);

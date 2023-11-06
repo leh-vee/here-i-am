@@ -5,20 +5,19 @@
   import LineMarkers from './LineMarkers.svelte';
   import VerseNumber from './VerseNumber.svelte';
   import { currentChannelFromSefirahCoordsPx, 
-    currentChannelToSefirahCoordsPx, 
-    blocksForCurrentChannel } from '../stores/ilan';
+    currentChannelToSefirahCoordsPx } from '../stores/ilan';
   import Controller from './Controller.svelte';
   import Word from './Word.svelte';
-  import LocatorIlan from './LocatorIlan.svelte';
+  import Ilan from './Ilan.svelte';
   import { nVerseWords, wordIndices, currentWord, currentVerse } from '../stores/text.js';
 
-  const movements = ['countdown', 'fromEllipsis', 'flight', 'recall', 'toEllipsis'];
+  const movements = ['summary', 'countdown', 'fromEllipsis', 'flight', 'recall', 'toEllipsis'];
   let currentMovementIndex = 0;
   const piTime = Math.PI * 1000;
 
-  $: isMapRendered = $blocksForCurrentChannel !== undefined;
   $: currentMovement = movements[currentMovementIndex];
 
+  $: isSummary = currentMovement === 'summary';
   $: isCountdown = currentMovement === 'countdown';
   $: isFromEllipsis = currentMovement === 'fromEllipsis';
   $: isFlight = currentMovement === 'flight';
@@ -26,7 +25,7 @@
   $: isToEllipsis = currentMovement === 'toEllipsis';
   $: isEllipsis = isFromEllipsis || isToEllipsis;
   
-  $: if (isCountdown && isMapRendered) startMovementTimer();
+  $: if (isSummary || isCountdown) startMovementTimer();
   $: if (isFromEllipsis) startMovementTimer();
   $: if (isFlight) scanVerse();
 
@@ -66,12 +65,14 @@
   <Controller on:coda={codaSequence} />
 {/if}
 <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
+  <Layer config={{ visible: isSummary }}>
+    <Ilan />
+  </Layer>
   <Layer config={{ visible: isCountdown }} >
     <VerseNumber />
   </Layer>
-  <Layer config={{ visible: !isCountdown }} >
+  <Layer config={{ visible: !isCountdown && !isSummary }} >
     <StreetTraces />
-    <LocatorIlan />
     {#if isFromEllipsis }
       <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
     {/if}

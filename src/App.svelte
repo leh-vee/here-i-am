@@ -1,5 +1,5 @@
 <script>
-  import { sefirotPoints, channelLines, channelProjections } from './stores/ilan.js';
+  import { sefirotPoints, channelLines, channelProjections, ilanProjection, ilanBlocks } from './stores/ilan.js';
   import { currentPiSlice, lastPiSlice } from './stores/text.js';
   import EllipsisPainter from './lib/EllipsisPainter.js';
   import StreetPainter from './lib/StreetPainter.js';
@@ -7,9 +7,9 @@
   import VerseExplorer from './lib/VerseExplorer.svelte';
   import { onMount } from 'svelte';
   import { renderBlocksAsBackground } from './lib/illustrators/streetBlocks.js';
-  import { fetchSefirot } from './api/client.js';
+  import { fetchSefirot, fetchBlocksForProjection } from './api/client.js';
   import { channelFeatures } from './lib/utils/geoJson.js';
-  import { projectionsForChannels } from './lib/utils/projections.js';
+  import { projectionsForChannels, projectionForIlan } from './lib/utils/projections.js';
 
   const v = {
     isMovementWordByWord: null,
@@ -49,10 +49,15 @@
   async function setIlanData(screenPx) {
     const sefirotGeoJson = await fetchSefirot();
     sefirotPoints.set(sefirotGeoJson);
+    
     const channelLinesGeoJson = channelFeatures(sefirotGeoJson);
     channelLines.set(channelLinesGeoJson);
     channelProjections.set(projectionsForChannels(channelLinesGeoJson, screenPx));
-    
+
+    const iProjection = await projectionForIlan(sefirotGeoJson, screenPx);
+    ilanProjection.set(iProjection);
+    const iBlocks = await fetchBlocksForProjection(iProjection, screenPx);
+    ilanBlocks.set(iBlocks);
     console.log('ilan data set');
   }
 
