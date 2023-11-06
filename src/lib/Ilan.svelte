@@ -1,6 +1,6 @@
 <script>
   import { tick } from 'svelte';
-  import { Image, Circle } from 'svelte-konva';
+  import { Image, Line } from 'svelte-konva';
   import { geoPath } from "d3";
   import { ilanProjection, ilanBlocks, sefirotPoints } from '../stores/treeOfLife.js';
   import { currentVerseIndex, lastPiSlice, currentPiSlice } from '../stores/text.js';
@@ -19,37 +19,37 @@
   geoGenerator({type: 'FeatureCollection', features: $ilanBlocks.features })
   ctx.stroke();
 
-  let marker;
-  let markerCoordinates = [0,0];
+  let vector;
+  let vectorCoordinates = [0,0, 0, 0];
+  let fromCoordsPx;
+  let toCoordsPx;
 
-  $: if (marker) {
-    console.log('ilan dash for verse with index', $currentVerseIndex);
+  $: if (vector) {
+    console.log('drawing vector for verse with index', $currentVerseIndex);
     const fromCoordsGsc = $sefirotPoints.features[$lastPiSlice].geometry.coordinates;
     const toCoordsGsc = $sefirotPoints.features[$currentPiSlice].geometry.coordinates;
-    const fromCoordsPx = $ilanProjection(fromCoordsGsc);
-    const toCoordsPx = $ilanProjection(toCoordsGsc);
-
-    markerCoordinates = fromCoordsPx;
-    dash(toCoordsPx);
-    
+    fromCoordsPx = $ilanProjection(fromCoordsGsc);
+    toCoordsPx = $ilanProjection(toCoordsGsc);
+    dash();
   }
   
-  async function dash(toCoords) {
+  async function dash() {
+    vectorCoordinates = [...fromCoordsPx, ...fromCoordsPx];
     await tick();
-    marker.to({
-      x: toCoords[0],
-      y: toCoords[1],
-      duration: 3
+    vector.to({
+      points: [...fromCoordsPx, ...toCoordsPx],
+      duration: Math.PI
     });
   }
 </script>
 
 <Image config={{ image: canvas }} />
-<Circle config={{
-    x: markerCoordinates[0],
-    y: markerCoordinates[1],
-    radius: 5,
-    fill: 'black'
+<Line config={{
+    points: vectorCoordinates,
+    stroke: 'black',
+    strokeWidth: 3,
+    lineCap: 'round'
   }}
-  bind:handle={marker}
+  bind:handle={vector}
 />
+
