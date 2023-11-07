@@ -25,12 +25,13 @@
   $: isToEllipsis = currentMovement === 'toEllipsis';
   $: isEllipsis = isFromEllipsis || isToEllipsis;
   
-  $: if (isSummary || isCountdown) startMovementTimer();
+  $: if (isCountdown) startMovementTimer();
+  $: if (isSummary) startMovementTimer(piTime * 2);
   $: if (isFromEllipsis) startMovementTimer();
   $: if (isFlight) scanVerse();
 
-  function startMovementTimer() {
-    setTimeout(() => { currentMovementIndex += 1 }, piTime);
+  function startMovementTimer(t=piTime) {
+    setTimeout(() => { currentMovementIndex += 1 }, t);
   }
 
   function scanVerse() {

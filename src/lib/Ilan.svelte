@@ -33,12 +33,19 @@
     dash();
   }
   
-  async function dash() {
-    vectorCoordinates = [...fromCoordsPx, ...fromCoordsPx];
+  async function dash(isTail=false) {
+    let endCoords;
+    if (isTail) {
+      endCoords = [...toCoordsPx, ...toCoordsPx]
+    } else {
+      vectorCoordinates = [...fromCoordsPx, ...fromCoordsPx];
+      endCoords = [...fromCoordsPx, ...toCoordsPx]; 
+    }
     await tick();
     vector.to({
-      points: [...fromCoordsPx, ...toCoordsPx],
-      duration: Math.PI
+      points: endCoords,
+      duration: Math.PI,
+      onFinish: () => { if (!isTail) dash(true) }
     });
   }
 </script>
@@ -47,7 +54,7 @@
 <Line config={{
     points: vectorCoordinates,
     stroke: 'black',
-    strokeWidth: 3,
+    strokeWidth: 2,
     lineCap: 'round'
   }}
   bind:handle={vector}
