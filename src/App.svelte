@@ -11,6 +11,8 @@
   import { fetchSefirot, fetchBlocksForProjection } from './api/client.js';
   import { channelFeatures } from './lib/utils/geoJson.js';
   import { projectionsForChannels, projectionForIlan } from './lib/utils/projections.js';
+  import { Stage } from 'svelte-konva';
+  import Overture from './lib/Overture.svelte';
 
   const v = {
     isMovementWordByWord: null,
@@ -24,12 +26,13 @@
       konvaEl: null,
       konvaStage: null
     },
-    isReader: false
+    isReader: false,
+    isOverture: false
   }; 
 
   onMount(async () => {
     await setIlanData(v.screenPx);
-    v.isReader = true;
+    v.isOverture = true;
 
     // v.screenProps.konvaStage = new Konva.Stage({
     //   container: v.screenProps.konvaEl, width: v.screenPx.width, height: v.screenPx.height
@@ -105,9 +108,13 @@
 </script>
 
 <div class='screen'>
-  {#if v.isReader}
-    <VerseExplorer />
-  {/if}
+  <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
+    {#if v.isOverture}
+      <Overture />
+    {:else if v.isReader}
+      <VerseExplorer />
+    {/if}
+  </Stage>
 </div>
 
 <style>

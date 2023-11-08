@@ -65,25 +65,23 @@
 {#if isRecall}
   <Controller on:coda={codaSequence} />
 {/if}
-<Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
-  <Layer config={{ visible: isSummary }}>
-    <Ilan />
-  </Layer>
-  <Layer config={{ visible: isCountdown }} >
-    <VerseNumber />
-  </Layer>
-  <Layer config={{ visible: !isCountdown && !isSummary }} >
-    <StreetTraces />
-    {#if isFromEllipsis }
-      <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
-    {/if}
-    <Word currentWord={ isEllipsis ? '...' : $currentWord } />
-    {#if isFlight || isRecall}
-      <LineMarkers words={ $currentVerse['a'] } line={'a'} />
-      <LineMarkers words={ $currentVerse['b'] } line={'b'} />
-    {/if}
-    {#if isToEllipsis }
-      <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } />
-    {/if}
-  </Layer>
-</Stage>
+<Layer config={{ visible: isSummary }}>
+  <Ilan />
+</Layer>
+<Layer config={{ visible: isCountdown }} >
+  <VerseNumber />
+</Layer>
+<Layer config={{ visible: !isCountdown && !isSummary }} >
+  <StreetTraces />
+  {#if isFromEllipsis }
+    <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
+  {/if}
+  <Word currentWord={ isEllipsis ? '...' : $currentWord } />
+  {#if isFlight || isRecall}
+    <LineMarkers words={ $currentVerse['a'] } line={'a'} />
+    <LineMarkers words={ $currentVerse['b'] } line={'b'} />
+  {/if}
+  {#if isToEllipsis }
+    <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } />
+  {/if}
+</Layer>
