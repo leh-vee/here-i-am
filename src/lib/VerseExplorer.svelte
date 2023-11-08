@@ -1,5 +1,5 @@
 <script>
-  import { Stage, Layer } from 'svelte-konva';
+  import { Layer } from 'svelte-konva';
   import StreetTraces from './StreetTraces.svelte';
   import SefirahMarker from './SefirahMarker.svelte';
   import LineMarkers from './LineMarkers.svelte';
