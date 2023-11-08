@@ -18,7 +18,7 @@
   align: 'center',
   verticalAlign: 'middle',
   fontSize: 250,
-  fontFamily: 'Indie Flower',
+  fontFamily: 'Inconsolata',
   fillEnabled: true,
   fill: 'black',
   stroke: 'black',
