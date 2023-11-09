@@ -2,7 +2,6 @@
   import { sefirotPoints, channelLines, channelProjections, 
     ilanProjection, ilanBlocks } from './stores/treeOfLife.js';
   import { currentPiSlice, lastPiSlice } from './stores/text.js';
-  import EllipsisPainter from './lib/EllipsisPainter.js';
   import StreetPainter from './lib/StreetPainter.js';
   import Konva from 'konva';
   import VerseExplorer from './lib/VerseExplorer.svelte';
@@ -59,11 +58,6 @@
     console.log('ilan data set');
   }
 
-  function elliplitcalCollapse() {    
-    v.ellipsisPainter = new EllipsisPainter(v.konvaLayer);
-    v.ellipsisPainter.animate().then(_ => subLinearCrawl()); 
-  }
-
   function subLinearCrawl() {
     const { canvasEl: el } = v.screenProps;
     let sefirah = v.sefirot.features[$lastPiSlice];
@@ -72,7 +66,6 @@
     v.streetPainter.drawBlocksFromNode(sefirah.id);
     setTimeout(() => {
       v.streetPainter.clearCanvas();
-      v.ellipsisPainter.clearCanvas();
     }, 15000);
   }
 
