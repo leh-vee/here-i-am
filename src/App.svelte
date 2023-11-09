@@ -15,24 +15,18 @@
   import Overture from './lib/Overture.svelte';
 
   const v = {
-    isMovementWordByWord: null,
     screenPx: {
       width: window.innerWidth,
       height: window.innerHeight
     },
-    screenProps: {
-      frameEl: null,
-      canvasEl: null,
-      konvaEl: null,
-      konvaStage: null
-    },
-    isReader: false,
-    isOverture: false
+    isDataInitialized: false,
+    isOverture: true,
+    isReader: false
   }; 
 
   onMount(async () => {
     await setIlanData(v.screenPx);
-    v.isOverture = true;
+    v.isDataInitialized = true;
 
     // v.screenProps.konvaStage = new Konva.Stage({
     //   container: v.screenProps.konvaEl, width: v.screenPx.width, height: v.screenPx.height
@@ -110,7 +104,7 @@
 <div class='screen'>
   <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
     {#if v.isOverture}
-      <Overture />
+      <Overture startCollapse={ v.isDataInitialized } />
     {:else if v.isReader}
       <VerseExplorer />
     {/if}

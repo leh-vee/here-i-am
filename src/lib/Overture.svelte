@@ -1,9 +1,14 @@
 <script>
-  import { Layer, Circle } from 'svelte-konva';  
+  import { Layer, Circle } from 'svelte-konva';
+  import Konva from 'konva';
+
+  export let startCollapse = true;
+  let isCollapsed = false;
+  let isCountdownComplete = false;
 
   const ellipsisStopAttrs = {
     radius: 5,
-    opacity: 0.3,  
+    opacity: Math.PI / 10,  
     fill: '#9E9EA1'
   }
 
@@ -14,12 +19,22 @@
   const ellipsisStops = new Array(3);
 
   $: if (ellipsisStops[0]) {
+    incomingTextAnime();
+  }
+
+  $: if (isCountdownComplete && startCollapse) {
+    collapseAnime();
+  }
+  
+  function incomingTextAnime() {
     const t = Math.PI / 10;
     const fadeIn = (index) => {
       ellipsisStops[index].to({
         opacity: 1,
         duration: t,
-        onFinish: () => { fadeOut(index) }
+        onFinish: () => {
+          if (!isCollapsed) { fadeOut(index) };
+        }
       });
     }
 
@@ -37,8 +52,24 @@
       });
     }
     fadeIn(0);
+    setTimeout(() => { 
+      isCountdownComplete = true;
+    }, Math.PI * 1000);
   }
-  
+
+  function collapseAnime() {
+    const animeAttrs = {
+      x: xCentre,
+      duration: Math.PI,
+      easing: Konva.Easings.StrongEaseIn
+    }
+    ellipsisStops[0].to(animeAttrs);
+    ellipsisStops[2].to({
+      ...animeAttrs,
+      onFinish: () => { isCollapsed = true }
+    });
+  }
+
 </script>
 
 <Layer>
