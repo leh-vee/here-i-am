@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { tenByTenArray } from "./base"; 
 import { geoPath, geoMercator } from "d3";
-const SEFIRAH_VIEW_SCALE = 2700000;
 
 export function projectionsForChannels(channels, screenPx) {
   const projections = tenByTenArray();
@@ -48,9 +47,10 @@ export function projectionForIlan(sefirot, screenPx) {
 }
 
 export function projectionForSefirah(sefirah, screenPx) {
+  const sefirahScale = 2700000;
   const p = geoMercator();
   const { width, height } = screenPx;
-  p.translate([width / 2, height / 2]).scale(SEFIRAH_VIEW_SCALE);
+  p.translate([width / 2, height / 2]).scale(sefirahScale);
   p.center(sefirah.geometry.coordinates);
   return p;
 } 

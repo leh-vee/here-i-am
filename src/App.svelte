@@ -44,17 +44,6 @@
     ilanBlocks.set(iBlocks);
     console.log('ilan data set');
   }
-
-  // function subLinearCrawl() {
-  //   const { canvasEl: el } = v.screenProps;
-  //   let sefirah = v.sefirot.features[$lastPiSlice];
-  //   let blocks = v.sefirotBlocks[$lastPiSlice];
-  //   v.streetPainter = new StreetPainter(el, sefirah.geometry.coordinates, blocks);
-  //   v.streetPainter.drawBlocksFromNode(sefirah.id);
-  //   setTimeout(() => {
-  //     v.streetPainter.clearCanvas();
-  //   }, 15000);
-  // }
 </script>
 
 <div class='screen'>

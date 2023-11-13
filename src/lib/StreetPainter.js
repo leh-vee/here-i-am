@@ -3,23 +3,16 @@ import * as d3 from 'd3';
 
 export default class StreetPainter {
 
-  constructor(canvasEl, centreCoordinates, blocks, degreesRotation=0) {
+  constructor(canvasEl, projection, blocks, degreesRotation=0) {
     this.blocks = blocks;
+    this.projection = projection;
 
     this.canvasContext = canvasEl.getContext('2d');
     this.canvasContext.lineWidth = 1;
     this.canvasContext.strokeStyle = '#9E9EA1';
 
     this.canvasWidth = this.canvasContext.canvas.clientWidth;
-    this.canvasHeight = this.canvasContext.canvas.clientHeight; 
-
-    this.projection = d3.geoMercator();
-    this.projection.translate([this.canvasWidth / 2, this.canvasHeight / 2])
-    this.adjustScale();
-    this.projection.center(centreCoordinates);
-  
-    this.centrePointLatLng = centreCoordinates;
-    this.canvasCentrePoint = this.projection(centreCoordinates);
+    this.canvasHeight = this.canvasContext.canvas.client = projection
     this.rotateCanvas(degreesRotation);
 
     this.totalSpiralSteps = null;
@@ -179,7 +172,8 @@ export default class StreetPainter {
     this.projection.scale(newScale);
   }
 
-  rotateCanvas(degrees, fulcrum = this.canvasCentrePoint) {
+  rotateCanvas(degrees) {
+    const fulcrum = this.projection.center();
     const fulcrumX = fulcrum[0];
     const fulcrumY = fulcrum[1];
     this.canvasContext.translate(fulcrumX, fulcrumY);

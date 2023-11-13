@@ -1,6 +1,9 @@
 <script>
-  import { Layer, Circle } from 'svelte-konva';
+  import { Layer, Circle, Image } from 'svelte-konva';
   import Konva from 'konva';
+  import StreetPainter from './StreetPainter.js';
+  import { sefirotPoints } from '../stores/treeOfLife.js';
+  import { groundZeroBlocks, groundZeroProjection } from '../stores/treeOfLife.js';
 
   export let startCollapse = true;
   let isCollapsed = false;
@@ -70,6 +73,15 @@
     });
   }
 
+  let crawlLayer;
+
+  $: if (isCollapsed) {
+    const crawlLayerCanvas = crawlLayer.getCanvas();
+    const crawler = new StreetPainter(crawlLayerCanvas, $groundZeroProjection, $groundZeroBlocks);
+    const groundZeroSefirahId = $sefirotPoints.features[0].id;
+    crawler.drawBlocksFromNode(groundZeroSefirahId);
+  } 
+
 </script>
 
 <Layer>
@@ -89,3 +101,4 @@
     ...ellipsisStopAttrs
   }} bind:handle={ellipsisStops[2]} />
 </Layer>
+<Layer bind:handle={crawlLayer} />
