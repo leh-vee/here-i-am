@@ -1,6 +1,3 @@
-// @ts-nocheck
-import * as d3 from 'd3';
-
 export default class StreetPainter {
 
   constructor(canvasEl, projection, blocks) {
@@ -64,8 +61,7 @@ export default class StreetPainter {
     const xDelta = toPoint[0] - fromPoint[0];
     const yDelta = toPoint[1] - fromPoint[1];
     
-    const lineLength = Math.sqrt(xDelta ** 2 + yDelta ** 2);;
-    const drawSpeed = d3.easeQuadIn(1 - this.blockDrawnIds.length / 200);
+    const lineLength = Math.sqrt(xDelta ** 2 + yDelta ** 2);
     const segmentLength = 1;
     const segmentPercentOfLineLength = segmentLength / lineLength;
   
