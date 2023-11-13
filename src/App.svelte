@@ -1,8 +1,6 @@
 <script>
   import { sefirotPoints, channelLines, channelProjections, 
     ilanProjection, ilanBlocks, groundZeroProjection, groundZeroBlocks } from './stores/treeOfLife.js';
-  import { lastPiSlice } from './stores/text.js';
-  import StreetPainter from './lib/StreetPainter.js';
   import VerseExplorer from './lib/VerseExplorer.svelte';
   import { onMount } from 'svelte';
   import { fetchSefirot, fetchBlocksForProjection } from './api/client.js';
