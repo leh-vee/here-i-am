@@ -26,7 +26,7 @@ function projectionForChannel(channel, screenPx) {
   const boundsFrameRatio = boundsToFrameRatio(channelCoordsPx, screenPx, 0.9);
   
   const { width, height } = screenPx;
-  centreProjection(projection, geoPath().centroid(channel));
+  projection.center(geoPath().centroid(channel));
   projection.translate([width / 2, height / 1.7]);
   scaleProjection(projection, boundsFrameRatio);
 
@@ -40,23 +40,20 @@ export function projectionForIlan(sefirot, screenPx) {
   const boundsFrameRatio = boundsToFrameRatio(ilanBoundsPx, screenPx);
   
   const { width, height } = screenPx;
-  centreProjection(projection, sefirot.features[6].geometry.coordinates);
+  projection.center(sefirot.features[6].geometry.coordinates);
   projection.translate([width / 2, height / 2]);
   scaleProjection(projection, boundsFrameRatio);
 
   return projection;
 }
 
-export function projectionBaseForSefirah(screenPx) {
+export function projectionForSefirah(sefirah, screenPx) {
   const p = geoMercator();
   const { width, height } = screenPx;
   p.translate([width / 2, height / 2]).scale(SEFIRAH_VIEW_SCALE);
+  p.center(sefirah.geometry.coordinates);
   return p;
 } 
-
-function centreProjection(p, pointGscCoords) {
-  return p.center(pointGscCoords);
-}
 
 function scaleProjection(p, scaleFactor) {
   return p.scale(p.scale() * scaleFactor);

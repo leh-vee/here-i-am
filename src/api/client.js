@@ -21,18 +21,6 @@ export async function fetchBlocksForProjection(projection, screenPx) {
   return JSON.parse(blocksJson);
 }
 
-export async function fetchBlocksForSefirotProjections(sefirot, projection, screenPx) {
-  const blocks = [];
-  for (let i = 0; i < 10; i++) {
-    projection.center(sefirot.features[i].geometry.coordinates);
-    let projectionCoords = projectionBoundingBoxCoords(projection, screenPx);
-    fetchProjectionBlocks(projectionCoords).then(blocksJson => {
-      blocks[i] = JSON.parse(blocksJson);
-    });
-  };
-  return blocks;
-}
-
 async function fetchProjectionBlocks(projectionCoords) {
   return fetchData('street-edges/area', 
     { method: "post", body: JSON.stringify(projectionCoords) }

@@ -3,6 +3,9 @@ import { writable, derived } from 'svelte/store';
 import { tenByTenArray } from '../lib/utils/base.js';
 import { lastPiSlice, currentPiSlice } from './text.js';
 
+export const groundZeroProjection = writable(undefined);
+export const groundZeroBlocks = writable(undefined);
+
 export const ilanProjection = writable(undefined);
 export const ilanBlocks = writable(undefined);
 

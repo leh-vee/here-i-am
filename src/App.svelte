@@ -1,15 +1,13 @@
 <script>
   import { sefirotPoints, channelLines, channelProjections, 
-    ilanProjection, ilanBlocks } from './stores/treeOfLife.js';
-  import { currentPiSlice, lastPiSlice } from './stores/text.js';
+    ilanProjection, ilanBlocks, groundZeroProjection, groundZeroBlocks } from './stores/treeOfLife.js';
+  import { lastPiSlice } from './stores/text.js';
   import StreetPainter from './lib/StreetPainter.js';
-  import Konva from 'konva';
   import VerseExplorer from './lib/VerseExplorer.svelte';
   import { onMount } from 'svelte';
-  import { renderBlocksAsBackground } from './lib/illustrators/streetBlocks.js';
   import { fetchSefirot, fetchBlocksForProjection } from './api/client.js';
   import { channelFeatures } from './lib/utils/geoJson.js';
-  import { projectionsForChannels, projectionForIlan } from './lib/utils/projections.js';
+  import { projectionForSefirah, projectionsForChannels, projectionForIlan } from './lib/utils/projections.js';
   import { Stage } from 'svelte-konva';
   import Overture from './lib/Overture.svelte';
 
@@ -25,27 +23,18 @@
 
   onMount(async () => {
     await setIlanData(v.screenPx);
-    v.isDataInitialized = true;
-
-    // v.screenProps.konvaStage = new Konva.Stage({
-    //   container: v.screenProps.konvaEl, width: v.screenPx.width, height: v.screenPx.height
-    // }); 
-    // v.konvaLayer = new Konva.Layer();
-    // v.screenProps.konvaStage.add(v.konvaLayer);
-
-    // v.baseSefirahProjection = projectionBaseForSefirah(v.screenPx);
-    
-    // fetchBlocksForSefirotProjections(v.sefirot, v.baseSefirahProjection, v.screenPx).then(blocks => {
-    //   v.sefirotBlocks = blocks;
-    //   console.log('sefirot blocks fetched');
-    // });
-
-    // elliplitcalCollapse();
+    v.isDataInitialized = true;  
   });
 
   async function setIlanData(screenPx) {
     const sefirotGeoJson = await fetchSefirot();
     sefirotPoints.set(sefirotGeoJson);
+
+    const zeroSefirah = sefirotGeoJson.features[0];
+    const zeroProjection = projectionForSefirah(zeroSefirah, v.screenPx);
+    groundZeroProjection.set(zeroProjection);
+    const zeroBlocks = await fetchBlocksForProjection(zeroProjection, v.screenPx);
+    groundZeroBlocks.set(zeroBlocks);
     
     const channelLinesGeoJson = channelFeatures(sefirotGeoJson);
     channelLines.set(channelLinesGeoJson);
@@ -58,40 +47,16 @@
     console.log('ilan data set');
   }
 
-  function subLinearCrawl() {
-    const { canvasEl: el } = v.screenProps;
-    let sefirah = v.sefirot.features[$lastPiSlice];
-    let blocks = v.sefirotBlocks[$lastPiSlice];
-    v.streetPainter = new StreetPainter(el, sefirah.geometry.coordinates, blocks);
-    v.streetPainter.drawBlocksFromNode(sefirah.id);
-    setTimeout(() => {
-      v.streetPainter.clearCanvas();
-    }, 15000);
-  }
-
-  async function letterTrail() { //this function should be more to do with the channel
-    const konvaLayer = new Konva.Layer();
-    v.screenProps.konvaStage.add(konvaLayer);
-
-    const projection = v.channels.projections[$lastPiSlice][$currentPiSlice];
-    const blocks = v.channels.blocks[$lastPiSlice][$currentPiSlice];
-    renderBlocksAsBackground(konvaLayer, projection, blocks);
-    
-    // const channel = $chLines[$lastPiSlice].features[$currentPiSlice];
-    // const verseChart = new VerseChart($currentVerse, konvaLayer, channel, projection);
-    // verseChart.markSefirah();
-    // setTimeout(() => {
-    //   verseChart.removeFromSefirahMarker();
-    //   verseChart.markVerseWords();
-    // }, 1000);
-
-    // dropSefirahMarker(channelLineCoords[0], konvaLayer, projection);
-
-    // dropVerseCrumbsOnLayer($currentVerse, konvaLayer, projection, channel);
-
-    // v.crumbAnimator = new CrumbAnimator(konvaLayer, v.sefirot, v.ilanBlocks, v.ilanProjection);
-  }
-
+  // function subLinearCrawl() {
+  //   const { canvasEl: el } = v.screenProps;
+  //   let sefirah = v.sefirot.features[$lastPiSlice];
+  //   let blocks = v.sefirotBlocks[$lastPiSlice];
+  //   v.streetPainter = new StreetPainter(el, sefirah.geometry.coordinates, blocks);
+  //   v.streetPainter.drawBlocksFromNode(sefirah.id);
+  //   setTimeout(() => {
+  //     v.streetPainter.clearCanvas();
+  //   }, 15000);
+  // }
 </script>
 
 <div class='screen'>
