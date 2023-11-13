@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 
 export default class StreetPainter {
 
-  constructor(canvasEl, projection, blocks, degreesRotation=0) {
+  constructor(canvasEl, projection, blocks) {
     this.blocks = blocks;
     this.projection = projection;
 
@@ -13,37 +13,6 @@ export default class StreetPainter {
 
     this.canvasWidth = this.canvasContext.canvas.clientWidth;
     this.canvasHeight = this.canvasContext.canvas.client = projection
-    this.rotateCanvas(degreesRotation);
-
-    this.totalSpiralSteps = null;
-  }
-
-  renderSpiralBySteps(remainingSteps = 400) {
-    this.adjustScale(40000);
-    this.rotateCanvas(25);
-    this.renderGrid();
-
-    if (this.totalSpiralSteps === null) this.totalSpiralSteps = remainingSteps;
-    const totalSteps = this.totalSpiralSteps;
-    const remainingStepsPercent = remainingSteps / totalSteps;
-
-    const maxDelay = 300;
-    const nextStepDelay = maxDelay * d3.easeExpIn(remainingStepsPercent); 
-
-    if (remainingSteps > 0) {
-      setTimeout(() => {
-        this.renderSpiralBySteps(remainingSteps - 1);
-      }, nextStepDelay);
-    } 
-  }
-
-  renderGrid() {
-    const geoGenerator = d3.geoPath()
-      .projection(this.projection)
-      .context(this.canvasContext);
-    this.canvasContext.beginPath();
-    geoGenerator({type: 'FeatureCollection', features: this.blocks.features})
-    this.canvasContext.stroke();
   }
 
   blockDrawnIds = [];
@@ -153,35 +122,5 @@ export default class StreetPainter {
       return blockProps.from_street_node_id === nodeId || blockProps.to_street_node_id === nodeId;
     })
     return blocks;
-  }
-
-  clipExtentBounds() {
-    const canvasWidthHeightDelta = this.canvasHeight - this.canvasWidth;
-    const x0 = -canvasWidthHeightDelta;
-    const y0 = 0;
-    const x1 = this.canvasHeight;
-    const y1 = this.canvasHeight;
-    return [[x0, y0],[x1, y1]];
-  }
-
-  static DEFAULT_SCALE_FACTOR = 2700000;
-
-  adjustScale(adjustment = 0) {
-    let newScale = StreetPainter.DEFAULT_SCALE_FACTOR;
-    if (adjustment != 0) newScale = this.projection.scale() + adjustment;
-    this.projection.scale(newScale);
-  }
-
-  rotateCanvas(degrees) {
-    const fulcrum = this.projection.center();
-    const fulcrumX = fulcrum[0];
-    const fulcrumY = fulcrum[1];
-    this.canvasContext.translate(fulcrumX, fulcrumY);
-    this.canvasContext.rotate(degrees * Math.PI / 180); 
-    this.canvasContext.translate(-fulcrumX, -fulcrumY);
-  }
-  
-  clearCanvas() {
-    this.canvasContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
   }
 }
