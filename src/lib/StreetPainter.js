@@ -21,7 +21,7 @@ export default class StreetPainter {
     });
   }
 
-  drawBlock(blockFeature, startNodeId) {
+  async drawBlock(blockFeature, startNodeId) {
     const blockProps = blockFeature.properties;
     
     if (this.blockDrawnIds.includes(blockFeature.id)) return null;
@@ -41,75 +41,79 @@ export default class StreetPainter {
       coordinates: lineCoordinates,
       endNodeId: endNodeId
     }
-  
-    this.animateBlockLine(blockAnimeProps)
-  
-    this.blockDrawnIds.push(blockFeature.id);
+
+    await this.animateLineString(blockAnimeProps);
+    this.blockDrawnIds.push(blockAnimeProps.id);
+    this.drawBlocksFromNode(endNodeId);
   }
 
-  animateBlockLine(blockAnimeProps, pointIndex = 0) {
-    const lineCoordinates = blockAnimeProps.coordinates;
-    const linesCount = lineCoordinates.length - 1;
-    const isLastLineInBlock = pointIndex === linesCount - 1;
-  
-    const fromPoint = this.projection(lineCoordinates[pointIndex]);
-    const toPoint = this.projection(lineCoordinates[pointIndex + 1]);
- 
-    if (fromPoint[0] < 0 || fromPoint[0] > this.canvasWidth || fromPoint[1] < 0 || fromPoint[1] > this.canvasHeight) {
-      return null;
-    }
-    const xDelta = toPoint[0] - fromPoint[0];
-    const yDelta = toPoint[1] - fromPoint[1];
+  animateLineString(props) {
+    return new Promise(async (resolve) => {
+      const lineCoords = props.coordinates;
+      const nPointsInLine = lineCoords.length - 1;
+      let startPointIndex = 0;
+      while (startPointIndex < nPointsInLine) {
+        let vectorCoords = [lineCoords[startPointIndex], lineCoords[startPointIndex + 1]];
+        await this.animateVector(vectorCoords);
+        startPointIndex+= 1;
+      }
+      resolve(true);
+    });
+  }
+
+  animateVector(coords) {
+    return new Promise((resolve) => {
     
-    const lineLength = Math.sqrt(xDelta ** 2 + yDelta ** 2);
-    const segmentLength = 1;
-    const segmentPercentOfLineLength = segmentLength / lineLength;
-  
-    const xSegmentDelta = xDelta * segmentPercentOfLineLength;
-    const ySegmentDelta = yDelta * segmentPercentOfLineLength; 
-  
-    const totalFrames = Math.ceil(lineLength / segmentLength);
-  
-    let frameIndex = 0;
-  
-    const drawSegment = () => {
-      const isFinalFrame = frameIndex === totalFrames - 1;
-  
-      const segmentStartPoint = [
-        fromPoint[0] + (xSegmentDelta * frameIndex),
-        fromPoint[1] + (ySegmentDelta * frameIndex)
-      ];
-  
-      let segmentEndPoint;
-      if (isFinalFrame) {
-        segmentEndPoint = toPoint;
-      } else {
-        segmentEndPoint = [
-          segmentStartPoint[0] + xSegmentDelta,
-          segmentStartPoint[1] + ySegmentDelta
-        ]
-      }
-  
-      this.canvasContext.beginPath();
-      this.canvasContext.moveTo(...segmentStartPoint);
-      this.canvasContext.lineTo(...segmentEndPoint);
-      this.canvasContext.stroke();
-  
-      if (isFinalFrame) {
-        if (isLastLineInBlock) {
-          this.drawBlocksFromNode(blockAnimeProps.endNodeId);
-        } else {
-          this.animateBlockLine(blockAnimeProps, pointIndex + 1);
-        }
-        return true;
-      } else {
-        frameIndex = frameIndex + 1;
-      }
+      const fromPoint = this.projection(coords[0]);
+      const toPoint = this.projection(coords[1]);
+   
+      const xDelta = toPoint[0] - fromPoint[0];
+      const yDelta = toPoint[1] - fromPoint[1];
       
-      requestAnimationFrame(drawSegment)
-    }
-  
-    drawSegment();
+      const lineLength = Math.sqrt(xDelta ** 2 + yDelta ** 2);
+      const segmentLength = Math.PI;
+      const segmentPercentOfLineLength = segmentLength / lineLength;
+    
+      const xSegmentDelta = xDelta * segmentPercentOfLineLength;
+      const ySegmentDelta = yDelta * segmentPercentOfLineLength; 
+    
+      const totalFrames = Math.ceil(lineLength / segmentLength);
+    
+      let frameIndex = 0;
+    
+      const drawSegment = () => {
+        const isFinalFrame = frameIndex === totalFrames - 1;
+    
+        const segmentStartPoint = [
+          fromPoint[0] + (xSegmentDelta * frameIndex),
+          fromPoint[1] + (ySegmentDelta * frameIndex)
+        ];
+    
+        let segmentEndPoint;
+        if (isFinalFrame) {
+          segmentEndPoint = toPoint;
+        } else {
+          segmentEndPoint = [
+            segmentStartPoint[0] + xSegmentDelta,
+            segmentStartPoint[1] + ySegmentDelta
+          ]
+        }
+    
+        this.canvasContext.beginPath();
+        this.canvasContext.moveTo(...segmentStartPoint);
+        this.canvasContext.lineTo(...segmentEndPoint);
+        this.canvasContext.stroke();
+
+        
+        if (isFinalFrame) {
+          resolve(true);
+        } else {
+          frameIndex = frameIndex + 1;
+          requestAnimationFrame(drawSegment);
+        }
+      }
+      drawSegment();
+    });
   }
 
   getBlocksAtNode(nodeId) {
