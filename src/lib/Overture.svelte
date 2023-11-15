@@ -79,8 +79,8 @@
     const crawlLayerCanvas = crawlLayer.getCanvas();
     const crawler = new StreetPainter(crawlLayerCanvas, $groundZeroProjection, $groundZeroBlocks);
     const groundZeroSefirahId = $sefirotPoints.features[0].id;
-    crawler.drawBlocksFromNode(groundZeroSefirahId).then(isDone => {
-      console.log('all blocks have been drawn', isDone);
+    crawler.drawBlocksFromNode(groundZeroSefirahId).then(orphanedBlocks => {
+      console.log('all blocks have been drawn but for...', orphanedBlocks);
     });
   } 
 

@@ -1,5 +1,9 @@
 export default class StreetPainter {
 
+  static randomNumberBetween(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
   constructor(canvasEl, projection, blocks) {
     this.blocks = blocks;
     this.projection = projection;
@@ -29,10 +33,10 @@ export default class StreetPainter {
     return blocks;
   }
 
-  async drawBlocksFromNode(nodeId) { // draw all blocks from node - recursive function
+  async drawBlocksFromNode(nodeId) {
     return new Promise(async (resolve) => {
-      const allDrawPromises = [];
       const blocks = this.getUndrawnBlocksAtNode(nodeId);
+      const allDrawPromises = [];
       blocks.forEach(async block => {
         const drawPromise = new Promise(async (resolve) => {
           const drawnBlockProps = await this.drawBlock(block, nodeId);
@@ -43,7 +47,7 @@ export default class StreetPainter {
         allDrawPromises.push(drawPromise);
       });
       await Promise.all(allDrawPromises);
-      resolve(true);
+      resolve(this.undrawnBlocks());
     });
   }
 
@@ -51,7 +55,7 @@ export default class StreetPainter {
     const blockProps = block.properties;
     let blockCoords = [...block.geometry.coordinates];
     let endNodeId = blockProps.to_street_node_id;
-    if (startNodeId === endNodeId) { // reverse draw direction
+    if (startNodeId === endNodeId) {
       blockCoords = blockCoords.reverse();
       endNodeId = blockProps.from_street_node_id;
     }
@@ -77,7 +81,7 @@ export default class StreetPainter {
       const yDelta = toPoint[1] - fromPoint[1];
       
       const lineLength = Math.sqrt(xDelta ** 2 + yDelta ** 2);
-      const segmentLength = 1;
+      const segmentLength = StreetPainter.randomNumberBetween(0.75, 0.25);
       const segmentPercentOfLineLength = segmentLength / lineLength;
     
       const xSegmentDelta = xDelta * segmentPercentOfLineLength;

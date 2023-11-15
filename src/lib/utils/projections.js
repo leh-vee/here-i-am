@@ -47,7 +47,7 @@ export function projectionForIlan(sefirot, screenPx) {
 }
 
 export function projectionForSefirah(sefirah, screenPx) {
-  const sefirahScale = 2700000;
+  const sefirahScale = 1800000;
   const p = geoMercator();
   const { width, height } = screenPx;
   p.translate([width / 2, height / 2]).scale(sefirahScale);
