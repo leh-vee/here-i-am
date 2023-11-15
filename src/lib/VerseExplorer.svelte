@@ -11,7 +11,7 @@
   import Ilan from './Ilan.svelte';
   import { nVerseWords, wordIndices, currentWord, currentVerse } from '../stores/text.js';
 
-  const movements = ['summary', 'countdown', 'fromEllipsis', 'flight', 'recall', 'toEllipsis'];
+  const movements = ['countdown', 'summary', 'fromEllipsis', 'flight', 'recall', 'toEllipsis'];
   let currentMovementIndex = 0;
   const piTime = Math.PI * 1000;
 
@@ -65,11 +65,11 @@
 {#if isRecall}
   <Controller on:coda={codaSequence} />
 {/if}
-<Layer config={{ visible: isSummary }}>
-  <Ilan />
-</Layer>
 <Layer config={{ visible: isCountdown }} >
   <VerseNumber />
+</Layer>
+<Layer config={{ visible: isSummary }}>
+  <Ilan />
 </Layer>
 <Layer config={{ visible: !isCountdown && !isSummary }} >
   <StreetTraces />

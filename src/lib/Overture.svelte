@@ -15,7 +15,7 @@
   const ellipsisStopAttrs = {
     radius: 5,
     opacity: Math.PI / 10,  
-    fill: '#9E9EA1'
+    fill: 'gray'
   }
 
   const ellipsisStopDelta = ellipsisStopAttrs.radius * 3;

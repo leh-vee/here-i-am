@@ -12,7 +12,7 @@
 
   const ctx = canvas.getContext('2d');
   ctx.lineWidth = 1;
-  ctx.strokeStyle = 'black';
+  ctx.strokeStyle = 'gray';
 
   const geoGenerator = geoPath().projection($ilanProjection).context(ctx);
   ctx.beginPath();

@@ -10,7 +10,7 @@ export default class StreetPainter {
 
     this.canvasContext = canvasEl.getContext('2d');
     this.canvasContext.lineWidth = 1;
-    this.canvasContext.strokeStyle = '#9E9EA1';
+    this.canvasContext.strokeStyle = 'gray';
 
     this.canvasWidth = this.canvasContext.canvas.clientWidth;
     this.canvasHeight = this.canvasContext.canvas.client = projection
