@@ -16,7 +16,8 @@
     },
     isDataInitialized: false,
     isOverture: true,
-    isReader: false
+    isCountdown: false,
+    isSwanSong: false
   }; 
 
   onMount(async () => {
@@ -44,13 +45,19 @@
     ilanBlocks.set(iBlocks);
     console.log('ilan data set');
   }
+
+  function commenceCountdown() {
+    v.isOverture = false;
+    v.isCountdown = true;
+  }
 </script>
 
 <div class='screen'>
   <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
     {#if v.isOverture}
-      <Overture startCollapse={ v.isDataInitialized } />
-    {:else if v.isReader}
+      <Overture startCollapse={ v.isDataInitialized } 
+        on:allBlocksCrawled={ commenceCountdown } />
+    {:else if v.isCountdown}
       <VerseExplorer />
     {/if}
   </Stage>

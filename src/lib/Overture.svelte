@@ -1,9 +1,12 @@
 <script>
-  import { Layer, Circle, Image } from 'svelte-konva';
+  import { Layer, Circle } from 'svelte-konva';
   import Konva from 'konva';
   import StreetPainter from './StreetPainter.js';
   import { sefirotPoints } from '../stores/treeOfLife.js';
   import { groundZeroBlocks, groundZeroProjection } from '../stores/treeOfLife.js';
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
 
   export let startCollapse = true;
   let isCollapsed = false;
@@ -81,6 +84,7 @@
     const groundZeroSefirahId = $sefirotPoints.features[0].id;
     crawler.drawBlocksFromNode(groundZeroSefirahId).then(orphanedBlocks => {
       console.log('all blocks have been drawn but for...', orphanedBlocks);
+      dispatch('allBlocksCrawled');
     });
   } 
 
