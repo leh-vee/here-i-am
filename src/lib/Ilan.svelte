@@ -1,62 +1,98 @@
 <script>
   import { tick } from 'svelte';
-  import { Image, Line } from 'svelte-konva';
+  import { Image, Line, Layer, Circle } from 'svelte-konva';
   import { geoPath } from "d3";
   import { ilanProjection, ilanBlocks, sefirotPoints } from '../stores/treeOfLife.js';
   import { currentVerseIndex, lastPiSlice, currentPiSlice } from '../stores/text.js';
-
+  import { onMount } from 'svelte';
 
   const canvas = document.createElement('canvas');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
 
-  const ctx = canvas.getContext('2d');
-  ctx.lineWidth = 1;
-  ctx.strokeStyle = 'gray';
+  onMount(async () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-  const geoGenerator = geoPath().projection($ilanProjection).context(ctx);
-  ctx.beginPath();
-  geoGenerator({type: 'FeatureCollection', features: $ilanBlocks.features })
-  ctx.stroke();
+    const ctx = canvas.getContext('2d');
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'gray';
 
-  let vector;
-  let vectorCoordinates = [0,0, 0, 0];
-  let fromCoordsPx;
-  let toCoordsPx;
+    const geoGenerator = geoPath().projection($ilanProjection).context(ctx);
+    ctx.beginPath();
+    geoGenerator({type: 'FeatureCollection', features: $ilanBlocks.features })
+    ctx.stroke();
+  });
 
-  $: if (vector) {
-    console.log('drawing vector for verse with index', $currentVerseIndex);
-    const fromCoordsGsc = $sefirotPoints.features[$lastPiSlice].geometry.coordinates;
-    const toCoordsGsc = $sefirotPoints.features[$currentPiSlice].geometry.coordinates;
-    fromCoordsPx = $ilanProjection(fromCoordsGsc);
-    toCoordsPx = $ilanProjection(toCoordsGsc);
-    dash();
-  }
-  
-  async function dash(isTail=false) {
-    let endCoords;
-    if (isTail) {
-      endCoords = [...toCoordsPx, ...toCoordsPx]
-    } else {
-      vectorCoordinates = [...fromCoordsPx, ...fromCoordsPx];
-      endCoords = [...fromCoordsPx, ...toCoordsPx]; 
-    }
+  let newPathway;
+  let fromSefirah;
+  let toSefirah;
+  let newPathwayCoordinates = [0, 0, 0, 0];
+  const chargeDuration = Math.PI / 10;
+
+  $: fromCoordsGsc = $sefirotPoints.features[$lastPiSlice].geometry.coordinates;
+  $: fromCoordsPx = $ilanProjection(fromCoordsGsc);
+  $: toCoordsGsc = $sefirotPoints.features[$currentPiSlice].geometry.coordinates;
+  $: toCoordsPx = $ilanProjection(toCoordsGsc);
+
+  $: if (Number.isInteger($currentVerseIndex) && newPathway) sendCharge();
+
+  async function sendCharge() {
+    let endCoords = [...fromCoordsPx, ...toCoordsPx];
+    newPathwayCoordinates = [...fromCoordsPx, ...fromCoordsPx];
     await tick();
-    vector.to({
+    fromSefirah.to({
+      radius: 0,
+      opacity: 0,
+      duration: chargeDuration
+    });
+    newPathway.to({
       points: endCoords,
-      duration: Math.PI,
-      onFinish: () => { if (!isTail) dash(true) }
+      opacity: 1,
+      duration: chargeDuration,
+      onFinish: receiveCharge
+    });
+  }
+
+  function receiveCharge() {
+    toSefirah.to({
+      radius: 3,
+      opacity: 1,
+      duration: chargeDuration
+    });
+    const endCoords = [...toCoordsPx, ...toCoordsPx];
+    newPathway.to({
+      points: endCoords,
+      opacity: 0,
+      duration: chargeDuration
     });
   }
 </script>
 
-<Image config={{ image: canvas }} />
-<Line config={{
-    points: vectorCoordinates,
+<Layer>
+  <Image config={{ image: canvas }} />
+  <Circle config={{
+    x: fromCoordsPx[0],
+    y: fromCoordsPx[1],
+    radius: 3,
+    fill: 'black'
+  }}
+  bind:handle={fromSefirah} 
+  />
+  <Line config={{
+    points: newPathwayCoordinates,
     stroke: 'black',
     strokeWidth: 2,
+    opacity: 0,
     lineCap: 'round'
   }}
-  bind:handle={vector}
-/>
-
+  bind:handle={newPathway}
+  />
+  <Circle config={{
+    x: toCoordsPx[0],
+    y: toCoordsPx[1],
+    fill: 'black',
+    radius: 0,
+    opacity: 0
+  }}
+  bind:handle={toSefirah} 
+  />
+</Layer>
