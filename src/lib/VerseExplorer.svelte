@@ -11,7 +11,7 @@
   import Ilan from './Ilan.svelte';
   import { nVerseWords, wordIndices, currentWord, currentVerse } from '../stores/text.js';
 
-  const movements = ['countdown', 'summary', 'fromEllipsis', 'flight', 'recall', 'toEllipsis'];
+  const movements = ['summary', 'countdown', 'fromEllipsis', 'flight', 'recall', 'toEllipsis'];
   let currentMovementIndex = 0;
   const piTime = Math.PI * 1000;
 
@@ -26,7 +26,7 @@
   $: isEllipsis = isFromEllipsis || isToEllipsis;
   
   $: if (isCountdown) startMovementTimer();
-  $: if (isSummary) startMovementTimer(piTime * 2);
+  $: if (isSummary) startMovementTimer(piTime);
   $: if (isFromEllipsis) startMovementTimer();
   $: if (isFlight) scanVerse();
 
@@ -69,7 +69,7 @@
   <VerseNumber />
 </Layer>
 <Layer config={{ visible: isSummary }}>
-  <Ilan />
+  <Ilan go={ isSummary } />
 </Layer>
 <Layer config={{ visible: !isCountdown && !isSummary }} >
   <StreetTraces />
