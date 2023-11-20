@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://127.0.0.1:8000/here-i-am/data";
+const API_BASE_URL = "http://192.168.0.128:8000/here-i-am/data";
 
 export async function fetchData(endpoint, options = {}) {
   const url = `${API_BASE_URL}/${endpoint}/`;
