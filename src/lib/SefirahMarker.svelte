@@ -9,6 +9,6 @@
     x: coordsPx[0],
     y: coordsPx[1],
     radius,
-    fill: 'black'
+    fill: 'white'
   }}
 />

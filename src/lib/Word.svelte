@@ -13,7 +13,6 @@
   fontSize: 80,
   fontFamily: 'Reenie Beanie',
   fillEnabled: true,
-  fill: 'black',
-  stroke: 'black',
+  fill: 'white',
   strokeWidth: 0
 }} />

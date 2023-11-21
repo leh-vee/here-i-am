@@ -14,7 +14,7 @@
   let hasBeenCurrentWord = isCurrentWord;
   $: if (isCurrentWord) hasBeenCurrentWord = true;
 
-  $: fill = isCurrentWord ? 'black' : 'dimgray';
+  $: fill = isCurrentWord ? 'white' : 'dimgrey';
   $: visible = (isCurrentWord || hasBeenCurrentWord) ? true : false;
   $: radius = isCurrentWord ? 5 : 3;
   

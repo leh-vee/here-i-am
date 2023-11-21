@@ -13,8 +13,8 @@
     canvas.height = window.innerHeight;
 
     const ctx = canvas.getContext('2d');
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = 'gray';
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'grey';
 
     const geoGenerator = geoPath().projection($ilanProjection).context(ctx);
     ctx.beginPath();
@@ -74,13 +74,13 @@
   y: fromCoordsPx[1],
   radius: 3,
   opacity: 1,
-  fill: 'black'
+  fill: 'white'
 }}
 bind:handle={fromSefirah} 
 />
 <Line config={{
   points: newPathwayCoordinates,
-  stroke: 'black',
+  stroke: 'white',
   strokeWidth: 2,
   opacity: 0,
   lineCap: 'round'
@@ -90,7 +90,7 @@ bind:handle={newPathway}
 <Circle config={{
   x: toCoordsPx[0],
   y: toCoordsPx[1],
-  fill: 'black',
+  fill: 'white',
   radius: 0,
   opacity: 0
 }}

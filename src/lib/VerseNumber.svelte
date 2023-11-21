@@ -20,7 +20,7 @@
   fontSize: 250,
   fontFamily: 'Inconsolata',
   fillEnabled: true,
-  fill: 'black',
-  stroke: 'black',
+  fill: 'white',
+  stroke: 'white',
   strokeWidth: 1
 }} />
