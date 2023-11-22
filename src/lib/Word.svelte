@@ -10,9 +10,9 @@
   height: window.innerHeight,
   align: 'center',
   verticalAlign: 'middle',
-  fontSize: 80,
-  fontFamily: 'Reenie Beanie',
+  fontSize: 90,
+  fontFamily: 'Alexross-Regular, Reenie Beanie',
   fillEnabled: true,
-  fill: 'white',
+  fill: 'gold',
   strokeWidth: 0
 }} />

@@ -7,7 +7,7 @@ const POEM = [
   {
     piSlice: 2,
     a: "all together chinked by the overhearing",
-    b: "of a featherweight junction’s heavy breathing" 
+    b: "of a featherweight junction's heavy breathing" 
   },
   {
     piSlice: 1,
@@ -16,7 +16,7 @@ const POEM = [
   },
   {
     piSlice: 1,
-    a: "the superstitious cleaving to silence’s rift",
+    a: "the superstitious cleaving to silence's rift",
     b: "stuttered into being before the first, broken word" 
   },
   {
@@ -26,8 +26,8 @@ const POEM = [
   },
   {
     piSlice: 1,
-    a: "never honestly small enough to – like dust",
-    b: "the ashen toss and turn – sink into the nothing special" 
+    a: "never honestly small enough to - like dust",
+    b: "the ashen toss and turn - sink into the nothing special" 
   },
   {
     piSlice: 5,
