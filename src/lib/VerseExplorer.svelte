@@ -76,7 +76,8 @@
   {#if isFromEllipsis }
     <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
   {/if}
-  <Word currentWord={ isEllipsis ? '...' : $currentWord } />
+  <Word currentWord={ isEllipsis ? '...' : $currentWord }
+    isVisible={!isCountdown && !isSummary} on:coda={codaSequence} />
   {#if isFlight || isRecall}
     <LineMarkers words={ $currentVerse['a'] } line={'a'} />
     <LineMarkers words={ $currentVerse['b'] } line={'b'} />
