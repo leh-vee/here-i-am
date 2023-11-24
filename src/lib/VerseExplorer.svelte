@@ -9,7 +9,7 @@
   import Controller from './Controller.svelte';
   import Word from './Word.svelte';
   import Ilan from './Ilan.svelte';
-  import { nVerseWords, wordIndices, currentVerse } from '../stores/text.js';
+  import { wordIndices, currentVerse } from '../stores/text.js';
 
   const movements = ['summary', 'countdown', 'fromEllipsis', 'flight', 'recall', 'toEllipsis'];
   let currentMovementIndex = 0;
@@ -28,28 +28,9 @@
   $: if (isCountdown) startMovementTimer();
   $: if (isSummary) startMovementTimer(piTime);
   $: if (isFromEllipsis) startMovementTimer();
-  $: if (isFlight) scanVerse();
 
   function startMovementTimer(t=piTime) {
     setTimeout(() => { currentMovementIndex += 1 }, t);
-  }
-
-  function scanVerse() {
-    const nScans = $nVerseWords - 1;
-    const t = piTime / nScans;
-    let nWordsScanned = 0;
-    const scanNextWord = () => {
-      setTimeout(() => { 
-        wordIndices.nextWord();
-        nWordsScanned += 1;
-        if (nWordsScanned < nScans) {
-          scanNextWord();
-        } else {
-          currentMovementIndex += 1;
-        }
-      }, t);
-    }
-    scanNextWord();
   }
 
   function codaSequence() {
@@ -76,7 +57,9 @@
   {#if isFromEllipsis }
     <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
   {/if}
-  <Word isEllipsis={ isEllipsis } isVisible={!isCountdown && !isSummary} on:coda={codaSequence} />
+  <Word isEllipsis={ isEllipsis } isVisible={!isCountdown && !isSummary} 
+    on:coda={codaSequence} on:nextMovement={ () => { currentMovementIndex += 1 } } 
+    isFlight={isFlight} />
   {#if isFlight || isRecall}
     <LineMarkers words={ $currentVerse['a'] } line={'a'} />
     <LineMarkers words={ $currentVerse['b'] } line={'b'} />

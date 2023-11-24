@@ -1,7 +1,7 @@
 <script>
   import { Stage, Layer, Text } from 'svelte-konva';
   import { wordIndices, isLastVerseWord, isFirstVerseWord, 
-    currentWord, nextWord, previousWord } from '../stores/text.js';
+    currentWord, nextWord, previousWord, nVerseWords } from '../stores/text.js';
   import { swipe } from 'svelte-gestures';
   import { createEventDispatcher } from 'svelte';
 
@@ -13,7 +13,7 @@
     height: window.innerHeight,
     align: 'center',
     verticalAlign: 'middle',
-    fontSize: 90,
+    fontSize: 80,
     fontFamily: 'Alexross-Regular, Reenie Beanie',
     fillEnabled: true,
     fill: 'gold',
@@ -22,12 +22,33 @@
 
   export let isEllipsis = false;
   export let isVisible = false;
+  export let isFlight = false;
+
+  $: if (isFlight) scanVerse();
+
+  function scanVerse() {
+    const nScans = $nVerseWords - 1;
+    const t = Math.PI * 2000 / nScans;
+    let nWordsScanned = 0;
+    const scanNextWord = () => {
+      setTimeout(() => { 
+        wordSwiped() 
+        nWordsScanned += 1;
+        if (nWordsScanned < nScans) {
+          scanNextWord();
+        } else {
+          dispatch('nextMovement');
+        }
+      }, t);
+    }
+    scanNextWord();
+  }
 
   $: word = isEllipsis ? '...' : $currentWord;
 
   function wordSwiped(event) {
     const duration = 0.2;
-    const direction = event.detail.direction;
+    const direction = event ? event.detail.direction : 'left';
     if (direction === 'right') {
       if (!$isFirstVerseWord) {
         textBoxes[1].to({
