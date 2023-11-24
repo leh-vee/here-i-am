@@ -9,7 +9,7 @@
   import Controller from './Controller.svelte';
   import Word from './Word.svelte';
   import Ilan from './Ilan.svelte';
-  import { nVerseWords, wordIndices, currentWord, currentVerse } from '../stores/text.js';
+  import { nVerseWords, wordIndices, currentVerse } from '../stores/text.js';
 
   const movements = ['summary', 'countdown', 'fromEllipsis', 'flight', 'recall', 'toEllipsis'];
   let currentMovementIndex = 0;
@@ -76,8 +76,7 @@
   {#if isFromEllipsis }
     <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
   {/if}
-  <Word currentWord={ isEllipsis ? '...' : $currentWord }
-    isVisible={!isCountdown && !isSummary} on:coda={codaSequence} />
+  <Word isEllipsis={ isEllipsis } isVisible={!isCountdown && !isSummary} on:coda={codaSequence} />
   {#if isFlight || isRecall}
     <LineMarkers words={ $currentVerse['a'] } line={'a'} />
     <LineMarkers words={ $currentVerse['b'] } line={'b'} />
