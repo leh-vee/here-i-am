@@ -20,9 +20,11 @@
     strokeWidth: 0
   }
 
-  export let isEllipsis = false;
   export let isVisible = false;
+  export let isEllipsis = false;
   export let isFlight = false;
+  
+  let isSwipable = false;
 
   $: if (isFlight) scanVerse();
 
@@ -37,6 +39,7 @@
         if (nWordsScanned < nScans) {
           scanNextWord();
         } else {
+          isSwipable = true;
           dispatch('nextMovement');
         }
       }, t);
@@ -44,7 +47,7 @@
     scanNextWord();
   }
 
-  $: word = isEllipsis ? '...' : $currentWord;
+  $: word = isEllipsis ? '...' : $currentWord; 
 
   function wordSwiped(event) {
     const duration = 0.2;
@@ -67,6 +70,7 @@
       }
     } else {
       if ($isLastVerseWord) {
+        isSwipable = false;
         dispatch('coda');
       } else {
         textBoxes[1].to({
@@ -87,7 +91,7 @@
   }
 </script>
 
-<div class='word' use:swipe={{ timeframe: 300, minSwipeDistance: 60 }} on:swipe={ wordSwiped }>
+<div class='word' use:swipe={{ timeframe: 300, minSwipeDistance: 60 }} on:swipe={ (e) => { if (isSwipable) wordSwiped(e) } }>
   <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
     <Layer config={{ visible: isVisible }} >
       <Text config={{
