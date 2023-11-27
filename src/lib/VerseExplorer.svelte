@@ -6,7 +6,6 @@
   import VerseNumber from './VerseNumber.svelte';
   import { currentChannelFromSefirahCoordsPx, 
     currentChannelToSefirahCoordsPx } from '../stores/treeOfLife.js';
-  import Controller from './Controller.svelte';
   import Word from './Word.svelte';
   import Ilan from './Ilan.svelte';
   import { wordIndices, currentVerse } from '../stores/text.js';
@@ -43,9 +42,6 @@
 
 </script>
 
-{#if isRecall}
-  <Controller on:coda={codaSequence} />
-{/if}
 <Layer config={{ visible: isCountdown }} >
   <VerseNumber />
 </Layer>
