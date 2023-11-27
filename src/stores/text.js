@@ -186,6 +186,15 @@ export const isFirstVerseWord = derived([wordIndices], (
   }
 );
 
+export const isLastWordInLineA = derived(
+  [poem, wordIndices], ([$poem, $wordIndices]) => {
+    let isLastWordInLineA = false;
+    let { wordIndex, line, verseIndex } = $wordIndices; 
+    if (line === 'a' && $poem[verseIndex][line].length === wordIndex + 1) isLastWordInLineA = true;
+    return isLastWordInLineA;
+  }
+);
+
 export const currentPiSlice = derived([poem, wordIndices], (
   [$poem, $wordIndices]) => {
     return $poem[$wordIndices.verseIndex].piSlice;

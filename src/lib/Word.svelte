@@ -1,7 +1,7 @@
 <script>
   import { Stage, Layer, Text } from 'svelte-konva';
   import { wordIndices, isLastVerseWord, isFirstVerseWord, 
-    currentWord, nextWord, previousWord, nVerseWords } from '../stores/text.js';
+    currentWord, nextWord, previousWord, nVerseWords, isLastWordInLineA } from '../stores/text.js';
   import { swipe } from 'svelte-gestures';
   import { createEventDispatcher } from 'svelte';
 
@@ -50,6 +50,7 @@
   $: word = isEllipsis ? '...' : $currentWord; 
 
   function wordSwiped(event) {
+    isSwipable = false;
     const duration = 0.2;
     const direction = event ? event.detail.direction : 'left';
     if (direction === 'right') {
@@ -65,27 +66,31 @@
             wordIndices.previousWord();
             textBoxes[1].offsetX(0);
             textBoxes[0].offsetX(window.innerWidth);
+            isSwipable = true;
           }
         });
       }
     } else {
       if ($isLastVerseWord) {
-        isSwipable = false;
         dispatch('coda');
       } else {
         textBoxes[1].to({
           offsetX: window.innerWidth,
           duration
         });
-        textBoxes[2].to({
-          offsetX: 0,
-          duration,
-          onFinish: () => {
-            wordIndices.nextWord();
-            textBoxes[1].offsetX(0);
-            textBoxes[2].offsetX(-window.innerWidth);
-          }
-        });
+        const caesuraDelay = $isLastWordInLineA ? Math.PI * 200  : 0;
+        setTimeout(() => {
+          textBoxes[2].to({
+            offsetX: 0,
+            duration,
+            onFinish: () => {
+              wordIndices.nextWord();
+              textBoxes[1].offsetX(0);
+              textBoxes[2].offsetX(-window.innerWidth);
+              isSwipable = true;
+            }
+          });
+        }, caesuraDelay);
       }
     }  
   }
@@ -110,9 +115,31 @@
       }} bind:handle={textBoxes[2]} />
     </Layer>
   </Stage>
+  <div class='controller'>
+    <span class='back button'
+      on:click={ () => { if (isSwipable) { wordSwiped({ detail: { direction: 'right' } })} } } ></span>
+    <span class='forward button'
+      on:click={ () => { if (isSwipable) { wordSwiped() } } } ></span>
+  </div>
 </div>
 
 <style>
+  .controller {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 25%;
+    display: flex;
+    z-index: 1;
+  }
+
+  .controller .button {
+    width: 50%;
+    text-align: center;
+    vertical-align: baseline;
+    font-size: 5vw;
+  }
+
   .word {
     position: absolute;
     top: 0;
