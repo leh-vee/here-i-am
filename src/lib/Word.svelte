@@ -1,7 +1,7 @@
 <script>
   import { Stage, Layer, Text } from 'svelte-konva';
-  import { wordIndices, isLastVerseWord, isFirstVerseWord, 
-    currentWord, nextWord, previousWord, nVerseWords, isLastWordInLineA } from '../stores/text.js';
+  import { wordIndices, isLastVerseWord, isFirstVerseWord, nVerseWords,
+    currentWord, nextWord, previousWord, isLastWordInLineA } from '../stores/text.js';
   import { swipe } from 'svelte-gestures';
   import { createEventDispatcher } from 'svelte';
 
@@ -26,73 +26,70 @@
   
   let isSwipable = false;
 
-  $: if (isFlight) scanVerse();
+  $: if (isFlight) scanNextWord();
 
-  function scanVerse() {
+  async function scanNextWord() {
     const nScans = $nVerseWords - 1;
-    const t = Math.PI * 2000 / nScans;
-    let nWordsScanned = 0;
-    const scanNextWord = () => {
-      setTimeout(() => { 
-        wordSwiped() 
-        nWordsScanned += 1;
-        if (nWordsScanned < nScans) {
-          scanNextWord();
-        } else {
-          isSwipable = true;
-          dispatch('nextMovement');
-        }
-      }, t);
+    const t = Math.PI * 1000 / nScans;
+    if ($isLastVerseWord) {
+      isSwipable = true;
+      dispatch('nextMovement');
+    } else {
+      await wordSwiped();
+      setTimeout(() => { scanNextWord() }, t)
     }
-    scanNextWord();
   }
 
   $: word = isEllipsis ? '...' : $currentWord; 
 
   function wordSwiped(event) {
     isSwipable = false;
-    const duration = 0.2;
+    const duration = Math.PI / 10;
     const direction = event ? event.detail.direction : 'left';
-    if (direction === 'right') {
-      if (!$isFirstVerseWord) {
-        textBoxes[1].to({
-          offsetX: -window.innerWidth,
-          duration
-        });
-        textBoxes[0].to({
-          offsetX: 0,
-          duration,
-          onFinish: () => {
-            wordIndices.previousWord();
-            textBoxes[1].offsetX(0);
-            textBoxes[0].offsetX(window.innerWidth);
-            isSwipable = true;
-          }
-        });
-      }
-    } else {
-      if ($isLastVerseWord) {
-        dispatch('coda');
-      } else {
-        textBoxes[1].to({
-          offsetX: window.innerWidth,
-          duration
-        });
-        const caesuraDelay = $isLastWordInLineA ? Math.PI * 200  : 0;
-        setTimeout(() => {
-          textBoxes[2].to({
+    return new Promise(resolve => {
+      if (direction === 'right') {
+        if (!$isFirstVerseWord) {
+          textBoxes[1].to({
+            offsetX: -window.innerWidth,
+            duration
+          });
+          textBoxes[0].to({
             offsetX: 0,
             duration,
             onFinish: () => {
-              wordIndices.nextWord();
+              wordIndices.previousWord();
               textBoxes[1].offsetX(0);
-              textBoxes[2].offsetX(-window.innerWidth);
+              textBoxes[0].offsetX(window.innerWidth);
               isSwipable = true;
+              resolve(true);
             }
           });
-        }, caesuraDelay);
-      }
-    }  
+        }
+      } else {
+        if ($isLastVerseWord) {
+          dispatch('coda');
+        } else {
+          textBoxes[1].to({
+            offsetX: window.innerWidth,
+            duration
+          });
+          const caesuraDelay = $isLastWordInLineA ? Math.PI * 200  : 0;
+          setTimeout(() => {
+            textBoxes[2].to({
+              offsetX: 0,
+              duration,
+              onFinish: () => {
+                wordIndices.nextWord();
+                textBoxes[1].offsetX(0);
+                textBoxes[2].offsetX(-window.innerWidth);
+                isSwipable = true;
+                resolve(true);
+              }
+            });
+          }, caesuraDelay);
+        }
+      }  
+    });
   }
 </script>
 
