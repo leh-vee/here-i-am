@@ -1,7 +1,21 @@
 import { readable, writable, derived } from 'svelte/store';
-import { POEM_PARSED } from '../data/poem';
+import { fetchLinesOfPoem } from '../api/client.js';
 
-const poem = readable(POEM_PARSED);
+const piCountDown = '32114159265358979323846264338327950';
+async function serializePoem() {
+  const lines = await fetchLinesOfPoem();
+  const poem = piCountDown.split('').map((piSlice, i) => {
+    const lineIndex = i * 2;
+    const verse = {
+      piSlice: piSlice,
+      a: lines[lineIndex].split(' '),
+      b: lines[lineIndex + 1].split(' ')
+    }
+    return verse;
+  });
+  return poem;
+}
+const poem = await serializePoem();
 
 function createWordIndicesStore() {
   const { subscribe, update } = writable(
@@ -18,7 +32,7 @@ function createWordIndicesStore() {
       let nextVerseIndex = verseIndex;
       let nextLine = line;
       let nextWordIndex = wordIndex;
-      if (verseIndex < POEM_PARSED.length - 1) {
+      if (verseIndex < poem.length - 1) {
         nextVerseIndex = nextVerseIndex + 1;
         nextLine = 'a';
         nextWordIndex = 0;
@@ -47,9 +61,9 @@ function createWordIndicesStore() {
       let nextLine = line;
       let nextVerseIndex = verseIndex;
 
-      const isEndOfTheLine = wordIndex == POEM_PARSED[verseIndex][line].length - 1;
+      const isEndOfTheLine = wordIndex == poem[verseIndex][line].length - 1;
       const isLineA = line == 'a';
-      const isLastVerse = verseIndex == POEM_PARSED.length - 1
+      const isLastVerse = verseIndex == poem.length - 1
 
       if (!isEndOfTheLine) {
         nextWordIndex += 1;
@@ -80,7 +94,7 @@ function createWordIndicesStore() {
         prevWordIndex -= 1;
       } else if (isLineB) {
         prevLine = 'a';
-        prevWordIndex = POEM_PARSED[verseIndex][prevLine].length - 1;
+        prevWordIndex = poem[verseIndex][prevLine].length - 1;
       }
       
       return {
@@ -94,25 +108,25 @@ function createWordIndicesStore() {
 export const wordIndices = createWordIndicesStore();
 
 export const currentWord = derived(
-  [poem, wordIndices], ([$poem, $wordIndices]) => {
+  [wordIndices], ([$wordIndices]) => {
     const { verseIndex, line, wordIndex } = $wordIndices;
-    return $poem[verseIndex][line][wordIndex];
+    return poem[verseIndex][line][wordIndex];
   }
 );
 
 export const nextWord = derived(
-  [poem, wordIndices], ([$poem, $wordIndices]) => {
+  [wordIndices], ([$wordIndices]) => {
     const { verseIndex, line, wordIndex } = $wordIndices;
     
-    const isEndOfTheLine = wordIndex == $poem[verseIndex][line].length - 1;
+    const isEndOfTheLine = wordIndex == poem[verseIndex][line].length - 1;
     const isLineA = line == 'a';
 
     let nextWord = null;
     
     if (!isEndOfTheLine) {
-      nextWord = $poem[verseIndex][line][wordIndex + 1];
+      nextWord = poem[verseIndex][line][wordIndex + 1];
     } else if (isLineA) {
-      nextWord = $poem[verseIndex]['b'][0];
+      nextWord = poem[verseIndex]['b'][0];
     } 
 
     return nextWord;
@@ -120,7 +134,7 @@ export const nextWord = derived(
 );
 
 export const previousWord = derived(
-  [poem, wordIndices], ([$poem, $wordIndices]) => {
+  [wordIndices], ([$wordIndices]) => {
     const { verseIndex, line, wordIndex } = $wordIndices;
 
     const isStartOfTheLine = wordIndex == 0;
@@ -129,9 +143,9 @@ export const previousWord = derived(
     let previousWord = null;
 
     if (!isStartOfTheLine) {
-      previousWord = $poem[verseIndex][line][wordIndex - 1];
+      previousWord = poem[verseIndex][line][wordIndex - 1];
     } else if (isLineB) {
-      previousWord = $poem[verseIndex]['a'][0];
+      previousWord = poem[verseIndex]['a'][0];
     }
 
     return previousWord;
@@ -139,9 +153,9 @@ export const previousWord = derived(
 );
 
 export const currentVerse = derived(
-  [poem, wordIndices], ([$poem, $wordIndices]) => {
+  [wordIndices], ([$wordIndices]) => {
     const { verseIndex } = $wordIndices;
-    return $poem[verseIndex];
+    return poem[verseIndex];
   } 
 );
 
@@ -158,27 +172,26 @@ export const nVerseWords = derived(
 );
 
 export const percentVerseRead = derived(
-  [poem, nVerseWords, wordIndices], 
-  ([$poem, $nVerseWords, $wordIndices]) => {
+  [nVerseWords, wordIndices], ([$nVerseWords, $wordIndices]) => {
     let nWordsRead = 0;
     if ($wordIndices.line === 'b') {
-      nWordsRead = nWordsRead + $poem[$wordIndices.verseIndex]['a'].length;
+      nWordsRead = nWordsRead + poem[$wordIndices.verseIndex]['a'].length;
     }
     nWordsRead = nWordsRead + $wordIndices.wordIndex;
     return nWordsRead / $nVerseWords;
   }
 );
 
-export const isFirstVerseTriad = derived([wordIndices], (
-  [$wordIndices]) => {
+export const isFirstVerseTriad = derived(
+  [wordIndices], ([$wordIndices]) => {
     let isFirstVerse = false;
     if ($wordIndices.verseIndex < 3) isFirstVerse = true;
     return isFirstVerse;
   }
 );
 
-export const isFirstVerseWord = derived([wordIndices], (
-  [$wordIndices]) => {
+export const isFirstVerseWord = derived(
+  [wordIndices], ([$wordIndices]) => {
     let isFirstVerseWord = false;
     let { wordIndex, line } = $wordIndices; 
     if (wordIndex === 0 && line === 'a') isFirstVerseWord = true;
@@ -187,26 +200,26 @@ export const isFirstVerseWord = derived([wordIndices], (
 );
 
 export const isLastWordInLineA = derived(
-  [poem, wordIndices], ([$poem, $wordIndices]) => {
+  [wordIndices], ([$wordIndices]) => {
     let isLastWordInLineA = false;
     let { wordIndex, line, verseIndex } = $wordIndices; 
-    if (line === 'a' && $poem[verseIndex][line].length === wordIndex + 1) isLastWordInLineA = true;
+    if (line === 'a' && poem[verseIndex][line].length === wordIndex + 1) isLastWordInLineA = true;
     return isLastWordInLineA;
   }
 );
 
-export const currentPiSlice = derived([poem, wordIndices], (
-  [$poem, $wordIndices]) => {
-    return $poem[$wordIndices.verseIndex].piSlice;
+export const currentPiSlice = derived(
+  [wordIndices], ([$wordIndices]) => {
+    return poem[$wordIndices.verseIndex].piSlice;
   }
 );
 
-export const lastPiSlice = derived([poem, wordIndices], (
-  [$poem, $wordIndices]) => {
-    let piSlice = 0;
+export const lastPiSlice = derived(
+  [wordIndices], ([$wordIndices]) => {
+    let piSlice = "0";
     const { verseIndex } = $wordIndices;
     if (verseIndex > 0) {
-      piSlice = $poem[verseIndex - 1].piSlice;
+      piSlice = poem[verseIndex - 1].piSlice;
     }
     return piSlice; 
   }
@@ -220,9 +233,9 @@ export const currentPiSlicesMatch = derived(
 );
 
 export const isLastVerseWord = derived(
-  [poem, wordIndices], ([$poem, $wordIndices]) => {
+  [wordIndices], ([$wordIndices]) => {
     const { verseIndex, line, wordIndex } = $wordIndices;
-    const nWords = $poem[verseIndex][line].length;
+    const nWords = poem[verseIndex][line].length;
     let isLastVerseWord = false;
     if (line === 'b' && wordIndex === nWords - 1) {
       isLastVerseWord = true;
