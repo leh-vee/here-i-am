@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { fetchData } from './interface.js';
+import { fetchData } from './streetNetworkApiInterface.js';
 
 export async function fetchSefirot() {
   const sefirotJson = await fetchData('street-nodes/tree-of-life');
@@ -21,6 +21,13 @@ export async function fetchBlocksForProjection(projection, screenPx) {
   return JSON.parse(blocksJson);
 }
 
+export async function fetchLinesOfPoem() {
+  const filePath = `${window.location.href}/poem.txt`;
+  const response = await fetch(filePath);
+  const text = await response.text();
+  return text.split('\n').map(line => line.trim());
+}
+
 async function fetchProjectionBlocks(projectionCoords) {
   return fetchData('street-edges/area', 
     { method: "post", body: JSON.stringify(projectionCoords) }
@@ -34,18 +41,3 @@ function projectionBoundingBoxCoords(projection, screenPx) {
   const coords = [...minCoords, ...maxCoords];
   return coords;
 } 
-
-function channelProjectionBoundingBoxCoords(projection, screenPx) {
-  const  { width, height } = screenPx;
-  const topLeftCoordsGsc = projection.invert([0, 0]);
-  const bottomRightCoordsGsc = projection.invert([width, height]);
-  const xMinCoordGsc = Math.min(topLeftCoordsGsc[0], bottomRightCoordsGsc[0]);
-  const xMaxCoordGsc = Math.max(topLeftCoordsGsc[0], bottomRightCoordsGsc[0]);
-  const yMinCoordGsc = Math.min(topLeftCoordsGsc[1], bottomRightCoordsGsc[1]);
-  const yMaxCoordGsc = Math.max(topLeftCoordsGsc[1], bottomRightCoordsGsc[1]);
-  const minCoordsGsc = [xMinCoordGsc, yMinCoordGsc]; 
-  const maxCoordsGsc = [xMaxCoordGsc, yMaxCoordGsc];
-  const coords = [...minCoordsGsc, ...maxCoordsGsc];
-
-  return coords;
-}
