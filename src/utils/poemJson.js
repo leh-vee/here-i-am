@@ -1,29 +1,39 @@
 const piCountDown = '32114159265358979323846264338327950';
+const punctuationRegEx = /([^\w\s'])/g;
 
 export async function serializePoem(poemLines) {
-  const poemJson = piCountDown.split('').map((piSlice, i) => {
+  const poemJson = [];
+  piCountDown.split('').forEach((piSlice, i) => {
     const lineIndex = i * 2;
+    const aLine = poemLines[lineIndex];
+    const bLine = poemLines[lineIndex + 1];
     const verse = {
       piSlice: piSlice,
-      a: encodePunctuation(poemLines[lineIndex]),
-      b: encodePunctuation(poemLines[lineIndex + 1])
+      a: splitWordsStripPunctuation(aLine),
+      b: splitWordsStripPunctuation(bLine),
+      punctuation: {
+        a: mapPunctuationForLine(aLine),
+        b: mapPunctuationForLine(bLine)
+      }
     }
-    return verse;
+    poemJson.push(verse);
   });
   return poemJson;
 }
 
-function encodePunctuation(lineStr) {
-  const encodedLine = [];
-  const rawLine = lineStr.split(' ');
-  const punctuationRegEx = /([^\w\s'])/g;
-  rawLine.forEach(chars => {
-    const wordPuncSplit = chars.split(punctuationRegEx).filter(str => str !== '');
-    wordPuncSplit.forEach(chars => {
-      const isPunctuation = chars.search(punctuationRegEx) === 0;
-      const encodedChars = isPunctuation ? chars.charCodeAt() : chars;
-      encodedLine.push(encodedChars);  
-    });
-  });
-  return encodedLine;
+function splitWordsStripPunctuation(str) {
+  return str.replaceAll(punctuationRegEx, '').split(' ');
+}
+
+function mapPunctuationForLine(lineStr) {
+  const map = {};
+  const splitLine = lineStr.split(punctuationRegEx);
+  let lastWordIndex = -1;
+  for (let i = 0; i*2 < splitLine.length - 2; i += 2) {
+    const wordsBeforeMark = splitLine[i].trim().split(' ');
+    const punctuationMark = splitLine[i+1];
+    lastWordIndex += wordsBeforeMark.length;
+    map[lastWordIndex] = punctuationMark;
+  }
+  return map;
 }
