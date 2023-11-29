@@ -21,7 +21,7 @@ export async function fetchBlocksForProjection(projection, screenPx) {
   return JSON.parse(blocksJson);
 }
 
-export async function fetchLinesOfPoem() {
+export async function fetchPoemText() {
   const filePath = `${window.location.href}/poem.txt`;
   const response = await fetch(filePath);
   const text = await response.text();

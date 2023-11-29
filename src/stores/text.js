@@ -1,22 +1,11 @@
 import { writable, derived } from 'svelte/store';
-import { fetchLinesOfPoem } from '../api/client.js';
+import { fetchPoemText } from '../api/client.js';
+import { serializePoem } from '../utils/poemJson.js';
 
-const piCountDown = '32114159265358979323846264338327950';
-
-async function serializePoem() {
-  const lines = await fetchLinesOfPoem();
-  const poem = piCountDown.split('').map((piSlice, i) => {
-    const lineIndex = i * 2;
-    const verse = {
-      piSlice: piSlice,
-      a: lines[lineIndex].split(' '),
-      b: lines[lineIndex + 1].split(' ')
-    }
-    return verse;
-  });
-  return poem;
-}
-const poem = await serializePoem();
+let poem;
+fetchPoemText().then(async lines => { 
+  poem = await serializePoem(lines);
+});
 
 function createWordIndicesStore() {
   const { subscribe, update } = writable(
