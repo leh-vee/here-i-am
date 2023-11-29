@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { fetchData } from './streetNetworkApiInterface.js';
+import { fetchData } from './serverConfig.js';
 
 export async function fetchSefirot() {
   const sefirotJson = await fetchData('street-nodes/tree-of-life');

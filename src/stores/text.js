@@ -1,4 +1,4 @@
-import { readable, writable, derived } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 import { fetchLinesOfPoem } from '../api/client.js';
 
 const piCountDown = '32114159265358979323846264338327950';
