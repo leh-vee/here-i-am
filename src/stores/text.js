@@ -142,6 +142,14 @@ export const previousWord = derived(
   }
 );
 
+export const nextPunctuation = derived(
+  [wordIndices], ([$wordIndices]) => {
+    const { verseIndex, line, wordIndex } = $wordIndices;
+    const punctuationMark = poem[verseIndex]['punctuation'][line][wordIndex];
+    return punctuationMark;
+  }
+);
+
 export const currentVerse = derived(
   [wordIndices], ([$wordIndices]) => {
     const { verseIndex } = $wordIndices;
@@ -158,17 +166,6 @@ export const currentVerseIndex = derived(
 export const nVerseWords = derived(
   [currentVerse], ([$currentVerse]) => {
     return $currentVerse['a'].length + $currentVerse['b'].length;
-  }
-);
-
-export const percentVerseRead = derived(
-  [nVerseWords, wordIndices], ([$nVerseWords, $wordIndices]) => {
-    let nWordsRead = 0;
-    if ($wordIndices.line === 'b') {
-      nWordsRead = nWordsRead + poem[$wordIndices.verseIndex]['a'].length;
-    }
-    nWordsRead = nWordsRead + $wordIndices.wordIndex;
-    return nWordsRead / $nVerseWords;
   }
 );
 
