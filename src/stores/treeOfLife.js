@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { writable, derived } from 'svelte/store';
-import { tenByTenArray } from '../lib/utils/base.js';
+import { tenByTenArray } from '../utils/base.js';
 import { lastPiSlice, currentPiSlice } from './text.js';
 
 export const groundZeroProjection = writable(undefined);

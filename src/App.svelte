@@ -4,8 +4,8 @@
   import VerseExplorer from './lib/VerseExplorer.svelte';
   import { onMount } from 'svelte';
   import { fetchSefirot, fetchBlocksForProjection } from './api/client.js';
-  import { channelFeatures } from './lib/utils/geoJson.js';
-  import { projectionForSefirah, projectionsForChannels, projectionForIlan } from './lib/utils/projections.js';
+  import { channelFeatures } from './utils/geoJson.js';
+  import { projectionForSefirah, projectionsForChannels, projectionForIlan } from './utils/projections.js';
   import { Stage } from 'svelte-konva';
   import Overture from './lib/Overture.svelte';
 
