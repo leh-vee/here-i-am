@@ -5,10 +5,25 @@ export async function serializePoem(poemLines) {
     const lineIndex = i * 2;
     const verse = {
       piSlice: piSlice,
-      a: poemLines[lineIndex].split(' '),
-      b: poemLines[lineIndex + 1].split(' ')
+      a: encodePunctuation(poemLines[lineIndex]),
+      b: encodePunctuation(poemLines[lineIndex + 1])
     }
     return verse;
   });
   return poemJson;
+}
+
+function encodePunctuation(lineStr) {
+  const encodedLine = [];
+  const rawLine = lineStr.split(' ');
+  const punctuationRegEx = /([^\w\s'])/g;
+  rawLine.forEach(chars => {
+    const wordPuncSplit = chars.split(punctuationRegEx).filter(str => str !== '');
+    wordPuncSplit.forEach(chars => {
+      const isPunctuation = chars.search(punctuationRegEx) === 0;
+      const encodedChars = isPunctuation ? chars.charCodeAt() : chars;
+      encodedLine.push(encodedChars);  
+    });
+  });
+  return encodedLine;
 }
