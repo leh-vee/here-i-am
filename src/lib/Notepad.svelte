@@ -28,7 +28,7 @@
     $: xPadPosition =  -$wordIndices.wordIndex * (window.innerWidth + margin);
     $: yPadPosition =  isLineA ? 0 : -window.innerHeight; 
 
-    $: if (padEl !== undefined) {
+    $: if (padEl) {
       padEl.to({
         duration: Math.PI / 10,
         x: xPadPosition,

@@ -6,20 +6,34 @@
   export let y;
   export let wordId;
 
-  let marker; 
+  let markerEl; 
+  let isRead = false;
   
   $: isCurrentWord = wordId === $currentWordId;
-  $: radius = isCurrentWord ? 5 : 3;
-  $: fill = isCurrentWord ? 'gold' : 'dimgrey';
   
-  let isRead = false;
-  $: if (isCurrentWord) isRead = true;
+  const duration = Math.PI / 10;
+  $: if (isCurrentWord && markerEl) {
+    isRead = true;
+    markerEl.to({
+      duration,
+      radius: 5,
+      fill: 'gold'
+    });
+  } else if (markerEl) {
+    markerEl.to({
+      duration,
+      radius: 3,
+      fill: 'dimgrey'
+    });
+  }
+
+
   
 </script>
 
 <Circle config={{ 
   x, y, 
-  radius, 
+  radius: 3,
   visible: isRead, 
-  fill,
-}} bind:handle={marker} />
+  fill: 'dimgrey'
+}} bind:handle={markerEl} />
