@@ -1,6 +1,6 @@
 <script>
     import { Group, Text } from 'svelte-konva';
-    import { currentVerse, wordIndices } from '../stores/text.js';
+    import { currentVerse, wordIndices, isLineBreak } from '../stores/text.js';
 
     let padEl;
     const padWordEls = { a: [], b: [] };
@@ -29,8 +29,7 @@
     $: yPadPosition =  isLineA ? 0 : -window.innerHeight; 
 
     $: if (padEl) {
-      const isNewLine = padEl.y() !== yPadPosition;
-      const duration = isNewLine ? Math.PI / 2 : Math.PI / 10;
+      const duration = $isLineBreak ? Math.PI / 2 : Math.PI / 10;
       padEl.to({
         duration,
         x: xPadPosition,

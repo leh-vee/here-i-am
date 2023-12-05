@@ -51,6 +51,8 @@ function createWordIndicesStore() {
       let nextLine = line;
       let nextVerseIndex = verseIndex;
 
+      let isBreak = false;
+
       const isEndOfTheLine = wordIndex == poem[verseIndex][line].length - 1;
       const isLineA = line == 'a';
       const isLastVerse = verseIndex == poem.length - 1
@@ -60,12 +62,14 @@ function createWordIndicesStore() {
       } else if (isLineA) {
         nextLine = 'b';
         nextWordIndex = 0;
+        isBreak = true;
       } else if (!isLastVerse) {
         nextVerseIndex += 1;
         nextLine = 'a';
         nextWordIndex = 0;
       }
-
+      isLineBreak.set(isBreak);
+      
       return {
         verseIndex: nextVerseIndex,
         line: nextLine,
@@ -77,6 +81,8 @@ function createWordIndicesStore() {
       let prevLine = line;
       let prevVerseIndex = verseIndex;
 
+      let isBreak = false;
+
       const isStartOfTheLine = wordIndex == 0;
       const isLineB = line == 'b';
 
@@ -84,8 +90,11 @@ function createWordIndicesStore() {
         prevWordIndex -= 1;
       } else if (isLineB) {
         prevLine = 'a';
+        isBreak = true;
         prevWordIndex = poem[verseIndex][prevLine].length - 1;
       }
+
+      isLineBreak.set(isBreak);
       
       return {
         verseIndex: prevVerseIndex,
@@ -97,6 +106,8 @@ function createWordIndicesStore() {
 }
 export const wordIndices = createWordIndicesStore();
 
+export const isLineBreak = writable(false);
+
 export const currentWord = derived(
   [wordIndices], ([$wordIndices]) => {
     const { verseIndex, line, wordIndex } = $wordIndices;
@@ -107,7 +118,7 @@ export const currentWord = derived(
 export const currentWordId = derived(
   [wordIndices], ([$wordIndices]) => {
     const { verseIndex, line, wordIndex } = $wordIndices;
-    return `${verseIndex}${line}${wordIndex}`;
+    return `${verseIndex}-${line}-${wordIndex}`;
   }
 );
 
@@ -135,14 +146,6 @@ export const currentVerseIndex = derived(
 export const nVerseWords = derived(
   [currentVerse], ([$currentVerse]) => {
     return $currentVerse['a'].length + $currentVerse['b'].length;
-  }
-);
-
-export const isFirstVerseTriad = derived(
-  [wordIndices], ([$wordIndices]) => {
-    let isFirstVerse = false;
-    if ($wordIndices.verseIndex < 3) isFirstVerse = true;
-    return isFirstVerse;
   }
 );
 
@@ -197,5 +200,13 @@ export const isLastVerseWord = derived(
       isLastVerseWord = true;
     }
     return isLastVerseWord;
+  }
+);
+
+export const isFirstVerseTriad = derived(
+  [wordIndices], ([$wordIndices]) => {
+    let isFirstVerse = false;
+    if ($wordIndices.verseIndex < 3) isFirstVerse = true;
+    return isFirstVerse;
   }
 );

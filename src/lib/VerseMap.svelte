@@ -20,10 +20,10 @@
 }}>
   {#each $currentVerse['a'] as _, i}
     <WordMarker x={xSpaceDeltaA * i} y={-yOffsetPx} 
-      wordId={`${$currentVerseIndex}a${i}`} />
+      wordId={`${$currentVerseIndex}-a-${i}`} />
   {/each}
   {#each $currentVerse['b'] as _, i}
     <WordMarker x={xSpaceDeltaB * i} y={yOffsetPx}
-      wordId={`${$currentVerseIndex}b${i}`} />
+      wordId={`${$currentVerseIndex}-b-${i}`} />
   {/each}
 </Group>

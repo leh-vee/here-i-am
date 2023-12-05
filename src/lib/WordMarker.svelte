@@ -1,17 +1,18 @@
 <script>
   import { Circle } from 'svelte-konva';
-  import { currentWordId } from '../stores/text.js';
+  import { currentWordId, isLineBreak } from '../stores/text.js';
  
   export let x;
   export let y;
   export let wordId;
 
+  $: isCurrentWord = wordId === $currentWordId;
+
   let markerEl; 
   let isRead = false;
   
-  $: isCurrentWord = wordId === $currentWordId;
+  $: duration = $isLineBreak ? Math.PI / 2 : Math.PI / 10;
   
-  const duration = Math.PI / 10;
   $: if (isCurrentWord && markerEl) {
     isRead = true;
     markerEl.to({
@@ -27,8 +28,6 @@
     });
   }
 
-
-  
 </script>
 
 <Circle config={{ 
