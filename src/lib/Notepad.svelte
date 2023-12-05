@@ -29,8 +29,10 @@
     $: yPadPosition =  isLineA ? 0 : -window.innerHeight; 
 
     $: if (padEl) {
+      const isNewLine = padEl.y() !== yPadPosition;
+      const duration = isNewLine ? Math.PI / 2 : Math.PI / 10;
       padEl.to({
-        duration: Math.PI / 10,
+        duration,
         x: xPadPosition,
         y: yPadPosition
       });
