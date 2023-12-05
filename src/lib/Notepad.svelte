@@ -30,10 +30,7 @@
 <Group config={{ 
   width: groupWidth, 
   height: window.innerHeight * 2,
-  x: 0, 
-  y: 0,
-  scaleX: 1.0,
-  scaleY: 1,
+  x: 0, y: 0
 }} bind:handle={padEl}>
   {#each $currentVerse['a'] as word, i}
     <Text config={{

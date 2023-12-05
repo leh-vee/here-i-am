@@ -1,7 +1,7 @@
 <script>
   import { Stage, Layer, Text } from 'svelte-konva';
   import { wordIndices, isLastVerseWord, isFirstVerseWord, nVerseWords,
-    currentWord, nextWord, previousWord, isLastWordInLineA } from '../stores/text.js';
+    currentWord, isLastWordInLineA } from '../stores/text.js';
   import { swipe } from 'svelte-gestures';
   import { createEventDispatcher } from 'svelte';
 
@@ -97,7 +97,7 @@
   <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
     <Layer config={{ visible: isVisible }} >
       <Text config={{
-        text: $previousWord,
+        text: '',
         offsetX: window.innerWidth,
         ...textProps
       }} bind:handle={textBoxes[0]} />
@@ -106,37 +106,15 @@
         ...textProps
       }} bind:handle={textBoxes[1]} />
       <Text config={{
-        text: $nextWord,
+        text: '',
         offsetX: -window.innerWidth,
         ...textProps
       }} bind:handle={textBoxes[2]} />
     </Layer>
   </Stage>
-  <div class='controller'>
-    <span class='back button'
-      on:click={ () => { if (isSwipable) { wordSwiped({ detail: { direction: 'right' } })} } } ></span>
-    <span class='forward button'
-      on:click={ () => { if (isSwipable) { wordSwiped() } } } ></span>
-  </div>
 </div>
 
 <style>
-  .controller {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 25%;
-    display: flex;
-    z-index: 1;
-  }
-
-  .controller .button {
-    width: 50%;
-    text-align: center;
-    vertical-align: baseline;
-    font-size: 5vw;
-  }
-
   .word {
     position: absolute;
     top: 0;
