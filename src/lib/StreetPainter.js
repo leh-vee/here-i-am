@@ -60,18 +60,19 @@ export default class StreetPainter {
       endNodeId = blockProps.from_street_node_id;
     }
     const nPointsInLine = blockCoords.length - 1;
+    const blockDrawSpeed = StreetPainter.randomNumberBetween(1, 0.25);
     let startPointIndex = 0;
     return new Promise(async (resolve) => {
       while (startPointIndex < nPointsInLine) {
         let vectorCoords = [blockCoords[startPointIndex], blockCoords[startPointIndex + 1]];
-        await this.animateVector(vectorCoords);
+        await this.animateVector(vectorCoords, blockDrawSpeed);
         startPointIndex+= 1;
       }
       resolve({ id: block.id, endNodeId });
     });
   }
 
-  animateVector(coords) {
+  animateVector(coords, segmentLength) {
     return new Promise((resolve) => {
     
       const fromPoint = this.projection(coords[0]);
@@ -81,7 +82,7 @@ export default class StreetPainter {
       const yDelta = toPoint[1] - fromPoint[1];
       
       const lineLength = Math.sqrt(xDelta ** 2 + yDelta ** 2);
-      const segmentLength = StreetPainter.randomNumberBetween(0.75, 0.25);
+      
       const segmentPercentOfLineLength = segmentLength / lineLength;
     
       const xSegmentDelta = xDelta * segmentPercentOfLineLength;
