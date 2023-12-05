@@ -5,11 +5,10 @@
   import VerseNumber from './VerseNumber.svelte';
   import { currentChannelFromSefirahCoordsPx, 
     currentChannelToSefirahCoordsPx } from '../stores/treeOfLife.js';
-  import Word from './Word.svelte';
-  import LineMarkers from './LineMarkers.svelte';
   import Notepad from './Notepad.svelte';
+  import VerseMap from './VerseMap.svelte';
   import Ilan from './Ilan.svelte';
-  import { wordIndices, currentVerse } from '../stores/text.js';
+  import { wordIndices, currentVerseIndex } from '../stores/text.js';
 
   const movements = ['summary', 'countdown', 'fromEllipsis', 'flight', 'recall', 'toEllipsis'];
   let currentMovementIndex = 0;
@@ -51,22 +50,26 @@
 </Layer>
 <Layer config={{ visible: !isCountdown && !isSummary }} >
   <StreetTraces />
-  {#if isFromEllipsis }
+  <!-- {#if isFromEllipsis }
     <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
-  {/if}
+  {/if} -->
   {#if !isCountdown && !isSummary}
-    <Notepad />
+    {#key $currentVerseIndex}
+      <Notepad /> 
+      <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
+      <VerseMap />
+      <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } />
+    {/key}
   {/if}
   <!-- <Word isEllipsis={ isEllipsis } isVisible={!isCountdown && !isSummary} 
     on:coda={codaSequence} on:nextMovement={ () => { currentMovementIndex += 1 } } 
     isFlight={isFlight} /> 
   {#if isFlight || isRecall}
-    <LineMarkers words={ $currentVerse['a'] } line={'a'} />
-    <LineMarkers words={ $currentVerse['b'] } line={'b'} />
-  {/if} -->
+    // VerseMap
+  {/if}
   {#if isToEllipsis }
     <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } />
-  {/if}
+  {/if} -->
 </Layer>
 <div class='controller'>
   <span class='back button'

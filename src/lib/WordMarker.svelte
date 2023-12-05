@@ -1,23 +1,25 @@
 <script>
   import { Circle } from 'svelte-konva';
-  import { wordIndices } from '../stores/text.js';
-
-  export let word;
-  export let line;
-  export let wordIndexInLine; 
+  import { currentWordId } from '../stores/text.js';
+ 
   export let x;
   export let y;
-  
-  $: isCurrentLine = line === $wordIndices['line'];
-  $: isCurrentWord = isCurrentLine && $wordIndices.wordIndex === wordIndexInLine;
-  
-  let hasBeenCurrentWord = isCurrentWord;
-  $: if (isCurrentWord) hasBeenCurrentWord = true;
+  export let wordId;
 
-  $: fill = isCurrentWord ? 'gold' : 'dimgrey';
-  $: visible = (isCurrentWord || hasBeenCurrentWord) ? true : false;
+  let marker; 
+  
+  $: isCurrentWord = wordId === $currentWordId;
   $: radius = isCurrentWord ? 5 : 3;
+  $: fill = isCurrentWord ? 'gold' : 'dimgrey';
+  
+  let isRead = false;
+  $: if (isCurrentWord) isRead = true;
   
 </script>
 
-<Circle config={{ x, y, name: word, radius, visible, fill }} />
+<Circle config={{ 
+  x, y, 
+  radius, 
+  visible: isRead, 
+  fill,
+}} bind:handle={marker} />

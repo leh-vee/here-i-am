@@ -104,41 +104,10 @@ export const currentWord = derived(
   }
 );
 
-export const nextWord = derived(
+export const currentWordId = derived(
   [wordIndices], ([$wordIndices]) => {
     const { verseIndex, line, wordIndex } = $wordIndices;
-    
-    const isEndOfTheLine = wordIndex == poem[verseIndex][line].length - 1;
-    const isLineA = line == 'a';
-
-    let nextWord = null;
-    
-    if (!isEndOfTheLine) {
-      nextWord = poem[verseIndex][line][wordIndex + 1];
-    } else if (isLineA) {
-      nextWord = poem[verseIndex]['b'][0];
-    } 
-
-    return nextWord;
-  }
-);
-
-export const previousWord = derived(
-  [wordIndices], ([$wordIndices]) => {
-    const { verseIndex, line, wordIndex } = $wordIndices;
-
-    const isStartOfTheLine = wordIndex == 0;
-    const isLineB = line == 'b';
-
-    let previousWord = null;
-
-    if (!isStartOfTheLine) {
-      previousWord = poem[verseIndex][line][wordIndex - 1];
-    } else if (isLineB) {
-      previousWord = poem[verseIndex]['a'][0];
-    }
-
-    return previousWord;
+    return `${verseIndex}${line}${wordIndex}`;
   }
 );
 
