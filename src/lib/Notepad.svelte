@@ -4,6 +4,17 @@
 
     let padEl;
     const padWordEls = { a: [], b: [] };
+    const wordAttrs = {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      align: 'center',
+      verticalAlign: 'middle',
+      fontSize: 50,
+      fontFamily: 'Love Ya Like A Sister',
+      fillEnabled: true,
+      fill: 'gold',
+      strokeWidth: 0,
+    }
 
     $: nWordsLineA = $currentVerse['a'].length;
     $: nWordsLineB = $currentVerse['b'].length;
@@ -35,32 +46,16 @@
   {#each $currentVerse['a'] as word, i}
     <Text config={{
       text: word,
-      width: window.innerWidth,
-      height: window.innerHeight,
       x: i * (window.innerWidth + wordBoxMarginA),
-      align: 'center',
-      verticalAlign: 'middle',
-      fontSize: 50,
-      fontFamily: 'Love Ya Like A Sister',
-      fillEnabled: true,
-      fill: 'gold',
-      strokeWidth: 0,
+      ...wordAttrs
     }} bind:handle={padWordEls['a'][i]} />
   {/each}
   {#each $currentVerse['b'] as word, i}
     <Text config={{
       text: word,
-      width: window.innerWidth,
-      height: window.innerHeight,
       x: i * (window.innerWidth + wordBoxMarginB),
       y: window.innerHeight,
-      align: 'center',
-      verticalAlign: 'middle',
-      fontSize: 50,
-      fontFamily: 'Love Ya Like A Sister',
-      fillEnabled: true,
-      fill: 'gold',
-      strokeWidth: 0,
+      ...wordAttrs
     }} bind:handle={padWordEls['b'][i]} />
   {/each}
 </Group>
