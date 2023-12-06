@@ -1,7 +1,7 @@
 <script>
   import { sefirotPoints, channelLines, channelProjections, 
     ilanProjection, ilanBlocks, groundZeroProjection, groundZeroBlocks } from './stores/treeOfLife.js';
-  import CountdownConductor from './lib/CountdownConductor.svelte';
+  import Countdown from './lib/Countdown.svelte';
   import { onMount } from 'svelte';
   import { fetchSefirot, fetchBlocksForProjection } from './api/client.js';
   import { channelFeatures } from './utils/geoJson.js';
@@ -58,7 +58,7 @@
       <Overture startCollapse={ v.isDataInitialized } 
         on:allBlocksCrawled={ commenceCountdown } />
     {:else if v.isCountdown}
-      <CountdownConductor />
+      <Countdown />
     {/if}
   </Stage>
 </div>
