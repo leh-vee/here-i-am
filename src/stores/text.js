@@ -122,11 +122,19 @@ export const currentWordId = derived(
   }
 );
 
-export const nextPunctuation = derived(
+export const isPunctuationNext = derived(
   [wordIndices], ([$wordIndices]) => {
     const { verseIndex, line, wordIndex } = $wordIndices;
-    const punctuationMark = poem[verseIndex]['punctuation'][line][wordIndex];
-    return punctuationMark;
+    const mark = poem[verseIndex]['punctuation'][line][wordIndex];
+    return mark !== undefined;
+  }
+);
+
+export const punctuationMark = derived(
+  [wordIndices, isPunctuationNext], ([$wordIndices, $isPunctuationNext]) => {
+    const { verseIndex, line, wordIndex } = $wordIndices;
+    const pM = $isPunctuationNext ? poem[verseIndex]['punctuation'][line][wordIndex] : ""; 
+    return pM;
   }
 );
 
