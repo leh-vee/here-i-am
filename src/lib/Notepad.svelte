@@ -9,11 +9,11 @@
       height: window.innerHeight,
       align: 'center',
       verticalAlign: 'middle',
-      fontSize: 50,
+      fontSize: Math.round(window.innerWidth / 9),
       fontFamily: 'Love Ya Like A Sister',
       fillEnabled: true,
       fill: 'gold',
-      strokeWidth: 0,
+      strokeWidth: 0
     }
 
     $: nWordsLineA = $currentVerse['a'].length;
