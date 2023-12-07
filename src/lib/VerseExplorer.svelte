@@ -31,7 +31,7 @@
     <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
     <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } />
     <VerseMap />
-    <Notepad />
+    <Notepad isPunctuating={animatePunctuation} />
     <Punctuation animate={animatePunctuation} on:punctuated={ postPunctuation } /> 
   {/key}
 </Layer>

@@ -1,9 +1,11 @@
 <script>
     import { Group, Text } from 'svelte-konva';
-    import { currentVerse, wordIndices, isLineBreak } from '../stores/text.js';
+    import { currentVerse, wordIndices, isLineBreak, currentWordId,
+      currentVerseIndex } from '../stores/text.js';
 
+    export let isPunctuating = false;
     let padEl;
-    const padWordEls = { a: [], b: [] };
+    let stashedWordEl = null;
     const wordAttrs = {
       width: window.innerWidth,
       height: window.innerHeight,
@@ -25,18 +27,47 @@
 
     $: isLineA = $wordIndices.line === 'a';
     $: margin = isLineA ? wordBoxMarginA : wordBoxMarginB;
-    $: xPadPosition =  -$wordIndices.wordIndex * (window.innerWidth + margin);
+    $: textElWidth = (window.innerWidth + margin);
+    $: xPadPosition =  -$wordIndices.wordIndex * textElWidth;
     $: yPadPosition =  isLineA ? 0 : -window.innerHeight; 
+    
+    const wordPanDuration = Math.PI / 10;
+    const lineBreakPanDuration = Math.PI / 2;
 
-    $: if (padEl) {
-      const duration = $isLineBreak ? Math.PI / 2 : Math.PI / 10;
-      padEl.to({
-        duration,
-        x: xPadPosition,
-        y: yPadPosition
-      });
+    $: {
+      const d = $isLineBreak ? lineBreakPanDuration : wordPanDuration;
+      movePadToCurrentWord(xPadPosition, yPadPosition, d);
     }
 
+    function movePadToCurrentWord(x, y, duration) {
+      if (padEl !== undefined) {
+        padEl.to({ 
+          duration, x, y,
+          onFinish: () => {
+            if (stashedWordEl !== null) unstashWord();
+          }
+        });
+      }
+    }
+
+    $: if (isPunctuating) stashWord(); 
+
+    function stashWord() {
+      const duration = Math.PI / 10;
+      stashedWordEl = padEl.findOne(`#${$currentWordId}`);
+      stashedWordEl.to({ 
+        duration, 
+        x: -textElWidth,
+        onFinish: () => {
+          stashedWordEl.visible(false);
+        } 
+      });
+    }  
+    
+    function unstashWord() {
+      stashedWordEl.visible(true);
+      stashedWordEl = null;
+    }
 </script>
 
 <Group config={{ 
@@ -48,15 +79,17 @@
     <Text config={{
       text: word,
       x: i * (window.innerWidth + wordBoxMarginA),
+      id: `${$currentVerseIndex}-a-${i}`,
       ...wordAttrs
-    }} bind:handle={padWordEls['a'][i]} />
+    }} />
   {/each}
   {#each $currentVerse['b'] as word, i}
     <Text config={{
       text: word,
       x: i * (window.innerWidth + wordBoxMarginB),
       y: window.innerHeight,
+      id: `${$currentVerseIndex}-b-${i}`,
       ...wordAttrs
-    }} bind:handle={padWordEls['b'][i]} />
+    }} />
   {/each}
 </Group>
