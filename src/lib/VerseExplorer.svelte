@@ -7,20 +7,20 @@
   import StreetTraces from './StreetTraces.svelte';
   import { currentChannelFromSefirahCoordsPx, 
     currentChannelToSefirahCoordsPx } from '../stores/treeOfLife.js';
-  import { currentVerseIndex, wordIndices, isPunctuationNext } from '../stores/text.js';
+  import { currentVerseIndex, wordIndices, isPunctuationNext, isPunctuation } from '../stores/text.js';
 
   let animatePunctuation = false;
 
   function read() {
     if ($isPunctuationNext) {
-      animatePunctuation = true;
+      isPunctuation.set(true);
     } else {
       wordIndices.nextWord();
     }
   }
   
   function postPunctuation() {
-    animatePunctuation = false;
+    isPunctuation.set(false);
     wordIndices.nextWord();
   }
 </script>
@@ -31,8 +31,8 @@
     <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
     <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } />
     <VerseMap />
-    <Notepad isPunctuating={animatePunctuation} />
-    <Punctuation animate={animatePunctuation} on:punctuated={ postPunctuation } /> 
+    <Notepad />
+    <Punctuation on:punctuated={ postPunctuation } /> 
   {/key}
 </Layer>
 <div class='controller'>

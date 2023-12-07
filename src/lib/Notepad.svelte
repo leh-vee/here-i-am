@@ -1,9 +1,8 @@
 <script>
     import { Group, Text } from 'svelte-konva';
     import { currentVerse, wordIndices, isLineBreak, currentWordId,
-      currentVerseIndex } from '../stores/text.js';
+      currentVerseIndex, isPunctuation } from '../stores/text.js';
 
-    export let isPunctuating = false;
     let padEl;
     let stashedWordEl = null;
     const wordAttrs = {
@@ -50,7 +49,7 @@
       }
     }
 
-    $: if (isPunctuating) stashWord(); 
+    $: if ($isPunctuation) stashWord(); 
 
     function stashWord() {
       const duration = Math.PI / 10;

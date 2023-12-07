@@ -1,6 +1,6 @@
 <script>
   import { Circle } from 'svelte-konva';
-  import { currentWordId, isLineBreak } from '../stores/text.js';
+  import { currentWordId, isLineBreak, isPunctuation } from '../stores/text.js';
  
   export let x;
   export let y;
@@ -14,6 +14,7 @@
   $: duration = $isLineBreak ? Math.PI / 2 : Math.PI / 10;
   
   $: if (isCurrentWord && markerEl) {
+    console.log('expand word marker...')
     isRead = true;
     markerEl.to({
       duration,
@@ -21,6 +22,15 @@
       fill: 'gold'
     });
   } else if (markerEl) {
+    contractMarker();
+  }
+
+  $: if ($isPunctuation && markerEl.radius() === 5) {
+    contractMarker();
+  }
+
+  function contractMarker() {
+    console.log('contract word marker...')
     markerEl.to({
       duration,
       radius: 3,
