@@ -7,20 +7,20 @@
   import StreetTraces from './StreetTraces.svelte';
   import { currentChannelFromSefirahCoordsPx, 
     currentChannelToSefirahCoordsPx } from '../stores/treeOfLife.js';
-  import { currentVerseIndex, wordIndices, isPunctuationNext, isPunctuation } from '../stores/text.js';
+  import { currentVerseIndex, wordIndices, isPunctuationNext, isCaesura } from '../stores/text.js';
 
   let animatePunctuation = false;
 
   function read() {
     if ($isPunctuationNext) {
-      isPunctuation.set(true);
+      isCaesura.set(true);
     } else {
       wordIndices.nextWord();
     }
   }
   
   function postPunctuation() {
-    isPunctuation.set(false);
+    isCaesura.set(false);
     wordIndices.nextWord();
   }
 </script>

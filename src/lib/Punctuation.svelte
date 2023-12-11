@@ -1,13 +1,13 @@
 <script>
   import { Text } from 'svelte-konva';
   import { createEventDispatcher } from 'svelte';
-  import { punctuationMark, isPunctuation } from '../stores/text.js';
+  import { punctuationMark, isCaesura } from '../stores/text.js';
 
   let punctuationEl;
   const dispatch = createEventDispatcher();
   const duration = Math.PI / 2
 
-  $: if ($isPunctuation) animateIn();
+  $: if ($isCaesura) animateIn();
 
   function animateIn() {
     punctuationEl.to({

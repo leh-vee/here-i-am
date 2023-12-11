@@ -1,7 +1,7 @@
 <script>
     import { Group, Text } from 'svelte-konva';
     import { currentVerse, wordIndices, isLineBreak, currentWordId,
-      currentVerseIndex, isPunctuation } from '../stores/text.js';
+      currentVerseIndex, isCaesura } from '../stores/text.js';
 
     let padEl;
     let stashedWordEl = null;
@@ -49,7 +49,7 @@
       }
     }
 
-    $: if ($isPunctuation) stashWord(); 
+    $: if ($isCaesura) stashWord(); 
 
     function stashWord() {
       const duration = Math.PI / 10;

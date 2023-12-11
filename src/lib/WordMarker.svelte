@@ -1,6 +1,6 @@
 <script>
   import { Circle } from 'svelte-konva';
-  import { currentWordId, isLineBreak, isPunctuation } from '../stores/text.js';
+  import { currentWordId, isLineBreak, isCaesura } from '../stores/text.js';
  
   export let x;
   export let y;
@@ -25,7 +25,7 @@
     contractMarker();
   }
 
-  $: if ($isPunctuation && markerEl.radius() === 5) {
+  $: if ($isCaesura && markerEl.radius() === 5) {
     contractMarker();
   }
 
