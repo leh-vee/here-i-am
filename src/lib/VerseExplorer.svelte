@@ -7,13 +7,38 @@
   import StreetTraces from './StreetTraces.svelte';
   import { currentChannelFromSefirahCoordsPx, 
     currentChannelToSefirahCoordsPx } from '../stores/treeOfLife.js';
-  import { currentVerseIndex, wordIndices, isPunctuationNext, isCaesura } from '../stores/text.js';
+  import { currentVerseIndex, wordIndices, isPunctuationNext, 
+    isCaesura, isEllipsis, isFirstVerseWord, isLastVerseWord } from '../stores/text.js';
+
+  $: isPreVerseElliptical = $isEllipsis && $isFirstVerseWord;
+  $: isPostVerseElliptical = $isEllipsis && $isLastVerseWord;
+  
+  $: if (isPreVerseElliptical) flight();
+  $: if (isPostVerseElliptical) coda();
+
+  function flight() {
+    setTimeout(() => { isEllipsis.set(false) }, Math.PI * 1000);
+  } 
+  
+  function coda() {
+    setTimeout(() => { wordIndices.nextVerse() }, Math.PI * 1000);
+  }
 
   function nextWord() {
-    if ($isPunctuationNext) {
-      isCaesura.set(true);
-    } else {
-      wordIndices.nextWord();
+    if (!$isEllipsis) {
+      if ($isPunctuationNext) {
+        isCaesura.set(true);
+      } else if ($isLastVerseWord) {
+        isEllipsis.set(true);
+      } else {
+        wordIndices.nextWord();
+      }
+    }
+  }
+
+  function previousWord() {
+    if (!$isEllipsis) {
+      wordIndices.previousWord();
     }
   }
   
@@ -26,15 +51,19 @@
 <Layer>
   {#key $currentVerseIndex}
     <StreetTraces />
-    <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
-    <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } />
-    <VerseMap />
-    <Notepad />
-    <Punctuation on:punctuated={ postPunctuation } /> 
+    {#if isPreVerseElliptical}
+      <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
+    {:else if isPostVerseElliptical}
+      <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } />
+    {:else if !$isEllipsis}
+      <VerseMap />
+      <Notepad />
+      <Punctuation on:punctuated={ postPunctuation } /> 
+    {/if}
   {/key}
 </Layer>
 <div class='controller'>
-  <span class='back button' on:click={ wordIndices.previousWord } ></span>
+  <span class='back button' on:click={ previousWord } ></span>
   <span class='forward button' on:click={ nextWord } ></span>
 </div>
 
