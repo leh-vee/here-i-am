@@ -9,6 +9,7 @@
     currentChannelToSefirahCoordsPx } from '../stores/treeOfLife.js';
   import { currentVerseIndex, wordIndices, isPunctuationNext, 
     isCaesura, isEllipsis, isFirstVerseWord, isLastVerseWord } from '../stores/text.js';
+  import Ellipsis from './Ellipsis.svelte';
 
   $: isPreVerseElliptical = $isEllipsis && $isFirstVerseWord;
   $: isPostVerseElliptical = $isEllipsis && $isLastVerseWord;
@@ -51,14 +52,17 @@
 <Layer>
   {#key $currentVerseIndex}
     <StreetTraces />
+    {#if $isEllipsis}
+      <Ellipsis />
+    {:else}
+      <VerseMap />
+      <Notepad />
+      <Punctuation on:punctuated={ postPunctuation } /> 
+    {/if}
     {#if isPreVerseElliptical}
       <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
     {:else if isPostVerseElliptical}
       <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } />
-    {:else if !$isEllipsis}
-      <VerseMap />
-      <Notepad />
-      <Punctuation on:punctuated={ postPunctuation } /> 
     {/if}
   {/key}
 </Layer>
