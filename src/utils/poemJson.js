@@ -30,10 +30,12 @@ function splitWordsStripPunctuation(str) {
 function mapPunctuationForLine(lineStr) {
   const map = {};
   const splitLine = lineStr.split(punctuationRegEx);
+  const nPunctuationMarks = splitLine.length / 2 - 1;
   let lastWordIndex = -1;
-  for (let i = 0; i*2 < splitLine.length - 2; i += 2) {
-    const wordsBeforeMark = splitLine[i].trim().split(' ');
-    const punctuationMark = splitLine[i+1];
+  for (let i = 0;  i < nPunctuationMarks; i++) {
+    const index = i*2;
+    const wordsBeforeMark = splitLine[index].trim().split(' ');
+    const punctuationMark = splitLine[index+1];
     lastWordIndex += wordsBeforeMark.length;
     map[lastWordIndex] = punctuationMark;
   }
