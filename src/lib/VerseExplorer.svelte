@@ -9,9 +9,7 @@
     currentChannelToSefirahCoordsPx } from '../stores/treeOfLife.js';
   import { currentVerseIndex, wordIndices, isPunctuationNext, isCaesura } from '../stores/text.js';
 
-  let animatePunctuation = false;
-
-  function read() {
+  function nextWord() {
     if ($isPunctuationNext) {
       isCaesura.set(true);
     } else {
@@ -37,7 +35,7 @@
 </Layer>
 <div class='controller'>
   <span class='back button' on:click={ wordIndices.previousWord } ></span>
-  <span class='forward button' on:click={ read } ></span>
+  <span class='forward button' on:click={ nextWord } ></span>
 </div>
 
 <style>
