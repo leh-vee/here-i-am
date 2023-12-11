@@ -5,14 +5,14 @@
 
   let punctuationEl;
   const dispatch = createEventDispatcher();
-  const duration = Math.PI / 3
+  const duration = Math.PI / 2
 
   $: if ($isPunctuation) animateIn();
 
   function animateIn() {
     punctuationEl.to({
       duration,
-      strokeWidth: 5,
+      strokeWidth: 2,
       onFinish: () => { animateOut() }
     });
   }
