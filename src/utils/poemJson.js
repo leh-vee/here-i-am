@@ -22,7 +22,9 @@ export async function serializePoem(poemLines) {
 }
 
 function splitWordsStripPunctuation(str) {
-  return str.replaceAll(punctuationRegEx, '').split(' ');
+  const strWithoutPunctuation = str.replaceAll(punctuationRegEx, '');
+  const words = strWithoutPunctuation.split(' ');
+  return words.filter(word => word !== '');
 }
 
 function mapPunctuationForLine(lineStr) {
