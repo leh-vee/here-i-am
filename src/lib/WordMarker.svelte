@@ -10,17 +10,13 @@
 
   let markerEl; 
   let isRead = false;
+
+  let isExpanded = false;
   
   $: duration = $isLineBreak ? Math.PI / 2 : Math.PI / 10;
   
   $: if (isCurrentWord && markerEl) {
-    console.log('expand word marker...')
-    isRead = true;
-    markerEl.to({
-      duration,
-      radius: 5,
-      fill: 'gold'
-    });
+    expandMarker();
   } else if (markerEl) {
     contractMarker();
   }
@@ -29,13 +25,27 @@
     contractMarker();
   }
 
+  function expandMarker() {
+    if (!isExpanded) {
+      isRead = true;
+      markerEl.to({
+        duration,
+        radius: 5,
+        fill: 'gold',
+        onFinish: () => { isExpanded = true }
+      });
+    }
+  }
+
   function contractMarker() {
-    console.log('contract word marker...')
-    markerEl.to({
-      duration,
-      radius: 3,
-      fill: 'dimgrey'
-    });
+    if (isExpanded) {
+      markerEl.to({
+        duration,
+        radius: 3,
+        fill: 'dimgrey',
+        onFinish: () => { isExpanded = false }
+      });
+    }
   }
 
 </script>
