@@ -213,3 +213,13 @@ export const isFirstVerseTriad = derived(
     return isFirstVerse;
   }
 );
+
+export const percentOfVerseRead = derived(
+  [nVerseWords, wordIndices], ([$nVerseWords, $wordIndices]) => {
+    const { verseIndex, line, wordIndex } = $wordIndices;
+    let nWordsRead = wordIndex;
+    if (line === 'b') nWordsRead += poem[verseIndex]['a'].length;
+    const percent = nWordsRead / $nVerseWords;
+    return percent.toPrecision(2);
+  }
+);

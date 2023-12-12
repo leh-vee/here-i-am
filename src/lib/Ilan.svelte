@@ -75,24 +75,18 @@
   radius: 3,
   opacity: 1,
   fill: 'white'
-}}
-bind:handle={fromSefirah} 
-/>
+}} bind:handle={fromSefirah} />
 <Line config={{
   points: newPathwayCoordinates,
   stroke: 'white',
   strokeWidth: 2,
   opacity: 0,
   lineCap: 'round'
-}}
-bind:handle={newPathway}
-/>
+}} bind:handle={newPathway} />
 <Circle config={{
   x: toCoordsPx[0],
   y: toCoordsPx[1],
   fill: 'white',
   radius: 0,
   opacity: 0
-}}
-bind:handle={toSefirah} 
-/>
+}} bind:handle={toSefirah} />

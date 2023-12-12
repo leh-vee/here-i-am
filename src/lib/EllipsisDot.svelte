@@ -3,12 +3,11 @@
   import { isFirstVerseWord } from '../stores/text.js';
   
   export let dotIndex = 0;
-  const colors = ['red', 'yellow', 'green'];
-  $: fill = $isFirstVerseWord ? colors[dotIndex] : 'gold';
+  const palette = ['red', 'yellow', 'green'];
+  $: colors = $isFirstVerseWord ? palette : [...palette].reverse();
+  $: fill = colors[dotIndex];
   let text = "   ";
 
-
-  
   $: {
     let ellipsisArray = [" ", " ", " "];
     ellipsisArray[dotIndex] = ".";

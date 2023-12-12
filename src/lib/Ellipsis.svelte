@@ -1,11 +1,11 @@
 <script>
   import EllipsisDot from "./EllipsisDot.svelte";
-  import { isFirstVerseWord } from '../stores/text.js';
+  import { onMount } from 'svelte';
 
-  let nDots = $isFirstVerseWord ? 1 : 3;
+  let nDots = 1;
   $: dots = new Array(nDots);
 
-  $: if ($isFirstVerseWord) getSetGo();
+  onMount(async () => { getSetGo() });
 
   function getSetGo() {
     setInterval(() => {

@@ -3,7 +3,8 @@
   import { Image } from 'svelte-konva';
   import { geoPath } from "d3";
   import { currentPiSlice, lastPiSlice } from '../stores/text.js';
-  import { currentChannelProjection, blocksForCurrentChannel, channelBlocks } from '../stores/treeOfLife.js';
+  import { currentChannelProjection, blocksForCurrentChannel, 
+    channelBlocks } from '../stores/treeOfLife.js';
   import { fetchBlocksWithinRadius } from '../api/client.js';
   import distance from "@turf/distance";
 

@@ -6,24 +6,23 @@
   import SefirahMarker from './SefirahMarker.svelte';
   import StreetTraces from './StreetTraces.svelte';
   import { currentChannelFromSefirahCoordsPx, 
-    currentChannelToSefirahCoordsPx } from '../stores/treeOfLife.js';
+    currentChannelToSefirahCoordsPx, blocksForCurrentChannel } from '../stores/treeOfLife.js';
   import { currentVerseIndex, wordIndices, isPunctuationNext, 
     isCaesura, isEllipsis, isFirstVerseWord, isLastVerseWord } from '../stores/text.js';
   import Ellipsis from './Ellipsis.svelte';
 
   $: isPreVerseElliptical = $isEllipsis && $isFirstVerseWord;
   $: isPostVerseElliptical = $isEllipsis && $isLastVerseWord;
-  
-  $: if (isPreVerseElliptical) flight();
-  $: if (isPostVerseElliptical) coda();
 
-  function flight() {
-    setTimeout(() => { isEllipsis.set(false) }, Math.PI * 1000);
-  } 
-  
-  function coda() {
-    setTimeout(() => { wordIndices.nextVerse() }, Math.PI * 1000);
+  $: if (isPreVerseElliptical && $blocksForCurrentChannel) {
+    setTimeout(flight, Math.PI * 1000);
   }
+
+  $: if (isPostVerseElliptical) {
+    setTimeout(coda, Math.PI * 1000);
+  }
+  function flight() { isEllipsis.set(false) }
+  function coda() { wordIndices.nextVerse() }
 
   function nextWord() {
     if (!$isEllipsis) {
@@ -51,18 +50,18 @@
 
 <Layer>
   {#key $currentVerseIndex}
-    <StreetTraces />
-    {#if $isEllipsis}
-      <Ellipsis />
-    {:else}
-      <VerseMap />
-      <Notepad />
-      <Punctuation on:punctuated={ postPunctuation } /> 
-    {/if}
-    {#if isPreVerseElliptical}
+    <StreetTraces />  
+    {#if $blocksForCurrentChannel}
       <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
-    {:else if isPostVerseElliptical}
-      <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } />
+      <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
+        isFromSefirah={false} />
+      {#if $isEllipsis}
+        <Ellipsis />
+      {:else}
+        <VerseMap />
+        <Notepad />
+        <Punctuation on:punctuated={ postPunctuation } />
+      {/if}
     {/if}
   {/key}
 </Layer>
