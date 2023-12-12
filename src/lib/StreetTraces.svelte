@@ -1,5 +1,4 @@
 <script>
-  // @ts-nocheck
   import { onMount } from 'svelte';
   import { Image } from 'svelte-konva';
   import { geoPath } from "d3";
@@ -38,7 +37,7 @@
       console.log('blocks for current channel projection fetched');
       if ($lastPiSlice !== $currentPiSlice) {
         channelBlocks.setForIndices($lastPiSlice, $currentPiSlice, blocks);
-      } else if ($lastPiSlice !== 0) {
+      } else if (Number($lastPiSlice) !== 0) {
         channelBlocks.setForIndices($lastPiSlice, 0, blocks);
       }
     });
