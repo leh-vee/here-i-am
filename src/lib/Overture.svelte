@@ -15,7 +15,7 @@
   const ellipsisStopAttrs = {
     radius: 5,
     opacity: Math.PI / 10,  
-    fill: 'grey'
+    fill: 'darkgrey'
   }
 
   const ellipsisStopDelta = ellipsisStopAttrs.radius * 3;
@@ -72,7 +72,10 @@
     ellipsisStops[0].to(animeAttrs);
     ellipsisStops[2].to({
       ...animeAttrs,
-      onFinish: () => { isCollapsed = true }
+      onFinish: () => { 
+        ellipsisStops.forEach(stop => stop.fill('gold'));
+        isCollapsed = true;
+      }
     });
   }
 
