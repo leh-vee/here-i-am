@@ -1,13 +1,14 @@
 <script>
   import { sefirotPoints, channelLines, channelProjections, 
     ilanProjection, ilanBlocks, groundZeroProjection, groundZeroBlocks } from './stores/treeOfLife.js';
-  import Countdown from './lib/Countdown.svelte';
-  import { onMount } from 'svelte';
-  import { fetchSefirot, fetchBlocksForProjection } from './api/client.js';
-  import { channelFeatures } from './utils/geoJson.js';
-  import { projectionForSefirah, projectionsForChannels, projectionForIlan } from './utils/projections.js';
-  import { Stage } from 'svelte-konva';
-  import Overture from './lib/Overture.svelte';
+    import { onMount } from 'svelte';
+    import { fetchSefirot, fetchBlocksForProjection } from './api/client.js';
+    import { channelFeatures } from './utils/geoJson.js';
+    import { projectionForSefirah, projectionsForChannels, projectionForIlan } from './utils/projections.js';
+    import { Stage } from 'svelte-konva';
+    import Overture from './lib/Overture.svelte';
+    import Countdown from './lib/Countdown.svelte';
+    import VerseExplorer from './lib/VerseExplorer.svelte';
 
   const v = {
     screenPx: {
@@ -58,7 +59,7 @@
       <Overture startCollapse={ v.isDataInitialized } 
         on:allBlocksCrawled={ commenceCountdown } />
     {:else if v.isCountdown}
-      <Countdown />
+      <VerseExplorer />
     {/if}
   </Stage>
 </div>
