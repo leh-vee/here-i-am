@@ -12,7 +12,7 @@
 
   const duration = Math.PI / 2;
 
-  $: if (isFromSefirah && !$isEllipsis) {
+  $: if (isFromSefirah && !$isEllipsis && markerEl) {
     markerEl.to({ 
       duration, fill: 'dimgrey',
       onFinish: () => { fill = 'dimgrey' } 

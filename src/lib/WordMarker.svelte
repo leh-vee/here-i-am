@@ -10,8 +10,6 @@
 
   let markerEl; 
   let isRead = false;
-
-  let isExpanded = false;
   
   $: duration = $isLineBreak ? Math.PI / 2 : Math.PI / 10;
   
@@ -26,24 +24,22 @@
   }
 
   function expandMarker() {
-    if (!isExpanded) {
+    if (markerEl.radius() < 5) {
       isRead = true;
       markerEl.to({
         duration,
         radius: 5,
-        fill: 'gold',
-        onFinish: () => { isExpanded = true }
+        fill: 'gold'
       });
     }
   }
 
   function contractMarker() {
-    if (isExpanded) {
+    if (markerEl.radius() > 3) {
       markerEl.to({
         duration,
         radius: 3,
-        fill: 'dimgrey',
-        onFinish: () => { isExpanded = false }
+        fill: 'dimgrey'
       });
     }
   }

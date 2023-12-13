@@ -9,22 +9,35 @@
     currentChannelToSefirahCoordsPx } from '../stores/treeOfLife';
   import { currentVerseIndex, wordIndices, isPunctuationNext, 
     isCaesura, isEllipsis, isFirstVerseWord, isLastVerseWord,
-    isInBetweenWords } from '../stores/text';
+    isInBetweenWords, currentWordId } from '../stores/text';
   import Ellipsis from './Ellipsis.svelte';
   import { swipe } from 'svelte-gestures';
 
 
   $: isPreVerseElliptical = $isEllipsis && $isFirstVerseWord;
   $: isPostVerseElliptical = $isEllipsis && $isLastVerseWord;
-
+  
+  let isInFlight = false;
   $: if (isPreVerseElliptical && $blocksForCurrentChannel) {
-    setTimeout(flight, Math.PI * 1000);
+    setTimeout(() => {
+      isEllipsis.set(false); 
+      isInFlight = true;
+    }, Math.PI * 1000);
+  }
+  
+  $: if (isInFlight && !$isInBetweenWords) {
+    if (!$isLastVerseWord) {
+      setTimeout(() => {
+        wordIndices.nextWord();
+      }, Math.PI * 10);  
+    } else {
+      isInFlight = false;
+    }
   }
 
   $: if (isPostVerseElliptical) {
     setTimeout(coda, Math.PI * 1000);
   }
-  function flight() { isEllipsis.set(false) }
   function coda() { wordIndices.nextVerse() }
 
   function nextWord() {
@@ -75,7 +88,7 @@
             <Ellipsis />
           {:else}
             <VerseMap />
-            <Notepad />
+            <Notepad inFlight={isInFlight} />
             <Punctuation on:punctuated={ postPunctuation } />
           {/if}
         {/if}
