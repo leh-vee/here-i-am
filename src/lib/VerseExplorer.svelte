@@ -31,7 +31,12 @@
         wordIndices.nextWord();
       }, Math.PI * 10);  
     } else {
-      isInFlight = false;
+      setTimeout(() => {
+        if (isInFlight) {
+          isEllipsis.set(true);
+          isInFlight = false;
+        }
+      }, Math.PI * 1000);
     }
   }
 
@@ -64,6 +69,7 @@
   }
 
   function swiped(event) {
+    if ($isLastVerseWord && isInFlight) isInFlight = false;
     if ($isInBetweenWords) return null;
     const direction = event.detail.direction;
     if (direction === 'left') {
@@ -97,8 +103,8 @@
   </Stage>
 </div>
 <div class='controller'>
-  <span class='back button' on:click={ previousWord } ></span>
-  <span class='forward button' on:click={ nextWord } ></span>
+  <span class='back button' on:click={ () => { swiped({ detail: { direction: 'right' } }) } } ></span>
+  <span class='forward button' on:click={ () => { swiped({ detail: { direction: 'left' } }) } } ></span>
 </div>
 
 <style>
