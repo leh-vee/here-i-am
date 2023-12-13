@@ -109,6 +109,7 @@ export const wordIndices = createWordIndicesStore();
 export const isLineBreak = writable(false);
 export const isCaesura = writable(false);
 export const isEllipsis = writable(true);
+export const isInBetweenWords = writable(false)
 
 export const currentWord = derived(
   [wordIndices], ([$wordIndices]) => {

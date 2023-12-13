@@ -5,10 +5,11 @@
   import VerseMap from './VerseMap.svelte';
   import SefirahMarker from './SefirahMarker.svelte';
   import StreetTraces from './StreetTraces.svelte';
-  import { currentChannelFromSefirahCoordsPx, 
-    currentChannelToSefirahCoordsPx, blocksForCurrentChannel } from '../stores/treeOfLife';
+  import { currentChannelFromSefirahCoordsPx, blocksForCurrentChannel,
+    currentChannelToSefirahCoordsPx } from '../stores/treeOfLife';
   import { currentVerseIndex, wordIndices, isPunctuationNext, 
-    isCaesura, isEllipsis, isFirstVerseWord, isLastVerseWord } from '../stores/text';
+    isCaesura, isEllipsis, isFirstVerseWord, isLastVerseWord,
+    isInBetweenWords } from '../stores/text';
   import Ellipsis from './Ellipsis.svelte';
   import { swipe } from 'svelte-gestures';
 
@@ -50,6 +51,7 @@
   }
 
   function swiped(event) {
+    if ($isInBetweenWords) return null;
     const direction = event.detail.direction;
     if (direction === 'left') {
       nextWord();
@@ -60,7 +62,7 @@
 </script>
 
 <div id='verse-explorer' use:swipe={{ timeframe: 300, minSwipeDistance: 60 }} 
-  on:swipe={ (e) => { swiped(e) } }>
+  on:swipe={(e) => { swiped(e) }}>
   <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
     <Layer>
       {#key $currentVerseIndex}

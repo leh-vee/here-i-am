@@ -1,7 +1,7 @@
 <script>
     import { Group, Text } from 'svelte-konva';
     import { currentVerse, wordIndices, isLineBreak, currentWordId,
-      currentVerseIndex, isCaesura } from '../stores/text.js';
+      currentVerseIndex, isCaesura, isInBetweenWords } from '../stores/text.js';
 
     let padEl;
     let stashedWordEl = null;
@@ -40,10 +40,12 @@
 
     function movePadToCurrentWord(x, y, duration) {
       if (padEl !== undefined) {
+        isInBetweenWords.set(true);
         padEl.to({ 
           duration, x, y,
           onFinish: () => {
             if (stashedWordEl !== null) unstashWord();
+            isInBetweenWords.set(false);
           }
         });
       }
