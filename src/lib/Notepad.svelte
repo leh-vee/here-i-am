@@ -54,7 +54,7 @@
     $: if ($isCaesura) stashWord(); 
 
     function stashWord() {
-      const duration = Math.PI / 10;
+      const duration = Math.PI / 5;
       stashedWordEl = padEl.findOne(`#${$currentWordId}`);
       stashedWordEl.to({ 
         duration, 
