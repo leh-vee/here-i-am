@@ -5,7 +5,9 @@
   import { ilanProjection, ilanBlocks, sefirotPoints } from '../stores/treeOfLife.js';
   import { currentVerseIndex, lastPiSlice, currentPiSlice } from '../stores/text.js';
   import { onMount } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
 
+  const dispatch = createEventDispatcher();
   const canvas = document.createElement('canvas');
 
   onMount(async () => {
@@ -63,7 +65,10 @@
     newPathway.to({
       points: endCoords,
       opacity: 0,
-      duration: chargeDuration
+      duration: chargeDuration,
+      onFinish: () => {
+        dispatch('blazed');
+      }
     });
   }
 </script>

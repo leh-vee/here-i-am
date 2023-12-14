@@ -9,20 +9,22 @@
     currentChannelToSefirahCoordsPx } from '../stores/treeOfLife';
   import { currentVerseIndex, wordIndices, isPunctuationNext, 
     isCaesura, isEllipsis, isFirstVerseWord, isLastVerseWord,
-    isInBetweenWords, currentWordId } from '../stores/text';
+    isInBetweenWords } from '../stores/text';
   import Ellipsis from './Ellipsis.svelte';
   import { swipe } from 'svelte-gestures';
 
+  export let isReading = false;
 
   $: isPreVerseElliptical = $isEllipsis && $isFirstVerseWord;
-  $: isPostVerseElliptical = $isEllipsis && $isLastVerseWord;
-  
   let isInFlight = false;
-  $: if (isPreVerseElliptical && $blocksForCurrentChannel) {
-    setTimeout(() => {
+
+  function postElliptical() {
+    if (isPreVerseElliptical) {
       isEllipsis.set(false); 
       isInFlight = true;
-    }, Math.PI * 1000);
+    } else {
+      wordIndices.nextVerse();
+    }
   }
   
   $: if (isInFlight && !$isInBetweenWords) {
@@ -39,11 +41,6 @@
       }, Math.PI * 1000);
     }
   }
-
-  $: if (isPostVerseElliptical) {
-    setTimeout(coda, Math.PI * 1000);
-  }
-  function coda() { wordIndices.nextVerse() }
 
   function nextWord() {
     if (!$isEllipsis) {
@@ -82,7 +79,7 @@
 
 <div id='verse-explorer' use:swipe={{ timeframe: 300, minSwipeDistance: 60 }} 
   on:swipe={(e) => { swiped(e) }}>
-  <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
+  <Stage config={{ width: window.innerWidth, height: window.innerHeight, visible: isReading }}>
     <Layer>
       {#key $currentVerseIndex}
         <StreetTraces />  
@@ -90,8 +87,8 @@
           <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
           <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
             isFromSefirah={false} />
-          {#if $isEllipsis}
-            <Ellipsis />
+          {#if $isEllipsis && isReading}
+            <Ellipsis on:go={ postElliptical } />
           {:else}
             <VerseMap />
             <Notepad inFlight={isInFlight} />

@@ -8,7 +8,6 @@
     import { Stage } from 'svelte-konva';
     import Overture from './lib/Overture.svelte';
     import Countdown from './lib/Countdown.svelte';
-    import VerseExplorer from './lib/VerseExplorer.svelte';
 
   const v = {
     screenPx: {
@@ -59,7 +58,7 @@
       <Overture startCollapse={ v.isDataInitialized } 
         on:allBlocksCrawled={ commenceCountdown } />
     {:else if v.isCountdown}
-      <VerseExplorer />
+      <Countdown />
     {/if}
   </Stage>
 </div>

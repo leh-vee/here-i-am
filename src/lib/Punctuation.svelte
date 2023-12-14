@@ -21,7 +21,7 @@
     punctuationEl.to({
       duration,
       strokeWidth: 0,
-      onFinish: () => { dispatch("punctuated"); }
+      onFinish: () => { dispatch('punctuated') }
     });
   }
 

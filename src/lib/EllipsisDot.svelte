@@ -1,11 +1,8 @@
 <script>
   import { Text } from "svelte-konva";
-  import { isFirstVerseWord } from '../stores/text.js';
   
   export let dotIndex = 0;
-  const palette = ['red', 'yellow', 'green'];
-  $: colors = $isFirstVerseWord ? palette : [...palette].reverse();
-  $: fill = colors[dotIndex];
+  export let fill;
   let text = "   ";
 
   $: {
