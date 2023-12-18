@@ -75,8 +75,18 @@
     ellipsisStops[2].to({
       ...animeAttrs,
       onFinish: () => { 
-        ellipsisStops.forEach(stop => stop.fill('gold'));
-        isCollapsed = true;
+        ellipsisStops.forEach((stop, i) => {
+          if (i === 0) {
+            stop.to({
+              duration: Math.PI / 10,
+              opacity: 1,
+              fill: 'gold',
+              onFinish: () => { isCollapsed = true }
+            });
+          } else {
+            stop.destroy();
+          }
+        });
       }
     });
   }
