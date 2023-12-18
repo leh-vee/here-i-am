@@ -1,5 +1,5 @@
 <script>
-  import { Layer, Circle } from 'svelte-konva';
+  import { Layer, Circle, Ring } from 'svelte-konva';
   import Konva from 'konva';
   import StreetPainter from './StreetPainter.js';
   import { sefirotPoints } from '../stores/treeOfLife.js';
@@ -23,6 +23,8 @@
   const xCentre = window.innerWidth / 2;
 
   const ellipsisStops = new Array(3);
+
+  let ringOfFate;
 
   $: if (ellipsisStops[0]) {
     incomingTextAnime();
@@ -87,7 +89,13 @@
     const groundZeroSefirahId = $sefirotPoints.features[0].id;
     crawler.drawBlocksFromNode(groundZeroSefirahId).then(orphanedBlocks => {
       console.log('all blocks have been drawn but for...', orphanedBlocks);
-      dispatch('allBlocksCrawled');
+      ringOfFate.to({
+        duration: Math.PI,
+        opacity: 1,
+        onFinish: () => {
+          dispatch('allBlocksCrawled');
+        }
+      });
     });
   } 
 
@@ -111,3 +119,14 @@
   }} bind:handle={ellipsisStops[2]} />
 </Layer>
 <Layer bind:handle={crawlLayer} />
+<Layer>
+  <Ring config={{ 
+    x: xCentre,
+    y: yCentre,
+    innerRadius: ellipsisStopAttrs.radius,
+    outerRadius: window.innerHeight * 2,
+    fill: 'black',
+    strokeEnabled: false,
+    opacity: 0
+  }} bind:handle={ringOfFate} />
+</Layer>
