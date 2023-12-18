@@ -5,6 +5,7 @@
 
   export let blocksGeoJson;
   export let projection;
+  let isMounted = false;
   let canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
 
@@ -14,9 +15,10 @@
 
     ctx.lineWidth = 2;
     ctx.strokeStyle = 'grey';
+    isMounted = true;
   });
 
-  $: if (blocksGeoJson) renderBlocks();
+  $: if (blocksGeoJson && isMounted) renderBlocks();
 
   function renderBlocks() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);

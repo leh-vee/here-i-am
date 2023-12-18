@@ -1,8 +1,8 @@
 <script>
   import { Layer } from 'svelte-konva';
   import VerseNumber from './VerseNumber.svelte';
-  import { currentVerseIndex, wordIndices } from '../stores/text.js';
-  import Ilan from './Ilan.svelte';
+  import { currentVerseIndex } from '../stores/text.js';
+  import Pathways from './Pathways.svelte';
   import VerseExplorer from './VerseExplorer.svelte';
 
   let showNewPathway = true;
@@ -21,12 +21,10 @@
       showVerseNumber = false;
     }, Math.PI * 1000);
   }
-
-
 </script>
 
 <Layer config={{ visible: showNewPathway }}>
-  <Ilan go={ showNewPathway } on:blazed={ postPathway } />
+  <Pathways go={ showNewPathway } on:blazed={ postPathway } />
 </Layer>
 <Layer config={{ visible: showVerseNumber }} >
   <VerseNumber />

@@ -1,28 +1,12 @@
 <script>
   import { tick } from 'svelte';
-  import { Image, Line, Circle } from 'svelte-konva';
-  import { geoPath } from "d3";
+  import { Line, Circle } from 'svelte-konva';
   import { ilanProjection, ilanBlocks, sefirotPoints } from '../stores/treeOfLife.js';
   import { currentVerseIndex, lastPiSlice, currentPiSlice } from '../stores/text.js';
-  import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
+  import StreetMap from './StreetMap.svelte';
 
   const dispatch = createEventDispatcher();
-  const canvas = document.createElement('canvas');
-
-  onMount(async () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const ctx = canvas.getContext('2d');
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = 'grey';
-
-    const geoGenerator = geoPath().projection($ilanProjection).context(ctx);
-    ctx.beginPath();
-    geoGenerator({type: 'FeatureCollection', features: $ilanBlocks.features })
-    ctx.stroke();
-  });
   
   export let go = false;
   let newPathway;
@@ -73,7 +57,7 @@
   }
 </script>
 
-<Image config={{ image: canvas }} />
+<StreetMap blocksGeoJson= { $ilanBlocks } projection={ $ilanProjection } />
 <Circle config={{
   x: fromCoordsPx[0],
   y: fromCoordsPx[1],
