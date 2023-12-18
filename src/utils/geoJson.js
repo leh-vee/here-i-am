@@ -8,12 +8,7 @@ const GEO_JSON_TEMPLATES = {
     type: "Feature",
     properties: {}, 
     geometry: { "type": "LineString", "coordinates": [] } 
-  },
-  wordCrumbFeature: { 
-    type: "Feature", 
-    properties: { word: '' },
-    geometry: { "type": "Point", "coordinates": [] } 
-  }  
+  }
 } 
 
 export function channelFeatures(sefirot) {
