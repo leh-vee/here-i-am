@@ -14,7 +14,7 @@
     canvas.height = window.innerHeight;
 
     ctx.lineWidth = 2;
-    ctx.strokeStyle = 'grey';
+    ctx.strokeStyle = 'dimgrey';
     isMounted = true;
   });
 
