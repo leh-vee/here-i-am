@@ -4,19 +4,39 @@
   import Notepad from './Notepad.svelte';
   import VerseMap from './VerseMap.svelte';
   import SefirahMarker from './SefirahMarker.svelte';
-  import StreetTraces from './StreetTraces.svelte';
+  import StreetMap from './StreetMap.svelte';
   import { currentChannelFromSefirahCoordsPx, blocksForCurrentChannel,
-    currentChannelToSefirahCoordsPx } from '../stores/treeOfLife';
+    currentChannelToSefirahCoordsPx, currentChannelProjection, 
+    channelBlocks } from '../stores/treeOfLife';
   import { currentVerseIndex, wordIndices, isPunctuationNext, 
     isCaesura, isEllipsis, isFirstVerseWord, isLastVerseWord,
     isInBetweenWords } from '../stores/text';
   import Ellipsis from './Ellipsis.svelte';
   import { swipe } from 'svelte-gestures';
+  import { fetchBlocksWithinRadius } from '../api/client.js';
+  import distance from "@turf/distance";
+  import { currentPiSlice, lastPiSlice } from '../stores/text.js';
 
   export let isReading = false;
 
   $: isPreVerseElliptical = $isEllipsis && $isFirstVerseWord;
   let isInFlight = false;
+
+  $: if ($blocksForCurrentChannel === undefined) fetchBlocksForProjection();
+
+  function fetchBlocksForProjection() {
+    const pCentre = $currentChannelProjection.center();
+    const pRadius = distance(pCentre, $currentChannelProjection.invert([0,0]));
+    fetchBlocksWithinRadius(pCentre, pRadius).then(blocks => {
+      console.log('blocks for current channel projection fetched');
+      if ($lastPiSlice !== $currentPiSlice) {
+        channelBlocks.setForIndices($lastPiSlice, $currentPiSlice, blocks);
+      } else if (Number($lastPiSlice) !== 0) {
+        channelBlocks.setForIndices($lastPiSlice, 0, blocks);
+      }
+    });
+    return true;
+  }
 
   function postElliptical() {
     if (isPreVerseElliptical) {
@@ -82,7 +102,8 @@
   <Stage config={{ width: window.innerWidth, height: window.innerHeight, visible: isReading }}>
     <Layer>
       {#key $currentVerseIndex}
-        <StreetTraces />  
+      <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
+        projection={ $currentChannelProjection } />  
         {#if $blocksForCurrentChannel}
           <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
           <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
@@ -100,7 +121,9 @@
   </Stage>
 </div>
 <div class='controller'>
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
   <span class='back button' on:click={ () => { swiped({ detail: { direction: 'right' } }) } } ></span>
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
   <span class='forward button' on:click={ () => { swiped({ detail: { direction: 'left' } }) } } ></span>
 </div>
 
