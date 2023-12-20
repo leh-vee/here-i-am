@@ -84,7 +84,7 @@
               onFinish: () => { isCollapsed = true }
             });
           } else {
-            stop.destroy();
+            stop.hide();
           }
         });
       }
