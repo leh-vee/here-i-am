@@ -99,15 +99,27 @@
     const groundZeroSefirahId = $sefirotPoints.features[0].id;
     crawler.drawBlocksFromNode(groundZeroSefirahId).then(orphanedBlocks => {
       console.log('all blocks have been drawn but for...', orphanedBlocks);
-      ringOfFate.to({
-        duration: Math.PI,
-        opacity: 1,
-        onFinish: () => {
-          dispatch('allBlocksCrawled');
-        }
-      });
+      fadeRaysOut();
     });
   } 
+
+  function fadeRaysOut() {
+    ringOfFate.to({
+      duration: Math.PI,
+      opacity: 1,
+      onFinish: () => { goNova() }
+    });
+  }
+
+  function goNova() {
+    ringOfFate.to({
+      duration: Math.PI,
+      innerRadius: 0,
+      onFinish: () => {
+        dispatch('allBlocksCrawled');
+      }
+    });
+  }
 
 </script>
 
