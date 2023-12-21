@@ -105,14 +105,14 @@
       {#key $currentVerseIndex}
         <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
           projection={ $currentChannelProjection } />
-          {#if $blocksForCurrentChannel}
+        <Stopwatch inFlight={ isInFlight }/>  
+        {#if $blocksForCurrentChannel}
           <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
           <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
           isFromSefirah={false} />
           {#if $isEllipsis && isReading}
             <Ellipsis on:go={ postElliptical } />
           {:else}
-            <Stopwatch />  
             <VerseMap />
             <Notepad inFlight={isInFlight} />
             <Punctuation on:punctuated={ postPunctuation } />

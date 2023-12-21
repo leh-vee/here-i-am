@@ -1,20 +1,23 @@
 <script>
   import { Text } from 'svelte-konva';  
-  import { onMount } from 'svelte';
+  import { isEllipsis, isFirstVerseWord, isLastVerseWord  } from '../stores/text';
+
+  export let inFlight = false;
 
   let start = new Date();
   $: startTime = start.getTime();
 
-  let current = new Date();
+  let current = start;
   $: currentTime = current.getTime();
 
-  $: elapsedSecs = currentTime - startTime;
+  $: elapsedMillisecs = currentTime - startTime;
+  $: isZero = elapsedMillisecs === 0;
 
-	$: minutes = Math.floor(elapsedSecs / 60000);
+	$: minutes = Math.floor(elapsedMillisecs / 1000 / 60);
   $: mm = zeroPadded(minutes);
-	$: seconds = Math.floor(elapsedSecs / 1000);
+	$: seconds = Math.floor(elapsedMillisecs / 1000) % 60;
   $: ss = zeroPadded(seconds);
-  $: ms = elapsedSecs.toString().slice(-3, -1);
+  $: ms = isZero ? "00" : elapsedMillisecs.toString().slice(-3, -1);
 
   $: formattedElapsed = `${mm}:${ss}.${ms}`;
 
@@ -22,15 +25,21 @@
     return number >= 10 ? number.toString() : `0${number}`;
   }
 
-  onMount(() => {
-		const interval = setInterval(() => {
+  $: isPreVerseElliptical = $isEllipsis && $isFirstVerseWord;
+  $: isPostVerseElliptical = $isEllipsis && $isLastVerseWord;
+
+  let interval;
+
+  $: if (isPreVerseElliptical) start = current;
+  $: if (isPostVerseElliptical) clearInterval(interval);
+  $: if (inFlight) {
+    start = new Date();
+    current = start;
+    interval = setInterval(() => {
 			current = new Date();
 		}, 10);
+  }
 
-		return () => {
-			clearInterval(interval);
-		};
-	});
 </script>
 
 <Text config={{
