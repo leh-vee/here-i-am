@@ -21,10 +21,11 @@
   const ellipsisStopDelta = ellipsisStopAttrs.radius * 3;
   const yCentre = window.innerHeight / 2;
   const xCentre = window.innerWidth / 2;
+  const circumradius = Math.hypot(xCentre, yCentre); 
 
   const ellipsisStops = new Array(3);
 
-  let ringOfFate;
+  let iris;
 
   $: if (ellipsisStops[0]) {
     incomingTextAnime();
@@ -104,7 +105,7 @@
   } 
 
   function fadeRaysOut() {
-    ringOfFate.to({
+    iris.to({
       duration: Math.PI,
       opacity: 1,
       onFinish: () => { goNova() }
@@ -112,7 +113,7 @@
   }
 
   function goNova() {
-    ringOfFate.to({
+    iris.to({
       duration: Math.PI,
       innerRadius: 0,
       onFinish: () => {
@@ -146,9 +147,9 @@
     x: xCentre,
     y: yCentre,
     innerRadius: ellipsisStopAttrs.radius,
-    outerRadius: window.innerHeight * 2,
+    outerRadius: circumradius,
     fill: 'black',
     strokeEnabled: false,
     opacity: 0
-  }} bind:handle={ringOfFate} />
+  }} bind:handle={iris} />
 </Layer>
