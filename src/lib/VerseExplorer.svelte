@@ -5,6 +5,7 @@
   import VerseMap from './VerseMap.svelte';
   import SefirahMarker from './SefirahMarker.svelte';
   import StreetMap from './StreetMap.svelte';
+  import Stopwatch from './Stopwatch.svelte';
   import { currentChannelFromSefirahCoordsPx, blocksForCurrentChannel,
     currentChannelToSefirahCoordsPx, currentChannelProjection, 
     channelBlocks } from '../stores/treeOfLife';
@@ -102,15 +103,16 @@
   <Stage config={{ width: window.innerWidth, height: window.innerHeight, visible: isReading }}>
     <Layer>
       {#key $currentVerseIndex}
-      <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
-        projection={ $currentChannelProjection } />  
-        {#if $blocksForCurrentChannel}
+        <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
+          projection={ $currentChannelProjection } />
+          {#if $blocksForCurrentChannel}
           <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
           <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
-            isFromSefirah={false} />
+          isFromSefirah={false} />
           {#if $isEllipsis && isReading}
             <Ellipsis on:go={ postElliptical } />
           {:else}
+            <Stopwatch />  
             <VerseMap />
             <Notepad inFlight={isInFlight} />
             <Punctuation on:punctuated={ postPunctuation } />
