@@ -43,16 +43,16 @@
 </script>
 
 <Text config={{
+  y: Math.round(window.innerHeight / 5.5),
   text: formattedElapsed,
   width: window.innerWidth,
   height: window.innerHeight / 2,
   align: 'center',
   verticalAlign: 'middle',
-  fontSize: 50,
-  fontFamily: 'Inconsolata',
+  fontSize: 9,
+  fontFamily: 'digital',
   fillEnabled: true,
   fill: 'white',
-  stroke: 'white',
-  strokeWidth: 1
+  strokeWidth: 0
 }} />
 
