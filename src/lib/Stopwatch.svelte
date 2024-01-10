@@ -17,7 +17,7 @@
   $: mm = zeroPadded(minutes);
 	$: seconds = Math.floor(elapsedMillisecs / 1000) % 60;
   $: ss = zeroPadded(seconds);
-  $: ms = isZero ? "00" : elapsedMillisecs.toString().slice(-3, -1);
+  $: ms = isZero ? "0" : elapsedMillisecs.toString().slice(-3, -2);
 
   $: formattedElapsed = `${mm}:${ss}.${ms}`;
 
