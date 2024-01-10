@@ -5,7 +5,7 @@
   import VerseMap from './VerseMap.svelte';
   import SefirahMarker from './SefirahMarker.svelte';
   import StreetMap from './StreetMap.svelte';
-  import Stopwatch from './Stopwatch.svelte';
+  import Stopwatch from './PiWatch.svelte';
   import { currentChannelFromSefirahCoordsPx, blocksForCurrentChannel,
     currentChannelToSefirahCoordsPx, currentChannelProjection, 
     channelBlocks } from '../stores/treeOfLife';
