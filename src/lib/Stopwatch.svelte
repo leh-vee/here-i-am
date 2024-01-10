@@ -21,6 +21,8 @@
 
   $: formattedElapsed = `${mm}:${ss}.${ms}`;
 
+  $: isPieVisible = elapsedMillisecs > 194000 && elapsedMillisecs < 194099; 
+  
   function zeroPadded(number) {
     return number >= 10 ? number.toString() : `0${number}`;
   }
@@ -43,7 +45,7 @@
 </script>
 
 <Text config={{
-  y: Math.round(window.innerHeight / 5.5),
+  y: Math.round(window.innerHeight / 5.3),
   text: formattedElapsed,
   width: window.innerWidth,
   height: window.innerHeight / 2,
@@ -54,5 +56,17 @@
   fillEnabled: true,
   fill: 'white',
   strokeWidth: 0
+}} />
+
+<Text config={{
+  y: Math.round(window.innerHeight / 8),
+  text: "🥧",
+  width: window.innerWidth,
+  height: window.innerHeight / 2,
+  align: 'center',
+  verticalAlign: 'middle',
+  fontSize: 50,
+  fillEnabled: true,
+  visible: isPieVisible
 }} />
 
