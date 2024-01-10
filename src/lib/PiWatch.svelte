@@ -20,14 +20,33 @@
   $: mm = zeroPadded(minutes);
 	$: seconds = Math.floor(elapsedMillisecs / 1000) % 60;
   $: ss = zeroPadded(seconds);
-  $: ms = isZero ? "0" : elapsedMillisecs.toString().slice(-3, -2);
+  $: zeroMsText = "000".slice(0, $nPiesScored + 1); 
+  $: ms = isZero ? zeroMsText : getMillisecsText(elapsedMillisecs.toString(), $nPiesScored);
 
   $: formattedElapsed = `${mm}:${ss}.${ms}`;
 
-  $: isPiSeconds = elapsedMillisecs > 194000 && elapsedMillisecs < 194099;
+  let isPiSeconds = false;
+  $: if ($nPiesScored === 0) {
+    isPiSeconds = elapsedMillisecs > 194100 && elapsedMillisecs < 194199;
+  } else if ($nPiesScored === 1) {
+    isPiSeconds = elapsedMillisecs > 194150 && elapsedMillisecs < 194159;
+  } else if ($nPiesScored >= 2) {
+    isPiSeconds = elapsedMillisecs === 194159;
+  }
+  
   
   function zeroPadded(number) {
     return number >= 10 ? number.toString() : `0${number}`;
+  }
+
+  function getMillisecsText(elapsedText, nPiesScored) {
+    let text = elapsedText.slice(-3, -2);
+    if (nPiesScored === 1) {
+      text = elapsedText.slice(-3, -1);
+    } else if (nPiesScored >= 2) {
+      text = elapsedText.slice(-3);
+    }
+    return text;
   }
 
   $: isPreVerseElliptical = $isEllipsis && $isFirstVerseWord;
