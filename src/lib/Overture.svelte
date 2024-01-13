@@ -21,11 +21,8 @@
   const ellipsisStopDelta = ellipsisStopAttrs.radius * 3;
   const yCentre = window.innerHeight / 2;
   const xCentre = window.innerWidth / 2;
-  const circumradius = Math.hypot(xCentre, yCentre); 
 
   const ellipsisStops = new Array(3);
-
-  let iris;
 
   $: if (ellipsisStops[0]) {
     incomingTextAnime();
@@ -98,32 +95,25 @@
     const crawlLayerCanvas = crawlLayer.getCanvas();
     const crawler = new StreetPainter(crawlLayerCanvas, $groundZeroProjection, $groundZeroBlocks);
     const groundZeroSefirahId = $sefirotPoints.features[0].id;
-    crawler.drawBlocksFromNode(groundZeroSefirahId).then(orphanedBlocks => {
-      console.log('all blocks have been drawn but for...', orphanedBlocks);
-      fadeRaysOut();
-    });
-  } 
-
-  function fadeRaysOut() {
-    iris.to({
-      duration: Math.PI,
-      opacity: 1,
-      onFinish: () => { goNova() }
-    });
+    setTimeout(() => {
+      crawler.drawBlocksFromNode(groundZeroSefirahId).then(orphanedBlocks => {
+        console.log('all blocks have been drawn but for...', orphanedBlocks);
+        goNova();
+      });
+    }, 200);
   }
 
   function goNova() {
-    iris.to({
-      duration: Math.PI,
-      innerRadius: 0,
-      onFinish: () => {
-        dispatch('allBlocksCrawled');
-      }
+    ellipsisStops[0].to({
+      duration: Math.PI / 10,
+      fill: 'black',
+      radius: Math.hypot(xCentre, yCentre),
+      onFinish: () => { dispatch('allBlocksCrawled') }
     });
   }
-
 </script>
 
+<Layer bind:handle={crawlLayer} />
 <Layer>
   <Circle config={{ 
     x: xCentre - ellipsisStopDelta,
@@ -140,16 +130,4 @@
     y: yCentre,
     ...ellipsisStopAttrs
   }} bind:handle={ellipsisStops[2]} />
-</Layer>
-<Layer bind:handle={crawlLayer} />
-<Layer>
-  <Ring config={{ 
-    x: xCentre,
-    y: yCentre,
-    innerRadius: ellipsisStopAttrs.radius,
-    outerRadius: circumradius,
-    fill: 'black',
-    strokeEnabled: false,
-    opacity: 0
-  }} bind:handle={iris} />
 </Layer>
