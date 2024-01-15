@@ -1,5 +1,5 @@
 <script>
-  import { Layer, Circle, Ring } from 'svelte-konva';
+  import { Circle } from 'svelte-konva';
   import Konva from 'konva';
   import { isDataInitialized } from '../stores/base.js';
   import { createEventDispatcher } from 'svelte';
@@ -71,13 +71,13 @@
       ...animeAttrs,
       onFinish: () => { 
         ellipsisStops.forEach((stop, i) => {
-          if (i === 0) {
+          if (i === 1) {
             stop.to({
               duration: Math.PI / 10,
               opacity: 1,
               onFinish: () => { 
                 isCollapsed = true;
-                dispatch('collapsed');
+                dispatch('collapsed', ellipsisStops[1]);
               }
             });
           } else {
@@ -89,20 +89,18 @@
   }
 </script>
 
-<Layer>
-  <Circle config={{ 
-    x: xCentre - ellipsisStopDelta,
-    y: yCentre,
-    ...ellipsisStopAttrs
-  }} bind:handle={ellipsisStops[0]} />
-  <Circle config={{ 
-    x: xCentre,
-    y: yCentre,
-    ...ellipsisStopAttrs
-  }} bind:handle={ellipsisStops[1]} />
-  <Circle config={{ 
-    x: xCentre + ellipsisStopDelta,
-    y: yCentre,
-    ...ellipsisStopAttrs
-  }} bind:handle={ellipsisStops[2]} />
-</Layer>
+<Circle config={{ 
+  x: xCentre - ellipsisStopDelta,
+  y: yCentre,
+  ...ellipsisStopAttrs
+}} bind:handle={ellipsisStops[0]} />
+<Circle config={{ 
+  x: xCentre,
+  y: yCentre,
+  ...ellipsisStopAttrs
+}} bind:handle={ellipsisStops[1]} />
+<Circle config={{ 
+  x: xCentre + ellipsisStopDelta,
+  y: yCentre,
+  ...ellipsisStopAttrs
+}} bind:handle={ellipsisStops[2]} />
