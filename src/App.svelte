@@ -1,6 +1,8 @@
 <script>
-  import { sefirotPoints, channelLines, channelProjections, 
-    ilanProjection, ilanBlocks, groundZeroProjection, groundZeroBlocks } from './stores/treeOfLife.js';
+    import { sefirotPoints, channelLines, channelProjections, 
+      ilanProjection, ilanBlocks, groundZeroProjection, 
+      groundZeroBlocks } from './stores/treeOfLife.js';
+    import { isDataInitialized } from './stores/base.js'; 
     import { onMount } from 'svelte';
     import { fetchSefirot, fetchBlocksForProjection } from './api/client.js';
     import { channelFeatures } from './utils/geoJson.js';
@@ -14,7 +16,6 @@
       width: window.innerWidth,
       height: window.innerHeight
     },
-    isDataInitialized: false,
     isOverture: true,
     isCountdown: false,
     isSwanSong: false
@@ -22,7 +23,7 @@
 
   onMount(async () => {
     await setIlanData(v.screenPx);
-    v.isDataInitialized = true;  
+    isDataInitialized.set(true);  
   });
 
   async function setIlanData(screenPx) {
@@ -55,8 +56,7 @@
 <div class='screen'>
   <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
     {#if v.isOverture}
-      <Overture startCollapse={ v.isDataInitialized } 
-        on:allBlocksCrawled={ commenceCountdown } />
+      <Overture on:dilated={ commenceCountdown } />
     {:else if v.isCountdown}
       <Countdown />
     {/if}
