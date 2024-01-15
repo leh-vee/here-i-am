@@ -1,5 +1,5 @@
 <script>
-  import { Layer, Circle, Ring } from 'svelte-konva';
+  import { Layer, Circle } from 'svelte-konva';
   import Konva from 'konva';
   import StreetPainter from './StreetPainter.js';
   import { sefirotPoints } from '../stores/treeOfLife.js';
@@ -19,8 +19,8 @@
   }
 
   const ellipsisStopDelta = ellipsisStopAttrs.radius * 3;
-  const yCentre = window.innerHeight / 2;
   const xCentre = window.innerWidth / 2;
+  const yCentre = window.innerHeight / 2;
 
   const ellipsisStops = new Array(3);
 
