@@ -1,22 +1,25 @@
 <script>
+  import { Line, Circle, Wedge, Layer, Text, Arc } from 'svelte-konva';
   import { tick } from 'svelte';
-  import { Line, Circle, Ring } from 'svelte-konva';
   import { ilanProjection, ilanBlocks, sefirotPoints } from '../stores/treeOfLife.js';
   import { currentVerseIndex, lastPiSlice, currentPiSlice } from '../stores/text.js';
   import { createEventDispatcher } from 'svelte';
   import StreetMap from './StreetMap.svelte';
 
   const dispatch = createEventDispatcher();
-
-  const circumradius = Math.hypot(window.innerWidth, window.innerHeight); 
+  const xCentre = window.innerWidth / 2;
+  const yCentre = window.innerHeight / 2;
   
   export let go = false;
   let newPathway;
   let fromSefirah;
   let toSefirah;
-  let iris;
   let newPathwayCoordinates = [0, 0, 0, 0];
+  let wedge;
+  let arc;
+  let verseNumberText;
   const chargeDuration = Math.PI / 2;
+  $: verseNumber = String($currentPiSlice);
 
   $: fromCoordsGsc = $sefirotPoints.features[$lastPiSlice].geometry.coordinates;
   $: fromCoordsPx = $ilanProjection(fromCoordsGsc);
@@ -24,34 +27,34 @@
   $: toCoordsPx = $ilanProjection(toCoordsGsc);
 
   $: isVerseIndex = Number.isInteger($currentVerseIndex);
-  $: isFirstVerse = $currentVerseIndex === 0;
 
-  $: if (isVerseIndex && newPathway && go) { 
-    if (isFirstVerse) {
-      inIris();
-    } else {
-      sendCharge();
-    }
+  $: if (isVerseIndex && newPathway && go) {
+    setTimeout(() => {
+      leaderWipe();
+    }, 1000);
   } 
 
-  function inIris() {
-    fromSefirah.to({
-      duration: 0,
-      fill: 'dimgrey'
+  function leaderWipe() {
+    wedge.to({
+      duration: Math.PI / 2, 
+      angle: 360,
+      onFinish: () => { 
+        toSefirah.fill('dimgrey');
+        wedge.destroy();
+        verseNumberText.destroy();
+        setHole();
+      }
     });
-    iris.to({
-      duration: Math.PI,
-      innerRadius: 3,
+  }
+
+  function setHole() {
+    toSefirah.to({
+      duration: Math.PI / 2,
+      radius: 3,
+      x: toCoordsPx[0],
+      y: toCoordsPx[1],
       onFinish: () => {
-        iris.to({
-          duration: Math.PI,
-          innerRadius: circumradius
-        });
-        fromSefirah.to({
-          duration: Math.PI,
-          fill: 'gold',
-          onFinish: () => { sendCharge() }
-        });
+        sendCharge();
       }
     });
   }
@@ -75,8 +78,7 @@
 
   function receiveCharge() {
     toSefirah.to({
-      radius: 3,
-      opacity: 1,
+      fill: 'gold',
       duration: chargeDuration
     });
     const endCoords = [...toCoordsPx, ...toCoordsPx];
@@ -89,37 +91,54 @@
       }
     });
   }
+
+  const initialToSefirahRadius = Math.round(xCentre * 0.7);
 </script>
 
-<StreetMap blocksGeoJson= { $ilanBlocks } projection={ $ilanProjection } />
-<Circle config={{
-  x: fromCoordsPx[0],
-  y: fromCoordsPx[1],
-  radius: 3,
-  opacity: 1,
-  fill: 'gold'
-}} bind:handle={fromSefirah} />
-<Line config={{
-  points: newPathwayCoordinates,
-  stroke: 'gold',
-  strokeWidth: 2,
-  opacity: 0,
-  lineCap: 'round'
-}} bind:handle={newPathway} />
-<Circle config={{
-  x: toCoordsPx[0],
-  y: toCoordsPx[1],
-  fill: 'gold',
-  radius: 0,
-  opacity: 0
-}} bind:handle={toSefirah} />
-{#if isFirstVerse}
-  <Ring config={{ 
+<Layer>
+  <StreetMap blocksGeoJson= { $ilanBlocks } projection={ $ilanProjection } />
+  <Circle config={{
     x: fromCoordsPx[0],
     y: fromCoordsPx[1],
-    innerRadius: 0,
-    outerRadius: circumradius,
+    radius: 0,
+    opacity: 1,
+    fill: 'gold'
+  }} bind:handle={fromSefirah} />
+  <Line config={{
+    points: newPathwayCoordinates,
+    stroke: 'gold',
+    strokeWidth: 2,
+    opacity: 0,
+    lineCap: 'round'
+  }} bind:handle={newPathway} />
+  <Circle config={{
+    x: xCentre,
+    y: yCentre,
     fill: 'black',
-    strokeEnabled: false
-  }} bind:handle={iris} />
-{/if}
+    radius: initialToSefirahRadius,
+    opacity: 1,
+    stroke: 'dimgrey',
+    strokeWidth: 2
+  }} bind:handle={toSefirah} />
+  <Text config={{
+    text: verseNumber,
+    width: window.innerWidth,
+    height: window.innerHeight,
+    align: 'center',
+    verticalAlign: 'middle',
+    fontSize: 160,
+    fillEnabled: true,
+    fill: 'grey',
+    stroke: 'dimgrey'
+  }} bind:handle={verseNumberText} />
+  <Wedge config={{
+    x: xCentre,
+    y: yCentre,
+    radius: initialToSefirahRadius,
+    angle: 0,
+    rotation: -90, 
+    fill: 'dimgrey',
+    strokeEnabled: false,
+    opacity: 1
+  }} bind:handle={wedge} />
+</Layer>

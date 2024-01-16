@@ -1,13 +1,9 @@
 <script>
-  import { Layer } from 'svelte-konva';
-  import VerseNumber from './VerseNumber.svelte';
   import { currentVerseIndex } from '../stores/text.js';
   import Pathways from './Pathways.svelte';
   import VerseExplorer from './VerseExplorer.svelte';
 
-  let showNewPathway = true;
-  let showVerseNumber = false;
-  $: isReading = !showNewPathway && !showVerseNumber;
+  let showNewPathway;
 
   $: {
     console.log('countdown cycle for verse at index...', $currentVerseIndex);
@@ -16,17 +12,10 @@
 
   function postPathway() {
     showNewPathway = false;
-    showVerseNumber = true;
-    setTimeout(() => {
-      showVerseNumber = false;
-    }, Math.PI * 1000);
   }
 </script>
 
-<Layer config={{ visible: showNewPathway }}>
+{#if showNewPathway}
   <Pathways go={ showNewPathway } on:blazed={ postPathway } />
-</Layer>
-<Layer config={{ visible: showVerseNumber }} >
-  <VerseNumber />
-</Layer>
-<VerseExplorer isReading={ isReading } />
+{/if}
+<VerseExplorer isReading={ !showNewPathway } />
