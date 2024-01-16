@@ -75,6 +75,7 @@
             stop.to({
               duration: Math.PI / 10,
               opacity: 1,
+              fill: 'gold',
               onFinish: () => { 
                 isCollapsed = true;
                 dispatch('collapsed', ellipsisStops[1]);
