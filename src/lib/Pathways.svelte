@@ -1,5 +1,5 @@
 <script>
-  import { Line, Circle, Wedge, Layer, Text, Arc } from 'svelte-konva';
+  import { Line, Circle, Wedge, Layer, Text } from 'svelte-konva';
   import { tick } from 'svelte';
   import { ilanProjection, ilanBlocks, sefirotPoints } from '../stores/treeOfLife.js';
   import { currentVerseIndex, lastPiSlice, currentPiSlice } from '../stores/text.js';
@@ -16,7 +16,6 @@
   let toSefirah;
   let newPathwayCoordinates = [0, 0, 0, 0];
   let wedge;
-  let arc;
   let verseNumberText;
   const chargeDuration = Math.PI / 2;
   $: verseNumber = String($currentPiSlice);
