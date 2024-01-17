@@ -39,7 +39,6 @@
       duration: Math.PI / 2, 
       angle: 360,
       onFinish: () => { 
-        toSefirah.fill('dimgrey');
         wedge.destroy();
         verseNumberText.destroy();
         setHole();
@@ -51,6 +50,7 @@
     toSefirah.to({
       duration: Math.PI / 2,
       radius: 3,
+      strokeWidth: 1,
       x: toCoordsPx[0],
       y: toCoordsPx[1],
       onFinish: () => {
@@ -118,27 +118,30 @@
     radius: initialToSefirahRadius,
     opacity: 1,
     stroke: 'dimgrey',
-    strokeWidth: 2
+    strokeWidth: 5
   }} bind:handle={toSefirah} />
   <Text config={{
+    x: 0,
+    y: 0,
     text: verseNumber,
     width: window.innerWidth,
-    height: window.innerHeight,
+    height: window.innerHeight / 1.5,
     align: 'center',
-    verticalAlign: 'middle',
-    fontSize: 160,
-    fillEnabled: true,
+    verticalAlign: 'bottom',
+    fontSize: 200,
+    fillEnabled: false,
     fill: 'grey',
-    stroke: 'dimgrey'
+    stroke: 'dimgrey',
+    strokeWidth: 4
   }} bind:handle={verseNumberText} />
   <Wedge config={{
     x: xCentre,
     y: yCentre,
-    radius: initialToSefirahRadius,
+    radius: initialToSefirahRadius - 5,
     angle: 0,
     rotation: -90, 
-    fill: 'dimgrey',
+    fill: 'gold',
     strokeEnabled: false,
-    opacity: 1
+    opacity: 0.5
   }} bind:handle={wedge} />
 </Layer>
