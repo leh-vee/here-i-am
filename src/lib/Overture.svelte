@@ -8,19 +8,24 @@
   const yCentre = window.innerHeight / 2;
   const initialToSefirahRadius = Math.round(xCentre * 0.7);
   let vessel;
+  let singularity;
 
   function buildVessel(event) {
-    const singularity = event.detail;
+    singularity = event.detail;
     vessel.to({
       duration: Math.PI,
       angle: 360,
-      outerRadius: initialToSefirahRadius,
-      innerRadius: initialToSefirahRadius - 5,
-      onFinish: () => { dispatch('vesselBuilt') }
+      outerRadius: initialToSefirahRadius + 3,
+      innerRadius: initialToSefirahRadius - 3
     });
     singularity.to({
       duration: Math.PI,
-      radius: 1
+      radius: 1,
+      onFinish: () => {
+        setTimeout(() => {
+          dispatch('vesselBuilt'); 
+        }, 100);
+      }
     });
   }
 

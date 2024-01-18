@@ -1,6 +1,7 @@
 <script>
-  import { Line, Circle, Wedge, Layer, Text } from 'svelte-konva';
+  import { Line, Circle, Wedge, Layer, Text, Ring, Arc } from 'svelte-konva';
   import { tick } from 'svelte';
+  import Konva from 'konva';
   import { ilanProjection, ilanBlocks, sefirotPoints } from '../stores/treeOfLife.js';
   import { currentVerseIndex, lastPiSlice, currentPiSlice } from '../stores/text.js';
   import { createEventDispatcher } from 'svelte';
@@ -17,7 +18,9 @@
   let newPathwayCoordinates = [0, 0, 0, 0];
   let wedge;
   let verseNumberText;
+  let iris;
   const chargeDuration = Math.PI / 2;
+  const diagonalRadius = Math.hypot(xCentre, yCentre);
   $: verseNumber = String($currentPiSlice);
 
   $: fromCoordsGsc = $sefirotPoints.features[$lastPiSlice].geometry.coordinates;
@@ -27,16 +30,49 @@
 
   $: isVerseIndex = Number.isInteger($currentVerseIndex);
 
+  $: isFirstVerse = isVerseIndex && $currentVerseIndex === 0;
+
   $: if (isVerseIndex && newPathway && go) {
-    setTimeout(() => {
-      leaderWipe();
-    }, 1000);
+    nova();
+  }
+
+  function nova() {
+    wedge.to({
+      duration: isFirstVerse ? Math.PI / 10 : 0,
+      radius: diagonalRadius,
+      opacity: 0
+    });
+    iris.to({
+      duration: isFirstVerse ? Math.PI / 5 : 0,
+      easing: Konva.Easings.EaseOut,
+      innerRadius: diagonalRadius,
+      onFinish: () => { leaderWipe() }
+    });
   } 
 
   function leaderWipe() {
+    wedge.angle(0);
+    wedge.rotation(-90);
+    wedge.opacity(0);
+    wedge.radius(initialToSefirahRadius - 3); 
+    verseNumberText.visible(true);
     wedge.to({
-      duration: Math.PI / 2, 
-      angle: 360,
+      duration: Math.PI, 
+      angle: 90,
+      rotation: 450,
+      opacity: 0.5,
+      onFinish: () => { 
+        leaderWipeOut();
+      }
+    });
+  }
+
+  function leaderWipeOut() {
+    wedge.to({
+      duration: Math.PI, 
+      angle: 0,
+      rotation: 900,
+      opacity: 0,
       onFinish: () => { 
         wedge.destroy();
         verseNumberText.destroy();
@@ -96,6 +132,16 @@
 
 <Layer>
   <StreetMap blocksGeoJson= { $ilanBlocks } projection={ $ilanProjection } />
+  <Arc config={{
+    x: xCentre, 
+    y: yCentre,
+    angle: 360,
+    rotation: -90,
+    innerRadius: initialToSefirahRadius,
+    outerRadius: diagonalRadius,
+    fill: 'black',
+    visible: isFirstVerse
+  }} bind:handle={iris} />
   <Circle config={{
     x: fromCoordsPx[0],
     y: fromCoordsPx[1],
@@ -117,8 +163,18 @@
     radius: initialToSefirahRadius,
     opacity: 1,
     stroke: 'dimgrey',
-    strokeWidth: 5
+    strokeWidth: 6
   }} bind:handle={toSefirah} />
+  <Wedge config={{
+    x: xCentre,
+    y: yCentre,
+    radius: 1,
+    angle: 360,
+    rotation: -90, 
+    fill: 'gold',
+    strokeEnabled: false,
+    opacity: 1
+  }} bind:handle={wedge} />
   <Text config={{
     x: 0,
     y: 0,
@@ -128,19 +184,8 @@
     align: 'center',
     verticalAlign: 'bottom',
     fontSize: 200,
-    fillEnabled: false,
-    fill: 'grey',
-    stroke: 'dimgrey',
-    strokeWidth: 4
+    fill: 'black',
+    strokeEnabled: false, 
+    visible: false
   }} bind:handle={verseNumberText} />
-  <Wedge config={{
-    x: xCentre,
-    y: yCentre,
-    radius: initialToSefirahRadius - 5,
-    angle: 0,
-    rotation: -90, 
-    fill: 'gold',
-    strokeEnabled: false,
-    opacity: 0.5
-  }} bind:handle={wedge} />
 </Layer>
