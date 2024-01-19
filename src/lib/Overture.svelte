@@ -2,6 +2,7 @@
   import { Layer, Arc } from 'svelte-konva';
   import EllipticalCollapse from './EllipticalCollapse.svelte';
   import { createEventDispatcher } from 'svelte';
+  import CountdownLeader from './CountdownLeader.svelte';
 
   const dispatch = createEventDispatcher();
   const xCentre = window.innerWidth / 2;
@@ -28,6 +29,18 @@
       }
     });
   }
+  
+  let isCollapsed = false;
+  function drain(event) {
+    singularity = event.detail;
+    singularity.to({
+      duration: Math.PI,
+      radius: 0,
+      onFinish: () => {
+        isCollapsed = true; 
+      }
+    });
+  }
 
 </script>
 
@@ -42,5 +55,8 @@
     fill: 'dimgrey',
     strokeEnabled: false
   }} bind:handle={vessel} />
-  <EllipticalCollapse on:collapsed={ buildVessel } />
+  <EllipticalCollapse on:collapsed={ drain } />
+  {#if isCollapsed}
+    <CountdownLeader />
+  {/if}
 </Layer>
