@@ -53,8 +53,10 @@
       radius: diagonalRadius,
       opacity: 0,
       onFinish: () => {
-        singularity.destroy(); 
-        startSearch = true;
+        singularity.destroy();
+        setTimeout(() => {
+          startSearch = true;
+        }, Math.PI * 1000); 
       }
     });
   }
