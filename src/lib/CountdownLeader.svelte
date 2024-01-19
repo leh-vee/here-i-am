@@ -3,7 +3,8 @@
     import { ilanProjection, ilanBlocks } from '../stores/treeOfLife.js';
     import { currentPiSlice } from '../stores/text.js';
     import StreetMap from './StreetMap.svelte';
-    import { onMount } from 'svelte';
+
+    export let search = false;
 
     const xCentre = window.innerWidth / 2;
     const yCentre = window.innerHeight / 2;
@@ -15,9 +16,9 @@
 
     $: verseNumber = String($currentPiSlice);
 
-    onMount(async () => {
+    $: if (search) {
       leaderWipeIn();
-    });
+    }
 
     function leaderWipeIn() {
       innerLightEl.to({
@@ -72,7 +73,8 @@
   fill: 'black',
   radius: vesselRadius,
   stroke: 'black',
-  strokeWidth: 6
+  strokeWidth: 6,
+  visible: search
 }} />
 <Wedge config={{
   x: xCentre,
@@ -82,7 +84,8 @@
   rotation: -90, 
   fill: 'gold',
   strokeEnabled: false,
-  opacity: 0
+  opacity: 0,
+  visible: search
 }} bind:handle={ innerLightEl } />
 <Text config={{
   x: 0,
@@ -95,5 +98,6 @@
   fontFamily: 'monospace',
   fontSize: 200,
   fill: 'black',
-  strokeEnabled: false
+  strokeEnabled: false,
+  visible: search
 }} />

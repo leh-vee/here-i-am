@@ -1,5 +1,5 @@
 <script>
-  import { Line, Circle, Wedge, Layer, Text, Ring, Arc } from 'svelte-konva';
+  import { Line, Circle, Wedge, Layer, Text, Arc } from 'svelte-konva';
   import { tick } from 'svelte';
   import Konva from 'konva';
   import { ilanProjection, ilanBlocks, sefirotPoints } from '../stores/treeOfLife.js';

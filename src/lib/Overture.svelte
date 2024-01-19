@@ -7,6 +7,8 @@
   const dispatch = createEventDispatcher();
   const xCentre = window.innerWidth / 2;
   const yCentre = window.innerHeight / 2;
+  const diagonalRadius = Math.hypot(xCentre, yCentre);
+
   const initialToSefirahRadius = Math.round(xCentre * 0.7);
   let vessel;
   let singularity;
@@ -35,9 +37,24 @@
     singularity = event.detail;
     singularity.to({
       duration: Math.PI,
-      radius: 0,
+      radius: 1,
+      opacity: 0.5,
       onFinish: () => {
-        isCollapsed = true; 
+        nova();
+      }
+    });
+  }
+
+  let startSearch = false;
+  function nova() {
+    isCollapsed = true;
+    singularity.to({
+      duration: Math.PI / 10,
+      radius: diagonalRadius,
+      opacity: 0,
+      onFinish: () => {
+        singularity.destroy(); 
+        startSearch = true;
       }
     });
   }
@@ -57,6 +74,6 @@
   }} bind:handle={vessel} />
   <EllipticalCollapse on:collapsed={ drain } />
   {#if isCollapsed}
-    <CountdownLeader />
+    <CountdownLeader search={ startSearch } />
   {/if}
 </Layer>
