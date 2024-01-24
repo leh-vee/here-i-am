@@ -56,7 +56,7 @@
 <div class='screen'>
   <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
     {#if v.isOverture}
-      <Overture on:vesselBuilt={ commenceCountdown } />
+      <Overture on:goneNova={ commenceCountdown } />
     {:else if v.isCountdown}
       <Countdown />
     {/if}
