@@ -1,21 +1,28 @@
 <script>
+  import { Layer } from 'svelte-konva';
   import { currentVerseIndex } from '../stores/text.js';
+  import CountdownLeader from './CountdownLeader.svelte';
   import Pathways from './Pathways.svelte';
   import VerseExplorer from './VerseExplorer.svelte';
 
-  let showNewPathway;
+  let movementIndex = 0;
 
   $: {
     console.log('countdown cycle for verse at index...', $currentVerseIndex);
-    showNewPathway = true;
+    movementIndex = 0;
   }
 
-  function postPathway() {
-    showNewPathway = false;
+  function nextMovement() {
+    movementIndex += 1;
   }
+
 </script>
 
-{#if showNewPathway}
-  <Pathways go={ showNewPathway } on:blazed={ postPathway } />
-{/if}
-<VerseExplorer isReading={ !showNewPathway } />
+<Layer>
+  {#if movementIndex === 0}
+    <CountdownLeader on:vesselMapped={ nextMovement } />
+  {:else if movementIndex === 1} 
+    <Pathways on:blazed={ nextMovement } />
+  {/if}
+</Layer>
+<VerseExplorer isReading={ movementIndex === 2 } />

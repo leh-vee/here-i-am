@@ -1,23 +1,29 @@
 <script>
     import { Circle, Text, Wedge } from 'svelte-konva';
-    import { ilanProjection, ilanBlocks } from '../stores/treeOfLife.js';
+    import { ilanProjection, ilanBlocks, sefirotPoints } from '../stores/treeOfLife.js';
     import { currentPiSlice } from '../stores/text.js';
     import StreetMap from './StreetMap.svelte';
+    import { createEventDispatcher } from 'svelte';
 
-    export let search = false;
+    const dispatch = createEventDispatcher();
 
     const xCentre = window.innerWidth / 2;
     const yCentre = window.innerHeight / 2;
     const diagonalRadius = Math.hypot(xCentre, yCentre);
     const vesselRadius = Math.round(xCentre * 0.7);
 
+    $: verseNumber = String($currentPiSlice);
+    $: toCoordsGsc = $sefirotPoints.features[$currentPiSlice].geometry.coordinates;
+    $: toCoordsPx = $ilanProjection(toCoordsGsc);
+
     let innerLightEl;
     let searchLightEl;
+    let verseNumberEl;
+    let vessel;
 
-    $: verseNumber = String($currentPiSlice);
-
-    $: if (search) {
+    $: if (innerLightEl !== undefined) {
       leaderWipeIn();
+      createVessel();
     }
 
     function leaderWipeIn() {
@@ -52,7 +58,30 @@
         opacity: 0
       });
     }
-    
+
+    function createVessel() {
+      vessel.to({
+        duration: Math.PI * 2,
+        stroke: 'dimgrey',
+        onFinish: () => { 
+          verseNumberEl.hide();
+          mapVesselToSefirah();
+        }
+      });
+    }
+
+    function mapVesselToSefirah() {
+      vessel.to({
+        duration: Math.PI / 2,
+        radius: 3,
+        strokeWidth: 1,
+        x: toCoordsPx[0],
+        y: toCoordsPx[1],
+        onFinish: () => {
+          dispatch('vesselMapped');
+        }
+      });
+    }
 </script>
 
 <Wedge config={{
@@ -73,9 +102,8 @@
   fill: 'black',
   radius: vesselRadius,
   stroke: 'black',
-  strokeWidth: 6,
-  visible: search
-}} />
+  strokeWidth: 6
+}} bind:handle={ vessel } />
 <Wedge config={{
   x: xCentre,
   y: yCentre,
@@ -84,8 +112,7 @@
   rotation: -90, 
   fill: 'gold',
   strokeEnabled: false,
-  opacity: 0,
-  visible: search
+  opacity: 0
 }} bind:handle={ innerLightEl } />
 <Text config={{
   x: 0,
@@ -98,6 +125,5 @@
   fontFamily: 'monospace',
   fontSize: 200,
   fill: 'black',
-  strokeEnabled: false,
-  visible: search
-}} />
+  strokeEnabled: false
+}} bind:handle={ verseNumberEl }/>
