@@ -28,16 +28,17 @@
     }
 
     function leaderWipeIn() {
-      innerLightEl.to({
+      const toAttrs = {
         duration: Math.PI, 
         angle: 90,
-        rotation: 450,
+        rotation: 450
+      }
+      innerLightEl.to({
+        ...toAttrs,
         opacity: 0.25
       });
       searchLightEl.to({
-        duration: Math.PI, 
-        angle: 90,
-        rotation: 450,
+        ...toAttrs,
         opacity: 0.5,
         onFinish: () => { 
           leaderWipeOut();
@@ -46,18 +47,14 @@
     }
 
     function leaderWipeOut() {
-      innerLightEl.to({
+      const toAttrs = {
         duration: Math.PI, 
         angle: 0,
         rotation: 900,
         opacity: 0
-      });
-      searchLightEl.to({
-        duration: Math.PI, 
-        angle: 0,
-        rotation: 900,
-        opacity: 0
-      });
+      };
+      innerLightEl.to({ ...toAttrs });
+      searchLightEl.to({ ...toAttrs });
     }
 
     function createVessel() {
