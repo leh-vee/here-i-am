@@ -22,14 +22,10 @@
   $: toCoordsPx = $ilanProjection(toCoordsGsc);
 
   $: if (toSefirah !== undefined) {
-    irisOut();
-  }
-
-  function irisOut() {
     iris.to({
       duration: Math.PI / 2,
       innerRadius: diagonalLength,
-      onFinish: () => { sendCharge() }
+      onFinish: sendCharge
     });
   }
 
