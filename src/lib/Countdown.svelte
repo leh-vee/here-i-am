@@ -11,7 +11,7 @@
   let isRemembering = false;
 
   $: if (aPrioriLayerEl !== undefined) {
-    console.log('countdown cycle for verse at index...', $currentVerseIndex);
+    console.log('countdown cycle for verse at index', $currentVerseIndex);
     isRemembering = false;
     aPrioriLayerEl.opacity(1);
     setTimeout(() => {

@@ -25,7 +25,6 @@
 
   function renderBlocks() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    console.log('updating street traces...');
     let geoGenerator = geoPath().projection(projection).context(ctx);
     ctx.beginPath();
     geoGenerator({type: 'FeatureCollection', features: blocksGeoJson.features })
