@@ -93,7 +93,7 @@
   opacity: 0
 }} bind:handle={ searchLightEl } />
 <StreetMap blocksGeoJson={ $ilanBlocks } projection={ $ilanProjection } 
-  colour={ 'black' } lineWidth={ 1 } />
+  colour={ 'black' } />
 <Circle config={{
   x: xCentre,
   y: yCentre,

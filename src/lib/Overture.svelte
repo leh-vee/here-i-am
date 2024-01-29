@@ -43,6 +43,6 @@
   <EllipticalCollapse on:collapsed={ coolDown } />
   {#if singularityContracted}
     <StreetMap blocksGeoJson={ $ilanBlocks } projection={ $ilanProjection } 
-      colour={ 'black' } lineWidth={ 1 } />
+      colour={ 'black' } />
   {/if}
 </Layer>

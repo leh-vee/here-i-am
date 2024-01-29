@@ -6,7 +6,6 @@
   export let blocksGeoJson;
   export let projection;
   export let colour = 'dimgrey';
-  export let lineWidth = 2;
 
   let isMounted = false;
   let canvas = document.createElement('canvas');
@@ -17,7 +16,7 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    ctx.lineWidth = lineWidth;
+    ctx.lineWidth = 2;
     ctx.strokeStyle = colour;
     isMounted = true;
   });
