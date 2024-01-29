@@ -109,12 +109,12 @@
         {#if $blocksForCurrentChannel}
           <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
           <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
-          isFromSefirah={false} />
+            isFromSefirah={ false } />
           {#if $isEllipsis && isReading}
             <Ellipsis on:go={ postElliptical } />
           {:else}
             <VerseMap />
-            <Notepad inFlight={isInFlight} />
+            <Notepad inFlight={ isInFlight } />
             <Punctuation on:punctuated={ postPunctuation } />
           {/if}
         {/if}

@@ -1,43 +1,33 @@
 <script>
+  // @ts-nocheck
   import { Circle } from 'svelte-konva';
-  import { percentOfVerseRead, isEllipsis, isLastVerseWord } from '../stores/text';
+  import { percentOfVerseRead } from '../stores/text';
   
   export let coordsPx;
   export let isFromSefirah = true;
 
-  let fill = isFromSefirah ? 'gold' : 'dimgrey'; 
-  let markerEl;
-  
-  $: percentRead = Number($percentOfVerseRead);
-
-  const duration = Math.PI / 2;
-
-  $: if (isFromSefirah && !$isEllipsis && markerEl) {
-    markerEl.to({ 
-      duration, fill: 'dimgrey',
-      onFinish: () => { fill = 'dimgrey' } 
-    });
-  }
-
-  $: if (!isFromSefirah && $isEllipsis && $isLastVerseWord) {
-    markerEl.to({ 
-      duration, fill: 'gold',
-      onFinish: () => { fill = 'gold' }
-    });
-  }
-  
+  let theLightEl;
   let radius = 0;
   
   $: if (isFromSefirah) {
-    radius = 5 - (5 * percentRead);
+    radius = 5 - (5 * $percentOfVerseRead);
   } else {
-    radius = 5 * percentRead;
+    radius = 5 * $percentOfVerseRead;
   }
 </script>
 
 <Circle config={{
   x: coordsPx[0],
   y: coordsPx[1],
-  radius,
-  fill
-}} bind:handle={markerEl} />
+  radius: 5,
+  fill: 'black',
+  stroke: 'dimgrey',
+  strokeWidth: 2
+}} />
+<Circle config={{
+  x: coordsPx[0],
+  y: coordsPx[1],
+  fill: 'gold',
+  strokeEnabled: false,
+  radius
+}} bind:handle={theLightEl} />
