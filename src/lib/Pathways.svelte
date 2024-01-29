@@ -10,9 +10,15 @@
   const diagonalLength = Math.hypot(window.innerHeight, window.innerWidth);
   const chargeDuration = Math.PI / 2;
   
-  let fromSefirah;
-  let toSefirah;
-  let newPathway;
+  const sefirahAttrs = {
+    radius: 3,
+    opacity: 1,
+    stroke: 'dimgrey',
+    strokeWidth: 1
+  };
+  let fromSefirahEl;
+  let toSefirahEl;
+  let newPathwayEl;
   let newPathwayCoordinates = [0, 0, 0, 0];
   let iris;
 
@@ -21,7 +27,7 @@
   $: toCoordsGsc = $sefirotPoints.features[$currentPiSlice].geometry.coordinates;
   $: toCoordsPx = $ilanProjection(toCoordsGsc);
 
-  $: if (toSefirah !== undefined) {
+  $: if (toSefirahEl !== undefined) {
     iris.to({
       duration: Math.PI / 2,
       innerRadius: diagonalLength,
@@ -33,12 +39,11 @@
     let endCoords = [...fromCoordsPx, ...toCoordsPx];
     newPathwayCoordinates = [...fromCoordsPx, ...fromCoordsPx];
     await tick();
-    fromSefirah.to({
+    fromSefirahEl.to({
       duration: chargeDuration,
-      radius: 0,
-      opacity: 0
+      fill: 'black'
     });
-    newPathway.to({
+    newPathwayEl.to({
       points: endCoords,
       opacity: 1,
       duration: chargeDuration,
@@ -47,12 +52,12 @@
   }
 
   function receiveCharge() {
-    toSefirah.to({
+    toSefirahEl.to({
       fill: 'gold',
       duration: chargeDuration
     });
     const endCoords = [...toCoordsPx, ...toCoordsPx];
-    newPathway.to({
+    newPathwayEl.to({
       points: endCoords,
       opacity: 0,
       duration: chargeDuration,
@@ -63,22 +68,13 @@
   }
 </script>
 
-
 <StreetMap blocksGeoJson= { $ilanBlocks } projection={ $ilanProjection } />
 <Circle config={{
   x: fromCoordsPx[0],
   y: fromCoordsPx[1],
-  radius: 3,
-  opacity: 1,
-  fill: 'gold'
-}} bind:handle={fromSefirah} />
-<Line config={{
-  points: newPathwayCoordinates,
-  stroke: 'gold',
-  strokeWidth: 2,
-  opacity: 0,
-  lineCap: 'round'
-}} bind:handle={newPathway} />
+  fill: 'gold',
+  ...sefirahAttrs
+}} bind:handle={fromSefirahEl} />
 <Ring config={{
   x: toCoordsPx[0],
   y: toCoordsPx[1],
@@ -90,8 +86,12 @@
   x: toCoordsPx[0],
   y: toCoordsPx[1],
   fill: 'black',
-  radius: 3,
-  opacity: 1,
-  stroke: 'dimgrey',
-  strokeWidth: 1
-}} bind:handle={toSefirah} />
+  ...sefirahAttrs
+}} bind:handle={toSefirahEl} />
+<Line config={{
+  points: newPathwayCoordinates,
+  stroke: 'gold',
+  strokeWidth: 2,
+  opacity: 0,
+  lineCap: 'round'
+}} bind:handle={newPathwayEl} />
