@@ -4,31 +4,21 @@
   import StreetMap from './StreetMap.svelte';
   import { ilanProjection, ilanBlocks } from '../stores/treeOfLife.js';
   import { createEventDispatcher } from 'svelte';
+  import Konva from 'konva';
 
   const dispatch = createEventDispatcher();
   const xCentre = window.innerWidth / 2;
   const yCentre = window.innerHeight / 2;
   const diagonalRadius = Math.hypot(xCentre, yCentre);
 
-  let singularity;
-  let singularityContracted = false;
-  
-  function coolDown(event) {
-    singularity = event.detail;
+  let ellipsisCollapsed = false;
+
+  function nova(event) {
+    ellipsisCollapsed = true;
+    const singularity = event.detail;
     singularity.to({
       duration: Math.PI,
-      radius: 1,
-      opacity: 0.5,
-      onFinish: () => {
-        singularityContracted = true;
-        nova();
-      }
-    });
-  }
-
-  function nova() {
-    singularity.to({
-      duration: Math.PI / 10,
+      easing: Konva.Easings.StrongEaseOut,
       radius: diagonalRadius,
       opacity: 0,
       onFinish: () => {
@@ -40,8 +30,8 @@
 </script>
 
 <Layer>
-  <EllipticalCollapse on:collapsed={ coolDown } />
-  {#if singularityContracted}
+  <EllipticalCollapse on:collapsed={ nova } />
+  {#if ellipsisCollapsed}
     <StreetMap blocksGeoJson={ $ilanBlocks } projection={ $ilanProjection } 
       colour={ 'black' } />
   {/if}
