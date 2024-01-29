@@ -4,25 +4,44 @@
   import CountdownLeader from './CountdownLeader.svelte';
   import Pathways from './Pathways.svelte';
   import VerseExplorer from './VerseExplorer.svelte';
+  
+  let aPrioriLayerEl;
+  let isMurmuring = false;
+  let isBlazing = false;
+  let isRemembering = false;
 
-  let movementIndex = 0;
-
-  $: {
+  $: if (aPrioriLayerEl !== undefined) {
     console.log('countdown cycle for verse at index...', $currentVerseIndex);
-    movementIndex = 0;
+    isRemembering = false;
+    aPrioriLayerEl.opacity(1);
+    setTimeout(() => {
+      isMurmuring = true;
+    }, Math.PI * 1000);
   }
 
-  function nextMovement() {
-    movementIndex += 1;
+  function blaze() {
+    isMurmuring = false;
+    isBlazing = true;
+  }
+
+  function remember() {
+    isRemembering = true;
+    aPrioriLayerEl.to({
+      duration: Math.PI,
+      opacity: 0,
+      onFinish: () => {
+        isBlazing = false;
+      }
+    });
   }
 
 </script>
 
-<Layer>
-  {#if movementIndex === 0}
-    <CountdownLeader on:vesselMapped={ nextMovement } />
-  {:else if movementIndex === 1} 
-    <Pathways on:blazed={ nextMovement } />
+<Layer config={{ opacity: 1 }} bind:handle={ aPrioriLayerEl } >
+  {#if isMurmuring}
+    <CountdownLeader on:vesselMapped={ blaze } />
+  {:else if isBlazing} 
+    <Pathways on:blazed={ remember } />
   {/if}
 </Layer>
-<VerseExplorer isReading={ movementIndex === 2 } />
+<VerseExplorer isReading={ isRemembering } />
