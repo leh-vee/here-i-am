@@ -1,5 +1,5 @@
 <script>
-  import { Stage, Layer } from 'svelte-konva';
+  import { Stage, Layer, Group } from 'svelte-konva';
   import Punctuation from './Punctuation.svelte';
   import Notepad from './Notepad.svelte';
   import VerseMap from './VerseMap.svelte';
@@ -19,10 +19,13 @@
   import { currentPiSlice, lastPiSlice } from '../stores/text.js';
 
   export let isReading = false;
+  let isInFlight = false;
+  let mapWatchGroupEl;
+  let sefirahsGroupEl;
 
   $: isPreVerseElliptical = $isEllipsis && $isFirstVerseWord;
-  let isInFlight = false;
-
+  $: isPostVerseElliptical = $isEllipsis && $isLastVerseWord;
+  
   $: if ($blocksForCurrentChannel === undefined) fetchBlocksForProjection();
 
   function fetchBlocksForProjection() {
@@ -96,20 +99,44 @@
       previousWord();
     }
   }
+
+  $: if (isPostVerseElliptical) fadeOutGroupEls();
+
+  function fadeOutGroupEls() {
+    mapWatchGroupEl.to({
+      duration: Math.PI,
+      opacity: 0,
+      onFinish: () => {
+        setTimeout(() => {
+          mapWatchGroupEl.opacity(1);
+          sefirahsGroupEl.opacity(1);
+        }, 3000);
+      }
+    });
+    sefirahsGroupEl.to({
+      duration: Math.PI,
+      opacity: 0
+    });
+  }
 </script>
 
 <div id='verse-explorer' use:swipe={{ timeframe: 300, minSwipeDistance: 60 }} 
   on:swipe={(e) => { swiped(e) }}>
-  <Stage config={{ width: window.innerWidth, height: window.innerHeight, visible: isReading }}>
+  <Stage config={{ width: window.innerWidth, height: window.innerHeight, 
+    visible: isReading }} >
     <Layer>
       {#key $currentVerseIndex}
-        <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
-          projection={ $currentChannelProjection } />
+        <Group bind:handle={ mapWatchGroupEl }>
+          <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
+            projection={ $currentChannelProjection } />
+        </Group>
         <Stopwatch inFlight={ isInFlight }/>  
         {#if $blocksForCurrentChannel}
-          <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
-          <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
-            isFromSefirah={ false } />
+          <Group bind:handle={ sefirahsGroupEl }>
+            <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
+            <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
+              isFromSefirah={ false } />
+          </Group>
           {#if $isEllipsis && isReading}
             <Ellipsis on:go={ postElliptical } />
           {:else}
