@@ -10,18 +10,24 @@
   $: if ($isCaesura) animateIn();
 
   function animateIn() {
+    punctuationEl.fillEnabled(true);
     punctuationEl.to({
       duration,
+      fill: 'dimgrey',
       strokeWidth: 2,
       onFinish: () => { animateOut() }
     });
   }
-
+  
   function animateOut() {
     punctuationEl.to({
       duration,
       strokeWidth: 0,
-      onFinish: () => { dispatch('punctuated') }
+      fill: 'black',
+      onFinish: () => { 
+        punctuationEl.fillEnabled(false);
+        dispatch('punctuated') 
+      }
     });
   }
 
@@ -29,13 +35,14 @@
 
 <Text config={{
   text: $punctuationMark,
-  y: 0,
+  y: 0, 
   width: window.innerWidth,
   height: window.innerHeight,
   align: 'center',
   verticalAlign: 'middle',
-  fontSize: window.innerHeight / 1.334,
+  fontSize: Math.round(window.innerWidth / 9),
   fillEnabled: false,
+  fill: 'black',
   stroke: 'dimgrey',
   strokeWidth: 0
 }} bind:handle={punctuationEl} />
