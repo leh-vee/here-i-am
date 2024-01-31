@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { writable, derived } from 'svelte/store';
 import { tenByTenArray } from '../utils/base.js';
-import { lastPiSlice, currentPiSlice } from './text.js';
+import { lastPiSlice, currentPiSlice, likePiSlices } from './text.js';
 
 export const groundZeroProjection = writable(undefined);
 export const groundZeroBlocks = writable(undefined);
@@ -27,10 +27,10 @@ function createChannelBlocksStore() {
 export const channelBlocks = createChannelBlocksStore();
 
 export const currentChannelProjection = derived(
-  [channelProjections, lastPiSlice, currentPiSlice], 
-  ([$channelProjections, $lastPiSlice, $currentPiSlice]) => {
+  [channelProjections, lastPiSlice, currentPiSlice, likePiSlices], 
+  ([$channelProjections, $lastPiSlice, $currentPiSlice, $likePiSlices]) => {
     let projection;
-    if ($lastPiSlice !== $currentPiSlice) {
+    if (!$likePiSlices) {
       projection = $channelProjections[$lastPiSlice][$currentPiSlice];
     } else if ($lastPiSlice !== 0) {
       projection = $channelProjections[$lastPiSlice][0];
@@ -40,10 +40,10 @@ export const currentChannelProjection = derived(
 );
 
 export const blocksForCurrentChannel = derived(
-  [channelBlocks, lastPiSlice, currentPiSlice], 
-  ([$channelBlocks, $lastPiSlice, $currentPiSlice]) => {
+  [channelBlocks, lastPiSlice, currentPiSlice, likePiSlices], 
+  ([$channelBlocks, $lastPiSlice, $currentPiSlice, $likePiSlices]) => {
     let blocks;
-    if ($lastPiSlice !== $currentPiSlice) {
+    if (!$likePiSlices) {
       blocks = $channelBlocks[$lastPiSlice][$currentPiSlice];
     } else if ($lastPiSlice !== 0) {
       blocks = $channelBlocks[$lastPiSlice][0];
@@ -53,10 +53,10 @@ export const blocksForCurrentChannel = derived(
 );
 
 export const currentChannelLine = derived(
-  [channelLines, lastPiSlice, currentPiSlice], 
-  ([$channelLines, $lastPiSlice, $currentPiSlice]) => {
+  [channelLines, lastPiSlice, currentPiSlice, likePiSlices], 
+  ([$channelLines, $lastPiSlice, $currentPiSlice, $likePiSlices]) => {
     let line;
-    if ($lastPiSlice !== $currentPiSlice) {
+    if (!$likePiSlices) {
       line = $channelLines[$lastPiSlice].features[$currentPiSlice];
     } else if ($lastPiSlice !== 0) {
       line = $channelLines[$lastPiSlice].features[0];

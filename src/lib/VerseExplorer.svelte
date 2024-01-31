@@ -16,7 +16,7 @@
   import { swipe } from 'svelte-gestures';
   import { fetchBlocksWithinRadius } from '../api/client.js';
   import distance from "@turf/distance";
-  import { currentPiSlice, lastPiSlice } from '../stores/text.js';
+  import { currentPiSlice, lastPiSlice, likePiSlices } from '../stores/text.js';
 
   export let isReading = false;
   let isInFlight = false;
@@ -33,9 +33,10 @@
     const pRadius = distance(pCentre, $currentChannelProjection.invert([0,0]));
     fetchBlocksWithinRadius(pCentre, pRadius).then(blocks => {
       console.log('blocks for current channel projection fetched');
-      if ($lastPiSlice !== $currentPiSlice) {
+      if (!$likePiSlices) {
         channelBlocks.setForIndices($lastPiSlice, $currentPiSlice, blocks);
-      } else if (Number($lastPiSlice) !== 0) {
+      // @ts-ignore
+      } else if ($lastPiSlice !== 0) {
         channelBlocks.setForIndices($lastPiSlice, 0, blocks);
       }
     });
