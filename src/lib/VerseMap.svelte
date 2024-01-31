@@ -1,6 +1,6 @@
 <script>
   import { currentChannelCoordsPx } from '../stores/treeOfLife.js';
-  import { currentVerse, currentVerseIndex } from '../stores/text.js';
+  import { currentVerse, currentVerseIndex, likePiSlices } from '../stores/text.js';
   import { Group } from 'svelte-konva';
   import WordMarker from './WordMarker.svelte';
 
@@ -11,6 +11,12 @@
   $: xLineDeltaPx = $currentChannelCoordsPx[1][0] - $currentChannelCoordsPx[0][0] - xMarginPx * 2;
   $: xSpaceDeltaA = Math.round(xLineDeltaPx / nSpacesLineA);
   $: xSpaceDeltaB = Math.round(xLineDeltaPx / nSpacesLineB);
+
+  function xCoordsForBeeAtIndex(index) {
+    let x =  xSpaceDeltaB * index;
+    if ($likePiSlices) x = xLineDeltaPx - x;
+    return x;
+  }
 
 </script>
 
@@ -23,7 +29,7 @@
       wordId={`${$currentVerseIndex}-a-${i}`} />
   {/each}
   {#each $currentVerse['b'] as _, i}
-    <WordMarker x={xSpaceDeltaB * i} y={yOffsetPx}
+    <WordMarker x={xCoordsForBeeAtIndex(i)} y={yOffsetPx}
       wordId={`${$currentVerseIndex}-b-${i}`} />
   {/each}
 </Group>
