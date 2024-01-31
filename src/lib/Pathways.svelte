@@ -2,7 +2,7 @@
   import { Line, Circle, Ring } from 'svelte-konva';
   import { tick } from 'svelte';
   import { ilanProjection, ilanBlocks, sefirotPoints } from '../stores/treeOfLife.js';
-  import { lastPiSlice, currentPiSlice } from '../stores/text.js';
+  import { lastPiSlice, currentPiSlice, likePiSlices } from '../stores/text.js';
   import { createEventDispatcher } from 'svelte';
   import StreetMap from './StreetMap.svelte';
 
@@ -24,10 +24,14 @@
 
   $: fromCoordsGsc = $sefirotPoints.features[$lastPiSlice].geometry.coordinates;
   $: fromCoordsPx = $ilanProjection(fromCoordsGsc);
-  $: toCoordsGsc = $sefirotPoints.features[$currentPiSlice].geometry.coordinates;
+  $: toSefirahIndex = $likePiSlices ? 0 : $currentPiSlice;
+  $: toCoordsGsc = $sefirotPoints.features[toSefirahIndex].geometry.coordinates;
   $: toCoordsPx = $ilanProjection(toCoordsGsc);
+  
+  $: irisCoordsX = $likePiSlices ? fromCoordsPx[0] : toCoordsPx[0];
+  $: irisCoordsY = $likePiSlices ? fromCoordsPx[1] : toCoordsPx[1];
 
-  $: if (toSefirahEl !== undefined) {
+  $: if (fromSefirahEl !== undefined) {
     iris.to({
       duration: Math.PI / 2,
       innerRadius: diagonalLength,
@@ -52,11 +56,16 @@
   }
 
   function receiveCharge() {
-    toSefirahEl.to({
+    let sefirahEl = toSefirahEl;
+    let endCoords = [...toCoordsPx, ...toCoordsPx];
+    if ($likePiSlices) {
+      sefirahEl = fromSefirahEl;
+      endCoords = [...fromCoordsPx, ...fromCoordsPx];
+    }
+    sefirahEl.to({
       fill: 'gold',
       duration: chargeDuration
     });
-    const endCoords = [...toCoordsPx, ...toCoordsPx];
     newPathwayEl.to({
       points: endCoords,
       opacity: 0,
@@ -76,8 +85,8 @@
   ...sefirahAttrs
 }} bind:handle={fromSefirahEl} />
 <Ring config={{
-  x: toCoordsPx[0],
-  y: toCoordsPx[1],
+  x: irisCoordsX,
+  y: irisCoordsY,
   innerRadius: 4,
   outerRadius: diagonalLength,
   fill: 'black'
