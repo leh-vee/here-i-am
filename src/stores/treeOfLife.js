@@ -5,6 +5,7 @@ import { lastPiSlice, currentPiSlice, likePiSlices } from './text.js';
 
 export const groundZeroProjection = writable(undefined);
 export const groundZeroBlocks = writable(undefined);
+export const groundZeroRotationBlocks = writable(undefined);
 
 export const ilanProjection = writable(undefined);
 export const ilanBlocks = writable(undefined);

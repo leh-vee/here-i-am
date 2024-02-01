@@ -1,7 +1,7 @@
 <script>
   import { sefirotPoints, channelLines, channelProjections, 
     ilanProjection, ilanBlocks, groundZeroProjection, 
-    groundZeroBlocks } from './stores/treeOfLife.js';
+    groundZeroBlocks, groundZeroRotationBlocks } from './stores/treeOfLife.js';
   import { isDataInitialized } from './stores/base.js'; 
   import { onMount } from 'svelte';
   import { fetchSefirot, fetchBlocksForProjection } from './api/client.js';
@@ -28,13 +28,16 @@
   async function setIlanData(screenPx) {
     const sefirotGeoJson = await fetchSefirot();
     sefirotPoints.set(sefirotGeoJson);
-
+    
+    
     const zeroSefirah = sefirotGeoJson.features[0];
     const zeroProjection = projectionForSefirah(zeroSefirah, screenPx);
     groundZeroProjection.set(zeroProjection);
     const zeroBlocks = await fetchBlocksForProjection(zeroProjection, screenPx);
     groundZeroBlocks.set(zeroBlocks);
-    
+    const zeroRotationBlocks = await fetchBlocksForProjection(zeroProjection, screenPx, true);
+    groundZeroRotationBlocks.set(zeroRotationBlocks);
+
     const channelLinesGeoJson = channelFeatures(sefirotGeoJson);
     channelLines.set(channelLinesGeoJson);
     channelProjections.set(projectionsForChannels(channelLinesGeoJson, screenPx));

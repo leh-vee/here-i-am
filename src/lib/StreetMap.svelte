@@ -6,10 +6,16 @@
   export let blocksGeoJson;
   export let projection;
   export let colour = 'dimgrey';
+  export let degreesRotation = 0;
+  export let scale = 1;
+
+  const xCentre = window.innerWidth / 2;
+  const yCentre = window.innerHeight / 2;
+  const rotationRadAngle = (degreesRotation * Math.PI) / 180;
 
   let isMounted = false;
   let canvas = document.createElement('canvas');
-  
+
   const ctx = canvas.getContext('2d');
 
   onMount(async () => {
@@ -18,6 +24,10 @@
 
     ctx.lineWidth = 2;
     ctx.strokeStyle = colour;
+    ctx.translate(xCentre, yCentre);
+    ctx.rotate(rotationRadAngle);
+    ctx.scale(scale, scale);
+    ctx.translate(-xCentre, -yCentre);
     isMounted = true;
   });
 

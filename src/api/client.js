@@ -15,8 +15,8 @@ export async function fetchBlocksWithinRadius(centroidCoords, radiusKm) {
   return JSON.parse(blocksJson);
 }
 
-export async function fetchBlocksForProjection(projection, screenPx) {
-  const projectionCoords = projectionBoundingBoxCoords(projection, screenPx);
+export async function fetchBlocksForProjection(projection, screenPx, forRotation=false) {
+  const projectionCoords = projectionBoundingBoxCoords(projection, screenPx, forRotation);
   const blocksJson = await fetchProjectionBlocks(projectionCoords);
   return JSON.parse(blocksJson);
 }
@@ -34,10 +34,23 @@ async function fetchProjectionBlocks(projectionCoords) {
   );
 }
 
-function projectionBoundingBoxCoords(projection, screenPx) {
+function projectionBoundingBoxCoords(projection, screenPx, forRotation=false) {
   const  { width, height } = screenPx;
-  const minCoords = projection.invert([0, 0]);
-  const maxCoords = projection.invert([width, height]);
-  const coords = [...minCoords, ...maxCoords];
+  let minCoordsPx = [0, 0];
+  let maxCoordsPx = [width, height];
+  if (forRotation) {
+    if (height > width) {
+      const halfMargin = (height - width) / 2;
+      minCoordsPx = [-halfMargin, 0];
+      maxCoordsPx = [width + halfMargin, height];
+    } else {
+      const halfMargin = (width - height) / 2;
+      minCoordsPx = [0, -halfMargin];
+      maxCoordsPx = [width, height + halfMargin];
+    }
+  }
+  const minCoordsGsc = projection.invert(minCoordsPx);
+  const maxCoordsGsc = projection.invert(maxCoordsPx);
+  const coords = [...minCoordsGsc, ...maxCoordsGsc];
   return coords;
 } 
