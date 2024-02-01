@@ -1,28 +1,27 @@
 <script>
-    import { sefirotPoints, channelLines, channelProjections, 
-      ilanProjection, ilanBlocks, groundZeroProjection, 
-      groundZeroBlocks } from './stores/treeOfLife.js';
-    import { isDataInitialized } from './stores/base.js'; 
-    import { onMount } from 'svelte';
-    import { fetchSefirot, fetchBlocksForProjection } from './api/client.js';
-    import { channelFeatures } from './utils/geoJson.js';
-    import { projectionForSefirah, projectionsForChannels, projectionForIlan } from './utils/projections.js';
-    import { Stage } from 'svelte-konva';
-    import Overture from './lib/Overture.svelte';
-    import Countdown from './lib/Countdown.svelte';
+  import { sefirotPoints, channelLines, channelProjections, 
+    ilanProjection, ilanBlocks, groundZeroProjection, 
+    groundZeroBlocks } from './stores/treeOfLife.js';
+  import { isDataInitialized } from './stores/base.js'; 
+  import { onMount } from 'svelte';
+  import { fetchSefirot, fetchBlocksForProjection } from './api/client.js';
+  import { channelFeatures } from './utils/geoJson.js';
+  import { projectionForSefirah, projectionsForChannels, projectionForIlan } from './utils/projections.js';
+  import { Stage } from 'svelte-konva';
+  import Overture from './lib/Overture.svelte';
+  import Countdown from './lib/Countdown.svelte';
+  import SwangSong from './lib/SwangSong.svelte';
 
-  const v = {
-    screenPx: {
-      width: window.innerWidth,
-      height: window.innerHeight
-    },
-    isOverture: true,
-    isCountdown: false,
-    isSwanSong: false
-  }; 
+  const screenPx = {
+    width: window.innerWidth,
+    height: window.innerHeight
+  }
+  const movements = ['overture', 'countdown', 'swanSong'];
+  let movementIndex = 0;
+  $: movement = movements[movementIndex];
 
   onMount(async () => {
-    await setIlanData(v.screenPx);
+    await setIlanData(screenPx);
     isDataInitialized.set(true);  
   });
 
@@ -31,9 +30,9 @@
     sefirotPoints.set(sefirotGeoJson);
 
     const zeroSefirah = sefirotGeoJson.features[0];
-    const zeroProjection = projectionForSefirah(zeroSefirah, v.screenPx);
+    const zeroProjection = projectionForSefirah(zeroSefirah, screenPx);
     groundZeroProjection.set(zeroProjection);
-    const zeroBlocks = await fetchBlocksForProjection(zeroProjection, v.screenPx);
+    const zeroBlocks = await fetchBlocksForProjection(zeroProjection, screenPx);
     groundZeroBlocks.set(zeroBlocks);
     
     const channelLinesGeoJson = channelFeatures(sefirotGeoJson);
@@ -47,18 +46,17 @@
     console.log('ilan data set');
   }
 
-  function commenceCountdown() {
-    v.isOverture = false;
-    v.isCountdown = true;
-  }
+  function nextMovement() { movementIndex += 1 }
 </script>
 
 <div class='screen'>
   <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
-    {#if v.isOverture}
-      <Overture on:goneNova={ commenceCountdown } />
-    {:else if v.isCountdown}
-      <Countdown />
+    {#if movement === 'overture' }
+      <Overture on:goneNova={ nextMovement } />
+    {:else if movement === 'countdown' }
+      <Countdown on:groundZero={ nextMovement } />
+    {:else if movement === 'swanSong' }
+      <SwangSong />
     {/if}
   </Stage>
 </div>

@@ -202,6 +202,12 @@ export const likePiSlices = derived(
   }
 );
 
+export const isGroundZero = derived(
+  [currentPiSlice], ([$currentPiSlice]) => {
+    return $currentPiSlice === "0";
+  }
+);
+
 export const isLastVerseWord = derived(
   [wordIndices], ([$wordIndices]) => {
     const { verseIndex, line, wordIndex } = $wordIndices;

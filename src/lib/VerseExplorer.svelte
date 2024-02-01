@@ -16,9 +16,13 @@
   import { swipe } from 'svelte-gestures';
   import { fetchBlocksWithinRadius } from '../api/client.js';
   import distance from "@turf/distance";
-  import { currentPiSlice, lastPiSlice, likePiSlices } from '../stores/text.js';
+  import { currentPiSlice, lastPiSlice, likePiSlices, isGroundZero } from '../stores/text.js';
+  import { createEventDispatcher } from 'svelte';
 
   export let isReading = false;
+  
+  const dispatch = createEventDispatcher();
+  
   let isInFlight = false;
   let mapWatchGroupEl;
   let sefirahsGroupEl;
@@ -47,6 +51,8 @@
     if (isPreVerseElliptical) {
       isEllipsis.set(false); 
       isInFlight = true;
+    } else if ($isGroundZero) {
+      dispatch('groundZero');
     } else {
       wordIndices.nextVerse();
     }

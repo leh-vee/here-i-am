@@ -44,4 +44,4 @@
     <Pathways on:blazed={ remember } />
   {/if}
 </Layer>
-<VerseExplorer isReading={ isRemembering } />
+<VerseExplorer isReading={ isRemembering } on:groundZero />
