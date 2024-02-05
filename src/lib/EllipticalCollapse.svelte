@@ -12,9 +12,11 @@
   const ellipsisStopAttrs = {
     radius: 5,
     opacity: Math.PI / 10,  
-    fill: 'dimgrey',
+    fill: 'black',
     strokeEnabled: false
   }
+
+  const piSquared = Math.PI**2;
 
   const ellipsisStopDelta = ellipsisStopAttrs.radius * 3;
   const yCentre = window.innerHeight / 2;
@@ -23,11 +25,21 @@
   const ellipsisStops = new Array(3);
 
   $: if (ellipsisStops[0]) {
+    fadeInEllipsis()
     incomingTextAnime();
   }
 
   $: if (isCountdownComplete && $isDataInitialized) {
     collapseAnime();
+  }
+
+  function fadeInEllipsis() {
+    ellipsisStops.forEach((stop, i) => {
+      stop.to({
+        duration: piSquared,
+        fill: 'dimgrey'
+      });
+    });
   }
   
   function incomingTextAnime() {
@@ -58,7 +70,7 @@
     fadeIn(0);
     setTimeout(() => { 
       isCountdownComplete = true;
-    }, Math.PI * 1000);
+    }, piSquared * 1000);
   }
 
   function collapseAnime() {
