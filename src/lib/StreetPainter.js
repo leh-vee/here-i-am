@@ -39,8 +39,8 @@ export default class StreetPainter {
       const allDrawPromises = [];
       blocks.forEach(async block => {
         const drawPromise = new Promise(async (resolve) => {
+          this.drawnBlockIds.push(block.id);
           const drawnBlockProps = await this.drawBlock(block, nodeId);
-          this.drawnBlockIds.push(drawnBlockProps.id);
           await this.drawBlocksFromNode(drawnBlockProps.endNodeId);
           resolve(true);
         });
@@ -60,7 +60,7 @@ export default class StreetPainter {
       endNodeId = blockProps.from_street_node_id;
     }
     const nPointsInLine = blockCoords.length - 1;
-    const blockDrawSpeed = StreetPainter.randomNumberBetween(1, 0.25);
+    const blockDrawSpeed = StreetPainter.randomNumberBetween(0.25, 0.75);
     let startPointIndex = 0;
     return new Promise(async (resolve) => {
       while (startPointIndex < nPointsInLine) {
