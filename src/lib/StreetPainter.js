@@ -1,11 +1,8 @@
 export default class StreetPainter {
 
-  static randomNumberBetween(min, max) {
-    return Math.random() * (max - min) + min;
-  }
-
   constructor(canvasEl, projection, blocks) {
     this.blocks = blocks;
+    this.nTotalBlocks = this.blocks.features.length;
     this.projection = projection;
 
     this.canvasContext = canvasEl.getContext('2d');
@@ -17,6 +14,11 @@ export default class StreetPainter {
   }
 
   drawnBlockIds = [];
+
+  percentDrawn() {
+    const nDrawnBlocks = this.drawnBlockIds.length;
+    return nDrawnBlocks / this.nTotalBlocks;
+  }
 
   undrawnBlocks() {
     const undrawn = this.blocks.features.filter(block => {
@@ -60,7 +62,7 @@ export default class StreetPainter {
       endNodeId = blockProps.from_street_node_id;
     }
     const nPointsInLine = blockCoords.length - 1;
-    const blockDrawSpeed = StreetPainter.randomNumberBetween(0.25, 0.75);
+    const blockDrawSpeed = Math.max(0.5, 1 - this.percentDrawn());
     let startPointIndex = 0;
     return new Promise(async (resolve) => {
       while (startPointIndex < nPointsInLine) {
