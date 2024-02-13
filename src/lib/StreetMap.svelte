@@ -7,7 +7,8 @@
   export let projection;
   export let colour = 'dimgrey';
   export let degreesRotation = 0;
-  export let scale = 1;
+  export let lineWidth = 2;
+  export let opacity = 1;
 
   const xCentre = window.innerWidth / 2;
   const yCentre = window.innerHeight / 2;
@@ -22,12 +23,12 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    ctx.lineWidth = 2;
+    ctx.lineWidth = lineWidth;
     ctx.strokeStyle = colour;
     ctx.translate(xCentre, yCentre);
     ctx.rotate(rotationRadAngle);
-    ctx.scale(scale, scale);
     ctx.translate(-xCentre, -yCentre);
+    ctx.globalAlpha = opacity;
     isMounted = true;
   });
 
