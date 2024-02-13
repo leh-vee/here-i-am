@@ -6,12 +6,14 @@
     sefirotPoints, groundZeroRotationBlocks } from '../stores/treeOfLife.js';
   import StreetMap from './StreetMap.svelte';
 
-  let vertigoSnaps = [];
   let crawlLayer;
-  let inVertigo = false;
   let singularity;
+  let isFallingDown = false;
+  let nStepsDown = 0;
 
-  $: baseProjectionScale = $groundZeroProjection.scale();
+  $: baseScale = $groundZeroProjection.scale();
+  $: projectionScaled = $groundZeroProjection.scale(baseScale + nStepsDown**3)
+  $: opacity = (300 - nStepsDown) / 300;
 
   function channeledLight(event) {
     singularity = event.detail;
@@ -22,45 +24,37 @@
     setTimeout(() => {
       crawler.drawBlocksFromNode(groundZeroSefirahId).then(orphanedBlocks => {
         console.log('all blocks have been drawn but for...', orphanedBlocks);
-        vertigo();
+        theFall();
       });
     }, 200);
   }
 
-  function vertigo() {
-    inVertigo = true;
-    const addSnap = () => {
-      const nSnaps = vertigoSnaps.length;
-      vertigoSnaps.push(nSnaps);
-      vertigoSnaps = vertigoSnaps; // trigger Svelte reactivity
-      if (nSnaps < 300) {
-        setTimeout(addSnap, Math.max(100 - nSnaps, 0));
+  function theFall() {
+    isFallingDown = true;
+    const totalStepsDown = 300;
+    const stepDown = () => {
+      nStepsDown += 1;
+      if (nStepsDown < totalStepsDown) {
+        setTimeout(stepDown, Math.max(100 - nStepsDown, 0));
       } else {
         setTimeout(() => {
           singularity.destroy();
         }, Math.PI * 1000);
       }
     }
-    addSnap();
+    stepDown();
   }
-
-  function opacityForIndex(i) {
-    let o = (300 - i) / 300;
-    return o;
-  } 
 
 </script>
 
 <Layer bind:handle={ crawlLayer } >
-  {#if inVertigo }
-    {#each vertigoSnaps.slice(-1) as snapIndex (snapIndex)}
+  {#if isFallingDown }
+    {#key nStepsDown}
       <StreetMap blocksGeoJson={ $groundZeroRotationBlocks } 
-        projection={ $groundZeroProjection.scale(baseProjectionScale + snapIndex**3) } 
-        colour={ 'gold' }
-        lineWidth={ 1 }
-        opacity={ opacityForIndex(snapIndex) }
-        degreesRotation={ snapIndex } />
-    {/each}
+        colour={ 'gold' } lineWidth={ 1 }
+        projection={ projectionScaled } 
+        opacity={ opacity } degreesRotation={ -nStepsDown } />
+    {/key}
   {/if}
   <EllipticalCollapse on:collapsed={ channeledLight } />
 </Layer>

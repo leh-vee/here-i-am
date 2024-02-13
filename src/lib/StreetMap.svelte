@@ -25,10 +25,10 @@
 
     ctx.lineWidth = lineWidth;
     ctx.strokeStyle = colour;
+    ctx.globalAlpha = opacity;
     ctx.translate(xCentre, yCentre);
     ctx.rotate(rotationRadAngle);
     ctx.translate(-xCentre, -yCentre);
-    ctx.globalAlpha = opacity;
     isMounted = true;
   });
 
