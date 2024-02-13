@@ -2,6 +2,7 @@
   import { Text } from "svelte-konva";
   
   export let dotIndex = 0;
+  export let visible;
   export let fill;
   let text = "   ";
 
@@ -23,5 +24,6 @@
   fontFamily: 'Courgette',
   fillEnabled: true,
   fill,
-  strokeWidth: 0
+  strokeWidth: 0,
+  visible
 }} />

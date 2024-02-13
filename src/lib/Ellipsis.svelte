@@ -9,8 +9,7 @@
   const palette = ['red', 'yellow', 'green'];
   $: colours = $isFirstVerseWord ? palette : [...palette].reverse();
 
-  let nDots = 0;
-  $: dots = new Array(nDots);
+  $: showDots = [false, false, false];
 
   onMount(async () => { 
     setTimeout(() => {
@@ -19,9 +18,11 @@
   });
 
   function getSetGo() {
-    if (nDots < 3) {
+    if (!showDots[-1]) {
       setTimeout(() => {
-        nDots += 1;
+        const nextFalseIndex = showDots.findIndex(s => s === false);
+        showDots[nextFalseIndex] = true;
+        showDots = showDots;
         getSetGo();
       }, 1000);
     } else {
@@ -33,7 +34,7 @@
   
 </script>
 
-{#each dots as dot, i (i)}
-  <EllipsisDot dotIndex={i} fill={colours[i]} />
+{#each showDots as showDot, i (i)}
+  <EllipsisDot dotIndex={i} fill={colours[i]} visible={showDot} />
 {/each}
 
