@@ -97,8 +97,9 @@
   }
 
   function swiped(event) {
-    if ($isLastVerseWord && isInFlight) isInFlight = false;
-    if ($isInBetweenWords) return null;
+    const isWindowOfIntervention = $isLastVerseWord && isInFlight;
+    if (isWindowOfIntervention) isInFlight = false;
+    if ($isInBetweenWords || isInFlight) return null;
     const direction = event.detail.direction;
     if (direction === 'left') {
       nextWord();

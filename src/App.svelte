@@ -29,7 +29,6 @@
     const sefirotGeoJson = await fetchSefirot();
     sefirotPoints.set(sefirotGeoJson);
     
-    
     const zeroSefirah = sefirotGeoJson.features[0];
     const zeroProjection = projectionForSefirah(zeroSefirah, screenPx);
     groundZeroProjection.set(zeroProjection);
