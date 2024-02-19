@@ -10,7 +10,7 @@
   import { Stage } from 'svelte-konva';
   import Overture from './lib/Overture.svelte';
   import Countdown from './lib/Countdown.svelte';
-  import SwangSong from './lib/SwangSong.svelte';
+  import SwanSong from './lib/SwanSong.svelte';
 
   const screenPx = {
     width: window.innerWidth,
@@ -58,7 +58,7 @@
     {:else if movement === 'countdown' }
       <Countdown on:groundZero={ nextMovement } />
     {:else if movement === 'swanSong' }
-      <SwangSong />
+      <SwanSong />
     {/if}
   </Stage>
 </div>
