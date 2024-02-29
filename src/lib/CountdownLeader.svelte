@@ -11,7 +11,7 @@
     const yCentre = window.innerHeight / 2;
     const diagonalRadius = Math.hypot(xCentre, yCentre);
     const vesselRadius = Math.round(xCentre * 0.7);
-    const vNumberRectPosY = yCentre - vesselRadius * 0.8;
+    const fontSize = Math.round(window.innerHeight / 4);
 
     $: verseNumber = String($currentPiSlice);
     $: toCoordsGsc = $sefirotPoints.features[$currentPiSlice].geometry.coordinates;
@@ -114,14 +114,14 @@
 }} bind:handle={ innerLightEl } />
 <Text config={{
   x: 0,
-  y: vNumberRectPosY,
+  y: 0,
   text: verseNumber,
   width: window.innerWidth,
-  height: vesselRadius * 2,
+  height: window.innerHeight,
   align: 'center',
   verticalAlign: 'middle',
   fontFamily: 'monospace',
-  fontSize: 200,
+  fontSize,
   fill: 'black',
   strokeEnabled: false
 }} bind:handle={ verseNumberEl }/>
