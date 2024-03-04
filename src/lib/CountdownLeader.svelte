@@ -1,5 +1,5 @@
 <script>
-    import { Circle, Text, Wedge } from 'svelte-konva';
+    import { Circle, Wedge } from 'svelte-konva';
     import { ilanProjection, ilanBlocks, sefirotPoints } from '../stores/treeOfLife.js';
     import { currentPiSlice } from '../stores/text.js';
     import StreetMap from './StreetMap.svelte';
@@ -11,15 +11,12 @@
     const yCentre = window.innerHeight / 2;
     const diagonalRadius = Math.hypot(xCentre, yCentre);
     const vesselRadius = Math.round(xCentre * 0.7);
-    const fontSize = Math.round(window.innerHeight / 4);
 
-    $: verseNumber = String($currentPiSlice);
     $: toCoordsGsc = $sefirotPoints.features[$currentPiSlice].geometry.coordinates;
     $: toCoordsPx = $ilanProjection(toCoordsGsc);
 
     let innerLightEl;
     let searchLightEl;
-    let verseNumberEl;
     let vessel;
 
     $: if (innerLightEl !== undefined) {
@@ -28,6 +25,7 @@
     }
 
     function leaderWipeIn() {
+      dispatch('showVerseNumber', $currentPiSlice);
       const toAttrs = {
         duration: Math.PI, 
         angle: 90,
@@ -54,7 +52,12 @@
         opacity: 0
       };
       innerLightEl.to({ ...toAttrs });
-      searchLightEl.to({ ...toAttrs });
+      searchLightEl.to({ 
+        ...toAttrs,
+        onFinish: () => {
+          dispatch('hideVerseNumber');
+        } 
+      });
     }
 
     function createVessel() {
@@ -62,7 +65,6 @@
         duration: Math.PI * 2,
         stroke: 'dimgrey',
         onFinish: () => { 
-          verseNumberEl.hide();
           mapVesselToSefirah();
         }
       });
@@ -112,16 +114,3 @@
   strokeEnabled: false,
   opacity: 0
 }} bind:handle={ innerLightEl } />
-<Text config={{
-  x: 0,
-  y: 0,
-  text: verseNumber,
-  width: window.innerWidth,
-  height: window.innerHeight,
-  align: 'center',
-  verticalAlign: 'middle',
-  fontFamily: 'monospace',
-  fontSize,
-  fill: 'black',
-  strokeEnabled: false
-}} bind:handle={ verseNumberEl }/>

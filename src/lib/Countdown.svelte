@@ -39,7 +39,7 @@
 
 <Layer config={{ opacity: 1 }} bind:handle={ aPrioriLayerEl } >
   {#if isMurmuring}
-    <CountdownLeader on:vesselMapped={ blaze } />
+    <CountdownLeader on:vesselMapped={ blaze } on:showVerseNumber on:hideVerseNumber />
   {:else if isBlazing} 
     <Pathways on:blazed={ remember } />
   {/if}
