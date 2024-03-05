@@ -11,6 +11,7 @@
   import Overture from './lib/Overture.svelte';
   import Countdown from './lib/Countdown.svelte';
   import SwanSong from './lib/SwanSong.svelte';
+  import VerseNumber from './lib/VerseNumber.svelte';
 
   const screenPx = {
     width: window.innerWidth,
@@ -19,7 +20,6 @@
   const movements = ['overture', 'countdown', 'swanSong'];
   let movementIndex = 0;
   $: movement = movements[movementIndex];
-  const verseNumberFontSize = Math.round(window.innerHeight / 3.5);
 
   onMount(async () => {
     await setIlanData(screenPx);
@@ -50,13 +50,6 @@
   }
 
   function nextMovement() { movementIndex += 1 }
-
-  let isVerseNumberVisible = false;
-  let verseNumber = 3;
-  function setVerseNumber(event) { 
-    verseNumber = event.detail;
-    isVerseNumberVisible = true; 
-  }
 </script>
 
 <div class='screen'>
@@ -64,19 +57,13 @@
     {#if movement === 'overture' }
       <Overture on:goneNova={ nextMovement } />
     {:else if movement === 'countdown' }
-      <Countdown on:groundZero={ nextMovement } 
-        on:showVerseNumber={ setVerseNumber }
-        on:hideVerseNumber={ () => { isVerseNumberVisible = false } } />
+      <Countdown on:groundZero={ nextMovement } />
     {:else if movement === 'swanSong' }
       <SwanSong />
     {/if}
   </Stage>
-  {#if isVerseNumberVisible}
-    <div id='verse-number-wrapper'>
-      <span id='verse-number' style='--fontSize:{verseNumberFontSize};'>
-        { verseNumber }
-      </span>
-    </div>
+  {#if isDataInitialized}
+    <VerseNumber />
   {/if}
 </div>
 
@@ -85,23 +72,5 @@
     width: 100%;
     height: 100%;
     background-color: black;
-  }
-  
-  #verse-number-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-  }
-
-  #verse-number {
-    color: black;
-    font-size: calc( var(--fontSize) * 1px );
-    font-family: monospace;
   }
 </style>

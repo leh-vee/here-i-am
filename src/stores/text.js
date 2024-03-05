@@ -180,7 +180,12 @@ export const isLastWordInLineA = derived(
 
 export const currentPiSlice = derived(
   [wordIndices], ([$wordIndices]) => {
-    return poem[$wordIndices.verseIndex].piSlice;
+    let piSlice = "3"; // hard code first slice in case store is called before poem is loaded (refactor)
+    const { verseIndex } = $wordIndices;
+    if (verseIndex > 0) {
+      piSlice = poem[verseIndex].piSlice;
+    }
+    return piSlice;
   }
 );
 
@@ -222,8 +227,16 @@ export const isLastVerseWord = derived(
 
 export const isFirstVerseTriad = derived(
   [wordIndices], ([$wordIndices]) => {
+    let isFirstTriad = false;
+    if ($wordIndices.verseIndex < 3) isFirstTriad = true;
+    return isFirstTriad;
+  }
+);
+
+export const isFirstVerse = derived(
+  [wordIndices], ([$wordIndices]) => {
     let isFirstVerse = false;
-    if ($wordIndices.verseIndex < 3) isFirstVerse = true;
+    if ($wordIndices.verseIndex === 0) isFirstVerse = true;
     return isFirstVerse;
   }
 );
