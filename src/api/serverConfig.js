@@ -1,6 +1,6 @@
-const API_BASE_URL = "http://192.168.0.157:8000/here-i-am/data";
+const HOST = import.meta.env.VITE_HOST_URL;
+const API_BASE_URL = `${HOST}/here-i-am/data`;
 
-console.log(import.meta.env.VITE_HOST_URL);
 
 export async function fetchData(endpoint, options = {}) {
   const url = `${API_BASE_URL}/${endpoint}/`;
