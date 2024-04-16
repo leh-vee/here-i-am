@@ -1,5 +1,4 @@
 const HOST = import.meta.env.VITE_HOST_URL || 'http://127.0.0.1:8000';
-console.log(HOST);
 const API_BASE_URL = `${HOST}/here-i-am/data`;
 
 
