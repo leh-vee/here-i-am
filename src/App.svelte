@@ -12,12 +12,13 @@
   import Countdown from './lib/Countdown.svelte';
   import SwanSong from './lib/SwanSong.svelte';
   import VerseNumber from './lib/VerseNumber.svelte';
+  import LandingPage from './lib/LandingPage.svelte';
 
   const screenPx = {
     width: window.innerWidth,
     height: window.innerHeight
   }
-  const movements = ['overture', 'countdown', 'swanSong'];
+  const movements = ['prologue', 'overture', 'countdown', 'swanSong'];
   let movementIndex = 0;
   $: movement = movements[movementIndex];
 
@@ -53,15 +54,19 @@
 </script>
 
 <div class='screen'>
-  <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
-    {#if movement === 'overture' }
-      <Overture on:goneNova={ nextMovement } />
-    {:else if movement === 'countdown' }
-      <Countdown on:groundZero={ nextMovement } />
-    {:else if movement === 'swanSong' }
-      <SwanSong />
-    {/if}
-  </Stage>
+  {#if movement === 'prologue'} 
+    <LandingPage on:go={ nextMovement } />
+  {:else}
+    <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
+      {#if movement === 'overture' }
+        <Overture on:goneNova={ nextMovement } />
+      {:else if movement === 'countdown' }
+        <Countdown on:groundZero={ nextMovement } />
+      {:else if movement === 'swanSong' }
+        <SwanSong />
+      {/if}
+    </Stage>
+  {/if}
   {#if isDataInitialized}
     <VerseNumber />
   {/if}
