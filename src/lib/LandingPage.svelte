@@ -3,16 +3,17 @@
 
   const dispatch = createEventDispatcher();
 
+  const btnDiameter = Math.round(window.innerWidth * 0.7);
+
   function dispatchGo() {
     dispatch('go');
   }
 </script>
 
 <div id='landing-page'>
-  <h1 class='title'>Here I Am</h1>
-  <h5 class='sub title'>Our Fallen Gang</h5>
-  <button id='go' on:click={dispatchGo}>
-    ...
+  <button on:click={dispatchGo} id="go" style='--diameter:{btnDiameter};'>
+    <span class="title">Here</span>
+    <span class="title">I Am</span>
   </button>
 </div>
 
@@ -21,37 +22,29 @@
     width: 100%;
     height: 100%;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-image: url("/toronto-lines.png");
     background-size: cover;
   }
-  .title {
-    margin: 0;
-    font-size: 18svw;
-    font-family: Arial, Helvetica, sans-serif;
-    color: gold;
-    -webkit-text-stroke-width: 2px;
-    -webkit-text-stroke-color: black;
-  }
   
-  .sub.title {
-    color: white;
-    font-size: 8svw;
-    -webkit-text-stroke-width: 1px;
+  button#go {
+    background: black;
+    text-align: center;
+    width: calc( var(--diameter) * 1px );
+    height: calc( var(--diameter) * 1px );
+    border-radius: 100%;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
-  button#go {
-    position: absolute;
-    bottom: 5%;
-    padding: 1px 36px;
-    border-radius: 6px;
-    background-color: white;
+  .title {
+    font-family: 'Love Ya Like A Sister';
+    font-size: 10lvh;
     color: gold;
-    font-size: 40px;
-    border: 2px solid black;
-    box-shadow: 0 8px 8px -4px lightblue;
-    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+    text-decoration: none
   }
 </style>
