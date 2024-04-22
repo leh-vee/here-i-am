@@ -2,8 +2,12 @@
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
-
   const btnDiameter = Math.round(window.innerWidth * 0.7);
+
+  let isTitleFontLoaded = false;
+  document.fonts.load("12px Love Ya Like A Sister", "a").then(() =>{
+    isTitleFontLoaded = true;
+  });
 
   function dispatchGo() {
     dispatch('go');
@@ -12,8 +16,10 @@
 
 <div id='landing-page'>
   <button on:click={dispatchGo} id="go" style='--diameter:{btnDiameter};'>
-    <span class="title">Here</span>
-    <span class="title">I Am</span>
+    {#if isTitleFontLoaded}
+      <span class="title">Here</span>
+      <span class="title">I Am</span>
+    {/if}
   </button>
 </div>
 
