@@ -53,20 +53,18 @@
   function nextMovement() { movementIndex += 1 }
 </script>
 
-<div class='screen'>
-  {#if movement === 'prologue'} 
-    <LandingPage on:go={ nextMovement } />
-  {:else}
-    <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
-      {#if movement === 'overture' }
-        <Overture on:goneNova={ nextMovement } />
-      {:else if movement === 'countdown' }
-        <Countdown on:groundZero={ nextMovement } />
-      {:else if movement === 'swanSong' }
-        <SwanSong />
-      {/if}
-    </Stage>
-  {/if}
+<div class='screen' class:landing-page={movement === 'prologue'}>
+  <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
+    {#if movement === 'prologue'} 
+      <LandingPage on:go={ nextMovement } />
+    {:else if movement === 'overture' }
+      <Overture on:goneNova={ nextMovement } />
+    {:else if movement === 'countdown' }
+      <Countdown on:groundZero={ nextMovement } />
+    {:else if movement === 'swanSong' }
+      <SwanSong />
+    {/if}
+  </Stage>
   {#if isDataInitialized}
     <VerseNumber />
   {/if}
@@ -77,5 +75,10 @@
     width: 100%;
     height: 100%;
     background-color: black;
+  }
+
+  .screen.landing-page {
+    background-image: url("/toronto-lines.png");
+    background-size: cover;
   }
 </style>
