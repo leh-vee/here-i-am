@@ -5,7 +5,8 @@
 
   let punctuationEl;
   const dispatch = createEventDispatcher();
-  const duration = Math.PI / 2
+  const duration = Math.PI / 2;
+  const fontSize = Math.round(window.innerWidth / 5);
 
   $: if ($isCaesura) animateIn();
 
@@ -13,7 +14,7 @@
     punctuationEl.fillEnabled(true);
     punctuationEl.to({
       duration,
-      fill: 'dimgrey',
+      opacity: 1,
       strokeWidth: 2,
       onFinish: () => { animateOut() }
     });
@@ -23,7 +24,7 @@
     punctuationEl.to({
       duration,
       strokeWidth: 0,
-      fill: 'black',
+      opacity: 0,
       onFinish: () => { 
         punctuationEl.fillEnabled(false);
         dispatch('punctuated') 
@@ -40,9 +41,9 @@
   height: window.innerHeight,
   align: 'center',
   verticalAlign: 'middle',
-  fontSize: Math.round(window.innerWidth / 9),
-  fillEnabled: false,
+  fontSize,
   fill: 'black',
+  opacity: 0,
   stroke: 'dimgrey',
   strokeWidth: 0
 }} bind:handle={punctuationEl} />
