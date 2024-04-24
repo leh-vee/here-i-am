@@ -7,6 +7,10 @@
   export let inFlight = false;
   let pieEl;
 
+  const watchFontSize = Math.round(window.innerWidth / 30);
+  const isPiSecondsFontSize = Math.round(window.innerWidth / 8);
+  const piScoreBoardFontSize = Math.round(window.innerWidth / 16);
+
   let start = new Date();
   $: startTime = start.getTime();
 
@@ -96,7 +100,7 @@
   height: window.innerHeight / 2,
   align: 'center',
   verticalAlign: 'middle',
-  fontSize: 9,
+  fontSize: watchFontSize,
   fontFamily: 'digital',
   fillEnabled: true,
   fill: 'white',
@@ -113,7 +117,7 @@
   height: window.innerHeight / 2,
   align: 'center',
   verticalAlign: 'middle',
-  fontSize: 50,
+  fontSize: isPiSecondsFontSize,
   fillEnabled: true,
   visible: isPiSeconds
 }} bind:handle={pieEl} />
@@ -123,7 +127,7 @@
   text: getPieScoreBoardText(),
   width: window.innerWidth,
   height: window.innerHeight / 2,
-  fontSize: 25,
+  fontSize: piScoreBoardFontSize,
   align: "center",
   fillEnabled: true
 }} />
