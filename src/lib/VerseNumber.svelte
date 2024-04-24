@@ -1,8 +1,8 @@
 <script>
-    import { isFirstVerseTriad, isFirstVerse, currentPiSlice } from '../stores/text.js';
+    import { isFirstVerseTriad, currentPiSlice } from '../stores/text.js';
     import { isVerseNumberVisible } from '../stores/base.js';
 
-    $: verseNumberFontSize = Math.round(window.innerHeight / ($isFirstVerseTriad ? 5 : 3.5));
+    $: verseNumberFontSize = Math.round(window.innerWidth / 2);
     
     let verseNumber;
     $: if ($isFirstVerseTriad) {
@@ -38,6 +38,6 @@
   #verse-number {
     color: black;
     font-size: calc( var(--fontSize) * 1px );
-    font-family: monospace;
+    font-family: "Wellfleet", monospace;
   }
 </style>
