@@ -5,11 +5,12 @@
 
   const xCentre = window.innerWidth / 2;
   const yCentre = window.innerHeight / 2;
-  const buttonRadius = Math.round(xCentre * 0.7);
   const diagonalRadius = Math.hypot(xCentre, yCentre);
-
+  
   let button;
+  let buttonRadius = Math.round(xCentre * 0.7);
   let stroke = 'dimgrey';
+  let strokeWidth = 6;
   let fill = 'gold';
   let fontSize = Math.round(window.innerWidth / 5);
 
@@ -27,6 +28,7 @@
     titleText = subtitle;
     fill = 'dimgrey';
     stroke = 'gold';
+    buttonRadius -= strokeWidth;
     fontSize = Math.round(window.innerWidth / 10)
   } 
 
@@ -46,11 +48,9 @@
     y: yCentre,
     fill: 'black',
     radius: buttonRadius,
-    strokeWidth: 6,
+    strokeWidth,
     stroke
   }} 
-  on:pointerdown={ btnPressed }
-  on:pointerup={ btnDepressed }
   bind:handle={ button } />
   {#if isTitleFontLoaded && isTitleVisible} 
     <Text config={{
@@ -64,9 +64,16 @@
       fontFamily: 'Love Ya Like A Sister',
       fontSize,
       fill
+    }} />
+    <Circle config={{
+      x: xCentre,
+      y: yCentre,
+      opacity: 0,
+      radius: buttonRadius + strokeWidth,
+      strokeEnabled: false
     }} 
-    on:pointerdown={ btnPressed }
-    on:pointerup={ btnDepressed }
+      on:pointerdown={ btnPressed }
+      on:pointerup={ btnDepressed }
     />
   {/if}
 </Layer>
