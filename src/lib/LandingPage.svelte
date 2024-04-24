@@ -3,6 +3,21 @@
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
+  let loveYaFontFace;
+  let nIntervals = 0;
+  const i = setInterval(() => {
+    const fontFaces = [...document.fonts];
+    loveYaFontFace = fontFaces.find(f => f.family === fontFamily);
+    if (loveYaFontFace !== undefined) {
+      loveYaFontFace.load().then(() => { isTitleFontLoaded = true });
+      clearInterval(i);
+    }
+    nIntervals += 1;
+    if (nIntervals > 10) {
+      isTitleFontLoaded;
+    }
+  }, 100);
+
   const xCentre = window.innerWidth / 2;
   const yCentre = window.innerHeight / 2;
   const diagonalRadius = Math.hypot(xCentre, yCentre);
@@ -13,16 +28,13 @@
   let strokeWidth = 6;
   let fill = 'gold';
   let fontSize = Math.round(window.innerWidth / 5);
+  const fontFamily = "Love Ya Like A Sister";
 
   const title = "Here\nI Am";
   const subtitle = "Our\nFallen\nGang";
   let titleText = title;
   let isTitleVisible = true;
   let isTitleFontLoaded = false;
-  
-  document.fonts.load("12px Love Ya Like A Sister", "a").then(() =>{
-    isTitleFontLoaded = true;
-  });
   
   function btnPressed() {
     titleText = subtitle;
@@ -52,7 +64,7 @@
     stroke
   }} 
   bind:handle={ button } />
-  {#if isTitleFontLoaded && isTitleVisible} 
+  {#if isTitleVisible && isTitleFontLoaded} 
     <Text config={{
       x: 0,
       y: 0,
@@ -61,7 +73,7 @@
       align: 'center',
       verticalAlign: 'middle',
       text: titleText,
-      fontFamily: 'Love Ya Like A Sister',
+      fontFamily,
       fontSize,
       fill
     }} />
