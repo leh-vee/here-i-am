@@ -94,7 +94,7 @@
 </script>
 
 <Text config={{
-  y: Math.round(window.innerHeight / 5.3),
+  y: Math.round(window.innerHeight / 6),
   text: formattedElapsed,
   width: window.innerWidth,
   height: window.innerHeight / 2,
