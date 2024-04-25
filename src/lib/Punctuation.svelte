@@ -36,6 +36,7 @@
 
 <Text config={{
   text: $punctuationMark,
+  x: 0,
   y: 0, 
   width: window.innerWidth,
   height: window.innerHeight,
