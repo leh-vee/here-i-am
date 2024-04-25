@@ -3,21 +3,6 @@
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
-  let loveYaFontFace;
-  let nIntervals = 0;
-  const i = setInterval(() => {
-    const fontFaces = [...document.fonts];
-    loveYaFontFace = fontFaces.find(f => f.family === fontFamily);
-    if (loveYaFontFace !== undefined) {
-      loveYaFontFace.load().then(() => { isTitleFontLoaded = true });
-      clearInterval(i);
-    }
-    nIntervals += 1;
-    if (nIntervals > 10) {
-      isTitleFontLoaded;
-    }
-  }, 100);
-
   const xCentre = window.innerWidth / 2;
   const yCentre = window.innerHeight / 2;
   const diagonalRadius = Math.hypot(xCentre, yCentre);
@@ -35,6 +20,17 @@
   let titleText = title;
   let isTitleVisible = true;
   let isTitleFontLoaded = false;
+
+  document.fonts.ready.then((fontFaceSet) => {
+    const fontFaces = [...fontFaceSet];
+    console.log(fontFaces.length, "fontfaces ready");
+    const loveYaFontFace = fontFaces.find(f => f.family === fontFamily);
+    console.log('load status of Love Ya... font:', loveYaFontFace.status);
+    loveYaFontFace.load().then(() => { 
+      console.log('load status of Love Ya... font:', loveYaFontFace.status);
+      isTitleFontLoaded = true;
+    });
+  });
   
   function btnPressed() {
     titleText = subtitle;
