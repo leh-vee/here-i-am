@@ -17,7 +17,6 @@
     "@turf/distance": "^6.5.0",
     "d3": "^7.6.1",
     "konva": "^9.0.1",
-    "svelte-gestures": "^1.5.2",
     "svelte-konva": "^0.3.1"
   }
 }

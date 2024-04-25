@@ -5,7 +5,8 @@
   import VerseMap from './VerseMap.svelte';
   import SefirahMarker from './SefirahMarker.svelte';
   import StreetMap from './StreetMap.svelte';
-  import Stopwatch from './PiWatch.svelte';
+  import PiWatch from './PiWatch.svelte';
+  import Controls from './Controls.svelte';
   import { currentChannelFromSefirahCoordsPx, blocksForCurrentChannel,
     currentChannelToSefirahCoordsPx, currentChannelProjection, 
     channelBlocks } from '../stores/treeOfLife';
@@ -13,7 +14,6 @@
     isCaesura, isEllipsis, isFirstVerseWord, isLastVerseWord,
     isInBetweenWords } from '../stores/text';
   import Ellipsis from './Ellipsis.svelte';
-  import { swipe } from 'svelte-gestures';
   import { fetchBlocksWithinRadius } from '../api/client.js';
   import distance from "@turf/distance";
   import { currentPiSlice, lastPiSlice, likePiSlices, isGroundZero } from '../stores/text.js';
@@ -128,8 +128,7 @@
   }
 </script>
 
-<div id='verse-explorer' use:swipe={{ timeframe: 300, minSwipeDistance: 60 }} 
-  on:swipe={(e) => { swiped(e) }}>
+<div id='verse-explorer'>
   <Stage config={{ width: window.innerWidth, height: window.innerHeight, 
     visible: isReading }} >
     <Layer>
@@ -138,7 +137,7 @@
           <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
             projection={ $currentChannelProjection } />
         </Group>
-        <Stopwatch inFlight={ isInFlight }/>  
+        <PiWatch inFlight={ isInFlight }/>  
         {#if $blocksForCurrentChannel}
           <Group bind:handle={ sefirahsGroupEl }>
             <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
@@ -151,17 +150,15 @@
             <VerseMap />
             <Notepad inFlight={ isInFlight } />
             <Punctuation on:punctuated={ postPunctuation } />
+            <Controls 
+              on:back={() => { swiped({ detail: { direction: 'right' } }) }}
+              on:forward={() => { swiped({ detail: { direction: 'left' } }) }}
+            />
           {/if}
         {/if}
       {/key}
     </Layer>
   </Stage>
-</div>
-<div class='controller'>
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <span class='back button' on:click={ () => { swiped({ detail: { direction: 'right' } }) } } ></span>
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <span class='forward button' on:click={ () => { swiped({ detail: { direction: 'left' } }) } } ></span>
 </div>
 
 <style>
@@ -171,21 +168,5 @@
     left: 0;
     right: 0;
     bottom: 0;
-  }
-
-  .controller {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 25%;
-    display: flex;
-    z-index: 1;
-  }
-
-  .controller .button {
-    width: 50%;
-    text-align: center;
-    vertical-align: baseline;
-    font-size: 5vw;
   }
 </style>
