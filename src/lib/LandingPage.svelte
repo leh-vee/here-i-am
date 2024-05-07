@@ -24,11 +24,8 @@
 
   document.fonts.ready.then((fontFaceSet) => {
     const fontFaces = [...fontFaceSet];
-    console.log(fontFaces.length, "fontfaces ready");
-    const loveYaFontFace = fontFaces.find(f => f.family === fontFamily);
-    console.log('load status of Love Ya... font:', loveYaFontFace.status);
-    loveYaFontFace.load().then(() => { 
-      console.log('load status of Love Ya... font:', loveYaFontFace.status);
+    const loveYaFontFaces = fontFaces.filter(f => f.family === fontFamily);
+    Promise.all(loveYaFontFaces.map(ff => ff.load())).then(() => { 
       isTitleFontLoaded = true;
     });
   });
