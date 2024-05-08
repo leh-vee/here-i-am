@@ -1,46 +1,73 @@
 <script>
-  import { Arrow } from 'svelte-konva';
+  import { Circle, RegularPolygon } from 'svelte-konva';
   import { currentChannelFromSefirahCoordsPx, currentChannelToSefirahCoordsPx } from '../stores/treeOfLife';
   import { isLastVerseWord } from '../stores/text';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
 
-  let backArrowEl, forwardArrowEl;
-  let arrowAttrs = {
-    y: window.innerHeight / 2,
-    fill: 'black',
-    pointerLength: 30,
-    pointerWidth: 40,
-    stroke: 'dimgrey',
-    opacity: 0.4,
-    strokeWidth: 3
+  const y = window.innerHeight / 2;
+  const radius = $currentChannelFromSefirahCoordsPx[0] - 2;
+  const btnStrokeWidth = 2;
+
+  const buttonAttrs = {
+    y,
+    radius,
+    fill: 'dimgrey',
+    stroke: 'gold',
+    strokeWidth: btnStrokeWidth
   }
 
+  const triangleAttrs = {
+    y,
+    sides: 3,
+    radius: radius - (btnStrokeWidth * 3),
+    fill: 'black',
+    strokeWidth: 0
+  }
+
+  const hitAreaElAttrs = {
+    y,
+    opacity: 0,
+    radius: radius * 2,
+    strokeEnabled: false
+  }
+
+  let backHitAreaEl, fowardHitAreaEl;
+
   $: if ($isLastVerseWord) { // & inFlight
-    backArrowEl.to({
-      duration: Math.PI / 2,
-      opacity: 1
-    });
-    forwardArrowEl.to({
-      duration: Math.PI / 2,
-      opacity: 1
-    });
+
   }
 </script>
 
-<Arrow config={{
-  ...arrowAttrs,
+<Circle config={{
   x: $currentChannelFromSefirahCoordsPx[0],
-  points: [0, 0, -0, 0]
-}}
-on:pointerclick={ () => { dispatch('back') } } 
-bind:handle={backArrowEl} />
-
-<Arrow config={{
-  ...arrowAttrs,
+  ...buttonAttrs
+}}/>
+<Circle config={{
   x: $currentChannelToSefirahCoordsPx[0],
-  points: [0, 0, 0, 0]
-}}
-on:pointerclick={ () => { dispatch('forward') } } 
-bind:handle={forwardArrowEl} />
+  ...buttonAttrs
+}}/>
+
+<RegularPolygon config={{
+  x: $currentChannelFromSefirahCoordsPx[0],
+  rotation: -90,
+  ...triangleAttrs
+}}/>
+<RegularPolygon config={{
+  x: $currentChannelToSefirahCoordsPx[0],
+  rotation: 90,
+  ...triangleAttrs
+}}/>
+
+<Circle config={{
+  x: $currentChannelFromSefirahCoordsPx[0],
+  ...hitAreaElAttrs
+}} bind:handle={backHitAreaEl}
+on:pointerclick={ () => { dispatch('back') } } />
+
+<Circle config={{
+  x: $currentChannelToSefirahCoordsPx[0],
+  ...hitAreaElAttrs
+}} bind:handle={fowardHitAreaEl}
+on:pointerclick={ () => { dispatch('forward') } } />
