@@ -7,9 +7,9 @@
   const dispatch = createEventDispatcher();
 
   const y = window.innerHeight / 2;
-  const xBackBtn = $currentChannelFromSefirahCoordsPx[0];
-  const xForwardBtn = window.innerWidth - xBackBtn;
   const radius = Math.round(window.innerWidth / 50);
+  const xBackBtn = $currentChannelFromSefirahCoordsPx[0] + radius;
+  const xForwardBtn = window.innerWidth - xBackBtn;
 
   const buttonAttrs = {
     y,
