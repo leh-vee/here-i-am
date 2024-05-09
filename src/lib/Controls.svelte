@@ -7,21 +7,23 @@
   const dispatch = createEventDispatcher();
 
   const y = window.innerHeight / 2;
-  const radius = $currentChannelFromSefirahCoordsPx[0] - 2;
-  const btnStrokeWidth = 2;
+  const btnMargin = 0;
+  const xBackBtn = $currentChannelFromSefirahCoordsPx[0] + btnMargin;
+  const xForwardBtn = $currentChannelToSefirahCoordsPx[0] - btnMargin;
+  const radius = Math.round(window.innerWidth / 50);
 
   const buttonAttrs = {
     y,
-    radius,
+    radius: radius * 1.5,
     fill: 'dimgrey',
-    stroke: 'gold',
-    strokeWidth: btnStrokeWidth
+    stroke: 'silver',
+    strokeWidth: 1
   }
 
   const triangleAttrs = {
     y,
     sides: 3,
-    radius: radius - (btnStrokeWidth * 3),
+    radius,
     fill: 'black',
     strokeWidth: 0
   }
@@ -41,33 +43,32 @@
 </script>
 
 <Circle config={{
-  x: $currentChannelFromSefirahCoordsPx[0],
+  x: xBackBtn,
   ...buttonAttrs
 }}/>
 <Circle config={{
-  x: $currentChannelToSefirahCoordsPx[0],
+  x: xForwardBtn,
   ...buttonAttrs
 }}/>
 
 <RegularPolygon config={{
-  x: $currentChannelFromSefirahCoordsPx[0],
+  x: xBackBtn,
   rotation: -90,
   ...triangleAttrs
 }}/>
 <RegularPolygon config={{
-  x: $currentChannelToSefirahCoordsPx[0],
+  x: xForwardBtn,
   rotation: 90,
   ...triangleAttrs
 }}/>
 
 <Circle config={{
-  x: $currentChannelFromSefirahCoordsPx[0],
+  x: xBackBtn,
   ...hitAreaElAttrs
 }} bind:handle={backHitAreaEl}
 on:pointerclick={ () => { dispatch('back') } } />
-
 <Circle config={{
-  x: $currentChannelToSefirahCoordsPx[0],
+  x: xForwardBtn,
   ...hitAreaElAttrs
 }} bind:handle={fowardHitAreaEl}
 on:pointerclick={ () => { dispatch('forward') } } />
