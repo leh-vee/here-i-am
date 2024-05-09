@@ -4,7 +4,6 @@
   import StreetMap from './StreetMap.svelte';
   import { ilanProjection, ilanBlocks } from '../stores/treeOfLife.js';
   import { createEventDispatcher } from 'svelte';
-  import Konva from 'konva';
 
   const dispatch = createEventDispatcher();
   const xCentre = window.innerWidth / 2;
