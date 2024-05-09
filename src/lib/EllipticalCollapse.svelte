@@ -86,8 +86,9 @@
         ellipsisStops.forEach((stop, i) => {
           if (i === 1) {
             stop.to({
-              duration: Math.PI - 3,
+              duration: Math.PI,
               opacity: 1,
+              radius: 0,
               fill: 'gold',
               onFinish: () => { 
                 isCollapsed = true;
