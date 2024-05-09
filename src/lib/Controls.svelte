@@ -30,7 +30,7 @@
   const hitAreaElAttrs = {
     y,
     opacity: 0,
-    radius: radius * 2,
+    radius: radius**2,
     strokeEnabled: false
   }
 
