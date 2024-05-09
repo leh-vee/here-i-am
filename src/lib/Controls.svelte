@@ -7,34 +7,60 @@
   const dispatch = createEventDispatcher();
 
   const y = window.innerHeight / 2;
-  const radius = Math.round(window.innerWidth / 50);
-  const xBackBtn = $currentChannelFromSefirahCoordsPx[0] + radius;
+  const baseBtnRadius = Math.round(window.innerWidth / 50);
+  const pressedBtnRadius = Math.round(window.innerWidth / 55);
+  const xBackBtn = $currentChannelFromSefirahCoordsPx[0] + baseBtnRadius;
   const xForwardBtn = window.innerWidth - xBackBtn;
+
+  let backBtnRadius = baseBtnRadius;
+  let fwdBtnRadius = baseBtnRadius;
+  
+  const baseBtnStrokeColour = '#989898';
+  const pressedBtnStrokeColour = '#808080';
+  let backBtnStrokeColour = baseBtnStrokeColour;
+  let fwdBtnStrokeColour = baseBtnStrokeColour;
 
   const buttonAttrs = {
     y,
-    radius: radius * 1.5,
     fill: 'dimgrey',
-    stroke: 'silver',
     strokeWidth: 1
   }
 
   const triangleAttrs = {
     y,
     sides: 3,
-    radius,
     fill: 'black',
-    strokeWidth: 0
+    enableStroke: false
   }
 
   const hitAreaElAttrs = {
     y,
     opacity: 0,
-    radius: radius**2,
+    radius: baseBtnRadius**2,
     strokeEnabled: false
   }
 
   let backHitAreaEl, fowardHitAreaEl;
+
+  function onBackButtonClick() {
+    backBtnRadius = pressedBtnRadius;
+    backBtnStrokeColour = pressedBtnStrokeColour;
+    dispatch('back');
+    setTimeout(() => {
+      backBtnRadius = baseBtnRadius;
+      backBtnStrokeColour = baseBtnStrokeColour;
+    }, Math.PI * 100);
+  }
+  
+  function onFwdButtonClick() {
+    fwdBtnRadius = pressedBtnRadius;
+    fwdBtnStrokeColour = pressedBtnStrokeColour;
+    dispatch('forward');
+    setTimeout(() => {
+      fwdBtnRadius = baseBtnRadius;
+      fwdBtnStrokeColour = baseBtnStrokeColour;
+    }, Math.PI * 100);
+  }
 
   $: if ($isLastVerseWord) { // & inFlight
 
@@ -43,21 +69,27 @@
 
 <Circle config={{
   x: xBackBtn,
+  radius: backBtnRadius * 1.5,
+  stroke: backBtnStrokeColour,
   ...buttonAttrs
 }}/>
 <Circle config={{
   x: xForwardBtn,
+  radius: fwdBtnRadius * 1.5,
+  stroke: fwdBtnStrokeColour,
   ...buttonAttrs
 }}/>
 
 <RegularPolygon config={{
   x: xBackBtn,
   rotation: -90,
+  radius: backBtnRadius,
   ...triangleAttrs
 }}/>
 <RegularPolygon config={{
   x: xForwardBtn,
   rotation: 90,
+  radius: fwdBtnRadius,
   ...triangleAttrs
 }}/>
 
@@ -65,9 +97,9 @@
   x: xBackBtn,
   ...hitAreaElAttrs
 }} bind:handle={backHitAreaEl}
-on:pointerclick={ () => { dispatch('back') } } />
+on:pointerclick={ onBackButtonClick } />
 <Circle config={{
   x: xForwardBtn,
   ...hitAreaElAttrs
 }} bind:handle={fowardHitAreaEl}
-on:pointerclick={ () => { dispatch('forward') } } />
+on:pointerclick={ onFwdButtonClick } />
