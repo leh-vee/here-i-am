@@ -1,15 +1,14 @@
 <script>
   import { Circle, RegularPolygon } from 'svelte-konva';
-  import { currentChannelFromSefirahCoordsPx, currentChannelToSefirahCoordsPx } from '../stores/treeOfLife';
+  import { currentChannelFromSefirahCoordsPx } from '../stores/treeOfLife';
   import { isLastVerseWord } from '../stores/text';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
 
   const y = window.innerHeight / 2;
-  const btnMargin = 0;
-  const xBackBtn = $currentChannelFromSefirahCoordsPx[0] + btnMargin;
-  const xForwardBtn = $currentChannelToSefirahCoordsPx[0] - btnMargin;
+  const xBackBtn = $currentChannelFromSefirahCoordsPx[0];
+  const xForwardBtn = window.innerWidth - xBackBtn;
   const radius = Math.round(window.innerWidth / 50);
 
   const buttonAttrs = {
