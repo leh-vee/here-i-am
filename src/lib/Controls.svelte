@@ -42,24 +42,28 @@
 
   let backHitAreaEl, fowardHitAreaEl;
 
-  function onBackButtonClick() {
+  function backBtnStickyDown() {
     backBtnRadius = pressedBtnRadius;
     backBtnStrokeColour = pressedBtnStrokeColour;
-    dispatch('back');
-    setTimeout(() => {
-      backBtnRadius = baseBtnRadius;
-      backBtnStrokeColour = baseBtnStrokeColour;
-    }, Math.PI * 100);
+    setTimeout(unstickBckBtn, Math.PI * 100);
   }
-  
-  function onFwdButtonClick() {
+
+  function unstickBckBtn() {
+    backBtnRadius = baseBtnRadius;
+    backBtnStrokeColour = baseBtnStrokeColour;
+    dispatch('back');
+  }
+
+  function fwdBtnStickyDown() {
     fwdBtnRadius = pressedBtnRadius;
     fwdBtnStrokeColour = pressedBtnStrokeColour;
+    setTimeout(unstickFwdBtn, Math.PI * 100);
+  }
+
+  function unstickFwdBtn() {
+    fwdBtnRadius = baseBtnRadius;
+    fwdBtnStrokeColour = baseBtnStrokeColour;
     dispatch('forward');
-    setTimeout(() => {
-      fwdBtnRadius = baseBtnRadius;
-      fwdBtnStrokeColour = baseBtnStrokeColour;
-    }, Math.PI * 100);
   }
 
   $: if ($isLastVerseWord) { // & inFlight
@@ -96,10 +100,14 @@
 <Circle config={{
   x: xBackBtn,
   ...hitAreaElAttrs
-}} bind:handle={backHitAreaEl}
-on:pointerclick={ onBackButtonClick } />
+  }} 
+  bind:handle={ backHitAreaEl }
+  on:pointerdown={ backBtnStickyDown }
+/>
 <Circle config={{
   x: xForwardBtn,
   ...hitAreaElAttrs
-}} bind:handle={fowardHitAreaEl}
-on:pointerclick={ onFwdButtonClick } />
+  }} 
+  bind:handle={fowardHitAreaEl}
+  on:pointerdown={ fwdBtnStickyDown } 
+/>
