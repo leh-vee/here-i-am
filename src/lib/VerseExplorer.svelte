@@ -63,13 +63,6 @@
       setTimeout(() => {
         wordIndices.nextWord();
       }, Math.PI * 10);  
-    } else {
-      setTimeout(() => {
-        if (isInFlight) {
-          isEllipsis.set(true);
-          isInFlight = false;
-        }
-      }, Math.PI * 1000);
     }
   }
 
@@ -151,6 +144,7 @@
             <Notepad inFlight={ isInFlight } />
             <Punctuation on:punctuated={ postPunctuation } />
             <Controls 
+              inFlight={ isInFlight }
               on:back={() => { swiped({ detail: { direction: 'right' } }) }}
               on:forward={() => { swiped({ detail: { direction: 'left' } }) }}
             />

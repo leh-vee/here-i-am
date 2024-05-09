@@ -1,10 +1,12 @@
 <script>
   import { Circle, RegularPolygon } from 'svelte-konva';
   import { currentChannelFromSefirahCoordsPx } from '../stores/treeOfLife';
-  import { isLastVerseWord } from '../stores/text';
+  import { isLastVerseWord, isInBetweenWords } from '../stores/text';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
+
+  export let inFlight;
 
   const y = window.innerHeight / 2;
   const baseBtnRadius = Math.round(window.innerWidth / 50);
@@ -20,6 +22,10 @@
   let backBtnStrokeColour = baseBtnStrokeColour;
   let fwdBtnStrokeColour = baseBtnStrokeColour;
 
+  const btnStickDurationMs = Math.PI * 100;
+
+  let btnOpacity = 0.3;
+
   const buttonAttrs = {
     y,
     fill: 'dimgrey',
@@ -33,19 +39,20 @@
     enableStroke: false
   }
 
-  const hitAreaElAttrs = {
+  let hitAreaElAttrs = {
     y,
     opacity: 0,
+    fill: 'white',
     radius: baseBtnRadius**2,
     strokeEnabled: false
   }
 
-  let backHitAreaEl, fowardHitAreaEl;
+  let backHitAreaEl, forwardHitAreaEl;
 
   function backBtnStickyDown() {
     backBtnRadius = pressedBtnRadius;
     backBtnStrokeColour = pressedBtnStrokeColour;
-    setTimeout(unstickBckBtn, Math.PI * 100);
+    setTimeout(unstickBckBtn, btnStickDurationMs);
   }
 
   function unstickBckBtn() {
@@ -57,7 +64,7 @@
   function fwdBtnStickyDown() {
     fwdBtnRadius = pressedBtnRadius;
     fwdBtnStrokeColour = pressedBtnStrokeColour;
-    setTimeout(unstickFwdBtn, Math.PI * 100);
+    setTimeout(unstickFwdBtn, btnStickDurationMs);
   }
 
   function unstickFwdBtn() {
@@ -66,8 +73,29 @@
     dispatch('forward');
   }
 
-  $: if ($isLastVerseWord) { // & inFlight
+  $: if ($isLastVerseWord && inFlight && !$isInBetweenWords) {
+    btnOpacity = 1;
+    setTimeout(() => {
+      if (inFlight) fwdBtnTutorial()
+    }, Math.PI * 1000);
+  }
 
+  function fwdBtnTutorial() {
+    forwardHitAreaEl.to({
+      duration: 1,
+      radius: fwdBtnRadius * 2,
+      opacity: 0.5,
+      onFinish: () => {
+        if (inFlight) fwdBtnStickyDown();
+        resetHitAreaAttrs();
+      }
+    });
+  }
+
+  $: if (inFlight === false) resetHitAreaAttrs();
+
+  function resetHitAreaAttrs() {
+    hitAreaElAttrs = hitAreaElAttrs;
   }
 </script>
 
@@ -75,12 +103,14 @@
   x: xBackBtn,
   radius: backBtnRadius * 1.5,
   stroke: backBtnStrokeColour,
+  opacity: btnOpacity,
   ...buttonAttrs
 }}/>
 <Circle config={{
   x: xForwardBtn,
   radius: fwdBtnRadius * 1.5,
   stroke: fwdBtnStrokeColour,
+  opacity: btnOpacity,
   ...buttonAttrs
 }}/>
 
@@ -108,6 +138,6 @@
   x: xForwardBtn,
   ...hitAreaElAttrs
   }} 
-  bind:handle={fowardHitAreaEl}
+  bind:handle={forwardHitAreaEl}
   on:pointerdown={ fwdBtnStickyDown } 
 />
