@@ -76,7 +76,7 @@
   function collapseAnime() {
     const animeAttrs = {
       x: xCentre,
-      duration: Math.PI,
+      duration: 2,
       easing: Konva.Easings.StrongEaseIn
     }
     ellipsisStops[0].to(animeAttrs);
@@ -86,7 +86,7 @@
         ellipsisStops.forEach((stop, i) => {
           if (i === 1) {
             stop.to({
-              duration: Math.PI / 10,
+              duration: Math.PI - 3,
               opacity: 1,
               fill: 'gold',
               onFinish: () => { 

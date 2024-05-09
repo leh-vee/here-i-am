@@ -17,7 +17,7 @@
     ellipsisCollapsed = true;
     const singularity = event.detail;
     singularity.to({
-      duration: Math.PI,
+      duration: 1,
       easing: Konva.Easings.StrongEaseOut,
       radius: diagonalRadius,
       opacity: 0,
