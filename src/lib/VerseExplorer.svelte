@@ -6,17 +6,16 @@
   import SefirahMarker from './SefirahMarker.svelte';
   import StreetMap from './StreetMap.svelte';
   import PiWatch from './PiWatch.svelte';
-  import Controls from './Controls.svelte';
+  import Button from './Button.svelte';
   import { currentChannelFromSefirahCoordsPx, blocksForCurrentChannel,
     currentChannelToSefirahCoordsPx, currentChannelProjection, 
     channelBlocks } from '../stores/treeOfLife';
-  import { currentVerseIndex, wordIndices, isPunctuationNext, 
-    isCaesura, isEllipsis, isFirstVerseWord, isLastVerseWord,
-    isInBetweenWords } from '../stores/text';
+  import { currentVerseIndex, wordIndices, isPunctuationNext, isCaesura, 
+    isEllipsis, isFirstVerseWord, isLastVerseWord, isInBetweenWords, 
+    currentPiSlice, lastPiSlice, likePiSlices, isGroundZero } from '../stores/text.js';
   import Ellipsis from './Ellipsis.svelte';
   import { fetchBlocksWithinRadius } from '../api/client.js';
   import distance from "@turf/distance";
-  import { currentPiSlice, lastPiSlice, likePiSlices, isGroundZero } from '../stores/text.js';
   import { createEventDispatcher } from 'svelte';
 
   export let isReading = false;
@@ -31,6 +30,10 @@
   $: isPostVerseElliptical = $isEllipsis && $isLastVerseWord;
   
   $: if ($blocksForCurrentChannel === undefined) fetchBlocksForProjection();
+
+  let isControllable = false;
+  $: if (isPreVerseElliptical) isControllable = false;
+  $: if ($isLastVerseWord && isInFlight && !$isInBetweenWords) isControllable = true;
 
   function fetchBlocksForProjection() {
     const pCentre = $currentChannelProjection.center();
@@ -142,11 +145,10 @@
             <VerseMap />
             <Notepad inFlight={ isInFlight } />
             <Punctuation on:punctuated={ postPunctuation } />
-            <Controls 
-              inFlight={ isInFlight }
-              on:back={() => { proceed('backward') }}
-              on:forward={() => { proceed('forward') }}
-            />
+            <Button isBackBtn={true} isDisabled={!isControllable} 
+              on:back={() => { proceed('backward') }} />
+            <Button isBackBtn={false} isDisabled={!isControllable}
+              on:forward={() => { proceed('forward') }} />
           {/if}
         {/if}
       {/key}
