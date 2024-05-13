@@ -14,6 +14,7 @@
   const xBackBtn = $currentChannelFromSefirahCoordsPx[0] + baseBtnRadius;
   const xForwardBtn = window.innerWidth - xBackBtn;
 
+  let showTutorial = true;
   let backBtnRadius = baseBtnRadius;
   let fwdBtnRadius = baseBtnRadius;
   
@@ -52,6 +53,7 @@
   function backBtnStickyDown() {
     backBtnRadius = pressedBtnRadius;
     backBtnStrokeColour = pressedBtnStrokeColour;
+    showTutorial = false;
     setTimeout(unstickBckBtn, btnStickDurationMs);
   }
 
@@ -64,6 +66,7 @@
   function fwdBtnStickyDown() {
     fwdBtnRadius = pressedBtnRadius;
     fwdBtnStrokeColour = pressedBtnStrokeColour;
+    showTutorial = false;
     setTimeout(unstickFwdBtn, btnStickDurationMs);
   }
 
@@ -75,12 +78,11 @@
 
   $: if ($isLastVerseWord && inFlight && !$isInBetweenWords) {
     btnOpacity = 1;
-    setTimeout(() => {
-      if (inFlight) fwdBtnTutorial()
-    }, Math.PI * 1000);
+    setTimeout(fwdBtnTutorial, Math.PI * 1000);
   }
-
+  
   function fwdBtnTutorial() {
+    if (!showTutorial) return null;
     forwardHitAreaEl.to({
       duration: 1,
       radius: fwdBtnRadius * 2,
