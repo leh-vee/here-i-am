@@ -89,12 +89,11 @@
     wordIndices.nextWord();
   }
 
-  function swiped(event) {
+  function proceed(direction) {
     const isWindowOfIntervention = $isLastVerseWord && isInFlight;
     if (isWindowOfIntervention) isInFlight = false;
     if ($isInBetweenWords || isInFlight) return null;
-    const direction = event.detail.direction;
-    if (direction === 'left') {
+    if (direction === 'forward') {
       nextWord();
     } else {
       previousWord();
@@ -145,8 +144,8 @@
             <Punctuation on:punctuated={ postPunctuation } />
             <Controls 
               inFlight={ isInFlight }
-              on:back={() => { swiped({ detail: { direction: 'right' } }) }}
-              on:forward={() => { swiped({ detail: { direction: 'left' } }) }}
+              on:back={() => { proceed('backward') }}
+              on:forward={() => { proceed('forward') }}
             />
           {/if}
         {/if}
