@@ -2,7 +2,7 @@
     import { isFirstVerseTriad, currentPiSlice } from '../stores/text.js';
     import { isVerseNumberVisible } from '../stores/base.js';
 
-    $: verseNumberFontSize = Math.round(window.innerWidth / 2);
+    const verseNumberFontSize = Math.round(window.innerWidth / 2);
     
     let verseNumber;
     $: if ($isFirstVerseTriad) {
