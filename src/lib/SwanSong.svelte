@@ -56,5 +56,6 @@
         opacity={ opacity } degreesRotation={ -nStepsDown } />
     {/key}
   {/if}
-  <EllipticalCollapse on:collapsed={ channeledLight } />
+  <EllipticalCollapse implodeOnFinale={ false }
+    on:collapsed={ channeledLight } />
 </Layer>

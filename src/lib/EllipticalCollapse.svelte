@@ -6,17 +6,19 @@
 
   const dispatch = createEventDispatcher();
 
+  export let implodeOnFinale = true;
+
+  const radius = 5;
+  
   let isCollapsed = false;
   let isCountdownComplete = false;
 
   const ellipsisStopAttrs = {
-    radius: 5,
+    radius,
     opacity: Math.PI / 10,  
     fill: 'black',
     strokeEnabled: false
   }
-
-  const piSquared = Math.PI**2;
 
   const ellipsisStopDelta = ellipsisStopAttrs.radius * 3;
   const yCentre = window.innerHeight / 2;
@@ -36,7 +38,7 @@
   function fadeInEllipsis() {
     ellipsisStops.forEach((stop, i) => {
       stop.to({
-        duration: piSquared,
+        duration: Math.PI,
         fill: 'dimgrey'
       });
     });
@@ -70,35 +72,41 @@
     fadeIn(0);
     setTimeout(() => { 
       isCountdownComplete = true;
-    }, piSquared * 1000);
+    }, 10000);
   }
 
   function collapseAnime() {
+    const collapseDuration = 2; 
     const animeAttrs = {
       x: xCentre,
-      duration: 2,
+      duration: collapseDuration,
       easing: Konva.Easings.StrongEaseIn
     }
     ellipsisStops[0].to(animeAttrs);
     ellipsisStops[2].to({
       ...animeAttrs,
-      onFinish: () => { 
-        ellipsisStops.forEach((stop, i) => {
-          if (i === 1) {
-            stop.to({
-              duration: Math.PI,
-              opacity: 1,
-              radius: 0,
-              fill: 'gold',
-              onFinish: () => { 
-                isCollapsed = true;
-                dispatch('collapsed', ellipsisStops[1]);
-              }
-            });
-          } else {
-            stop.hide();
+      onFinish: () => {
+        isCollapsed = true;
+        singularityFinale();
+      }
+    });
+  }
+
+  function singularityFinale() {
+    const finalRadius = implodeOnFinale ? 0 : radius;
+    const duration = implodeOnFinale ? Math.PI : Math.PI / 10;
+    ellipsisStops.forEach((stop, i) => {
+      if (i === 1) {
+        stop.to({
+          duration,
+          radius: finalRadius,
+          fill: 'gold',
+          onFinish: () => {
+            dispatch('collapsed', ellipsisStops[1]);
           }
         });
+      } else {
+        stop.hide();
       }
     });
   }
