@@ -1,8 +1,27 @@
 <script>
   import { Layer, Circle, Text } from 'svelte-konva';
+  import { sefirotPoints } from '../stores/treeOfLife.js';
+  import { fetchBlocksForProjection } from '../api/client.js';
+  import { projectionForLandingPage } from '../utils/projections.js';
+  import StreetMap from './StreetMap.svelte';
   import { createEventDispatcher } from 'svelte';
   
   const dispatch = createEventDispatcher();
+
+  const screenPx = {
+    width: window.innerWidth,
+    height: window.innerHeight
+  }
+  
+  let projection, blocks;
+  $: if ($sefirotPoints) {
+    setMapData();
+  }
+
+  async function setMapData() {
+    projection = projectionForLandingPage($sefirotPoints, screenPx);
+    blocks = await fetchBlocksForProjection(projection, screenPx);
+  }
 
   const xCentre = window.innerWidth / 2;
   const yCentre = window.innerHeight / 2;
@@ -46,40 +65,45 @@
       onFinish: () => { dispatch('go') }
     });
   } 
+
 </script>
 
 <Layer>
-  <Circle config={{
-    x: xCentre,
-    y: yCentre,
-    fill: 'black',
-    radius: buttonRadius,
-    strokeWidth,
-    stroke
-  }} 
-  bind:handle={ button } />
-  {#if isTitleVisible && isTitleFontLoaded} 
-    <Text config={{
-      x: 0,
-      y: 0,
-      width: window.innerWidth,
-      height: window.innerHeight,
-      align: 'center',
-      verticalAlign: 'middle',
-      text: titleText,
-      fontFamily,
-      fontSize,
-      fill
-    }} />
+  {#if projection && blocks}
+    <StreetMap blocksGeoJson= { blocks } 
+      projection={ projection } colour='white' />
     <Circle config={{
       x: xCentre,
       y: yCentre,
-      opacity: 0,
-      radius: buttonRadius + strokeWidth,
-      strokeEnabled: false
+      fill: 'black',
+      radius: buttonRadius,
+      strokeWidth,
+      stroke
     }} 
-      on:pointerdown={ btnPressed }
-      on:pointerup={ btnDepressed }
-    />
+    bind:handle={ button } />
+    {#if isTitleVisible && isTitleFontLoaded} 
+      <Text config={{
+        x: 0,
+        y: 0,
+        width: window.innerWidth,
+        height: window.innerHeight,
+        align: 'center',
+        verticalAlign: 'middle',
+        text: titleText,
+        fontFamily,
+        fontSize,
+        fill
+      }} />
+      <Circle config={{
+        x: xCentre,
+        y: yCentre,
+        opacity: 0,
+        radius: buttonRadius + strokeWidth,
+        strokeEnabled: false
+      }} 
+        on:pointerdown={ btnPressed }
+        on:pointerup={ btnDepressed }
+      />
+    {/if}
   {/if}
 </Layer>
