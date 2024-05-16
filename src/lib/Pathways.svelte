@@ -3,8 +3,8 @@
   import { tick } from 'svelte';
   import { ilanProjection, ilanBlocks, sefirotPoints } from '../stores/treeOfLife.js';
   import { lastPiSlice, currentPiSlice, likePiSlices } from '../stores/text.js';
-  import { createEventDispatcher } from 'svelte';
   import StreetMap from './StreetMap.svelte';
+  import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
   const diagonalLength = Math.hypot(window.innerHeight, window.innerWidth);
