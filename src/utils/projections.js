@@ -46,6 +46,13 @@ export function projectionForIlan(sefirot, screenPx) {
   return projection;
 }
 
+export function projectionForLandingPage(sefirot, screenPx) {
+  const projection = projectionForIlan(sefirot, screenPx);
+  projection.center(sefirot.features[0].geometry.coordinates)
+  projection.scale(projection.scale() * 0.4);
+  return projection;
+}
+
 export function projectionForSefirah(sefirah, screenPx) {
   const sefirahScale = 1800000;
   const p = geoMercator();
