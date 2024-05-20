@@ -77,8 +77,7 @@
     background-color: black;
   }
 
-  /* .screen.landing-page {
-    background-image: url("/toronto-lines.png");
-    background-size: cover;
-  } */
+  .screen.landing-page {
+    background-color: white;
+  }
 </style>

@@ -4,6 +4,7 @@
   import { fetchBlocksForProjection } from '../api/client.js';
   import { projectionForLandingPage } from '../utils/projections.js';
   import StreetMap from './StreetMap.svelte';
+  import FlippingCoin from './FlippingCoin.svelte';
   import { createEventDispatcher } from 'svelte';
   
   const dispatch = createEventDispatcher();
@@ -12,11 +13,12 @@
     width: window.innerWidth,
     height: window.innerHeight
   }
+
+  let isRevealed = false;
   
   let projection, blocks;
-  $: if ($sefirotPoints) {
-    setMapData();
-  }
+  $: if ($sefirotPoints) setMapData();
+  $: stopCoinFlip = (projection !== undefined && blocks !== undefined);
 
   async function setMapData() {
     projection = projectionForLandingPage($sefirotPoints, screenPx);
@@ -66,12 +68,15 @@
     });
   } 
 
+  function reveal() {
+    isRevealed = true;
+  }
 </script>
 
 <Layer>
-  {#if projection && blocks}
+  {#if isRevealed}
     <StreetMap blocksGeoJson= { blocks } 
-      projection={ projection } colour='white' />
+      projection={ projection } colour='black' />
     <Circle config={{
       x: xCentre,
       y: yCentre,
@@ -105,5 +110,8 @@
         on:pointerup={ btnDepressed }
       />
     {/if}
+  {:else}
+    <FlippingCoin radius={ buttonRadius } strokeWidth={ strokeWidth }
+      stop={ stopCoinFlip } on:stopped={ reveal } />
   {/if}
 </Layer>
