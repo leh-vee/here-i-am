@@ -3,24 +3,19 @@
     ilanProjection, ilanBlocks, groundZeroProjection, 
     groundZeroBlocks, groundZeroRotationBlocks } from './stores/treeOfLife.js';
   import { isDataInitialized } from './stores/base.js'; 
-  import { onMount } from 'svelte';
+  import { projectionForSefirah, projectionsForChannels, projectionForIlan } from './utils/projections.js';
   import { fetchSefirot, fetchBlocksForProjection } from './api/client.js';
   import { channelFeatures } from './utils/geoJson.js';
-  import { projectionForSefirah, projectionsForChannels, projectionForIlan } from './utils/projections.js';
-  import { Stage } from 'svelte-konva';
-  import Overture from './lib/Overture.svelte';
-  import Countdown from './lib/Countdown.svelte';
-  import SwanSong from './lib/SwanSong.svelte';
-  import VerseNumber from './lib/VerseNumber.svelte';
+  import Conductor from './lib/Conductor.svelte';
   import LandingPage from './lib/LandingPage.svelte';
+  import { onMount } from 'svelte';
 
   const screenPx = {
     width: window.innerWidth,
     height: window.innerHeight
   }
-  const movements = ['prologue', 'overture', 'countdown', 'swanSong'];
-  let movementIndex = 0;
-  $: movement = movements[movementIndex];
+
+  let isLandingPage = true;
 
   onMount(async () => {
     await setIlanData(screenPx);
@@ -49,35 +44,21 @@
     ilanBlocks.set(iBlocks);
     console.log('ilan data set');
   }
-
-  function nextMovement() { movementIndex += 1 }
 </script>
 
-<div class='screen' class:landing-page={movement === 'prologue'}>
-  <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
-    {#if movement === 'prologue'} 
-      <LandingPage on:go={ nextMovement } />
-    {:else if movement === 'overture' }
-      <Overture on:goneNova={ nextMovement } />
-    {:else if movement === 'countdown' }
-      <Countdown on:groundZero={ nextMovement } />
-    {:else if movement === 'swanSong' }
-      <SwanSong />
-    {/if}
-  </Stage>
-  {#if isDataInitialized}
-    <VerseNumber />
+
+<div id='screen'>
+  {#if isLandingPage}
+    <LandingPage on:go={ () => { isLandingPage = false }  } />
+  {:else}
+    <Conductor />
   {/if}
 </div>
 
 <style>
-  .screen {
+  #screen {
     width: 100%;
     height: 100%;
     background-color: black;
-  }
-
-  .screen.landing-page {
-    background-color: white;
   }
 </style>

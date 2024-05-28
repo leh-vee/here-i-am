@@ -1,5 +1,5 @@
 <script>
-  import { Layer, Circle, Text } from 'svelte-konva';
+  import { Stage, Layer, Circle, Text } from 'svelte-konva';
   import { sefirotPoints } from '../stores/treeOfLife.js';
   import { fetchBlocksForProjection } from '../api/client.js';
   import { projectionForLandingPage } from '../utils/projections.js';
@@ -73,45 +73,55 @@
   }
 </script>
 
-<Layer>
-  {#if isRevealed}
-    <StreetMap blocksGeoJson= { blocks } 
-      projection={ projection } colour='black' />
-    <Circle config={{
-      x: xCentre,
-      y: yCentre,
-      fill: 'black',
-      radius: buttonRadius,
-      strokeWidth,
-      stroke
-    }} 
-    bind:handle={ button } />
-    {#if isTitleVisible && isTitleFontLoaded} 
-      <Text config={{
-        x: 0,
-        y: 0,
-        width: window.innerWidth,
-        height: window.innerHeight,
-        align: 'center',
-        verticalAlign: 'middle',
-        text: titleText,
-        fontFamily,
-        fontSize,
-        fill
-      }} />
-      <Circle config={{
-        x: xCentre,
-        y: yCentre,
-        opacity: 0,
-        radius: buttonRadius + strokeWidth,
-        strokeEnabled: false
-      }} 
-        on:pointerdown={ btnPressed }
-        on:pointerup={ btnDepressed }
-      />
-    {/if}
-  {:else}
-    <FlippingCoin radius={ buttonRadius } strokeWidth={ strokeWidth }
-      stop={ stopCoinFlip } on:stopped={ reveal } />
-  {/if}
-</Layer>
+<div id='landing-page'>
+  <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
+    <Layer>
+      {#if isRevealed}
+        <StreetMap blocksGeoJson= { blocks } 
+          projection={ projection } colour='black' />
+        <Circle config={{
+          x: xCentre,
+          y: yCentre,
+          fill: 'black',
+          radius: buttonRadius,
+          strokeWidth,
+          stroke
+        }} 
+        bind:handle={ button } />
+        {#if isTitleVisible && isTitleFontLoaded} 
+          <Text config={{
+            x: 0,
+            y: 0,
+            width: window.innerWidth,
+            height: window.innerHeight,
+            align: 'center',
+            verticalAlign: 'middle',
+            text: titleText,
+            fontFamily,
+            fontSize,
+            fill
+          }} />
+          <Circle config={{
+            x: xCentre,
+            y: yCentre,
+            opacity: 0,
+            radius: buttonRadius + strokeWidth,
+            strokeEnabled: false
+          }} 
+            on:pointerdown={ btnPressed }
+            on:pointerup={ btnDepressed }
+          />
+        {/if}
+      {:else}
+        <FlippingCoin radius={ buttonRadius } strokeWidth={ strokeWidth }
+          stop={ stopCoinFlip } on:stopped={ reveal } />
+      {/if}
+    </Layer>
+  </Stage>
+</div>
+
+<style>
+  #landing-page {
+    background-color: white;
+  }
+</style>
