@@ -3,9 +3,9 @@
   import { sefirotPoints } from '../stores/treeOfLife.js';
   import { fetchBlocksForProjection } from '../api/client.js';
   import { projectionForLandingPage } from '../utils/projections.js';
-  import StreetMap from './StreetMap.svelte';
   import FlippingCoin from './FlippingCoin.svelte';
   import { createEventDispatcher } from 'svelte';
+  import MapTiles from './MapTiles.svelte';
   
   const dispatch = createEventDispatcher();
 
@@ -73,12 +73,11 @@
   }
 </script>
 
+<MapTiles />
 <div id='landing-page'>
   <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
     <Layer>
       {#if isRevealed}
-        <StreetMap blocksGeoJson= { blocks } 
-          projection={ projection } colour='black' />
         <Circle config={{
           x: xCentre,
           y: yCentre,
@@ -122,6 +121,10 @@
 
 <style>
   #landing-page {
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 0;
     background-color: white;
   }
 </style>
