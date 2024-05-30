@@ -7,33 +7,33 @@
   import { projectionForGroundZero } from '../utils/projections.js';
   import { fetchBlocksForProjection } from '../api/client.js';
 
-  let isGroundZeroDataLoaded = false;
-  let isMapTilesLoaded = false;
+  let isTileMapLoaded = false;
+  let isMacroMapLoaded = false;
 
   onMount(async () => {
-    await setGroundZeroData({ width: window.innerWidth, height: window.innerHeight });
-    isGroundZeroDataLoaded = true;
+    await loadMacroMapData({ width: window.innerWidth, height: window.innerHeight });
+    isMacroMapLoaded = true;
   });
 
   const groundZeroCoordsGcs = [-79.466850201826205, 43.657227646269199];
   let projection, blocks;
-  async function setGroundZeroData(screenPx) {
+  async function loadMacroMapData(screenPx) {
     projection = projectionForGroundZero(groundZeroCoordsGcs, screenPx);
     blocks = await fetchBlocksForProjection(projection, screenPx);
   }
 
   function mapTilesLoaded() {
-    isMapTilesLoaded = true;
+    isTileMapLoaded = true;
   }
-
-  $: allDataLoaded = isGroundZeroDataLoaded && isMapTilesLoaded;
+  
+  $: allLandingPageMapsLoaded = isMacroMapLoaded && isTileMapLoaded;
 </script>
 
 
 <MapTiles centreCoordsGcs={ groundZeroCoordsGcs } on:loaded={ mapTilesLoaded } />
 <div id='landing-page'>
   <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
-    <TitlePage stopCoinFlipIntro={ allDataLoaded } on:go />
+    <TitlePage stopCoinFlipIntro={ allLandingPageMapsLoaded } on:go />
     <!-- <Menu projection={ projection } blocks={ blocks } /> -->
   </Stage>
 </div>

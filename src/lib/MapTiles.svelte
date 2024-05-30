@@ -16,7 +16,7 @@
   const mvtId = 'le0nl.dd0rj3wo';
   const tileUrl = `https://api.mapbox.com/v4/${mvtId}/` +
    `{z}/{x}/{y}.vector.pbf?access_token=${mapBoxApiKey}`;
-  const source = new VectorTileSource({
+  const vectorTileSource = new VectorTileSource({
     format: new MVT(), url: tileUrl 
   });
 
@@ -27,7 +27,7 @@
       controls: [],
       layers: [
         new VectorTileLayer({
-          source,
+          source: vectorTileSource,
           style: {
             'stroke-color': 'black',
             'stroke-width': 1
@@ -52,13 +52,11 @@
   }
 
   let tilesLoading = 0;
-  let tilesLoaded = 0;
-  source.on('tileloadstart', () => {
+  let tilesLoaded= 0;
+  vectorTileSource.on('tileloadstart', () => {
     tilesLoading += 1;
   });
-
-  source.on(['tileloadend', 'tileloaderror'], () => { tilesLoaded += 1 });
-  
+  vectorTileSource.on(['tileloadend', 'tileloaderror'], () => { tilesLoaded += 1 });
   $: if (tilesLoading > 1 && tilesLoaded === tilesLoading) {
     dispatch('loaded');
   }
