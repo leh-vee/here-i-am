@@ -5,25 +5,29 @@
   import VectorTileLayer from 'ol/layer/VectorTile.js';
   import VectorTileSource from 'ol/source/VectorTile.js';
   import MVT from 'ol/format/MVT.js';
+  import { createEventDispatcher } from 'svelte';
+  
+  const dispatch = createEventDispatcher();
 
-  export let highParkLonLat = [-79.466809, 43.657215];
+  export let centreCoordsGcs;
   export let zoom = 13;
 
   const mapBoxApiKey = import.meta.env.VITE_MAPBOX_API_KEY;
-  const tileUrl = `https://api.mapbox.com/v4/le0nl.dd0rj3wo/{z}/{x}/{y}.vector.pbf?access_token=${mapBoxApiKey}`;
+  const mvtId = 'le0nl.dd0rj3wo';
+  const tileUrl = `https://api.mapbox.com/v4/${mvtId}/` +
+   `{z}/{x}/{y}.vector.pbf?access_token=${mapBoxApiKey}`;
+  const source = new VectorTileSource({
+    format: new MVT(), url: tileUrl 
+  });
 
   let map;
-
   function initializeMap(node) {
     map = new Map({
       target: node.id,
       controls: [],
       layers: [
         new VectorTileLayer({
-          source: new VectorTileSource({
-            format: new MVT(),
-            url: tileUrl,
-          }),
+          source,
           style: {
             'stroke-color': 'black',
             'stroke-width': 1
@@ -31,7 +35,7 @@
         }),
       ],
       view: new View({
-        center: fromLonLat(highParkLonLat),
+        center: fromLonLat(centreCoordsGcs),
         zoom,
         minZoom: zoom,
         maxZoom: zoom
@@ -45,6 +49,18 @@
         }
       }
     }
+  }
+
+  let tilesLoading = 0;
+  let tilesLoaded = 0;
+  source.on('tileloadstart', () => {
+    tilesLoading += 1;
+  });
+
+  source.on(['tileloadend', 'tileloaderror'], () => { tilesLoaded += 1 });
+  
+  $: if (tilesLoading > 1 && tilesLoaded === tilesLoading) {
+    dispatch('loaded');
   }
   
 </script>

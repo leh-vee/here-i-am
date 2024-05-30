@@ -46,10 +46,14 @@ export function projectionForIlan(sefirot, screenPx) {
   return projection;
 }
 
-export function projectionForLandingPage(sefirot, screenPx) {
-  const projection = projectionForIlan(sefirot, screenPx);
-  projection.center(sefirot.features[0].geometry.coordinates)
-  projection.scale(projection.scale() * 0.4);
+export function projectionForLandingPage(groundZeroCoords, screenPx) {
+  const projection = geoMercator();
+  const { width, height } = screenPx;
+  const scale = 1800000 / 2;
+
+  projection.center(groundZeroCoords);
+  projection.translate([width / 2, height / 2]);
+  projection.scale(scale);
   return projection;
 }
 

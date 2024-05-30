@@ -1,28 +1,11 @@
 <script>
   import { Layer, Circle, Text } from 'svelte-konva';
   import FlippingCoin from './FlippingCoin.svelte';
-  import { sefirotPoints } from '../../stores/treeOfLife.js';
-  import { fetchBlocksForProjection } from '../../api/client.js';
-  import { projectionForLandingPage } from '../../utils/projections.js';
-
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
-  const screenPx = {
-    width: window.innerWidth,
-    height: window.innerHeight
-  }
-
-  let isRevealed = false;
-  
-  let projection, blocks;
-  $: if ($sefirotPoints) setMapData();
-  $: stopCoinFlip = (projection !== undefined && blocks !== undefined);
-
-  async function setMapData() {
-    projection = projectionForLandingPage($sefirotPoints, screenPx);
-    blocks = await fetchBlocksForProjection(projection, screenPx);
-  }
+  export let stopCoinFlipIntro = false;
+  let isShowTitleButton = false;
 
   const xCentre = window.innerWidth / 2;
   const yCentre = window.innerHeight / 2;
@@ -67,13 +50,13 @@
     });
   } 
 
-  function reveal() {
-    isRevealed = true;
+  function showTitleButton() {
+    isShowTitleButton = true;
   }
 </script>
 
 <Layer>
-  {#if isRevealed}
+  {#if isShowTitleButton}
     <Circle config={{
       x: xCentre,
       y: yCentre,
@@ -109,6 +92,6 @@
     {/if}
   {:else}
     <FlippingCoin radius={ buttonRadius } strokeWidth={ strokeWidth }
-      stop={ stopCoinFlip } on:stopped={ reveal } />
+      stop={ stopCoinFlipIntro } on:stopped={ showTitleButton } />
   {/if}
 </Layer>
