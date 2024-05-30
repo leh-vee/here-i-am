@@ -46,23 +46,12 @@ export function projectionForIlan(sefirot, screenPx) {
   return projection;
 }
 
-export function projectionForLandingPage(groundZeroCoords, screenPx) {
-  const projection = geoMercator();
-  const { width, height } = screenPx;
-  const scale = 1800000 / 2;
-
-  projection.center(groundZeroCoords);
-  projection.translate([width / 2, height / 2]);
-  projection.scale(scale);
-  return projection;
-}
-
-export function projectionForSefirah(sefirah, screenPx) {
+export function projectionForGroundZero(groundZeroCoordsGcs, screenPx) {
   const sefirahScale = 1800000;
   const p = geoMercator();
   const { width, height } = screenPx;
   p.translate([width / 2, height / 2]).scale(sefirahScale);
-  p.center(sefirah.geometry.coordinates);
+  p.center(groundZeroCoordsGcs);
   return p;
 } 
 

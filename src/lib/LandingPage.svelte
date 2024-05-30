@@ -4,7 +4,7 @@
   import TitlePage from './landing_page/TitlePage.svelte';
   import Menu from './landing_page/Menu.svelte';
   import { onMount } from 'svelte';
-  import { projectionForLandingPage } from '../utils/projections.js';
+  import { projectionForGroundZero } from '../utils/projections.js';
   import { fetchBlocksForProjection } from '../api/client.js';
 
   let isGroundZeroDataLoaded = false;
@@ -18,7 +18,7 @@
   const groundZeroCoordsGcs = [-79.466850201826205, 43.657227646269199];
   let projection, blocks;
   async function setGroundZeroData(screenPx) {
-    projection = projectionForLandingPage(groundZeroCoordsGcs, screenPx);
+    projection = projectionForGroundZero(groundZeroCoordsGcs, screenPx);
     blocks = await fetchBlocksForProjection(projection, screenPx);
   }
 

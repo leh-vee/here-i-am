@@ -3,7 +3,7 @@
     ilanProjection, ilanBlocks, groundZeroProjection, 
     groundZeroBlocks, groundZeroRotationBlocks } from './stores/treeOfLife.js';
   import { isDataInitialized } from './stores/base.js'; 
-  import { projectionForSefirah, projectionsForChannels, projectionForIlan } from './utils/projections.js';
+  import { projectionForGroundZero, projectionsForChannels, projectionForIlan } from './utils/projections.js';
   import { fetchSefirot, fetchBlocksForProjection } from './api/client.js';
   import { channelFeatures } from './utils/geoJson.js';
   import Conductor from './lib/Conductor.svelte';
@@ -27,7 +27,7 @@
     sefirotPoints.set(sefirotGeoJson);
     
     const zeroSefirah = sefirotGeoJson.features[0];
-    const zeroProjection = projectionForSefirah(zeroSefirah, screenPx);
+    const zeroProjection = projectionForGroundZero(zeroSefirah.geometry.coordinates, screenPx);
     groundZeroProjection.set(zeroProjection);
     const zeroBlocks = await fetchBlocksForProjection(zeroProjection, screenPx);
     groundZeroBlocks.set(zeroBlocks);
