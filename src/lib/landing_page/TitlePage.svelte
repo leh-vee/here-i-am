@@ -1,5 +1,5 @@
 <script>
-  import { Circle, Text } from 'svelte-konva';
+  import { Ring, Circle, Text } from 'svelte-konva';
   import FlippingCoin from './FlippingCoin.svelte';
   import Konva from 'konva';
   import { createEventDispatcher } from 'svelte';
@@ -41,11 +41,18 @@
       duration: 1,
       scaleX: -markerEl.scaleX(),
       easing: Konva.Easings.StrongEaseInOut,
-      onFinish: () => {
-        dispatch('show-menu');
-      }
+      onFinish: () => { irisWipeOut() }
     });
   }
+
+  function irisWipeOut() { 
+    markerEl.to({
+      duration: Math.PI / 10,
+      easing: Konva.Easings.EaseOut,
+      innerRadius: diagonalRadius + strokeWidth,
+      onFinish: () => { dispatch('show-menu') }
+    });
+  } 
   
   // function showSubtitle() {
   //   titleText = subtitle;
@@ -55,15 +62,6 @@
   //   fontSize = Math.round(window.innerWidth / 10)
   // } 
 
-  // function irisWipeOut() { 
-  //   isTitleVisible = false;
-  //   markerEl.to({
-  //     duration: Math.PI / 10,
-  //     radius: diagonalRadius,
-  //     onFinish: () => { dispatch('go') }
-  //   });
-  // } 
-
   function showTitleButton() {
     isShowTitleButton = true;
   }
@@ -71,15 +69,15 @@
 
 
 {#if isShowTitleButton}
-  <Circle config={{
+  <Ring config={{
     x: xCentre,
     y: yCentre,
     fill: 'black',
-    radius: buttonRadius,
+    outerRadius: buttonRadius,
+    innerRadius: 0,
     strokeWidth,
     stroke
-  }} 
-  bind:handle={ markerEl } />
+  }} bind:handle={ markerEl } />
   {#if isTitleVisible && isTitleFontLoaded} 
     <Text config={{
       x: 0,

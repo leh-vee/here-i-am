@@ -20,7 +20,7 @@
     markerRingEl.to({
       duration: 3,
       outerRadius: diagonalLength,
-      fill: 'grey',
+      fill: 'gold',
       easing: Konva.Easings.EaseOut,
       onFinish: () => {
         isShowOptions = true;
@@ -51,7 +51,7 @@
     height: window.innerHeight / 3,
     align: 'center',
     text: 'Where Am I?',
-    fill: 'gold',
+    fill: 'black',
     fontSize: 22,
     textDecoration: 'underline'
   }} />
@@ -62,7 +62,7 @@
     height: window.innerHeight / 3,
     align: 'center',
     text: 'What Is This?',
-    fill: 'gold',
+    fill: 'black',
     fontSize: 22,
     textDecoration: 'underline'
   }} />
@@ -74,6 +74,6 @@
     align: 'center',
     verticalAlign: 'middle',
     text: 'GO',
-    fill: 'gold'
+    fill: 'black'
   }} on:pointerclick={ initiatePoem } />
 {/if}
