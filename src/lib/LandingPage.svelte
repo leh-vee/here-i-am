@@ -19,7 +19,7 @@
   const groundZeroCoordsGcs = [-79.466850201826205, 43.657227646269199];
   let projection, blocks;
   async function loadMacroMapData(screenPx) {
-    projection = projectionForGroundZero(groundZeroCoordsGcs, screenPx);
+    projection = projectionForGroundZero(groundZeroCoordsGcs, screenPx, true);
     blocks = await fetchBlocksForProjection(projection, screenPx);
   }
 

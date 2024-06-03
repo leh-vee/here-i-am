@@ -46,14 +46,15 @@ export function projectionForIlan(sefirot, screenPx) {
   return projection;
 }
 
-export function projectionForGroundZero(groundZeroCoordsGcs, screenPx) {
+export function projectionForGroundZero(groundZeroCoordsGcs, screenPx, isMacro=false) {
   const sefirahScale = 1800000;
+  let scale = isMacro ? sefirahScale / 1.7 : sefirahScale;
   const p = geoMercator();
   const { width, height } = screenPx;
-  p.translate([width / 2, height / 2]).scale(sefirahScale);
+  p.translate([width / 2, height / 2]).scale(scale);
   p.center(groundZeroCoordsGcs);
   return p;
-} 
+}
 
 function scaleProjection(p, scaleFactor) {
   return p.scale(p.scale() * scaleFactor);
