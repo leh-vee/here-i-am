@@ -18,10 +18,10 @@
 
   $: if (markerRingEl !== undefined) {
     markerRingEl.to({
-      duration: Math.PI,
+      duration: 3,
       outerRadius: diagonalLength,
       fill: 'grey',
-      easing: Konva.Easings.StrongEaseOut,
+      easing: Konva.Easings.EaseOut,
       onFinish: () => {
         isShowOptions = true;
       }
@@ -44,6 +44,28 @@
   fill: 'black'
 }} bind:handle={ markerRingEl } />
 {#if isShowOptions}
+  <Text config={{
+    x: 0,
+    y: 70,
+    width: window.innerWidth,
+    height: window.innerHeight / 3,
+    align: 'center',
+    text: 'Where Am I?',
+    fill: 'gold',
+    fontSize: 22,
+    textDecoration: 'underline'
+  }} />
+  <Text config={{
+    x: 0,
+    y: 102,
+    width: window.innerWidth,
+    height: window.innerHeight / 3,
+    align: 'center',
+    text: 'What Is This?',
+    fill: 'gold',
+    fontSize: 22,
+    textDecoration: 'underline'
+  }} />
   <Text config={{
     x: 0,
     y: window.innerHeight - window.innerHeight / 3,
