@@ -1,17 +1,19 @@
 <script>
-  import { Layer, Circle, Text } from 'svelte-konva';
+  import { Circle, Text } from 'svelte-konva';
   import FlippingCoin from './FlippingCoin.svelte';
+  import Konva from 'konva';
   import { createEventDispatcher } from 'svelte';
+  
   const dispatch = createEventDispatcher();
 
   export let stopCoinFlipIntro = false;
+  let markerEl;
   let isShowTitleButton = false;
 
   const xCentre = window.innerWidth / 2;
   const yCentre = window.innerHeight / 2;
   const diagonalRadius = Math.hypot(xCentre, yCentre);
   
-  let button;
   let buttonRadius = Math.round(xCentre * 0.7);
   let stroke = 'dimgrey';
   let strokeWidth = 6;
@@ -32,66 +34,74 @@
       isTitleFontLoaded = true;
     });
   });
-  
-  function btnPressed() {
-    titleText = subtitle;
-    fill = 'dimgrey';
-    stroke = 'gold';
-    buttonRadius -= strokeWidth;
-    fontSize = Math.round(window.innerWidth / 10)
-  } 
 
-  function btnDepressed() { 
+  function showMenu() {
     isTitleVisible = false;
-    button.to({
-      duration: Math.PI / 10,
-      radius: diagonalRadius,
-      onFinish: () => { dispatch('go') }
+    markerEl.to({
+      duration: 1,
+      scaleX: -markerEl.scaleX(),
+      easing: Konva.Easings.StrongEaseInOut,
+      onFinish: () => {
+        dispatch('show-menu');
+      }
     });
-  } 
+  }
+  
+  // function showSubtitle() {
+  //   titleText = subtitle;
+  //   fill = 'dimgrey';
+  //   stroke = 'gold';
+  //   buttonRadius -= strokeWidth;
+  //   fontSize = Math.round(window.innerWidth / 10)
+  // } 
+
+  // function irisWipeOut() { 
+  //   isTitleVisible = false;
+  //   markerEl.to({
+  //     duration: Math.PI / 10,
+  //     radius: diagonalRadius,
+  //     onFinish: () => { dispatch('go') }
+  //   });
+  // } 
 
   function showTitleButton() {
     isShowTitleButton = true;
   }
 </script>
 
-<Layer>
-  {#if isShowTitleButton}
+
+{#if isShowTitleButton}
+  <Circle config={{
+    x: xCentre,
+    y: yCentre,
+    fill: 'black',
+    radius: buttonRadius,
+    strokeWidth,
+    stroke
+  }} 
+  bind:handle={ markerEl } />
+  {#if isTitleVisible && isTitleFontLoaded} 
+    <Text config={{
+      x: 0,
+      y: 0,
+      width: window.innerWidth,
+      height: window.innerHeight,
+      align: 'center',
+      verticalAlign: 'middle',
+      text: titleText,
+      fontFamily,
+      fontSize,
+      fill
+    }} />
     <Circle config={{
       x: xCentre,
       y: yCentre,
-      fill: 'black',
-      radius: buttonRadius,
-      strokeWidth,
-      stroke
-    }} 
-    bind:handle={ button } />
-    {#if isTitleVisible && isTitleFontLoaded} 
-      <Text config={{
-        x: 0,
-        y: 0,
-        width: window.innerWidth,
-        height: window.innerHeight,
-        align: 'center',
-        verticalAlign: 'middle',
-        text: titleText,
-        fontFamily,
-        fontSize,
-        fill
-      }} />
-      <Circle config={{
-        x: xCentre,
-        y: yCentre,
-        opacity: 0,
-        radius: buttonRadius + strokeWidth,
-        strokeEnabled: false
-      }} 
-        on:pointerdown={ btnPressed }
-        on:pointerup={ btnDepressed }
-      />
-    {/if}
-  {:else}
-    <FlippingCoin radius={ buttonRadius } strokeWidth={ strokeWidth }
-      stop={ stopCoinFlipIntro } on:stopped={ showTitleButton } />
+      opacity: 0,
+      radius: buttonRadius + strokeWidth,
+      strokeEnabled: false
+    }} on:pointerclick={ showMenu } />
   {/if}
-</Layer>
+{:else}
+  <FlippingCoin radius={ buttonRadius } strokeWidth={ strokeWidth }
+    stop={ stopCoinFlipIntro } on:stopped={ showTitleButton } />
+{/if}

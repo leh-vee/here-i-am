@@ -9,6 +9,7 @@
 
   let isTileMapLoaded = false;
   let isMacroMapLoaded = false;
+  let showTitlePage = true;
 
   onMount(async () => {
     await loadMacroMapData({ width: window.innerWidth, height: window.innerHeight });
@@ -25,16 +26,26 @@
   function mapTilesLoaded() {
     isTileMapLoaded = true;
   }
+
+  function showMenu() {
+    showTitlePage = false;
+  }
   
   $: allLandingPageMapsLoaded = isMacroMapLoaded && isTileMapLoaded;
 </script>
 
-
-<MapTiles centreCoordsGcs={ groundZeroCoordsGcs } on:loaded={ mapTilesLoaded } />
+{#if showTitlePage}
+  <MapTiles centreCoordsGcs={ groundZeroCoordsGcs } on:loaded={ mapTilesLoaded } />
+{/if}
 <div id='landing-page'>
   <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
-    <TitlePage stopCoinFlipIntro={ allLandingPageMapsLoaded } on:go />
-    <!-- <Menu projection={ projection } blocks={ blocks } /> -->
+    <Layer>
+      {#if showTitlePage}
+        <TitlePage stopCoinFlipIntro={ allLandingPageMapsLoaded } on:show-menu={ showMenu } />
+      {:else}
+        <Menu projection={ projection } blocks={ blocks } on:go />
+      {/if}
+    </Layer>
   </Stage>
 </div>
 
