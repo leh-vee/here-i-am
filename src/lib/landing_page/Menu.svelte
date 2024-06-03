@@ -1,6 +1,7 @@
 <script>
   import { Ring, Text } from 'svelte-konva';
   import StreetMap from '../StreetMap.svelte';
+  import Konva from 'konva';
   import { createEventDispatcher } from 'svelte';
   
   const dispatch = createEventDispatcher();
@@ -12,28 +13,45 @@
   const yCentre = window.innerHeight / 2;
   const diagonalLength = Math.hypot(window.innerHeight, window.innerWidth);
 
+  let markerRingEl;
+  let isShowOptions = false;
+
+  $: if (markerRingEl !== undefined) {
+    markerRingEl.to({
+      duration: Math.PI,
+      outerRadius: diagonalLength,
+      fill: 'grey',
+      easing: Konva.Easings.StrongEaseOut,
+      onFinish: () => {
+        isShowOptions = true;
+      }
+    });
+  }
+
   function initiatePoem() {
     dispatch('go');
   }
 </script>
 
-<StreetMap projection={ projection } blocksGeoJson={ blocks } />
+<StreetMap projection={ projection } blocksGeoJson={ blocks }  />
 <Ring config={{
   x: xCentre,
   y: yCentre,
   innerRadius: Math.round(xCentre * 0.7),
-  outerRadius: diagonalLength,
+  outerRadius: 0,
   strokeWidth: 6,
   stroke: 'dimgrey',
   fill: 'black'
-}} />
-<Text config={{
-  x: 0,
-  y: window.innerHeight - window.innerHeight / 3,
-  width: window.innerWidth,
-  height: window.innerHeight / 3,
-  align: 'center',
-  verticalAlign: 'middle',
-  text: 'GO',
-  fill: 'gold'
-}} on:pointerclick={ initiatePoem } />
+}} bind:handle={ markerRingEl } />
+{#if isShowOptions}
+  <Text config={{
+    x: 0,
+    y: window.innerHeight - window.innerHeight / 3,
+    width: window.innerWidth,
+    height: window.innerHeight / 3,
+    align: 'center',
+    verticalAlign: 'middle',
+    text: 'GO',
+    fill: 'gold'
+  }} on:pointerclick={ initiatePoem } />
+{/if}
