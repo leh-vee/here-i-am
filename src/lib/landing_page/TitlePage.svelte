@@ -49,6 +49,7 @@
     markerEl.to({
       duration: Math.PI / 10,
       easing: Konva.Easings.EaseOut,
+      fill: 'lightyellow',
       innerRadius: diagonalRadius + strokeWidth,
       onFinish: () => { dispatch('show-menu') }
     });

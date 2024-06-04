@@ -46,8 +46,13 @@
   </Stage>
 </div>
 {#if showMenuOptions}
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <h5 id='menu' on:click={ () => { dispatch('go') } }>GO!</h5>
+  <div id='menu'>
+    <h5 class='option'>Where are you?</h5>
+    <!-- svelte-ignore a11y-missing-content -->
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <h5 class='option middle' on:click={ () => { dispatch('go') } }></h5>
+    <h5 class='option'>What is this?</h5>
+  </div>
 {/if}
 
 <style>
@@ -61,12 +66,28 @@
 
   #menu {
     position: absolute;
-    bottom: 0;
-    left: 0;
+    top: 0;
     width: 100%;
-    color: gold;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    color: black;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align: center;
-    font-family: 'love ya like a sister';
-    font-size: 7dvh;
+    font-size: 4.5dvh;
+    text-decoration: underline;
   }
+  
+  #menu .option {
+    margin: 0;
+  }
+
+  #menu .option.middle {
+    height: 40%;
+    width: 70%;
+    border-radius: 50%;
+    margin: 0 auto;
+  }
+
 </style>
