@@ -1,69 +1,60 @@
 <script>
-  import { Stage, Layer } from 'svelte-konva';
+  import LandingPageMarker from './landing_page/LandingPageMarker.svelte';
   import MapTiles from './MapTiles.svelte';
-  import TitlePage from './landing_page/TitlePage.svelte';
-  import { onMount } from 'svelte';
-  import { projectionForGroundZero } from '../utils/projections.js';
-  import { fetchBlocksForProjection } from '../api/client.js';
-  import { createEventDispatcher } from 'svelte';
-  
-  const dispatch = createEventDispatcher();
-
-  let isTileMapLoaded = false;
-  let isMacroMapLoaded = false;
-  let showMenuOptions = false;
-
-  onMount(async () => {
-    await loadMacroMapData({ width: window.innerWidth, height: window.innerHeight });
-    isMacroMapLoaded = true;
-  });
 
   const groundZeroCoordsGcs = [-79.466850201826205, 43.657227646269199];
-  let projection, blocks;
-  async function loadMacroMapData(screenPx) {
-    projection = projectionForGroundZero(groundZeroCoordsGcs, screenPx, true);
-    blocks = await fetchBlocksForProjection(projection, screenPx);
-  }
+
+  let isTileMapLoaded = false;
+  let isMenu = false;
 
   function mapTilesLoaded() {
     isTileMapLoaded = true;
   }
-  
-  $: allLandingPageMapsLoaded = isMacroMapLoaded && isTileMapLoaded;
 
   function showMenu() {
-    showMenuOptions = true;
+    isMenu = true;
+  }
+
+  function lightbox() {
+    console.log('show lightbox');
   }
 </script>
 
-
 <MapTiles centreCoordsGcs={ groundZeroCoordsGcs } on:loaded={ mapTilesLoaded } />
 <div id='landing-page'>
-  <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
-    <Layer>
-      <TitlePage stopCoinFlipIntro={ allLandingPageMapsLoaded } on:show-menu={ showMenu } />
-    </Layer>
-  </Stage>
-</div>
-{#if showMenuOptions}
-  <div id='menu'>
-    <h5 class='option'>Where are you?</h5>
-    <!-- svelte-ignore a11y-missing-content -->
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <h5 class='option middle' on:click={ () => { dispatch('go') } }></h5>
-    <h5 class='option'>What is this?</h5>
+  <div id='marker'>
+    <LandingPageMarker flip={ !isTileMapLoaded } on:inverted={ showMenu } on:go />
   </div>
-{/if}
+  {#if isMenu}
+    <div id='menu'>
+      <div class='question'>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <h5 on:click={ lightbox }>Where are you?</h5>
+      </div>
+      <div class='place-holder'>
+      </div>
+      <div class='question'>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <h5 on:click={ lightbox }>What is this?</h5>
+      </div>
+    </div>
+  {/if}
+</div> 
 
 <style>
   #landing-page {
+    width: 100%;
+    height: 100%;
+  }
+  
+  #landing-page #marker {
     position: absolute;
     top: 0;
-    width: 0;
-    height: 0;
-    background-color: white;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
   }
-
+  
   #menu {
     position: absolute;
     top: 0;
@@ -73,21 +64,27 @@
     flex-direction: column;
     justify-content: space-evenly;
     color: black;
+  }
+
+  #menu div {
+    width: 100%;
+  }
+
+  #menu .question {
+    height: 25%;
+    z-index: 1;
+  }
+
+  #menu .place-holder {
+    height: 50%;
+  }
+  
+  #menu .question h5 {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align: center;
     font-size: 4.5dvh;
     text-decoration: underline;
-  }
-  
-  #menu .option {
-    margin: 0;
-  }
-
-  #menu .option.middle {
-    height: 40%;
-    width: 70%;
-    border-radius: 50%;
-    margin: 0 auto;
+    color: black;
   }
 
 </style>
