@@ -1,5 +1,5 @@
 <script>
-  import { Stage, Layer, Ring } from 'svelte-konva';
+  import { Stage, Layer, Ring, Circle } from 'svelte-konva';
   import Konva from 'konva';
   import Title from './Title.svelte';
   import { createEventDispatcher } from 'svelte';
@@ -17,23 +17,23 @@
   let markerEl;
   let isMarkerInverted = false;
 
-  export let flip = true;
-  let isFlipping = false;
-  let showTitle = true;
+  export let stopFlipping = false;
+  let isFlipping = true;
 
-  $: if (flip && markerEl !== undefined) flipMarker();
+  $: showTitle = !isFlipping && !isMarkerInverted;
+
+  $: if (markerEl !== undefined) flipMarker();
 
   function flipMarker() {
-    isFlipping = true;
     markerEl.to({
       duration: 1,
       scaleX: -markerEl.scaleX(),
       easing: Konva.Easings.StrongEaseInOut,
       onFinish: () => { 
-        if (flip) {
-          flipMarker();
-        } else {
+        if (stopFlipping) {
           isFlipping = false;
+        } else {
+          flipMarker();
         }
       }
     });
@@ -47,14 +47,13 @@
       if (isMarkerInverted) {
         dispatch('go');
       } else {
-        turnInsideOut();
         isMarkerInverted = true;
+        turnInsideOut();
       }
     } 
   }
 
   function turnInsideOut() {
-    showTitle = false;
     markerEl.to({
       duration: Math.PI / 10,
       easing: Konva.Easings.EaseOut,
@@ -79,8 +78,15 @@
       strokeWidth,
       stroke
     }} bind:handle={ markerEl } />
-    {#if !isFlipping && showTitle}
+    {#if showTitle}
       <Title />
+    {:else if isMarkerInverted}
+      <Circle config={{
+        x: xCentre,
+        y: yCentre,
+        radius: 2,
+        fill: 'black'
+      }} />
     {/if}
   </Layer>
 </Stage>

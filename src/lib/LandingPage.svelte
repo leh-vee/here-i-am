@@ -23,7 +23,7 @@
 <MapTiles centreCoordsGcs={ groundZeroCoordsGcs } on:loaded={ mapTilesLoaded } />
 <div id='landing-page'>
   <div id='marker'>
-    <LandingPageMarker flip={ !isTileMapLoaded } on:inverted={ showMenu } on:go />
+    <LandingPageMarker stopFlipping={ isTileMapLoaded } on:inverted={ showMenu } on:go />
   </div>
   {#if isMenu}
     <div id='menu'>
