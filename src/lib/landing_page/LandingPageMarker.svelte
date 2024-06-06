@@ -94,7 +94,7 @@
       <Circle config={{
         x: xCentre,
         y: yCentre,
-        radius: 2,
+        radius: Math.PI,
         fill: 'black'
       }} />
       <Ring config={{
