@@ -10,11 +10,11 @@
   const xCentre = window.innerWidth / 2;
   const diagonalRadius = Math.hypot(xCentre, yCentre);
 
-  const radius = Math.round((window.innerHeight / 2) * 0.4);
+  const markerRadius = Math.round((window.innerHeight / 2) * 0.4);
   const stroke = 'dimgrey';
   const strokeWidth = 6;
 
-  let markerEl;
+  let markerEl, irisEl;
   let isMarkerInverted = false;
 
   export let stopFlipping = false;
@@ -42,10 +42,10 @@
   function click() {
     const pointerPosition =  markerEl.getRelativePointerPosition();
     const ppPxDistanceFromCentre = Math.hypot(pointerPosition.x, pointerPosition.y);
-    const isMarkerClick = ppPxDistanceFromCentre < radius - strokeWidth;
+    const isMarkerClick = ppPxDistanceFromCentre < markerRadius - strokeWidth;
     if (isMarkerClick) {
       if (isMarkerInverted) {
-        dispatch('go');
+        irisIn();
       } else {
         isMarkerInverted = true;
         turnInsideOut();
@@ -62,6 +62,16 @@
       onFinish: () => { dispatch('inverted') }
     });
   }
+
+  function irisIn() {
+    irisEl.to({
+      duration: 1,
+      easing: Konva.Easings.EaseIn,
+      innerRadius: 0,
+      fill: 'black',
+      onFinish: () => { dispatch('go') } 
+    });
+  }
 </script>
 
 <Stage config={{ 
@@ -73,7 +83,7 @@
       x: xCentre,
       y: yCentre,
       fill: 'black',
-      outerRadius: radius,
+      outerRadius: markerRadius,
       innerRadius: 0,
       strokeWidth,
       stroke
@@ -87,6 +97,14 @@
         radius: 2,
         fill: 'black'
       }} />
+      <Ring config={{
+        x: xCentre,
+        y: yCentre,
+        fill: 'gold',
+        outerRadius: diagonalRadius,
+        innerRadius: diagonalRadius,
+        strokeEnabled: false
+      }} bind:handle={ irisEl } />
     {/if}
   </Layer>
 </Stage>
