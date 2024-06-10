@@ -29,7 +29,7 @@
     <div id='menu'>
       <div class='question'>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <h5 on:click={ lightbox }>Where are you?</h5>
+        <h5 on:click={ lightbox }>Where am I?</h5>
       </div>
       <div class='place-holder'>
       </div>
