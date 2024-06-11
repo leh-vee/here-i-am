@@ -24,7 +24,7 @@
 
   $: if (markerEl !== undefined) flipMarker();
 
-  function flipMarker() {
+  function flipMarker(callbackFn) {
     markerEl.to({
       duration: 1,
       scaleX: -markerEl.scaleX(),
@@ -32,6 +32,7 @@
       onFinish: () => { 
         if (stopFlipping) {
           isFlipping = false;
+          if (callbackFn) callbackFn();
         } else {
           flipMarker();
         }
@@ -48,7 +49,7 @@
         irisIn();
       } else {
         isMarkerInverted = true;
-        turnInsideOut();
+        flipMarker(turnInsideOut);
       }
     } 
   }
