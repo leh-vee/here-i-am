@@ -5,37 +5,31 @@
   const groundZeroCoordsGcs = [-79.466850201826205, 43.657227646269199];
 
   let isTileMapLoaded = false;
-  let isMenu = false;
+  let isInterior = false;
 
   function mapTilesLoaded() {
     isTileMapLoaded = true;
   }
 
-  function showMenu() {
-    isMenu = true;
-  }
-
-  function lightbox() {
-    console.log('show lightbox');
+  function showInterior() {
+    isInterior = true;
   }
 </script>
 
 <MapTiles centreCoordsGcs={ groundZeroCoordsGcs } on:loaded={ mapTilesLoaded } />
 <div id='landing-page'>
   <div id='marker'>
-    <LandingPageMarker stopFlipping={ isTileMapLoaded } on:inverted={ showMenu } on:go />
+    <LandingPageMarker stopFlipping={ isTileMapLoaded } on:inverted={ showInterior } on:go />
   </div>
-  {#if isMenu}
-    <div id='menu'>
+  {#if isInterior}
+    <div id='interior'>
       <div class='question'>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <h5 on:click={ lightbox }>Where am I?</h5>
+        <h5>Where am I?</h5>
       </div>
       <div class='place-holder'>
       </div>
       <div class='question'>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <h5 on:click={ lightbox }>What is this?</h5>
+        <h5>What is this?</h5>
       </div>
     </div>
   {/if}
@@ -55,7 +49,7 @@
     z-index: 1;
   }
   
-  #menu {
+  #interior {
     position: absolute;
     top: 0;
     width: 100%;
@@ -66,24 +60,23 @@
     color: black;
   }
 
-  #menu div {
+  #interior div {
     width: 100%;
   }
 
-  #menu .question {
+  #interior .question {
     height: 25%;
     z-index: 1;
   }
 
-  #menu .place-holder {
+  #interior .place-holder {
     height: 50%;
   }
   
-  #menu .question h5 {
+  #interior .question h5 {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align: center;
     font-size: 4.5dvh;
-    text-decoration: underline;
     color: black;
   }
 
