@@ -1,5 +1,5 @@
 <script>
-  import { Stage, Layer, Ring, Circle } from 'svelte-konva';
+  import { Stage, Layer, Ring, Circle, Text } from 'svelte-konva';
   import Konva from 'konva';
   import Title from './landing_page/Title.svelte';
   import MapTiles from './MapTiles.svelte';
@@ -17,6 +17,12 @@
 
   const coinRadius = Math.round((height / 2) * 0.4);
   const strokeWidth = 6;
+
+  const questionTextAttrs = {
+    fontFamily: "Verdana, Geneva, Tahoma, sans-serif",
+    fontSize: 30,
+    fill: 'black'
+  }
 
   let coinEl, menuEl, irisEl;
   let isHeads = false;
@@ -140,6 +146,26 @@
           y: yCentre,
           radius: Math.PI,
           fill: 'black'
+        }} />
+        <Text config={{
+          x: 0,
+          y: 0,
+          width,
+          height: window.innerHeight / 3,
+          align: 'center',
+          verticalAlign: 'middle',
+          text: 'Where am I?',
+          ...questionTextAttrs
+        }} />
+        <Text config={{
+          x: 0,
+          y: (window.innerHeight / 3) * 2,
+          width,
+          height: window.innerHeight / 3,
+          align: 'center',
+          verticalAlign: 'middle',
+          text: 'What is this?',
+          ...questionTextAttrs
         }} />
       {/if}
     </Layer>
