@@ -34,8 +34,8 @@
   const markerRadius = 2;
 
   const questionTextAttrs = {
-    x: Math.round(width * .1),
-    width: Math.round(width * .8),
+    x: 10,
+    width: width - 10,
     fontFamily: "Verdana, Geneva, Tahoma, sans-serif",
     fontSize: Math.round(width / 25),
     fill: 'black'
