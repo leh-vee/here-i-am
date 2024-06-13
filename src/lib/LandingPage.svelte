@@ -24,7 +24,7 @@
     fill: 'black'
   }
 
-  let coinEl, menuEl, irisEl;
+  let coinEl, coinOverflowEl, irisEl;
   let isHeads = false;
   let isTails = false;
 
@@ -79,7 +79,7 @@
   function openCoinTransition() {
     const duration = Math.PI / 10;
     const openIris = () => {
-      menuEl.to({
+      coinOverflowEl.to({
         duration,
         innerRadius: diagonalRadius,
         opacity: 1, 
@@ -120,7 +120,7 @@
         fill: 'black',
         opacity: 0,
         strokeEnabled: false
-      }} bind:handle={ menuEl } />
+      }} bind:handle={ coinOverflowEl } />
       <Ring config={{
         x: xCentre,
         y: yCentre,
