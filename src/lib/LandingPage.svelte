@@ -7,7 +7,20 @@
   
   const dispatch = createEventDispatcher();
 
-  const groundZeroCoordsGcs = [-79.466850201826205, 43.657227646269199];
+  const coordFixtures = [
+    [-79.466850201826205, 43.657227646269199],
+    [-79.327115097415998, 43.6919267876238], 
+    [-79.541550900447305, 43.607307180951203],
+    [-79.413797673100703, 43.641680243166597],
+    [-79.500562196484097, 43.696934074491899],
+    [-79.441953787130998, 43.691966449116798],
+    [-79.460826261873095, 43.693347307108603]
+  ];
+
+  let goInterval;
+
+  let coordIndex = 0;
+  $: groundZeroCoordsGcs = coordFixtures[coordIndex];
 
   const height = window.innerHeight;
   const width = window.innerWidth;
@@ -18,21 +31,25 @@
   const coinRadius = Math.round((height / 2) * 0.4);
   const strokeWidth = 6;
 
+  const markerRadius = 2;
+
   const questionTextAttrs = {
+    x: Math.round(width * .1),
+    width: Math.round(width * .8),
     fontFamily: "Verdana, Geneva, Tahoma, sans-serif",
-    fontSize: Math.round(width / 12),
+    fontSize: Math.round(width / 25),
     fill: 'black'
   }
 
-  let coinEl, coinOverflowEl, irisEl;
+  let coinEl, coinOverflowEl, irisEl, markerEl;
   let isHeads = false;
   let isTails = false;
 
   let isTileMapLoading = true; 
 
-  $: if (coinEl !== undefined) { introFlip() };
+  $: if (coinEl !== undefined) { almostThereFlip() };
 
-  function introFlip() {
+  function almostThereFlip() {
     let nTotalFlips = 0;
     const flip = async () => { 
       nTotalFlips += 1;
@@ -71,18 +88,56 @@
         await flipCoin();
         openCoinTransition();
       } else if (isTails) {
-        irisIn();
+        clearInterval(goInterval);
+        closeCoinTransition();
       }
     } 
   }
 
+  function closeCoinTransition() {
+    const duration = Math.PI / 10;
+    markerEl.to({
+      duration,
+      radius: coinRadius,
+      easing: Konva.Easings.EaseIn,
+      onFinish: () => {
+        coinEl.innerRadius(0);
+        markerEl.radius(markerRadius);
+        isTails = false;
+        coinOverflowEl.innerRadius(0);
+        getNewGroundZeroCoords()
+      }
+    });
+  }
+
+  $: if (isHeads) retractFlow(); 
+  $: if (isTails) goInterval = setInterval(irisIn, Math.PI * 1000);
+
+  function retractFlow() {
+    coinOverflowEl.to({
+      duration: Math.PI / 10,
+      innerRadius: coinRadius,
+      outerRadius: coinRadius,
+      fill: 'black',
+      easing: Konva.Easings.EaseIn
+    });
+  }
+
+  function getNewGroundZeroCoords() {
+    if (coordIndex < coordFixtures.length - 1) {
+      coordIndex += 1;
+    } else {
+      coordIndex = 0;
+    }
+    almostThereFlip();
+  }
+
   function openCoinTransition() {
     const duration = Math.PI / 10;
-    const openIris = () => {
+    const coinOlverflow = () => {
       coinOverflowEl.to({
         duration,
-        innerRadius: diagonalRadius,
-        opacity: 1, 
+        outerRadius: diagonalRadius, 
         fill: 'gold',
         easing: Konva.Easings.EaseOut,
         onFinish: () => { isTails = true }
@@ -92,7 +147,7 @@
       duration,
       innerRadius: coinRadius,
       easing: Konva.Easings.EaseIn,
-      onFinish: () => { openIris() }
+      onFinish: () => { coinOlverflow() }
     });
   }
 
@@ -115,10 +170,9 @@
       <Ring config={{
         x: xCentre,
         y: yCentre,
-        outerRadius: coinRadius,
-        innerRadius: coinRadius,
-        fill: 'black',
-        opacity: 0,
+        outerRadius: diagonalRadius,
+        innerRadius: 0,
+        fill: 'gold',
         strokeEnabled: false
       }} bind:handle={ coinOverflowEl } />
       <Ring config={{
@@ -130,6 +184,13 @@
         strokeWidth,
         stroke: 'dimgrey'
       }} bind:handle={ coinEl } />
+      <Circle config={{
+        x: xCentre,
+        y: yCentre,
+        radius: markerRadius,
+        fill: 'black',
+        visible: isTails
+      }} bind:handle={ markerEl } />
       <Ring config={{
         x: xCentre,
         y: yCentre,
@@ -141,30 +202,20 @@
       {#if isHeads}
         <Title />
       {:else if isTails}
-        <Circle config={{
-          x: xCentre,
-          y: yCentre,
-          radius: Math.PI,
-          fill: 'black'
-        }} />
         <Text config={{
-          x: 0,
           y: 0,
-          width,
           height: window.innerHeight / 3,
           align: 'center',
           verticalAlign: 'middle',
-          text: '...an intersection in a city of intersections, destined at a crossroads',
+          text: '...an intersection in a city of \n intersections, destined at a crossroads',
           ...questionTextAttrs
         }} />
         <Text config={{
-          x: 0,
           y: (window.innerHeight / 3) * 2,
-          width,
           height: window.innerHeight / 3,
           align: 'center',
           verticalAlign: 'middle',
-          text: '...a countdown that never ends, until it does',
+          text: '...a countdown that never ends, until \n suddenly it does',
           ...questionTextAttrs
         }} />
       {/if}

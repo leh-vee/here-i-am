@@ -21,7 +21,7 @@
   });
 
   let map;
-  function initializeMap(node) {
+  function initializeMap(node, coords) {
     map = new Map({
       target: node.id,
       controls: [],
@@ -35,7 +35,7 @@
         }),
       ],
       view: new View({
-        center: fromLonLat(centreCoordsGcs),
+        center: fromLonLat(coords),
         zoom,
         minZoom: zoom,
         maxZoom: zoom
@@ -63,7 +63,9 @@
   
 </script>
 
-<div id='map' use:initializeMap />
+{#key centreCoordsGcs}
+  <div id='map' use:initializeMap={centreCoordsGcs} />
+{/key}
 
 <style>
   #map {
