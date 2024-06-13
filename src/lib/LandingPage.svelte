@@ -20,7 +20,7 @@
 
   const questionTextAttrs = {
     fontFamily: "Verdana, Geneva, Tahoma, sans-serif",
-    fontSize: 30,
+    fontSize: Math.round(width / 12),
     fill: 'black'
   }
 
@@ -154,7 +154,7 @@
           height: window.innerHeight / 3,
           align: 'center',
           verticalAlign: 'middle',
-          text: 'Where am I?',
+          text: '...an intersection in a city of intersections, destined at a crossroads',
           ...questionTextAttrs
         }} />
         <Text config={{
@@ -164,7 +164,7 @@
           height: window.innerHeight / 3,
           align: 'center',
           verticalAlign: 'middle',
-          text: 'What is this?',
+          text: '...a countdown that never ends, until it does',
           ...questionTextAttrs
         }} />
       {/if}
