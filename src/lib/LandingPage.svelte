@@ -52,7 +52,7 @@
   let image = null;
   $: if (coinEl !== undefined) {
       const img = document.createElement("img");
-      img.src = "https://cdn-icons-png.flaticon.com/512/5524/5524586.png";
+      img.src = "https://lh6.ggpht.com/tu1t59ovtBhIUglagJ0fAXGvuFpVzn330fzbVQcDnxnEJ68he_dQ_R50Qb67VNtQhLg";
       img.onload = () => {
           image = img;
       };
@@ -226,10 +226,10 @@
           ...questionTextAttrs
         }} />
         <Image config={{ 
-          x: (window.innerWidth / 2) - 25,
-          y: window.innerHeight - 60,
-          width: 50,
-          height: 50,
+          x: (window.innerWidth / 2) - 30,
+          y: window.innerHeight - 70,
+          width: 60,
+          height: 60,
           image 
         }} on:pointerclick={ closeCoinTransition } /> 
       {/if}
