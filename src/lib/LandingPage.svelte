@@ -17,7 +17,12 @@
     [-79.460826261873095, 43.693347307108603]
   ];
 
-  let autoFlipTimeout;
+  let captionIndex = 0;
+  const captions = [
+    "...an intersection in a city of\nintersections, destined at a crossroads",
+    "...a countdown that never ends, until\nsuddenly it does"
+  ]
+  $: caption = captions[captionIndex];
 
   let coordIndex = 0;
   $: groundZeroCoordsGcs = coordFixtures[coordIndex];
@@ -44,6 +49,7 @@
   let coinEl, coinOverflowEl, irisEl, markerEl;
   let isHeads = false;
   let isTails = false;
+  let isFlipping;
 
   let isTileMapLoading = true; 
 
@@ -52,7 +58,7 @@
   let image = null;
   $: if (coinEl !== undefined) {
       const img = document.createElement("img");
-      img.src = "https://lh6.ggpht.com/tu1t59ovtBhIUglagJ0fAXGvuFpVzn330fzbVQcDnxnEJ68he_dQ_R50Qb67VNtQhLg";
+      img.src = "https://cdn-icons-png.flaticon.com/512/5524/5524586.png";
       img.onload = () => {
           image = img;
       };
@@ -60,6 +66,7 @@
 
   function almostThereFlip() {
     let nTotalFlips = 0;
+    isFlipping = true;
     const flip = async () => { 
       nTotalFlips += 1;
       await flipCoin();
@@ -68,6 +75,8 @@
       } else {
         retractFlow();
         isHeads = true;
+        isFlipping = false;
+        captionIndex = (captionIndex === 0 ? 1 : 0);
       }
     }
     flip();
@@ -98,7 +107,6 @@
         await flipCoin();
         openCoinTransition();
       } else if (isTails) {
-        clearTimeout(autoFlipTimeout);
         irisIn();
       }
     } 
@@ -198,6 +206,26 @@
         fill: 'black',
         visible: isTails
       }} bind:handle={ markerEl } />
+      <Text config={{
+        y: window.innerHeight - window.innerHeight / 3,
+        height: window.innerHeight / 3,
+        align: 'center',
+        verticalAlign: 'middle',
+        text: caption,
+        visible: isFlipping,
+        ...questionTextAttrs
+      }} />
+      {#if isHeads}
+        <Title />
+      {:else if isTails}
+        <Image config={{ 
+          x: (window.innerWidth / 2) - 30,
+          y: window.innerHeight - window.innerHeight / 6 - 30,
+          width: 60,
+          height: 60,
+          image 
+        }} on:pointerclick={ closeCoinTransition } />
+      {/if}
       <Ring config={{
         x: xCentre,
         y: yCentre,
@@ -206,33 +234,6 @@
         innerRadius: diagonalRadius,
         strokeEnabled: false
       }} bind:handle={ irisEl } />
-      {#if isHeads}
-        <Title />
-      {:else if isTails}
-        <Text config={{
-          y: 0,
-          height: window.innerHeight / 3,
-          align: 'center',
-          verticalAlign: 'middle',
-          text: '...an intersection in a city of \n intersections, destined at a crossroads',
-          ...questionTextAttrs
-        }} />
-        <Text config={{
-          y: (window.innerHeight / 3) * 2,
-          height: window.innerHeight / 3,
-          align: 'center',
-          verticalAlign: 'middle',
-          text: '...a countdown that never ends, until \n suddenly it does',
-          ...questionTextAttrs
-        }} />
-        <Image config={{ 
-          x: (window.innerWidth / 2) - 30,
-          y: window.innerHeight - 70,
-          width: 60,
-          height: 60,
-          image 
-        }} on:pointerclick={ closeCoinTransition } /> 
-      {/if}
     </Layer>
   </Stage> 
 </div> 
