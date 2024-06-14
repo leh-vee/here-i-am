@@ -1,5 +1,5 @@
 <script>
-  import { Stage, Layer, Ring, Circle, Text } from 'svelte-konva';
+  import { Stage, Layer, Ring, Circle, Text, Image } from 'svelte-konva';
   import Konva from 'konva';
   import Title from './landing_page/Title.svelte';
   import MapTiles from './MapTiles.svelte';
@@ -34,10 +34,10 @@
   const markerRadius = 2;
 
   const questionTextAttrs = {
-    x: 10,
-    width: width - 10,
+    x: 5,
+    width: width - 5,
     fontFamily: "Verdana, Geneva, Tahoma, sans-serif",
-    fontSize: Math.round(width / 25),
+    fontSize: Math.round(width / 23),
     fill: 'black'
   }
 
@@ -48,6 +48,15 @@
   let isTileMapLoading = true; 
 
   $: if (coinEl !== undefined) { almostThereFlip() };
+
+  let image = null;
+  $: if (coinEl !== undefined) {
+      const img = document.createElement("img");
+      img.src = "https://cdn-icons-png.flaticon.com/512/5524/5524586.png";
+      img.onload = () => {
+          image = img;
+      };
+  };
 
   function almostThereFlip() {
     let nTotalFlips = 0;
@@ -110,8 +119,6 @@
       }
     });
   }
- 
-  $: if (isTails) autoFlipTimeout = setTimeout(closeCoinTransition, 5000);
 
   function retractFlow() {
     coinOverflowEl.to({
@@ -218,6 +225,13 @@
           text: '...a countdown that never ends, until \n suddenly it does',
           ...questionTextAttrs
         }} />
+        <Image config={{ 
+          x: (window.innerWidth / 2) - 25,
+          y: window.innerHeight - 60,
+          width: 50,
+          height: 50,
+          image 
+        }} on:pointerclick={ closeCoinTransition } /> 
       {/if}
     </Layer>
   </Stage> 
