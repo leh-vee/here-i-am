@@ -17,7 +17,7 @@
     [-79.460826261873095, 43.693347307108603]
   ];
 
-  let goInterval;
+  let autoFlipTimeout;
 
   let coordIndex = 0;
   $: groundZeroCoordsGcs = coordFixtures[coordIndex];
@@ -57,6 +57,7 @@
       if (isTileMapLoading || nTotalFlips < 3) {
         flip();
       } else {
+        retractFlow();
         isHeads = true;
       }
     }
@@ -88,8 +89,8 @@
         await flipCoin();
         openCoinTransition();
       } else if (isTails) {
-        clearInterval(goInterval);
-        closeCoinTransition();
+        clearTimeout(autoFlipTimeout);
+        irisIn();
       }
     } 
   }
@@ -109,17 +110,16 @@
       }
     });
   }
-
-  $: if (isHeads) retractFlow(); 
-  $: if (isTails) goInterval = setInterval(irisIn, Math.PI * 1000);
+ 
+  $: if (isTails) autoFlipTimeout = setTimeout(closeCoinTransition, 5000);
 
   function retractFlow() {
     coinOverflowEl.to({
-      duration: Math.PI / 10,
+      duration: Math.PI / 7,
       innerRadius: coinRadius,
       outerRadius: coinRadius,
       fill: 'black',
-      easing: Konva.Easings.EaseIn
+      easing: Konva.Easings.EaseOut
     });
   }
 
