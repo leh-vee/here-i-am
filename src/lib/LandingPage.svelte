@@ -1,5 +1,5 @@
 <script>
-  import { Stage, Layer, Ring, Circle, Text, Image } from 'svelte-konva';
+  import { Stage, Layer, Ring, Circle, Text } from 'svelte-konva';
   import Konva from 'konva';
   import Title from './landing_page/Title.svelte';
   import MapTiles from './MapTiles.svelte';
@@ -55,15 +55,6 @@
 
   $: if (coinEl !== undefined) { almostThereFlip() };
 
-  let image = null;
-  $: if (coinEl !== undefined) {
-      const img = document.createElement("img");
-      img.src = "https://cdn-icons-png.flaticon.com/512/5524/5524586.png";
-      img.onload = () => {
-          image = img;
-      };
-  };
-
   function almostThereFlip() {
     let nTotalFlips = 0;
     isFlipping = true;
@@ -112,21 +103,21 @@
     } 
   }
 
-  function closeCoinTransition() {
-    const duration = Math.PI / 10;
-    markerEl.to({
-      duration,
-      radius: coinRadius,
-      easing: Konva.Easings.EaseIn,
-      onFinish: () => {
-        coinEl.innerRadius(0);
-        markerEl.radius(markerRadius);
-        isTails = false;
-        coinOverflowEl.innerRadius(0);
-        getNewGroundZeroCoords()
-      }
-    });
-  }
+  // function closeCoinTransition() {
+  //   const duration = Math.PI / 10;
+  //   markerEl.to({
+  //     duration,
+  //     radius: coinRadius,
+  //     easing: Konva.Easings.EaseIn,
+  //     onFinish: () => {
+  //       coinEl.innerRadius(0);
+  //       markerEl.radius(markerRadius);
+  //       isTails = false;
+  //       coinOverflowEl.innerRadius(0);
+  //       getNewGroundZeroCoords()
+  //     }
+  //   });
+  // }
 
   function retractFlow() {
     coinOverflowEl.to({
@@ -217,14 +208,6 @@
       }} />
       {#if isHeads}
         <Title />
-      {:else if isTails}
-        <Image config={{ 
-          x: (window.innerWidth / 2) - 30,
-          y: window.innerHeight - window.innerHeight / 6 - 30,
-          width: 60,
-          height: 60,
-          image 
-        }} on:pointerclick={ closeCoinTransition } />
       {/if}
       <Ring config={{
         x: xCentre,
