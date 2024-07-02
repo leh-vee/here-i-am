@@ -64,7 +64,7 @@
       if (isTileMapLoading || nTotalFlips < 3) {
         flip();
       } else {
-        retractFlow();
+        retractCoinOverflow();
         isHeads = true;
         isFlipping = false;
         captionIndex = (captionIndex === 0 ? 1 : 0);
@@ -119,12 +119,10 @@
   //   });
   // }
 
-  function retractFlow() {
+  function retractCoinOverflow() {
     coinOverflowEl.to({
-      duration: Math.PI / 7,
-      innerRadius: coinRadius,
-      outerRadius: coinRadius,
-      fill: 'black',
+      duration: Math.PI / 10,
+      innerRadius: diagonalRadius,
       easing: Konva.Easings.EaseOut
     });
   }
@@ -178,7 +176,7 @@
         y: yCentre,
         outerRadius: diagonalRadius,
         innerRadius: 0,
-        fill: 'gold',
+        fill: 'lightgrey',
         strokeEnabled: false
       }} bind:handle={ coinOverflowEl } />
       <Ring config={{
@@ -203,7 +201,7 @@
         align: 'center',
         verticalAlign: 'middle',
         text: caption,
-        visible: isFlipping,
+        visible: false,
         ...questionTextAttrs
       }} />
       {#if isHeads}
