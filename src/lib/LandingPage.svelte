@@ -19,6 +19,14 @@
     artistStatement = artistStatements[artistStatementIndex];
   } 
 
+  function cycleArtistStatement() {
+    if (artistStatementIndex === artistStatements.length - 1) {
+      artistStatementIndex = 0; 
+    } else {
+      artistStatementIndex += 1;
+    }
+  }
+
   const coordFixtures = [
     [-79.466850201826205, 43.657227646269199],
     [-79.327115097415998, 43.6919267876238], 
@@ -123,7 +131,7 @@
         markerEl.radius(markerRadius);
         isTails = false;
         coinOverflowEl.innerRadius(0);
-        artistStatementIndex += 1;
+        cycleArtistStatement();
         getNewGroundZeroCoords()
       }
     });
