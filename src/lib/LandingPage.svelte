@@ -42,7 +42,7 @@
     x: 5,
     width: width - 5,
     fontFamily: "Verdana, Geneva, Tahoma, sans-serif",
-    fontSize: Math.round(width / 23),
+    fontSize: Math.round(width / 30),
     fill: 'black'
   }
 
@@ -103,21 +103,21 @@
     } 
   }
 
-  // function closeCoinTransition() {
-  //   const duration = Math.PI / 10;
-  //   markerEl.to({
-  //     duration,
-  //     radius: coinRadius,
-  //     easing: Konva.Easings.EaseIn,
-  //     onFinish: () => {
-  //       coinEl.innerRadius(0);
-  //       markerEl.radius(markerRadius);
-  //       isTails = false;
-  //       coinOverflowEl.innerRadius(0);
-  //       getNewGroundZeroCoords()
-  //     }
-  //   });
-  // }
+  function closeCoinTransition() {
+    const duration = Math.PI / 10;
+    markerEl.to({
+      duration,
+      radius: coinRadius,
+      easing: Konva.Easings.EaseIn,
+      onFinish: () => {
+        coinEl.innerRadius(0);
+        markerEl.radius(markerRadius);
+        isTails = false;
+        coinOverflowEl.innerRadius(0);
+        getNewGroundZeroCoords()
+      }
+    });
+  }
 
   function retractCoinOverflow() {
     coinOverflowEl.to({
@@ -138,11 +138,11 @@
 
   function openCoinTransition() {
     const duration = Math.PI / 10;
+    coinOverflowEl.innerRadius(coinRadius).outerRadius(coinRadius);
     const coinOlverflow = () => {
       coinOverflowEl.to({
         duration,
         outerRadius: diagonalRadius, 
-        fill: 'gold',
         easing: Konva.Easings.EaseOut,
         onFinish: () => { isTails = true }
       });
@@ -195,17 +195,25 @@
         fill: 'black',
         visible: isTails
       }} bind:handle={ markerEl } />
-      <Text config={{
-        y: window.innerHeight - window.innerHeight / 3,
-        height: window.innerHeight / 3,
-        align: 'center',
-        verticalAlign: 'middle',
-        text: caption,
-        visible: false,
-        ...questionTextAttrs
-      }} />
       {#if isHeads}
         <Title />
+      {:else if isTails}
+        <Text config={{
+          y: 0,
+          height: window.innerHeight / 3,
+          align: 'center',
+          verticalAlign: 'middle',
+          text: '...is a poem about an intersection, in a cityful',
+          ...questionTextAttrs
+        }} />
+        <Text config={{
+          y: window.innerHeight - window.innerHeight / 3,
+          height: window.innerHeight / 3,
+          align: 'center',
+          verticalAlign: 'middle',
+          text: 'of intersections, destined at a crossroads.',
+          ...questionTextAttrs
+        }} />
       {/if}
       <Ring config={{
         x: xCentre,
