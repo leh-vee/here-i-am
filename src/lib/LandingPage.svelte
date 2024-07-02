@@ -103,12 +103,17 @@
     } 
   }
 
+  let timeoutToFlip = null;
+  $: if (isTails) {
+    timeoutToFlip = setTimeout(closeCoinTransition, Math.PI * 1000);
+  }
+
   function closeCoinTransition() {
     const duration = Math.PI / 10;
     markerEl.to({
       duration,
       radius: coinRadius,
-      easing: Konva.Easings.EaseIn,
+      easing: Konva.Easings.EaseOut,
       onFinish: () => {
         coinEl.innerRadius(0);
         markerEl.radius(markerRadius);
@@ -193,7 +198,7 @@
         y: yCentre,
         radius: markerRadius,
         fill: 'black',
-        visible: isTails
+        visible: !isHeads
       }} bind:handle={ markerEl } />
       {#if isHeads}
         <Title />
