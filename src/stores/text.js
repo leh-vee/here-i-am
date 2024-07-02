@@ -1,6 +1,6 @@
 import { writable, derived } from 'svelte/store';
 import { fetchPoemText } from '../api/client.js';
-import { serializePoem } from '../utils/poemJson.js';
+import { serializePoem } from '../utils/textJson.js';
 
 let poem;
 fetchPoemText().then(async lines => { 

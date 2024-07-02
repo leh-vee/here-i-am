@@ -21,6 +21,18 @@ export async function serializePoem(poemLines) {
   return poemJson;
 }
 
+export function serializeCouplets(lines) {
+  const coupletsJson = [];
+  const nCouplets = lines.length / 2;
+  for (let i = 0; i < nCouplets; i++) {
+    const aLine = lines[i * 2];
+    const bLine = lines[i * 2 + 1];
+    const couplet = { a: aLine, b: bLine };
+    coupletsJson.push(couplet);
+  }
+  return coupletsJson;
+}
+
 function splitWordsStripPunctuation(str) {
   const strWithoutPunctuation = str.replaceAll(punctuationRegEx, '');
   const words = strWithoutPunctuation.split(' ');

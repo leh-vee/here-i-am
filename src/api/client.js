@@ -21,12 +21,21 @@ export async function fetchBlocksForProjection(projection, screenPx, forRotation
   return JSON.parse(blocksJson);
 }
 
-export async function fetchPoemText() {
+export function fetchPoemText() {
   const filePath = `${window.location.href}/poem.txt`;
+  return getLinesFromTxtFile(filePath);
+}
+
+export function fetchArtistStatements() {
+  const filePath = `${window.location.href}/artist_statement_couplets.txt`;
+  return getLinesFromTxtFile(filePath);
+}
+
+async function getLinesFromTxtFile(filePath) {
   const response = await fetch(filePath);
   const text = await response.text();
   return text.split('\n').map(line => line.trim());
-}
+} 
 
 async function fetchProjectionBlocks(projectionCoords) {
   return fetchData('street-edges/area', 

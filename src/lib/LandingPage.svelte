@@ -4,8 +4,20 @@
   import Title from './landing_page/Title.svelte';
   import MapTiles from './MapTiles.svelte';
   import { createEventDispatcher } from 'svelte';
+  import { fetchArtistStatements } from '../api/client.js';
+  import { serializeCouplets } from '../utils/textJson.js';
   
   const dispatch = createEventDispatcher();
+
+  let artistStatements, artistStatementIndex, artistStatement;
+  fetchArtistStatements().then(lines => { 
+    artistStatements = serializeCouplets(lines);
+    artistStatementIndex = 0;
+  });
+
+  $: if (artistStatementIndex !== undefined) {
+    artistStatement = artistStatements[artistStatementIndex];
+  } 
 
   const coordFixtures = [
     [-79.466850201826205, 43.657227646269199],
@@ -16,13 +28,6 @@
     [-79.441953787130998, 43.691966449116798],
     [-79.460826261873095, 43.693347307108603]
   ];
-
-  let captionIndex = 0;
-  const captions = [
-    "...an intersection in a city of\nintersections, destined at a crossroads",
-    "...a countdown that never ends, until\nsuddenly it does"
-  ]
-  $: caption = captions[captionIndex];
 
   let coordIndex = 0;
   $: groundZeroCoordsGcs = coordFixtures[coordIndex];
@@ -67,7 +72,6 @@
         retractCoinOverflow();
         isHeads = true;
         isFlipping = false;
-        captionIndex = (captionIndex === 0 ? 1 : 0);
       }
     }
     flip();
@@ -119,6 +123,7 @@
         markerEl.radius(markerRadius);
         isTails = false;
         coinOverflowEl.innerRadius(0);
+        artistStatementIndex += 1;
         getNewGroundZeroCoords()
       }
     });
@@ -208,7 +213,7 @@
           height: window.innerHeight / 3,
           align: 'center',
           verticalAlign: 'middle',
-          text: '...is a poem about an intersection, in a cityful',
+          text: `...${artistStatement.a}`,
           ...questionTextAttrs
         }} />
         <Text config={{
@@ -216,7 +221,7 @@
           height: window.innerHeight / 3,
           align: 'center',
           verticalAlign: 'middle',
-          text: 'of intersections, destined at a crossroads.',
+          text: artistStatement.b,
           ...questionTextAttrs
         }} />
       {/if}
