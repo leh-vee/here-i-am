@@ -4,14 +4,12 @@
   import Title from './landing_page/Title.svelte';
   import ArtistStatement from './landing_page/ArtistStatement.svelte';
   import MapTiles from './MapTiles.svelte';
-
   import { createEventDispatcher } from 'svelte';
   
   const dispatch = createEventDispatcher();
 
   let timeoutToFlip = null;
-  $: if (isTails) {
-    
+  function flipBackDelay() { 
     timeoutToFlip = setTimeout(closeCoinTransition, Math.PI * 1000);
   }
 
@@ -190,7 +188,7 @@
       {#if isHeads}
         <Title />
       {/if}
-      <ArtistStatement visible={ isTails } />
+      <ArtistStatement visible={ isTails } on:revealed={ flipBackDelay } />
       <Ring config={{
         x: xCentre,
         y: yCentre,
