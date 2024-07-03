@@ -1,5 +1,5 @@
 <script>
-  import { Stage, Layer, Ring, Circle } from 'svelte-konva';
+  import { Stage, Layer, Ring, Circle, Arc } from 'svelte-konva';
   import Konva from 'konva';
   import Title from './landing_page/Title.svelte';
   import ArtistStatement from './landing_page/ArtistStatement.svelte';
@@ -9,10 +9,13 @@
   const dispatch = createEventDispatcher();
 
   let isFullStop = false;
-  let timeoutToFlip = null;
   function flipBackDelay() {
     isFullStop = true;
-    timeoutToFlip = setTimeout(closeCoinTransition, Math.PI * 1000);
+    progressBarEl.to({
+      duration: Math.PI,
+      angle: 360,
+      onFinish: closeCoinTransition
+    });
   }
 
   const coordFixtures = [
@@ -39,14 +42,16 @@
 
   const markerRadius = 2;
 
-  let coinEl, coinOverflowEl, irisEl, markerEl;
+  let coinEl, coinOverflowEl, irisEl, markerEl, progressBarEl;
   let isHeads = false;
   let isTails = false;
   let isFlipping;
 
   let isTileMapLoading = true; 
 
-  $: if (coinEl !== undefined) { almostThereFlip() };
+  $: if (coinEl !== undefined) almostThereFlip();
+
+  $: if (progressBarEl !== undefined) progressBarEl.rotate(-90);
 
   function almostThereFlip() {
     let nTotalFlips = 0;
@@ -181,6 +186,17 @@
         strokeWidth,
         stroke: 'dimgrey'
       }} bind:handle={ coinEl } />
+      <Arc config={{
+        x: xCentre,
+        y: yCentre,
+        outerRadius: coinRadius + strokeWidth / 2,
+        innerRadius: coinRadius - strokeWidth / 2,
+        fill: 'black',
+        opacity: 1,
+        angle: 0,
+        visible: isFullStop,
+        strokeEnabled: false
+      }} bind:handle={ progressBarEl } />
       <Circle config={{
         x: xCentre,
         y: yCentre,
