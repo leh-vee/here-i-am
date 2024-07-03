@@ -25,6 +25,7 @@
     progressiveLines = { a: "", b: "" };
     await buildLine();
     await buildLine('b');
+    progressiveLines.b += '.';
     dispatch('revealed');
   }
   

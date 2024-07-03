@@ -8,8 +8,10 @@
   
   const dispatch = createEventDispatcher();
 
+  let isFullStop = false;
   let timeoutToFlip = null;
-  function flipBackDelay() { 
+  function flipBackDelay() {
+    isFullStop = true;
     timeoutToFlip = setTimeout(closeCoinTransition, Math.PI * 1000);
   }
 
@@ -102,6 +104,7 @@
       onFinish: () => {
         coinEl.innerRadius(0);
         markerEl.radius(markerRadius);
+        isFullStop = false;
         isTails = false;
         coinOverflowEl.innerRadius(0);
         getNewGroundZeroCoords()
@@ -183,7 +186,7 @@
         y: yCentre,
         radius: markerRadius,
         fill: 'black',
-        visible: !isHeads
+        visible: isFullStop
       }} bind:handle={ markerEl } />
       {#if isHeads}
         <Title />
