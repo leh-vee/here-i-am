@@ -1,30 +1,18 @@
 <script>
-  import { Stage, Layer, Ring, Circle, Text } from 'svelte-konva';
+  import { Stage, Layer, Ring, Circle } from 'svelte-konva';
   import Konva from 'konva';
   import Title from './landing_page/Title.svelte';
+  import ArtistStatement from './landing_page/ArtistStatement.svelte';
   import MapTiles from './MapTiles.svelte';
+
   import { createEventDispatcher } from 'svelte';
-  import { fetchArtistStatements } from '../api/client.js';
-  import { serializeCouplets } from '../utils/textJson.js';
   
   const dispatch = createEventDispatcher();
 
-  let artistStatements, artistStatementIndex, artistStatement;
-  fetchArtistStatements().then(lines => { 
-    artistStatements = serializeCouplets(lines);
-    artistStatementIndex = 0;
-  });
-
-  $: if (artistStatementIndex !== undefined) {
-    artistStatement = artistStatements[artistStatementIndex];
-  } 
-
-  function cycleArtistStatement() {
-    if (artistStatementIndex === artistStatements.length - 1) {
-      artistStatementIndex = 0; 
-    } else {
-      artistStatementIndex += 1;
-    }
+  let timeoutToFlip = null;
+  $: if (isTails) {
+    
+    timeoutToFlip = setTimeout(closeCoinTransition, Math.PI * 1000);
   }
 
   const coordFixtures = [
@@ -50,14 +38,6 @@
   const strokeWidth = 6;
 
   const markerRadius = 2;
-
-  const questionTextAttrs = {
-    x: 5,
-    width: width - 5,
-    fontFamily: "Verdana, Geneva, Tahoma, sans-serif",
-    fontSize: Math.round(width / 30),
-    fill: 'black'
-  }
 
   let coinEl, coinOverflowEl, irisEl, markerEl;
   let isHeads = false;
@@ -115,11 +95,6 @@
     } 
   }
 
-  let timeoutToFlip = null;
-  $: if (isTails) {
-    timeoutToFlip = setTimeout(closeCoinTransition, Math.PI * 1000);
-  }
-
   function closeCoinTransition() {
     const duration = Math.PI / 10;
     markerEl.to({
@@ -131,7 +106,6 @@
         markerEl.radius(markerRadius);
         isTails = false;
         coinOverflowEl.innerRadius(0);
-        cycleArtistStatement();
         getNewGroundZeroCoords()
       }
     });
@@ -215,24 +189,8 @@
       }} bind:handle={ markerEl } />
       {#if isHeads}
         <Title />
-      {:else if isTails}
-        <Text config={{
-          y: 0,
-          height: window.innerHeight / 3,
-          align: 'center',
-          verticalAlign: 'middle',
-          text: `...${artistStatement.a}`,
-          ...questionTextAttrs
-        }} />
-        <Text config={{
-          y: window.innerHeight - window.innerHeight / 3,
-          height: window.innerHeight / 3,
-          align: 'center',
-          verticalAlign: 'middle',
-          text: artistStatement.b,
-          ...questionTextAttrs
-        }} />
       {/if}
+      <ArtistStatement visible={ isTails } />
       <Ring config={{
         x: xCentre,
         y: yCentre,
