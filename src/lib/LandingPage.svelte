@@ -174,7 +174,7 @@
         y: yCentre,
         outerRadius: diagonalRadius,
         innerRadius: 0,
-        fill: 'lightgrey',
+        fill: 'gold',
         strokeEnabled: false
       }} bind:handle={ coinOverflowEl } />
       <Ring config={{
