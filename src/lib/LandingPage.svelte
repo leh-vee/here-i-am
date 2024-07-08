@@ -11,11 +11,7 @@
   let isFullStop = false;
   function flipBackDelay() {
     isFullStop = true;
-    progressBarEl.to({
-      duration: Math.PI,
-      angle: 360,
-      onFinish: closeCoinTransition
-    });
+    setTimeout(closeCoinTransition, Math.PI * 1000)
   }
 
   const coordFixtures = [
@@ -42,7 +38,7 @@
 
   const markerRadius = 2;
 
-  let coinEl, coinOverflowEl, irisEl, markerEl, progressBarEl;
+  let coinEl, coinOverflowEl, irisEl, markerEl;
   let isHeads = false;
   let isTails = false;
   let isFlipping;
@@ -50,8 +46,6 @@
   let isTileMapLoading = true; 
 
   $: if (coinEl !== undefined) almostThereFlip();
-
-  $: if (progressBarEl !== undefined) progressBarEl.rotate(-90);
 
   function almostThereFlip() {
     let nTotalFlips = 0;
@@ -186,17 +180,6 @@
         strokeWidth,
         stroke: 'dimgrey'
       }} bind:handle={ coinEl } />
-      <Arc config={{
-        x: xCentre,
-        y: yCentre,
-        outerRadius: coinRadius + strokeWidth / 2,
-        innerRadius: coinRadius - strokeWidth / 2,
-        fill: 'black',
-        opacity: 1,
-        angle: 0,
-        visible: isFullStop,
-        strokeEnabled: false
-      }} bind:handle={ progressBarEl } />
       <Circle config={{
         x: xCentre,
         y: yCentre,
