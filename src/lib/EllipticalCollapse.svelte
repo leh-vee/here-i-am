@@ -6,8 +6,6 @@
 
   const dispatch = createEventDispatcher();
 
-  export let implodeOnFinale = true;
-
   const radius = 5;
   
   let isCollapsed = false;
@@ -93,13 +91,10 @@
   }
 
   function singularityFinale() {
-    const finalRadius = implodeOnFinale ? 0 : radius;
-    const duration = implodeOnFinale ? Math.PI : Math.PI / 10;
     ellipsisStops.forEach((stop, i) => {
       if (i === 1) {
         stop.to({
-          duration,
-          radius: finalRadius,
+          duration: Math.PI,
           fill: 'gold',
           onFinish: () => {
             dispatch('collapsed', ellipsisStops[1]);
