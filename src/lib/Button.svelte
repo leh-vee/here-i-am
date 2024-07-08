@@ -1,7 +1,6 @@
 <script>
   import { Circle, RegularPolygon } from 'svelte-konva';
   import { currentChannelFromSefirahCoordsPx } from '../stores/treeOfLife';
-  import { isTutorialMode } from '../stores/base.js'; 
   import { createEventDispatcher } from 'svelte';
 
   export let isBackBtn;
@@ -57,7 +56,6 @@
 
   function btnStickyDown(cancelTutorialMode=true) {
     if (isDisabled) return null;
-    if ($isTutorialMode && cancelTutorialMode) isTutorialMode.set(false);
     btnRadius = pressedBtnRadius;
     btnStrokeColour = pressedBtnStrokeColour;
     setTimeout(unstickBtn, 500);
@@ -67,29 +65,6 @@
     btnRadius = baseBtnRadius;
     btnStrokeColour = baseBtnStrokeColour;
     dispatch(dispatchCode);
-  }
-
-  $: if (isFwdBtn && $isTutorialMode && isEnabled) {
-    setTimeout(btnTutorial, Math.PI * 1000);
-  }
-
-  function btnTutorial() {
-    if (!$isTutorialMode) return null;
-    hitAreaEl.to({
-      duration: 1,
-      radius: btnRadius * 2,
-      opacity: 0.5,
-      onFinish: () => {
-        if ($isTutorialMode) btnStickyDown(false);
-        resetHitAreaAttrs();
-      }
-    });
-  }
-
-  $: if (!$isTutorialMode) resetHitAreaAttrs();
-
-  function resetHitAreaAttrs() {
-    hitAreaElAttrs = hitAreaElAttrs;
   }
 </script>
 
