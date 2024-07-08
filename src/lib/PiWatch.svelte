@@ -3,8 +3,6 @@
   import { isEllipsis, isFirstVerseWord, isLastVerseWord  } from '../stores/text';
   import { nPiesScored } from '../stores/base';
 
-
-  export let inFlight = false;
   let pieEl;
 
   const watchFontSize = Math.round(window.innerWidth / 30);
@@ -66,7 +64,7 @@
       nPiesScored.set($nPiesScored + 1); 
     }
   }
-  $: if (inFlight) {
+  $: if (pieEl !== undefined) {
     start = new Date();
     current = start;
     interval = setInterval(() => {

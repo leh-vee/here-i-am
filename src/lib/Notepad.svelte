@@ -3,7 +3,6 @@
     import { currentVerse, wordIndices, isLineBreak, currentWordId,
       currentVerseIndex, isCaesura, isInBetweenWords } from '../stores/text.js';
       
-    export let inFlight = false;
     let padEl;
     let stashedWordEl = null;
     const wordAttrs = {
@@ -32,7 +31,7 @@
     $: yPadPosition =  isLineA ? 0 : -window.innerHeight; 
     
     const wordPanDuration = Math.PI / 10;
-    $: lineBreakPanDuration = inFlight ? wordPanDuration : Math.PI / 2;
+    const lineBreakPanDuration = Math.PI / 2;
     $: {
       const d = $isLineBreak ? lineBreakPanDuration : wordPanDuration;
       movePadToCurrentWord(xPadPosition, yPadPosition, d);

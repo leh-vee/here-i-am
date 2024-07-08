@@ -5,11 +5,10 @@
   export let x;
   export let y;
   export let wordId;
-
-  $: isCurrentWord = wordId === $currentWordId;
+  export let isVisible = false;
 
   let markerEl; 
-  let isRead = false;
+  $: isCurrentWord = wordId === $currentWordId;
   
   $: duration = $isLineBreak ? Math.PI / 2 : Math.PI / 10;
   
@@ -25,7 +24,6 @@
 
   function expandMarker() {
     if (markerEl.radius() < 5) {
-      isRead = true;
       markerEl.to({
         duration,
         radius: 5,
@@ -49,6 +47,6 @@
 <Circle config={{ 
   x, y, 
   radius: 3,
-  visible: isRead, 
+  visible: isVisible, 
   fill: 'dimgrey'
 }} bind:handle={markerEl} />

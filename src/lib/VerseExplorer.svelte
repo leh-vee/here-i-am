@@ -17,13 +17,12 @@
   import { fetchBlocksWithinRadius } from '../api/client.js';
   import distance from "@turf/distance";
   import { createEventDispatcher } from 'svelte';
-
-  export let isReading = false;
   
   const dispatch = createEventDispatcher();
-  
-  let isInFlight = false;
-  let mapWatchGroupEl;
+
+  export let isReading = false;
+
+  let streetMapContainerEl;
   let sefirahsGroupEl;
 
   $: isPreVerseElliptical = $isEllipsis && $isFirstVerseWord;
@@ -32,8 +31,11 @@
   $: if ($blocksForCurrentChannel === undefined) fetchBlocksForProjection();
 
   let isControllable = false;
-  $: if (isPreVerseElliptical) isControllable = false;
-  $: if ($isLastVerseWord && isInFlight && !$isInBetweenWords) isControllable = true;
+  $: if (isPreVerseElliptical) {
+    isControllable = false;
+  } else {
+    isControllable = true;
+  }
 
   function fetchBlocksForProjection() {
     const pCentre = $currentChannelProjection.center();
@@ -53,19 +55,11 @@
   function postElliptical() {
     if (isPreVerseElliptical) {
       isEllipsis.set(false); 
-      isInFlight = true;
+      isControllable = true;
     } else if ($isGroundZero) {
       dispatch('groundZero');
     } else {
       wordIndices.nextVerse();
-    }
-  }
-  
-  $: if (isInFlight && !$isInBetweenWords) {
-    if (!$isLastVerseWord) {
-      setTimeout(() => {
-        wordIndices.nextWord();
-      }, Math.PI * 10);  
     }
   }
 
@@ -93,9 +87,7 @@
   }
 
   function proceed(direction) {
-    const isWindowOfIntervention = $isLastVerseWord && isInFlight;
-    if (isWindowOfIntervention) isInFlight = false;
-    if ($isInBetweenWords || isInFlight) return null;
+    if ($isInBetweenWords) return null;
     if (direction === 'forward') {
       nextWord();
     } else {
@@ -103,15 +95,15 @@
     }
   }
 
-  $: if (isPostVerseElliptical) fadeOutGroupEls();
+  $: if (isPostVerseElliptical) fadeStreetMap();
 
-  function fadeOutGroupEls() {
-    mapWatchGroupEl.to({
+  function fadeStreetMap() {
+    streetMapContainerEl.to({
       duration: Math.PI,
       opacity: 0,
       onFinish: () => {
         setTimeout(() => {
-          mapWatchGroupEl.opacity(1);
+          streetMapContainerEl.opacity(1);
           sefirahsGroupEl.opacity(1);
         }, 3000);
       }
@@ -128,11 +120,11 @@
     visible: isReading }} >
     <Layer>
       {#key $currentVerseIndex}
-        <Group bind:handle={ mapWatchGroupEl }>
+        <Group bind:handle={ streetMapContainerEl }>
           <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
             projection={ $currentChannelProjection } />
         </Group>
-        <PiWatch inFlight={ isInFlight }/>  
+        <PiWatch />  
         {#if $blocksForCurrentChannel}
           <Group bind:handle={ sefirahsGroupEl }>
             <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
@@ -142,13 +134,12 @@
           {#if $isEllipsis && isReading}
             <Ellipsis on:go={ postElliptical } />
           {:else}
-            <VerseMap />
-            <Notepad inFlight={ isInFlight } />
+            <VerseMap onTheRun={ isControllable } />
+            <Notepad />
             <Punctuation on:punctuated={ postPunctuation } />
-            <Button isBackBtn={true} isDisabled={!isControllable} 
+            <Button isBackBtn={true} isDisabled={ $isFirstVerseWord } 
               on:back={() => { proceed('backward') }} />
-            <Button isBackBtn={false} isDisabled={!isControllable}
-              on:forward={() => { proceed('forward') }} />
+            <Button isBackBtn={false} on:forward={() => { proceed('forward') }} />
           {/if}
         {/if}
       {/key}

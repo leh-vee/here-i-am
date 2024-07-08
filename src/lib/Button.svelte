@@ -4,10 +4,7 @@
   import { createEventDispatcher } from 'svelte';
 
   export let isBackBtn;
-  const isFwdBtn = !isBackBtn;
-  
-  export let isDisabled = true;
-  $: isEnabled = !isDisabled;
+  export let isDisabled = false;
   
   const dispatch = createEventDispatcher();
   const dispatchCode = isBackBtn ? 'back' : 'forward';
@@ -27,7 +24,7 @@
 
   const rotation = isBackBtn ? -90 : 90;
   
-  $: btnOpacity = isDisabled ? 0.3 : 1;
+  $: btnOpacity = isDisabled ? 0.5 : 1;
 
   let hitAreaEl;
 
