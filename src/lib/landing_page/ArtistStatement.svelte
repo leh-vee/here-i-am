@@ -21,12 +21,30 @@
   async function revealNextStatement() {
     statementIndex = (statementIndex >= nStatements - 1) ? 0 : statementIndex + 1; 
     statement =  structuredClone(statements[statementIndex]);
-    statement.a = `...${statement.a}`;
     progressiveLines = { a: "", b: "" };
+    await buildEllipsis();
     await buildLine();
     await buildLine('b');
-    progressiveLines.b += '.';
-    dispatch('revealed');
+    setTimeout(() => {
+      progressiveLines.b += '.';
+      dispatch('revealed');
+    }, Math.PI * 1000); 
+  }
+
+  function buildEllipsis() {
+    return new Promise((resolve) => {
+      const addDotToLineA = () => { 
+        progressiveLines.a += '.';
+        setTimeout(()=> {
+          if (progressiveLines.a === '...') {
+            resolve(true);
+          } else {
+            addDotToLineA();
+          }
+        }, 1000);
+      }
+      setTimeout(addDotToLineA, Math.PI * 1000);
+    });
   }
   
   function buildLine(line = 'a') {
