@@ -1,5 +1,5 @@
 <script>
-  import { Stage, Layer, Ring, Circle, Arc } from 'svelte-konva';
+  import { Stage, Layer, Ring, Circle } from 'svelte-konva';
   import Konva from 'konva';
   import Title from './landing_page/Title.svelte';
   import ArtistStatement from './landing_page/ArtistStatement.svelte';
@@ -11,7 +11,9 @@
   let isFullStop = false;
   function flipBackDelay() {
     isFullStop = true;
-    setTimeout(closeCoinTransition, Math.PI * 1000)
+    setTimeout(() => {
+      if (!isIrisClosing) closeCoinTransition();
+    }, Math.PI * 1000)
   }
 
   const coordFixtures = [
@@ -147,7 +149,10 @@
     });
   }
 
+  let isIrisClosing = false;
+
   function irisIn() {
+    isIrisClosing = true;
     irisEl.to({
       duration: 1,
       easing: Konva.Easings.EaseIn,
