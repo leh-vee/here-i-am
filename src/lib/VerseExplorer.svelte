@@ -21,6 +21,12 @@
   const dispatch = createEventDispatcher();
 
   export let isReading = false;
+  let stopWatch = false;
+
+  $: {
+    console.log('explorer at verse index', $currentVerseIndex);
+    stopWatch = false;
+  }
 
   let streetMapContainerEl;
   let sefirahsGroupEl;
@@ -68,6 +74,7 @@
       if ($isPunctuationNext) {
         isCaesura.set(true);
       } else if ($isLastVerseWord) {
+        stopWatch = true;
         isEllipsis.set(true);
       } else {
         wordIndices.nextWord();
@@ -124,7 +131,7 @@
           <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
             projection={ $currentChannelProjection } />
         </Group>
-        <PiWatch />  
+        <PiWatch isStart={ isControllable } isStop={ stopWatch } />  
         {#if $blocksForCurrentChannel}
           <Group bind:handle={ sefirahsGroupEl }>
             <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />

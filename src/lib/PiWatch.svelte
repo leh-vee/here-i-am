@@ -1,9 +1,10 @@
 <script>
   import { Text } from 'svelte-konva';  
-  import { isEllipsis, isFirstVerseWord, isLastVerseWord  } from '../stores/text';
   import { nPiesScored } from '../stores/base';
 
   let pieEl;
+  export let isStart = false;
+  export let isStop = false;
 
   const watchFontSize = Math.round(window.innerWidth / 30);
   const isPiSecondsFontSize = Math.round(window.innerWidth / 8);
@@ -51,20 +52,18 @@
     return text;
   }
 
-  $: isPreVerseElliptical = $isEllipsis && $isFirstVerseWord;
-  $: isPostVerseElliptical = $isEllipsis && $isLastVerseWord;
-
   let interval;
 
-  $: if (isPreVerseElliptical) start = current;
-  $: if (isPostVerseElliptical) {
+  $: if (isStop) {
+    console.log('stop watch');
     clearInterval(interval);
     if (isPiSeconds) {
       pieSpin();
       nPiesScored.set($nPiesScored + 1); 
     }
   }
-  $: if (pieEl !== undefined) {
+  $: if (isStart) {
+    console.log('start watch');
     start = new Date();
     current = start;
     interval = setInterval(() => {
