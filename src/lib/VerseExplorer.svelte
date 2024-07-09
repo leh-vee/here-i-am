@@ -81,9 +81,9 @@
     }
   }
 
-  $: if (isPostVerse) fadeStreetMap();
+  $: if (isPostVerse) fadeMapEls();
 
-  function fadeStreetMap() {
+  function fadeMapEls() {
     streetMapContainerEl.to({
       duration: Math.PI,
       opacity: 0,
