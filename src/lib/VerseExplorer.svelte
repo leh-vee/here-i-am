@@ -11,7 +11,7 @@
     currentChannelToSefirahCoordsPx, currentChannelProjection, 
     channelBlocks } from '../stores/treeOfLife';
   import { currentVerseIndex, wordIndices, isPunctuationNext, isCaesura, 
-    isEllipsis, isFirstVerseWord, isLastVerseWord, isInBetweenWords, 
+    isFirstVerseWord, isLastVerseWord, isInBetweenWords, 
     currentPiSlice, lastPiSlice, likePiSlices, isGroundZero } from '../stores/text.js';
   import Ellipsis from './Ellipsis.svelte';
   import { fetchBlocksWithinRadius } from '../api/client.js';
@@ -23,26 +23,19 @@
   export let isReading = false;
   let stopWatch = false;
   let isPostVerse = false;
+  let isEllipsis = true;
 
   $: {
     console.log('explorer at verse index', $currentVerseIndex);
     stopWatch = false;
     isPostVerse = false;
+    isEllipsis = true;
   }
 
   let streetMapContainerEl;
   let sefirahsGroupEl;
-
-  $: isPreVerseElliptical = $isEllipsis && $isFirstVerseWord;
   
   $: if ($blocksForCurrentChannel === undefined) fetchBlocksForProjection();
-
-  let isControllable = false;
-  $: if (isPreVerseElliptical) {
-    isControllable = false;
-  } else {
-    isControllable = true;
-  }
 
   function fetchBlocksForProjection() {
     const pCentre = $currentChannelProjection.center();
@@ -59,31 +52,18 @@
     return true;
   }
 
-  function postElliptical() {
-    if (isPreVerseElliptical) {
-      isEllipsis.set(false); 
-      isControllable = true;
-    } else if ($isGroundZero) {
-      dispatch('groundZero');
-    }
+  function postElliptical() { 
+    isEllipsis = false; 
   }
 
   function nextWord() {
-    if (!$isEllipsis) {
-      if ($isPunctuationNext) {
-        isCaesura.set(true);
-      } else if ($isLastVerseWord) {
-        stopWatch = true;
-        isPostVerse = true;
-      } else {
-        wordIndices.nextWord();
-      }
-    }
-  }
-
-  function previousWord() {
-    if (!$isEllipsis) {
-      wordIndices.previousWord();
+    if ($isPunctuationNext) {
+      isCaesura.set(true);
+    } else if ($isLastVerseWord) {
+      stopWatch = true;
+      isPostVerse = true;
+    } else {
+      wordIndices.nextWord();
     }
   }
   
@@ -97,7 +77,7 @@
     if (direction === 'forward') {
       nextWord();
     } else {
-      previousWord();
+      wordIndices.previousWord();
     }
   }
 
@@ -111,7 +91,11 @@
         setTimeout(() => {
           streetMapContainerEl.opacity(1);
           sefirahsGroupEl.opacity(1);
-          wordIndices.nextVerse();
+          if ($isGroundZero) {
+            dispatch('groundZero');
+          } else {
+            wordIndices.nextVerse();
+          }
         }, 3000);
       }
     });
@@ -131,17 +115,17 @@
           <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
             projection={ $currentChannelProjection } />
         </Group>
-        <PiWatch isStart={ isControllable } isStop={ stopWatch } />  
+        <PiWatch isStart={ !isEllipsis } isStop={ stopWatch } />  
         {#if $blocksForCurrentChannel}
           <Group bind:handle={ sefirahsGroupEl }>
             <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
             <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
               isFromSefirah={ false } />
           </Group>
-          {#if $isEllipsis && isReading}
+          {#if isEllipsis && isReading}
             <Ellipsis on:go={ postElliptical } />
           {:else if !isPostVerse}
-            <VerseMap onTheRun={ isControllable } />
+            <VerseMap onTheRun={ !isEllipsis } />
             <Notepad />
             <Punctuation on:punctuated={ postPunctuation } />
             <Button isBackBtn={true} isDisabled={ $isFirstVerseWord } 
