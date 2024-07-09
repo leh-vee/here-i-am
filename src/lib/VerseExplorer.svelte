@@ -22,17 +22,18 @@
 
   export let isReading = false;
   let stopWatch = false;
+  let isPostVerse = false;
 
   $: {
     console.log('explorer at verse index', $currentVerseIndex);
     stopWatch = false;
+    isPostVerse = false;
   }
 
   let streetMapContainerEl;
   let sefirahsGroupEl;
 
   $: isPreVerseElliptical = $isEllipsis && $isFirstVerseWord;
-  $: isPostVerseElliptical = $isEllipsis && $isLastVerseWord;
   
   $: if ($blocksForCurrentChannel === undefined) fetchBlocksForProjection();
 
@@ -64,8 +65,6 @@
       isControllable = true;
     } else if ($isGroundZero) {
       dispatch('groundZero');
-    } else {
-      wordIndices.nextVerse();
     }
   }
 
@@ -75,7 +74,7 @@
         isCaesura.set(true);
       } else if ($isLastVerseWord) {
         stopWatch = true;
-        isEllipsis.set(true);
+        isPostVerse = true;
       } else {
         wordIndices.nextWord();
       }
@@ -102,7 +101,7 @@
     }
   }
 
-  $: if (isPostVerseElliptical) fadeStreetMap();
+  $: if (isPostVerse) fadeStreetMap();
 
   function fadeStreetMap() {
     streetMapContainerEl.to({
@@ -112,6 +111,7 @@
         setTimeout(() => {
           streetMapContainerEl.opacity(1);
           sefirahsGroupEl.opacity(1);
+          wordIndices.nextVerse();
         }, 3000);
       }
     });
@@ -140,7 +140,7 @@
           </Group>
           {#if $isEllipsis && isReading}
             <Ellipsis on:go={ postElliptical } />
-          {:else}
+          {:else if !isPostVerse}
             <VerseMap onTheRun={ isControllable } />
             <Notepad />
             <Punctuation on:punctuated={ postPunctuation } />
