@@ -22,18 +22,19 @@
 
   export let isReading = false;
   let stopWatch = false;
-  let isPostVerse = false;
   let isEllipsis = true;
+  let isVerseRun = false;
+  let lightEllipsis = false;
+  let showButtons = false;
+  let showNotepad = false;
 
   $: {
     console.log('explorer at verse index', $currentVerseIndex);
-    stopWatch = false;
-    isPostVerse = false;
     isEllipsis = true;
   }
 
   let streetMapContainerEl;
-  let sefirahsGroupEl;
+  let markerGroupEls;
   
   $: if ($blocksForCurrentChannel === undefined) fetchBlocksForProjection();
 
@@ -52,16 +53,17 @@
     return true;
   }
 
-  function postElliptical() { 
-    isEllipsis = false; 
-  }
-
   function nextWord() {
     if ($isPunctuationNext) {
       isCaesura.set(true);
+    } else if (isEllipsis) {
+      isEllipsis = false;
+      showNotepad = true;
     } else if ($isLastVerseWord) {
       stopWatch = true;
-      isPostVerse = true;
+      showNotepad = false;
+      showButtons = false;
+      fadeMapEls();
     } else {
       wordIndices.nextWord();
     }
@@ -81,8 +83,6 @@
     }
   }
 
-  $: if (isPostVerse) fadeMapEls();
-
   function fadeMapEls() {
     streetMapContainerEl.to({
       duration: Math.PI,
@@ -90,7 +90,7 @@
       onFinish: () => {
         setTimeout(() => {
           streetMapContainerEl.opacity(1);
-          sefirahsGroupEl.opacity(1);
+          markerGroupEls.opacity(1);
           if ($isGroundZero) {
             dispatch('groundZero');
           } else {
@@ -99,7 +99,7 @@
         }, 3000);
       }
     });
-    sefirahsGroupEl.to({
+    markerGroupEls.to({
       duration: Math.PI,
       opacity: 0
     });
@@ -117,21 +117,31 @@
         </Group>
         <PiWatch isStart={ !isEllipsis } isStop={ stopWatch } />  
         {#if $blocksForCurrentChannel}
-          <Group bind:handle={ sefirahsGroupEl }>
-            <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } />
+          <Group bind:handle={ markerGroupEls }>
+            <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } 
+              isLit={ lightEllipsis } />
             <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
-              isFromSefirah={ false } />
+              isFromSefirah={ false } isLit={ true } />
+            <VerseMap onTheRun={ isVerseRun } on:visible={ () => {  lightEllipsis = true } } />
           </Group>
-          {#if isEllipsis && isReading}
-            <Ellipsis on:go={ postElliptical } />
-          {:else if !isPostVerse}
-            <VerseMap onTheRun={ !isEllipsis } />
-            <Notepad />
-            <Punctuation on:punctuated={ postPunctuation } />
-            <Button isBackBtn={true} isDisabled={ $isFirstVerseWord } 
-              on:back={() => { proceed('backward') }} />
-            <Button isBackBtn={false} on:forward={() => { proceed('forward') }} />
-          {/if}
+          <Ellipsis
+            visible={ isEllipsis }
+            reveal={ isReading }
+            light={ lightEllipsis } 
+            on:revealed={ () => { isVerseRun = true } } 
+            on:lit={ () => { showButtons = true } } 
+          />
+          <Notepad visible={ showNotepad } />
+          <Punctuation on:punctuated={ postPunctuation } />
+          <Button
+            isBackBtn={true} 
+            isDisabled={ $isFirstVerseWord } 
+            visible={ showButtons } 
+            on:back={() => { proceed('backward') }} />
+          <Button
+            isBackBtn={false} 
+            visible={ showButtons }
+            on:forward={() => { proceed('forward') }} />
         {/if}
       {/key}
     </Layer>

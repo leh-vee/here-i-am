@@ -2,14 +2,23 @@
   import { Text } from "svelte-konva";
   
   export let dotIndex = 0;
-  export let visible;
-  export let fill;
+  export let visible = false;
+  export let light = false;
+
   let text = "   ";
+  let dotEl;
 
   $: {
     let ellipsisArray = [" ", " ", " "];
     ellipsisArray[dotIndex] = ".";
-    text = ellipsisArray.join(''); 
+    text = ellipsisArray.join('');
+  }
+
+  $: if (light && dotEl !== undefined) {
+    dotEl.to({ 
+      duration: 1,
+      fill: 'gold'
+    });
   }
 
 </script>
@@ -20,10 +29,10 @@
   height: window.innerHeight,
   align: 'center',
   verticalAlign: 'middle',
-  fontSize: Math.round(window.innerWidth / 5),
+  fontSize: Math.round(window.innerWidth / 9),
   fontFamily: 'Courgette',
   fillEnabled: true,
-  fill,
+  fill: 'dimgrey',
   strokeWidth: 0,
   visible
-}} />
+}} bind:handle={ dotEl } />

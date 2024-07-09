@@ -44,4 +44,6 @@
     <Pathways on:blazed={ remember } />
   {/if}
 </Layer>
-<VerseExplorer isReading={ isRemembering } on:groundZero />
+{#key $currentVerseIndex}
+  <VerseExplorer isReading={ isRemembering } on:groundZero />
+{/key}

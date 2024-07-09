@@ -4,15 +4,16 @@
   import { percentOfVerseRead } from '../stores/text';
   
   export let coordsPx;
+  export let isLit = false;
   export let isFromSefirah = true;
 
   let theLightEl;
-  let radius = 0;
+
+  $: if (isLit && theLightEl !== undefined) animateOpacity($percentOfVerseRead);
   
-  $: if (isFromSefirah) {
-    radius = 5 - (5 * $percentOfVerseRead);
-  } else {
-    radius = 5 * $percentOfVerseRead;
+  function animateOpacity(percentRead) {
+    const opacity = isFromSefirah ? 1 - percentRead : Math.max(percentRead - (Math.PI - 3), 0);
+    theLightEl.to({ duration: Math.PI, opacity });
   }
 </script>
 
@@ -29,5 +30,6 @@
   y: coordsPx[1],
   fill: 'gold',
   strokeEnabled: false,
-  radius
-}} bind:handle={theLightEl} />
+  opacity: 0,
+  radius: 5
+}} bind:handle={ theLightEl } />

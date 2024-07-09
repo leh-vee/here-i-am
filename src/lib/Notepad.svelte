@@ -3,6 +3,7 @@
     import { currentVerse, wordIndices, isLineBreak, currentWordId,
       currentVerseIndex, isCaesura, isInBetweenWords } from '../stores/text.js';
       
+    export let visible = false;
     let padEl;
     let stashedWordEl = null;
     const wordAttrs = {
@@ -73,7 +74,7 @@
 <Group config={{ 
   width: groupWidth, 
   height: window.innerHeight * 2,
-  x: 0, y: 0
+  x: 0, y: 0, visible
 }} bind:handle={padEl}>
   {#each $currentVerse['a'] as word, i}
     <Text config={{

@@ -3,20 +3,25 @@
   import { currentVerse, currentVerseIndex, likePiSlices } from '../stores/text.js';
   import { Group } from 'svelte-konva';
   import WordMarker from './WordMarker.svelte';
+  import { createEventDispatcher } from 'svelte';
+  
+  const dispatch = createEventDispatcher();
 
   export let onTheRun = false;
 
-  const nWordsVisible = { a: 0, b: 0 }
-  $: if (onTheRun) incrementVisibleWords();
+  const nMarkersVisible = { a: 0, b: 0 }
+  $: if (onTheRun) incrementVisibleMarkers();
 
-  function incrementVisibleWords() {
+  function incrementVisibleMarkers() {
     const plusOne = (line = 'a') => {
       const duration = Math.PI * 100;
-      nWordsVisible[line] += 1;
-      if (nWordsVisible[line] < $currentVerse[line].length) {
+      nMarkersVisible[line] += 1;
+      if (nMarkersVisible[line] < $currentVerse[line].length) {
         setTimeout(() => { plusOne(line) }, duration);
       } else if (line === 'a') {
         setTimeout(() => { plusOne('b') }, duration);
+      } else {
+        dispatch('visible');
       }
     }
     plusOne();
@@ -51,11 +56,11 @@
   {#each $currentVerse['a'] as _, i}
     <WordMarker x={ xForWordIndexAndLine(i) } y={ -yOffsetPx } 
       wordId={`${$currentVerseIndex}-a-${i}`} 
-      isVisible={ i < nWordsVisible.a } />
+      isVisible={ i < nMarkersVisible.a } />
   {/each}
   {#each $currentVerse['b'] as _, i}
     <WordMarker x={ xForWordIndexAndLine(i, 'b') } y={yOffsetPx}
       wordId={`${$currentVerseIndex}-b-${i}`} 
-      isVisible={ i < nWordsVisible.b } />
+      isVisible={ i < nMarkersVisible.b } />
   {/each}
 </Group>

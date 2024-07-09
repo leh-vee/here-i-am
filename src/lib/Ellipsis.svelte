@@ -1,38 +1,52 @@
 <script>
+  import { Group } from "svelte-konva";
   import EllipsisDot from "./EllipsisDot.svelte";
-  import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
 
-  const colours = ['red', 'yellow', 'green'];
+  export let visible;
+  export let reveal = false;
+  export let light = false;
 
-  $: showDots = [false, false, false];
+  const piFractionSecs = (Math.PI - 3) * 1000;
+  const showDots = [false, false, false];
+  const lightDots = [false, false, false];
 
-  onMount(async () => { 
-    setTimeout(() => {
-      getSetGo();
-    }, (Math.PI - 3) * 1000);
-  });
+  $: if (reveal) setTimeout(slowReveal, piFractionSecs);
 
-  function getSetGo() {
-    if (!showDots[-1]) {
-      setTimeout(() => {
-        const nextFalseIndex = showDots.findIndex(s => s === false);
-        showDots[nextFalseIndex] = true;
-        showDots = showDots;
-        getSetGo();
-      }, 1000);
-    } else {
-      setTimeout(() => {
-        dispatch('go')
-      }, 1000);
+  function slowReveal() {
+    const nDots = showDots.length;
+    const revealDot = (i) => {
+      showDots[i] = true;
+      if (i < nDots - 1) {
+        setTimeout(() => { revealDot(i + 1) }, 1000);
+      } else { 
+        setTimeout(() => { dispatch('revealed') }, piFractionSecs);
+      }
     }
+    revealDot(0);
+  }  
+
+  $: if (light) setTimeout(slowLight, piFractionSecs);
+
+  function slowLight() {
+    const nDotsToLight = lightDots.length;
+    const lightDot = (i) => {
+      lightDots[i] = true;
+      if (i < nDotsToLight - 1) {
+        setTimeout(() => { lightDot(i + 1) }, 1000);
+      } else { 
+        setTimeout(() => { dispatch('lit') }, Math.PI * 1000);
+      }
+    }
+    lightDot(0);
   }
-  
 </script>
 
-{#each showDots as showDot, i (i)}
-  <EllipsisDot dotIndex={i} fill={colours[i]} visible={showDot} />
-{/each}
+<Group config={{ visible }}>
+  {#each showDots as showDot, i (i)}
+    <EllipsisDot dotIndex={i} visible={showDot} light={ lightDots[i] } />
+  {/each}
+</Group>
 

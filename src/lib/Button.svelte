@@ -1,10 +1,11 @@
 <script>
-  import { Circle, RegularPolygon } from 'svelte-konva';
+  import { Circle, RegularPolygon, Group } from 'svelte-konva';
   import { currentChannelFromSefirahCoordsPx } from '../stores/treeOfLife';
   import { createEventDispatcher } from 'svelte';
 
   export let isBackBtn;
   export let isDisabled = false;
+  export let visible = false;
   
   const dispatch = createEventDispatcher();
   const dispatchCode = isBackBtn ? 'back' : 'forward';
@@ -65,20 +66,22 @@
   }
 </script>
 
-<Circle config={{
-  radius: btnRadius * 1.5,
-  stroke: btnStrokeColour,
-  opacity: btnOpacity,
-  ...buttonAttrs
-}}/>
-<RegularPolygon config={{
-  rotation,
-  radius: btnRadius,
-  ...triangleAttrs
-}}/>
-<Circle config={{
-  ...hitAreaElAttrs
-  }} 
-  bind:handle={ hitAreaEl }
-  on:pointerdown={ () => { btnStickyDown() } }
-/>
+<Group config={{ visible }}>
+  <Circle config={{
+    radius: btnRadius * 1.5,
+    stroke: btnStrokeColour,
+    opacity: btnOpacity,
+    ...buttonAttrs
+  }}/>
+  <RegularPolygon config={{
+    rotation,
+    radius: btnRadius,
+    ...triangleAttrs
+  }}/>
+  <Circle config={{
+    ...hitAreaElAttrs
+    }} 
+    bind:handle={ hitAreaEl }
+    on:pointerdown={ () => { btnStickyDown() } }
+  />
+</Group>
