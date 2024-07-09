@@ -55,7 +55,6 @@
   let interval;
 
   $: if (isStop) {
-    console.log('stop watch');
     clearInterval(interval);
     if (isPiSeconds) {
       pieSpin();
@@ -63,7 +62,6 @@
     }
   }
   $: if (isStart) {
-    console.log('start watch');
     start = new Date();
     current = start;
     interval = setInterval(() => {
