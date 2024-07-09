@@ -1,13 +1,11 @@
 <script>
   import EllipsisDot from "./EllipsisDot.svelte";
   import { onMount } from 'svelte';
-  import { isFirstVerseWord } from '../stores/text.js';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
 
-  const palette = ['red', 'yellow', 'green'];
-  $: colours = $isFirstVerseWord ? palette : [...palette].reverse();
+  const colours = ['red', 'yellow', 'green'];
 
   $: showDots = [false, false, false];
 
