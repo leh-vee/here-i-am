@@ -35,7 +35,7 @@
   const xCentre = width / 2;
   const diagonalRadius = Math.hypot(xCentre, yCentre);
 
-  const coinRadius = Math.round((height / 2) * 0.4);
+  const coinRadius = Math.round((width / 2) * 0.8);
   const strokeWidth = 6;
 
   const markerRadius = 2;
