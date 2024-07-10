@@ -30,7 +30,7 @@
   align: 'center',
   verticalAlign: 'middle',
   fontSize: Math.round(window.innerWidth / 5),
-  fontFamily: "serif",
+  fontFamily: "Courgette",
   fillEnabled: true,
   fill: 'dimgrey',
   strokeWidth: 0,
