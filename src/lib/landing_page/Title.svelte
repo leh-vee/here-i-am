@@ -3,7 +3,7 @@
 
   const title = "Here\nI Am";
   const fontFamily = "Love Ya Like A Sister";
-  const fontSize = Math.round(window.innerHeight / 9);
+  const fontSize = Math.round(window.innerWidth / 4.5);
   const fill = 'gold';
 
   // const subtitle = "Our\nFallen\nGang";
