@@ -29,7 +29,7 @@
   height: window.innerHeight,
   align: 'center',
   verticalAlign: 'middle',
-  fontSize: Math.round(window.innerWidth / 4),
+  fontSize: Math.round(window.innerWidth / 5),
   fontFamily: "serif",
   fillEnabled: true,
   fill: 'dimgrey',
