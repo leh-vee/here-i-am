@@ -14,7 +14,6 @@
   
   function animateOpacity(percentRead, isEngaged) {
     const opacity = isFromSefirah ? fromOpacity(percentRead, isEngaged) : toOpacity(percentRead);
-    console.log(opacity);
     theLightEl.to({ duration: Math.PI, opacity });
   }
 
