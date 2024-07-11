@@ -1,7 +1,8 @@
 <script>
   import { Circle } from 'svelte-konva';
   import { currentWordId, isLineBreak, isCaesura } from '../stores/text.js';
- 
+  import { isReaderEngaged } from '../stores/base';
+
   export let x;
   export let y;
   export let wordId;
@@ -12,7 +13,7 @@
   
   $: duration = $isLineBreak ? Math.PI / 2 : Math.PI / 10;
   
-  $: if (isCurrentWord && markerEl) {
+  $: if ($isReaderEngaged && isCurrentWord && markerEl) {
     expandMarker();
   } else if (markerEl) {
     contractMarker();

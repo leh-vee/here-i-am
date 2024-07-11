@@ -1,9 +1,7 @@
 <script>
   import { Text } from "svelte-konva";
   import Konva from 'konva';
-  import { createEventDispatcher } from 'svelte';
-
-  const dispatch = createEventDispatcher();
+  import { isReaderEngaged } from '../stores/base';
   
   export let dotIndex = 0;
   export let visible = false;
@@ -31,9 +29,7 @@
       duration: 1,
       fontSize: 0,
       easing: Konva.Easings.EaseOut,
-      onFinish: () => {
-        dispatch('ellipsisFaded');
-      }
+      onFinish: () => { isReaderEngaged.set(true) }
     });
   }
  

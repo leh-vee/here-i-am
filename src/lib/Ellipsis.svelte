@@ -49,6 +49,5 @@
     visible={showDot}
     light={ lightDots[i] } 
     isFade={ fadeAway }
-    on:ellipsisFaded
   />
 {/each}

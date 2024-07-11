@@ -7,9 +7,6 @@
     currentChannelFromSefirahCoordsPx } from '../stores/treeOfLife.js';
   import { currentVerse, likePiSlices,
     currentVerseIndex } from '../stores/text.js';
-  import { createEventDispatcher } from 'svelte';
-  
-  const dispatch = createEventDispatcher();
 
   export let revealEllipsis = false;
   export let fadeEllipsis = false;
@@ -87,5 +84,4 @@
   light={ triggerRadiate }
   on:lit={ () => { isLit = true } }
   fadeAway={ fadeEllipsis }
-  on:ellipsisFaded
 />

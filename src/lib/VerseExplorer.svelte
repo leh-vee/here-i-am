@@ -5,11 +5,12 @@
   import VerseMap from './VerseMap.svelte';
   import StreetMap from './StreetMap.svelte';
   import PiWatch from './PiWatch.svelte';
+  import { isReaderEngaged } from '../stores/base';
   import { channelBlocks, blocksForCurrentChannel, 
     currentChannelProjection } from '../stores/treeOfLife';
   import { wordIndices, isPunctuationNext, isGroundZero,
     isLastVerseWord, isInBetweenWords, isCaesura,
-    currentPiSlice, lastPiSlice, likePiSlices } from '../stores/text.js';
+    currentPiSlice, lastPiSlice, likePiSlices } from '../stores/text';
   import { fetchBlocksWithinRadius } from '../api/client.js';
   import distance from "@turf/distance";
   import { createEventDispatcher } from 'svelte';
@@ -17,7 +18,6 @@
   const dispatch = createEventDispatcher();
 
   export let isReading = false;
-  let isEngaged = false;
   let fadeGroupEl;
   let verseMapCom;
   
@@ -43,7 +43,7 @@
     if ($isPunctuationNext) {
       isCaesura.set(true);
     } else if ($isLastVerseWord) {
-      isEngaged = false;
+      isReaderEngaged.set(false);
       fadeOut();
     } else {
       wordIndices.nextWord();
@@ -72,7 +72,7 @@
   }
 
   function click() {
-    if (isEngaged) {
+    if ($isReaderEngaged) {
       nextWord();
     } else {
       verseMapCom.click();
@@ -90,12 +90,11 @@
             projection={ $currentChannelProjection } />
           <VerseMap 
             revealEllipsis={ isReading }
-            on:ellipsisFaded={ () => { isEngaged = true } }
             bind:this={ verseMapCom } 
           />
-          <Notepad visible={ isEngaged } />
+          <Notepad visible={ $isReaderEngaged } />
         </Group>
-        <PiWatch isStart={ isEngaged } isStop={ !isEngaged } />  
+        <PiWatch isStart={ $isReaderEngaged } isStop={ !$isReaderEngaged } />  
         <Punctuation on:punctuated={ postPunctuation } />
       {/if}
     </Layer>

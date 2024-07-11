@@ -2,6 +2,7 @@
   // @ts-nocheck
   import { Circle } from 'svelte-konva';
   import { percentOfVerseRead } from '../stores/text';
+  import { isReaderEngaged } from '../stores/base';
   
   export let coordsPx;
   export let isLit = false;
@@ -9,11 +10,22 @@
 
   let theLightEl;
 
-  $: if (isLit && theLightEl !== undefined) animateOpacity($percentOfVerseRead);
+  $: if (isLit && theLightEl !== undefined) animateOpacity($percentOfVerseRead, $isReaderEngaged);
   
-  function animateOpacity(percentRead) {
-    const opacity = isFromSefirah ? 1 - percentRead : Math.max(percentRead - (Math.PI - 3), 0);
+  function animateOpacity(percentRead, isEngaged) {
+    const opacity = isFromSefirah ? fromOpacity(percentRead, isEngaged) : toOpacity(percentRead);
+    console.log(opacity);
     theLightEl.to({ duration: Math.PI, opacity });
+  }
+
+  function fromOpacity(p, isEngaged) {
+    let o = 1;
+    if (isEngaged) o = Math.max(1 - p - (Math.PI - 3), 0); 
+    return o;
+  }
+
+  function toOpacity(p) { 
+    return Math.max(p - (Math.PI - 3), 0);
   }
 </script>
 
