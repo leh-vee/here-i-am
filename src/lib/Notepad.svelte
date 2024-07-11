@@ -33,7 +33,7 @@
     
     const wordPanDuration = Math.PI / 10;
     const lineBreakPanDuration = Math.PI / 2;
-    $: {
+    $: if (visible) {
       const d = $isLineBreak ? lineBreakPanDuration : wordPanDuration;
       movePadToCurrentWord(xPadPosition, yPadPosition, d);
     }
@@ -51,7 +51,7 @@
       }
     }
 
-    $: if ($isCaesura) stashWord(); 
+    $: if ($isCaesura) stashWord();
 
     function stashWord() {
       const duration = Math.PI / 5;
@@ -74,7 +74,7 @@
 <Group config={{ 
   width: groupWidth, 
   height: window.innerHeight * 2,
-  x: 0, y: 0, visible
+  x: textElWidth, y: 0, visible
 }} bind:handle={padEl}>
   {#each $currentVerse['a'] as word, i}
     <Text config={{

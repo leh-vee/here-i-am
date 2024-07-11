@@ -3,17 +3,14 @@
   import Punctuation from './Punctuation.svelte';
   import Notepad from './Notepad.svelte';
   import VerseMap from './VerseMap.svelte';
-  import SefirahMarker from './SefirahMarker.svelte';
   import StreetMap from './StreetMap.svelte';
   import PiWatch from './PiWatch.svelte';
-  import Button from './Button.svelte';
-  import { currentChannelFromSefirahCoordsPx, blocksForCurrentChannel,
-    currentChannelToSefirahCoordsPx, currentChannelProjection, 
-    channelBlocks } from '../stores/treeOfLife';
-  import { currentVerseIndex, wordIndices, isPunctuationNext, isCaesura, 
-    isFirstVerseWord, isLastVerseWord, isInBetweenWords, 
-    currentPiSlice, lastPiSlice, likePiSlices, isGroundZero } from '../stores/text.js';
   import Ellipsis from './Ellipsis.svelte';
+  import { channelBlocks, blocksForCurrentChannel, 
+    currentChannelProjection } from '../stores/treeOfLife';
+  import { currentVerseIndex, wordIndices, isPunctuationNext,  
+    isLastVerseWord, isInBetweenWords, isCaesura, isGroundZero,
+    currentPiSlice, lastPiSlice, likePiSlices } from '../stores/text.js';
   import { fetchBlocksWithinRadius } from '../api/client.js';
   import distance from "@turf/distance";
   import { createEventDispatcher } from 'svelte';
@@ -23,8 +20,9 @@
   export let isReading = false;
   let stopWatch = false;
   let isEllipsis = true;
-  let isVerseRun = false;
   let lightEllipsis = false;
+  let isEllipsisLit = false;
+  let isVerseRun = false;
   let showButtons = false;
   let showNotepad = false;
 
@@ -54,6 +52,7 @@
   }
 
   function nextWord() {
+    if ($isInBetweenWords) return null;
     if ($isPunctuationNext) {
       isCaesura.set(true);
     } else if (isEllipsis) {
@@ -72,15 +71,6 @@
   function postPunctuation() {
     isCaesura.set(false);
     wordIndices.nextWord();
-  }
-
-  function proceed(direction) {
-    if ($isInBetweenWords) return null;
-    if (direction === 'forward') {
-      nextWord();
-    } else {
-      wordIndices.previousWord();
-    }
   }
 
   function fadeMapEls() {
@@ -104,46 +94,38 @@
       opacity: 0
     });
   }
+
+  function click() {
+    if (showNotepad) nextWord();
+  }
 </script>
 
 <div id='verse-explorer'>
   <Stage config={{ width: window.innerWidth, height: window.innerHeight, 
-    visible: isReading }} >
+    visible: isReading }} on:pointerclick={ click } >
     <Layer>
-      {#key $currentVerseIndex}
+      {#if $blocksForCurrentChannel}
         <Group bind:handle={ streetMapContainerEl }>
           <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
             projection={ $currentChannelProjection } />
         </Group>
         <PiWatch isStart={ !isEllipsis } isStop={ stopWatch } />  
-        {#if $blocksForCurrentChannel}
-          <Group bind:handle={ markerGroupEls }>
-            <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } 
-              isLit={ lightEllipsis } />
-            <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
-              isFromSefirah={ false } isLit={ true } />
-            <VerseMap onTheRun={ isVerseRun } on:visible={ () => {  lightEllipsis = true } } />
-          </Group>
-          <Ellipsis
-            visible={ isEllipsis }
-            reveal={ isReading }
-            light={ lightEllipsis } 
-            on:revealed={ () => { isVerseRun = true } } 
-            on:lit={ () => { showButtons = true } } 
+        <Group bind:handle={ markerGroupEls }>
+          <VerseMap 
+            onTheRun={ isVerseRun } 
+            on:visible={ () => {  lightEllipsis = true } } 
           />
-          <Notepad visible={ showNotepad } />
-          <Punctuation on:punctuated={ postPunctuation } />
-          <Button
-            isBackBtn={true} 
-            isDisabled={ $isFirstVerseWord } 
-            visible={ showButtons } 
-            on:back={() => { proceed('backward') }} />
-          <Button
-            isBackBtn={false} 
-            visible={ showButtons }
-            on:forward={() => { proceed('forward') }} />
-        {/if}
-      {/key}
+        </Group>
+        <Notepad visible={ showNotepad } />
+        <Punctuation on:punctuated={ postPunctuation } />
+        <Ellipsis
+          visible={ isEllipsis }
+          reveal={ isReading }
+          on:revealed={ () => { isVerseRun = true } }
+          light={ lightEllipsis }
+          on:faded={ () => { showNotepad = true }}
+        />
+      {/if}
     </Layer>
   </Stage>
 </div>

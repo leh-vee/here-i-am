@@ -5,9 +5,12 @@
 
   const dispatch = createEventDispatcher();
 
-  export let visible;
+  export let visible = false;
   export let reveal = false;
   export let light = false;
+
+  let isLit = false;
+  let fadeAway = false;
 
   const piFractionSecs = (Math.PI - 3) * 1000;
   const showDots = [false, false, false];
@@ -37,16 +40,30 @@
       if (i < nDotsToLight - 1) {
         setTimeout(() => { lightDot(i + 1) }, 1000);
       } else { 
-        setTimeout(() => { dispatch('lit') }, Math.PI * 1000);
+        isLit = true;
       }
     }
     lightDot(0);
   }
+
+  function click() { 
+    if (isLit) {
+      fadeAway = true;
+      setTimeout(() => {
+        dispatch('faded');
+      }, 1000);
+    }
+  }
 </script>
 
-<Group config={{ visible }}>
+<Group config={{ visible }} on:pointerclick={ click }>
   {#each showDots as showDot, i (i)}
-    <EllipsisDot dotIndex={i} visible={showDot} light={ lightDots[i] } />
+    <EllipsisDot 
+      dotIndex={i} 
+      visible={showDot}
+      light={ lightDots[i] } 
+      isFade={ fadeAway } 
+    />
   {/each}
 </Group>
 

@@ -1,9 +1,11 @@
 <script>
   import { Text } from "svelte-konva";
+  import Konva from 'konva';
   
   export let dotIndex = 0;
   export let visible = false;
   export let light = false;
+  export let isFade = false;
 
   let text = "   ";
   let dotEl;
@@ -21,6 +23,14 @@
     });
   }
 
+  $: if (isFade && dotEl !== undefined) {
+    dotEl.to({
+      duration: 1,
+      fontSize: 0,
+      easing: Konva.Easings.EaseOut
+    });
+  }
+ 
 </script>
 
 <Text config={{

@@ -1,8 +1,11 @@
 <script>
-  import { currentChannelCoordsPx } from '../stores/treeOfLife.js';
-  import { currentVerse, currentVerseIndex, likePiSlices } from '../stores/text.js';
   import { Group } from 'svelte-konva';
+  import SefirahMarker from './SefirahMarker.svelte';
   import WordMarker from './WordMarker.svelte';
+  import { currentChannelCoordsPx, currentChannelToSefirahCoordsPx,
+    currentChannelFromSefirahCoordsPx } from '../stores/treeOfLife.js';
+  import { currentVerse, likePiSlices,
+    currentVerseIndex } from '../stores/text.js';
   import { createEventDispatcher } from 'svelte';
   
   const dispatch = createEventDispatcher();
@@ -49,6 +52,10 @@
 
 </script>
 
+<SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } 
+    isLit={ true } />
+<SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
+  isFromSefirah={ false } isLit={ true } />
 <Group config={{ 
   x: lineStartX, 
   y: $currentChannelCoordsPx[0][1]
