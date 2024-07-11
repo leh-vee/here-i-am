@@ -32,7 +32,7 @@
       fontSize: 0,
       easing: Konva.Easings.EaseOut,
       onFinish: () => { 
-        if (!$isReaderEngaged) isReaderEngaged.set(true);
+        if (dotIndex === 0) isReaderEngaged.set(true);
       }
     });
   }

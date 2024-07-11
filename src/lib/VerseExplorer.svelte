@@ -18,6 +18,7 @@
   const dispatch = createEventDispatcher();
 
   export let isReading = false;
+  let stopWatch = false;
   let fadeGroupEl;
   let verseMapCom;
   
@@ -43,7 +44,7 @@
     if ($isPunctuationNext) {
       isCaesura.set(true);
     } else if ($isLastVerseWord) {
-      isReaderEngaged.set(false);
+      stopWatch = true;
       fadeOut();
     } else {
       wordIndices.nextWord();
@@ -61,6 +62,7 @@
       opacity: 0,
       onFinish: () => {
         setTimeout(() => {
+          isReaderEngaged.set(false);
           if ($isGroundZero) {
             dispatch('groundZero');
           } else {
@@ -94,7 +96,7 @@
           />
           <Notepad visible={ $isReaderEngaged } />
         </Group>
-        <PiWatch isStart={ $isReaderEngaged } isStop={ !$isReaderEngaged } />  
+        <PiWatch isStart={ $isReaderEngaged } isStop={ stopWatch } />  
         <Punctuation on:punctuated={ postPunctuation } />
       {/if}
     </Layer>
