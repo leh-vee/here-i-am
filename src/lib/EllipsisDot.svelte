@@ -1,6 +1,9 @@
 <script>
   import { Text } from "svelte-konva";
   import Konva from 'konva';
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
   
   export let dotIndex = 0;
   export let visible = false;
@@ -27,7 +30,10 @@
     dotEl.to({
       duration: 1,
       fontSize: 0,
-      easing: Konva.Easings.EaseOut
+      easing: Konva.Easings.EaseOut,
+      onFinish: () => {
+        dispatch('ellipsisFaded');
+      }
     });
   }
  

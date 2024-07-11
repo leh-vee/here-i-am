@@ -5,11 +5,10 @@
   import VerseMap from './VerseMap.svelte';
   import StreetMap from './StreetMap.svelte';
   import PiWatch from './PiWatch.svelte';
-  import Ellipsis from './Ellipsis.svelte';
   import { channelBlocks, blocksForCurrentChannel, 
     currentChannelProjection } from '../stores/treeOfLife';
-  import { currentVerseIndex, wordIndices, isPunctuationNext,  
-    isLastVerseWord, isInBetweenWords, isCaesura, isGroundZero,
+  import { wordIndices, isPunctuationNext, isGroundZero,
+    isLastVerseWord, isInBetweenWords, isCaesura,
     currentPiSlice, lastPiSlice, likePiSlices } from '../stores/text.js';
   import { fetchBlocksWithinRadius } from '../api/client.js';
   import distance from "@turf/distance";
@@ -18,21 +17,9 @@
   const dispatch = createEventDispatcher();
 
   export let isReading = false;
-  let stopWatch = false;
-  let isEllipsis = true;
-  let lightEllipsis = false;
-  let isEllipsisLit = false;
-  let isVerseRun = false;
-  let showButtons = false;
-  let showNotepad = false;
-
-  $: {
-    console.log('explorer at verse index', $currentVerseIndex);
-    isEllipsis = true;
-  }
-
-  let streetMapContainerEl;
-  let markerGroupEls;
+  let isEngaged = false;
+  let fadeGroupEl;
+  let verseMapCom;
   
   $: if ($blocksForCurrentChannel === undefined) fetchBlocksForProjection();
 
@@ -55,14 +42,9 @@
     if ($isInBetweenWords) return null;
     if ($isPunctuationNext) {
       isCaesura.set(true);
-    } else if (isEllipsis) {
-      isEllipsis = false;
-      showNotepad = true;
     } else if ($isLastVerseWord) {
-      stopWatch = true;
-      showNotepad = false;
-      showButtons = false;
-      fadeMapEls();
+      isEngaged = false;
+      fadeOut();
     } else {
       wordIndices.nextWord();
     }
@@ -73,14 +55,12 @@
     wordIndices.nextWord();
   }
 
-  function fadeMapEls() {
-    streetMapContainerEl.to({
+  function fadeOut() {
+    fadeGroupEl.to({
       duration: Math.PI,
       opacity: 0,
       onFinish: () => {
         setTimeout(() => {
-          streetMapContainerEl.opacity(1);
-          markerGroupEls.opacity(1);
           if ($isGroundZero) {
             dispatch('groundZero');
           } else {
@@ -89,14 +69,14 @@
         }, 3000);
       }
     });
-    markerGroupEls.to({
-      duration: Math.PI,
-      opacity: 0
-    });
   }
 
   function click() {
-    if (showNotepad) nextWord();
+    if (isEngaged) {
+      nextWord();
+    } else {
+      verseMapCom.click();
+    }
   }
 </script>
 
@@ -105,26 +85,18 @@
     visible: isReading }} on:pointerclick={ click } >
     <Layer>
       {#if $blocksForCurrentChannel}
-        <Group bind:handle={ streetMapContainerEl }>
+        <Group bind:handle={ fadeGroupEl }>
           <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
             projection={ $currentChannelProjection } />
-        </Group>
-        <PiWatch isStart={ !isEllipsis } isStop={ stopWatch } />  
-        <Group bind:handle={ markerGroupEls }>
           <VerseMap 
-            onTheRun={ isVerseRun } 
-            on:visible={ () => {  lightEllipsis = true } } 
+            revealEllipsis={ isReading }
+            on:ellipsisFaded={ () => { isEngaged = true } }
+            bind:this={ verseMapCom } 
           />
+          <Notepad visible={ isEngaged } />
         </Group>
-        <Notepad visible={ showNotepad } />
+        <PiWatch isStart={ isEngaged } isStop={ !isEngaged } />  
         <Punctuation on:punctuated={ postPunctuation } />
-        <Ellipsis
-          visible={ isEllipsis }
-          reveal={ isReading }
-          on:revealed={ () => { isVerseRun = true } }
-          light={ lightEllipsis }
-          on:faded={ () => { showNotepad = true }}
-        />
       {/if}
     </Layer>
   </Stage>

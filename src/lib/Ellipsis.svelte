@@ -1,16 +1,12 @@
 <script>
-  import { Group } from "svelte-konva";
   import EllipsisDot from "./EllipsisDot.svelte";
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
 
-  export let visible = false;
   export let reveal = false;
   export let light = false;
-
-  let isLit = false;
-  let fadeAway = false;
+  export let fadeAway = false;
 
   const piFractionSecs = (Math.PI - 3) * 1000;
   const showDots = [false, false, false];
@@ -40,30 +36,19 @@
       if (i < nDotsToLight - 1) {
         setTimeout(() => { lightDot(i + 1) }, 1000);
       } else { 
-        isLit = true;
+        dispatch('lit');
       }
     }
     lightDot(0);
   }
-
-  function click() { 
-    if (isLit) {
-      fadeAway = true;
-      setTimeout(() => {
-        dispatch('faded');
-      }, 1000);
-    }
-  }
 </script>
 
-<Group config={{ visible }} on:pointerclick={ click }>
-  {#each showDots as showDot, i (i)}
-    <EllipsisDot 
-      dotIndex={i} 
-      visible={showDot}
-      light={ lightDots[i] } 
-      isFade={ fadeAway } 
-    />
-  {/each}
-</Group>
-
+{#each showDots as showDot, i (i)}
+  <EllipsisDot 
+    dotIndex={i} 
+    visible={showDot}
+    light={ lightDots[i] } 
+    isFade={ fadeAway }
+    on:ellipsisFaded
+  />
+{/each}
