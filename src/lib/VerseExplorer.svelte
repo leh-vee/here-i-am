@@ -18,7 +18,7 @@
   const dispatch = createEventDispatcher();
 
   export let isReading = false;
-  let stopWatch = false;
+  let isFinished = false;
   let fadeGroupEl;
   let verseMapCom;
   
@@ -40,11 +40,11 @@
   }
 
   function nextWord() {
-    if ($isInBetweenWords) return null;
+    if ($isInBetweenWords || isFinished) return null;
     if ($isPunctuationNext) {
       isCaesura.set(true);
     } else if ($isLastVerseWord) {
-      stopWatch = true;
+      isFinished = true;
       fadeOut();
     } else {
       wordIndices.nextWord();
@@ -57,6 +57,7 @@
   }
 
   function fadeOut() {
+    if (isFinished) return null;
     fadeGroupEl.to({
       duration: Math.PI,
       opacity: 0,
@@ -74,7 +75,7 @@
   }
 
   function click() {
-    if ($isReaderEngaged) {
+    if ($isReaderEngaged && !isFinished) {
       nextWord();
     } else {
       verseMapCom.click();
@@ -96,7 +97,7 @@
           />
           <Notepad visible={ $isReaderEngaged } />
         </Group>
-        <PiWatch isStart={ $isReaderEngaged } isStop={ stopWatch } />  
+        <PiWatch isStart={ $isReaderEngaged } isStop={ isFinished } />  
         <Punctuation on:punctuated={ postPunctuation } />
       {/if}
     </Layer>

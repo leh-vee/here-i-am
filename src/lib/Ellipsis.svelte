@@ -36,7 +36,9 @@
       if (i < nDotsToLight - 1) {
         setTimeout(() => { lightDot(i + 1) }, 1000);
       } else { 
-        dispatch('lit');
+        setTimeout(() => {
+          dispatch('lit');
+        }, 1000);
       }
     }
     lightDot(0);
