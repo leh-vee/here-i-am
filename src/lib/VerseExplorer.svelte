@@ -44,7 +44,6 @@
     if ($isPunctuationNext) {
       isCaesura.set(true);
     } else if ($isLastVerseWord) {
-      isFinished = true;
       fadeOut();
     } else {
       wordIndices.nextWord();
@@ -57,7 +56,11 @@
   }
 
   function fadeOut() {
-    if (isFinished) return null;
+    if (isFinished) {
+      return null;
+    } else {
+      isFinished = true;
+    }
     fadeGroupEl.to({
       duration: Math.PI,
       opacity: 0,
