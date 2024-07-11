@@ -28,6 +28,7 @@
   $: if (isFade && dotEl !== undefined) {
     dotEl.to({
       duration: 1,
+      fill: 'black',
       fontSize: 0,
       easing: Konva.Easings.EaseOut,
       onFinish: () => { 
