@@ -4,12 +4,13 @@
   import { isReaderEngaged } from '../stores/base';
   
   export let dotIndex = 0;
-  export let visible = false;
+  export let show = false;
   export let light = false;
   export let isFade = false;
 
   let text = "   ";
   let dotEl;
+  $: visible = show && !$isReaderEngaged;
 
   $: {
     let ellipsisArray = [" ", " ", " "];
@@ -29,7 +30,9 @@
       duration: 1,
       fontSize: 0,
       easing: Konva.Easings.EaseOut,
-      onFinish: () => { isReaderEngaged.set(true) }
+      onFinish: () => { 
+        if (!$isReaderEngaged) isReaderEngaged.set(true);
+      }
     });
   }
  

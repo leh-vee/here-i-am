@@ -46,7 +46,7 @@
 {#each showDots as showDot, i (i)}
   <EllipsisDot 
     dotIndex={i} 
-    visible={showDot}
+    show={showDot}
     light={ lightDots[i] } 
     isFade={ fadeAway }
   />
