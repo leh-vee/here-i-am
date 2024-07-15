@@ -1,7 +1,8 @@
 <script>
-  import { Stage, Layer, Ring, Circle } from 'svelte-konva';
+  import { Stage, Layer, Ring, Circle, Text } from 'svelte-konva';
   import Konva from 'konva';
   import Title from './landing_page/Title.svelte';
+  import Number from './landing_page/Number.svelte';
   import ArtistStatement from './landing_page/ArtistStatement.svelte';
   import MapTiles from './MapTiles.svelte';
   import { createEventDispatcher } from 'svelte';
@@ -16,6 +17,7 @@
   ];
 
   let coordIndex = 0;
+  let countdownNumber = 3;
   $: groundZeroCoordsGcs = coordFixtures[coordIndex];
   $: isFinalLocation = coordIndex === 3;
 
@@ -36,6 +38,7 @@
   let isFlipping;
 
   let isTileMapLoading = true; 
+  let isClosedCoin = false;
 
   $: if (coinEl !== undefined) almostThereFlip();
 
@@ -93,11 +96,16 @@
       radius: coinRadius,
       easing: Konva.Easings.EaseOut,
       onFinish: () => {
-        coinEl.innerRadius(0);
-        markerEl.radius(0);
-        isTails = false;
-        coinOverflowEl.innerRadius(0);
-        getNewGroundZeroCoords()
+        isClosedCoin = true;
+        setTimeout(() => {
+          isClosedCoin = false;
+          countdownNumber -= 1;
+          coinEl.innerRadius(0);
+          markerEl.radius(0);
+          isTails = false;
+          coinOverflowEl.innerRadius(0);
+          getNewGroundZeroCoords()
+        }, Math.PI * 1000);
       }
     });
   }
@@ -199,7 +207,8 @@
         strokeEnabled: false
       }} bind:handle={ irisEl } />
     </Layer>
-  </Stage> 
+  </Stage>
+  <Number isVisible={ isClosedCoin } number={ countdownNumber } /> 
 </div> 
 
 <style>
