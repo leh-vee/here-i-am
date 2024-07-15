@@ -8,26 +8,16 @@
   
   const dispatch = createEventDispatcher();
 
-  let isFullStop = false;
-  function flipBackDelay() {
-    isFullStop = true;
-    setTimeout(() => {
-      if (!isIrisClosing) closeCoinTransition();
-    }, Math.PI * 1000)
-  }
-
   const coordFixtures = [
-    [-79.466850201826205, 43.657227646269199],
-    [-79.327115097415998, 43.6919267876238], 
-    [-79.541550900447305, 43.607307180951203],
-    [-79.413797673100703, 43.641680243166597],
-    [-79.500562196484097, 43.696934074491899],
-    [-79.441953787130998, 43.691966449116798],
-    [-79.460826261873095, 43.693347307108603]
+    [-79.386788067996605, 43.670226390504098],
+    [-79.497769710547999, 43.750492139210003],
+    [-79.306775909005395, 43.705856672084899],
+    [-79.466850201826205, 43.657227646269199]
   ];
 
   let coordIndex = 0;
   $: groundZeroCoordsGcs = coordFixtures[coordIndex];
+  $: isFinalLocation = coordIndex === 3;
 
   const height = window.innerHeight;
   const width = window.innerWidth;
@@ -90,7 +80,7 @@
         isHeads = false;
         await flipCoin();
         openCoinTransition();
-      } else if (isTails) {
+      } else if (isTails && isFinalLocation) {
         irisIn();
       }
     } 
@@ -104,8 +94,7 @@
       easing: Konva.Easings.EaseOut,
       onFinish: () => {
         coinEl.innerRadius(0);
-        markerEl.radius(markerRadius);
-        isFullStop = false;
+        markerEl.radius(0);
         isTails = false;
         coinOverflowEl.innerRadius(0);
         getNewGroundZeroCoords()
@@ -138,7 +127,13 @@
         duration,
         outerRadius: diagonalRadius, 
         easing: Konva.Easings.EaseOut,
-        onFinish: () => { isTails = true }
+        onFinish: () => {
+          isTails = true,
+          markerEl.to({
+            duration: Math.PI,
+            radius: markerRadius
+          });
+        }
       });
     }
     coinEl.to({
@@ -188,14 +183,13 @@
       <Circle config={{
         x: xCentre,
         y: yCentre,
-        radius: markerRadius,
-        fill: 'black',
-        visible: isFullStop
+        radius: 0,
+        fill: 'black'
       }} bind:handle={ markerEl } />
       {#if isHeads}
         <Title />
       {/if}
-      <ArtistStatement visible={ isTails } on:revealed={ flipBackDelay } />
+      <ArtistStatement visible={ isTails } on:revealed={ closeCoinTransition } />
       <Ring config={{
         x: xCentre,
         y: yCentre,

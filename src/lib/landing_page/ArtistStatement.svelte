@@ -5,11 +5,11 @@
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
-  let statements, nStatements, statementIndex;
+  let statements, nStatements; 
+  let statementIndex = 0;
   fetchArtistStatements().then(lines => { 
     statements = serializeCouplets(lines);
     nStatements = statements.length;
-    statementIndex = nStatements;
   });
 
   export let visible = false;
@@ -19,16 +19,20 @@
   $: if (visible) revealNextStatement();
 
   async function revealNextStatement() {
-    statementIndex = (statementIndex >= nStatements - 1) ? 0 : statementIndex + 1; 
-    statement =  structuredClone(statements[statementIndex]);
     progressiveLines = { a: "", b: "" };
     await buildEllipsis();
-    await buildLine();
-    await buildLine('b');
-    setTimeout(() => {
-      progressiveLines.b += '.';
-      dispatch('revealed');
-    }, Math.PI * 1000); 
+    if (statementIndex < nStatements) {
+      statement =  structuredClone(statements[statementIndex]);
+      await buildLine();
+      await buildLine('b');
+      setTimeout(() => {
+        progressiveLines.b += '.';
+        statementIndex += 1;
+        setTimeout(() => {
+          dispatch('revealed');
+        }, 750);
+      }, Math.PI * 1000); 
+    }
   }
 
   function buildEllipsis() {
@@ -43,7 +47,7 @@
           }
         }, 1000);
       }
-      setTimeout(addDotToLineA, Math.PI * 1000);
+      setTimeout(addDotToLineA, (Math.PI - 3) * 1000);
     });
   }
   
@@ -69,8 +73,8 @@
   const questionTextAttrs = {
     x: 5,
     width: width - 5,
-    fontFamily: "Verdana, Geneva, Tahoma, sans-serif",
-    fontSize: Math.round(width / 20),
+    fontFamily: '"Homemade Apple", sans-serif',
+    fontSize: Math.round(width / 22),
     fill: 'black'
   }
 </script>
