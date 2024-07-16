@@ -16,20 +16,13 @@
     [-79.466850201826205, 43.657227646269199]
   ];
 
-  let coordIndex = 0;
-  let countdownNumber = 3;
-  $: groundZeroCoordsGcs = coordFixtures[coordIndex];
-  $: isFinalLocation = coordIndex === 3;
-
   const height = window.innerHeight;
   const width = window.innerWidth;
   const yCentre = height / 2;
   const xCentre = width / 2;
   const diagonalRadius = Math.hypot(xCentre, yCentre);
-
   const coinRadius = Math.round((width / 2) * 0.8);
   const strokeWidth = 6;
-
   const markerRadius = 2;
 
   let coinEl, coinOverflowEl, irisEl, markerEl;
@@ -39,6 +32,11 @@
 
   let isTileMapLoading = true; 
   let isClosedCoin = false;
+
+  let coordIndex = 0;
+  let countdownNumber = 3;
+  $: groundZeroCoordsGcs = coordFixtures[coordIndex];
+  $: isFinalLocation = coordIndex === 3;
 
   $: if (coinEl !== undefined) almostThereFlip();
 
