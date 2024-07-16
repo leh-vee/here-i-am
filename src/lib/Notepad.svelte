@@ -1,7 +1,7 @@
 <script>
     import { Group, Text } from 'svelte-konva';
     import { currentVerse, wordIndices, isLineBreak, currentWordId,
-      currentVerseIndex, isCaesura, isInBetweenWords, isLineA } from '../stores/text.js';
+      currentVerseIndex, isCaesura, isInBetweenWords, isLineA, likePiSlices } from '../stores/text.js';
       
     export let visible = false;
     let padEl;
@@ -27,16 +27,18 @@
 
     $: margin = $isLineA ? wordBoxMarginA : wordBoxMarginB;
     $: textElWidth = (window.innerWidth + margin);
-    $: xPadPosition =  -$wordIndices.wordIndex * textElWidth;
+    $: xPadPosition =  (!$isLineA && $likePiSlices) ? ($wordIndices.wordIndex - (nWordsLineB - 1)) * textElWidth : -$wordIndices.wordIndex * textElWidth;
     $: yPadPosition =  $isLineA ? 0 : -window.innerHeight; 
+
+    $: lineBWords = $likePiSlices ? structuredClone($currentVerse['b']).reverse() : $currentVerse['b'];
     
     const wordPanDuration = Math.PI / 10;
     const lineBreakPanDuration = Math.PI / 2;
     $: if (visible) {
-      const d = $isLineBreak ? lineBreakPanDuration : wordPanDuration;
+      const d = ($isLineBreak && !$likePiSlices) ? lineBreakPanDuration : wordPanDuration;
       movePadToCurrentWord(xPadPosition, yPadPosition, d);
     }
-
+``
     function movePadToCurrentWord(x, y, duration) {
       if (padEl !== undefined) {
         isInBetweenWords.set(true);
@@ -83,7 +85,7 @@
       ...wordAttrs
     }} />
   {/each}
-  {#each $currentVerse['b'] as word, i}
+  {#each lineBWords as word, i}
     <Text config={{
       text: word,
       x: i * (window.innerWidth + wordBoxMarginB),
