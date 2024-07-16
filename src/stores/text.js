@@ -168,6 +168,12 @@ export const isFirstVerseWord = derived(
   }
 );
 
+export const isLineA = derived(
+  [wordIndices], ([$wordIndices]) => {
+    return $wordIndices.line === 'a';
+  }
+);
+
 export const isLastWordInLineA = derived(
   [wordIndices], ([$wordIndices]) => {
     let isLastWordInLineA = false;

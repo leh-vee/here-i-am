@@ -61,8 +61,10 @@
 
 <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } 
     isLit={ triggerRadiate } />
-<SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
-  isFromSefirah={ false } isLit={ true } />
+{#if !$likePiSlices}
+  <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
+    isFromSefirah={ false } isLit={ true } />
+{/if}
 <Group config={{ 
   x: lineStartX, 
   y: $currentChannelCoordsPx[0][1]

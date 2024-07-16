@@ -1,7 +1,7 @@
 <script>
     import { Group, Text } from 'svelte-konva';
     import { currentVerse, wordIndices, isLineBreak, currentWordId,
-      currentVerseIndex, isCaesura, isInBetweenWords } from '../stores/text.js';
+      currentVerseIndex, isCaesura, isInBetweenWords, isLineA } from '../stores/text.js';
       
     export let visible = false;
     let padEl;
@@ -25,11 +25,10 @@
     $: wordBoxMarginA = Math.round(groupWidth / nWordsLineA - window.innerWidth);
     $: wordBoxMarginB = Math.round(groupWidth / nWordsLineB - window.innerWidth);
 
-    $: isLineA = $wordIndices.line === 'a';
-    $: margin = isLineA ? wordBoxMarginA : wordBoxMarginB;
+    $: margin = $isLineA ? wordBoxMarginA : wordBoxMarginB;
     $: textElWidth = (window.innerWidth + margin);
     $: xPadPosition =  -$wordIndices.wordIndex * textElWidth;
-    $: yPadPosition =  isLineA ? 0 : -window.innerHeight; 
+    $: yPadPosition =  $isLineA ? 0 : -window.innerHeight; 
     
     const wordPanDuration = Math.PI / 10;
     const lineBreakPanDuration = Math.PI / 2;

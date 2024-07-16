@@ -1,7 +1,7 @@
 <script>
   // @ts-nocheck
   import { Circle } from 'svelte-konva';
-  import { percentOfVerseRead } from '../stores/text';
+  import { percentOfVerseRead, likePiSlices, isLineA } from '../stores/text';
   import { isReaderEngaged } from '../stores/base';
   
   export let coordsPx;
@@ -19,7 +19,13 @@
 
   function fromOpacity(p, isEngaged) {
     let o = 1;
-    if (isEngaged) o = Math.max(1 - p - (Math.PI - 3), 0); 
+    if (isEngaged) {
+      if ($likePiSlices && !$isLineA) {
+        o = toOpacity(p);
+      } else {
+        o = Math.max(1 - p - (Math.PI - 3), 0); 
+      }
+    }
     return o;
   }
 
