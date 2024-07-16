@@ -3,6 +3,7 @@
   import { fetchArtistStatements } from '../../api/client.js';
   import { serializeCouplets } from '../../utils/textJson.js';
   import { createEventDispatcher } from 'svelte';
+  
   const dispatch = createEventDispatcher();
 
   let statements, nStatements; 

@@ -28,13 +28,12 @@
   let coinEl, coinOverflowEl, irisEl, markerEl;
   let isHeads = false;
   let isTails = false;
-  let isFlipping;
 
   let isTileMapLoading = true; 
   let isClosedCoin = false;
 
   let coordIndex = 0;
-  let countdownNumber = 3;
+  $: countdownNumber = 3 - coordIndex;
   $: groundZeroCoordsGcs = coordFixtures[coordIndex];
   $: isFinalLocation = coordIndex === 3;
 
@@ -42,7 +41,6 @@
 
   function almostThereFlip() {
     let nTotalFlips = 0;
-    isFlipping = true;
     const flip = async () => { 
       nTotalFlips += 1;
       await flipCoin();
@@ -51,7 +49,6 @@
       } else {
         retractCoinOverflow();
         isHeads = true;
-        isFlipping = false;
       }
     }
     flip();
@@ -69,8 +66,6 @@
       });
     });
   }
-
-  function mapTilesLoaded() { isTileMapLoading = false }
 
   async function click() {
     const pointerPosition =  coinEl.getRelativePointerPosition();
@@ -97,7 +92,6 @@
         isClosedCoin = true;
         setTimeout(() => {
           isClosedCoin = false;
-          countdownNumber -= 1;
           coinEl.innerRadius(0);
           markerEl.radius(0);
           isTails = false;
@@ -117,11 +111,8 @@
   }
 
   function getNewGroundZeroCoords() {
-    if (coordIndex < coordFixtures.length - 1) {
-      coordIndex += 1;
-    } else {
-      coordIndex = 0;
-    }
+    coordIndex += 1;
+    isTileMapLoading = true;
     almostThereFlip();
   }
 
@@ -150,10 +141,7 @@
     });
   }
 
-  let isIrisClosing = false;
-
   function irisIn() {
-    isIrisClosing = true;
     irisEl.to({
       duration: 1,
       easing: Konva.Easings.EaseIn,
@@ -165,7 +153,8 @@
 
 </script>
 
-<MapTiles centreCoordsGcs={ groundZeroCoordsGcs } on:loaded={ mapTilesLoaded } />
+<MapTiles centreCoordsGcs={ groundZeroCoordsGcs } 
+  on:loaded={ () => { isTileMapLoading = false } } />
 <div id='landing-page'>
   <Stage config={{ width, height }} on:pointerclick={ click }>
     <Layer>
