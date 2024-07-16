@@ -84,6 +84,12 @@
   fill: 'gold',
   ...sefirahAttrs
 }} bind:handle={fromSefirahEl} />
+<Circle config={{
+  x: toCoordsPx[0],
+  y: toCoordsPx[1],
+  fill: 'black',
+  ...sefirahAttrs
+}} bind:handle={toSefirahEl} />
 <Ring config={{
   x: irisCoordsX,
   y: irisCoordsY,
@@ -91,12 +97,6 @@
   outerRadius: diagonalLength,
   fill: 'black'
 }} bind:handle={iris} />
-<Circle config={{
-  x: toCoordsPx[0],
-  y: toCoordsPx[1],
-  fill: 'black',
-  ...sefirahAttrs
-}} bind:handle={toSefirahEl} />
 <Line config={{
   points: newPathwayCoordinates,
   stroke: 'gold',
