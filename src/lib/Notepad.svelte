@@ -25,9 +25,10 @@
     $: wordBoxMarginA = Math.round(groupWidth / nWordsLineA - window.innerWidth);
     $: wordBoxMarginB = Math.round(groupWidth / nWordsLineB - window.innerWidth);
 
+    $: isLineBAndLikeSlices = !$isLineA && $likePiSlices;
     $: margin = $isLineA ? wordBoxMarginA : wordBoxMarginB;
     $: textElWidth = (window.innerWidth + margin);
-    $: xPadPosition =  (!$isLineA && $likePiSlices) ? ($wordIndices.wordIndex - (nWordsLineB - 1)) * textElWidth : -$wordIndices.wordIndex * textElWidth;
+    $: xPadPosition =  isLineBAndLikeSlices ? ($wordIndices.wordIndex - (nWordsLineB - 1)) * textElWidth : -$wordIndices.wordIndex * textElWidth;
     $: yPadPosition =  $isLineA ? 0 : -window.innerHeight; 
 
     $: lineBWords = $likePiSlices ? structuredClone($currentVerse['b']).reverse() : $currentVerse['b'];
@@ -38,7 +39,7 @@
       const d = ($isLineBreak && !$likePiSlices) ? lineBreakPanDuration : wordPanDuration;
       movePadToCurrentWord(xPadPosition, yPadPosition, d);
     }
-``
+
     function movePadToCurrentWord(x, y, duration) {
       if (padEl !== undefined) {
         isInBetweenWords.set(true);
@@ -55,11 +56,12 @@
     $: if ($isCaesura) stashWord();
 
     function stashWord() {
-      const duration = Math.PI / 5;
+      const duration = Math.PI / 10;
       stashedWordEl = padEl.findOne(`#${$currentWordId}`);
+      const currentX = stashedWordEl.attrs.x;
+      const x = isLineBAndLikeSlices ? currentX + textElWidth : currentX - textElWidth;
       stashedWordEl.to({ 
-        duration, 
-        x: -textElWidth,
+        duration, x,
         onFinish: () => {
           stashedWordEl.visible(false);
         } 
@@ -69,6 +71,15 @@
     function unstashWord() {
       stashedWordEl.visible(true);
       stashedWordEl = null;
+    }
+
+    function wordId(i, line='b') {
+      let id = `${$currentVerseIndex}-${line}-${i}`;
+      if (line === 'b' && $likePiSlices) {
+        const reverseIndex = nWordsLineB - 1 - i; 
+        id = `${$currentVerseIndex}-${line}-${reverseIndex}`
+      }
+      return id;
     }
 </script>
 
@@ -90,7 +101,7 @@
       text: word,
       x: i * (window.innerWidth + wordBoxMarginB),
       y: window.innerHeight,
-      id: `${$currentVerseIndex}-b-${i}`,
+      id: wordId(i),
       ...wordAttrs
     }} />
   {/each}
