@@ -19,10 +19,14 @@
 
   export let isReading = false;
   let isFinished = false;
+  let isFetchingBlocks = false;
   let fadeGroupEl;
   let verseMapCom;
   
-  $: if ($blocksForCurrentChannel === undefined) fetchBlocksForProjection();
+  $: if ($blocksForCurrentChannel === undefined && !isFetchingBlocks) {
+    isFetchingBlocks = true;
+    fetchBlocksForProjection();
+  } 
 
   function fetchBlocksForProjection() {
     const pCentre = $currentChannelProjection.center();
