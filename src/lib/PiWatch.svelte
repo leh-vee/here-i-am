@@ -1,6 +1,7 @@
 <script>
   import { Text } from 'svelte-konva';  
-  import { nPiesScored } from '../stores/base';
+  import { millisecsElapsedByVerse, nPiesScored } from '../stores/base';
+  import { currentVerseIndex } from '../stores/text.js';
 
   let pieEl;
   export let isStart = false;
@@ -25,6 +26,8 @@
   $: ss = zeroPadded(seconds);
   $: zeroMsText = "000".slice(0, $nPiesScored + 1); 
   $: ms = isZero ? zeroMsText : getMillisecsText(elapsedMillisecs.toString(), $nPiesScored);
+
+  $: $millisecsElapsedByVerse[$currentVerseIndex] = elapsedMillisecs; 
 
   $: formattedElapsed = `${mm}:${ss}.${ms}`;
 
