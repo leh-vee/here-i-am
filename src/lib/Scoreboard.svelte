@@ -8,7 +8,7 @@
 
   const height = 25;
   let y = -height;
-  const duration = Math.PI;
+  const duration = Math.PI / 10;
 
   $: text = `${$totalPoints} pts`;
   
@@ -48,9 +48,8 @@
   y,
   width: window.innerWidth,
   height,
-  fill: 'lightgrey',
-  strokeWidth: 0,
-  stroke: 'gold'
+  fill: 'gold',
+  strokeWidth: 0
 }} bind:handle={ rectEl } />
 {#if isFontLoaded}
   <Text config={{
