@@ -7,12 +7,12 @@
   let textEl, rectEl;
 
   const height = 25;
-  let y = -height;
-  const duration = Math.PI / 10;
+  let y =  -height;
 
   $: text = `${$totalPoints} pts`;
   
   $: if (reveal) {
+    const duration = Math.PI;
     const newY = 0;
     rectEl.to({ duration, y: newY });
     textEl.to({ 
@@ -23,6 +23,7 @@
   }
 
   $: if (hide) {
+    const duration = Math.PI / 10;
     const newY = -height;
     rectEl.to({ duration, y: newY });
     textEl.to({ 
@@ -32,7 +33,7 @@
     });
   }
 
-  const fontFamily = "digital";
+  const fontFamily = 'Courier New';
   let isFontLoaded = false;
   document.fonts.ready.then((fontFaceSet) => {
     const fontFaces = [...fontFaceSet];
@@ -49,7 +50,12 @@
   width: window.innerWidth,
   height,
   fill: 'white',
-  strokeWidth: 0
+  storke: 'white',
+  strokeWidth: 1,
+  shadowColor: 'gold',
+  shadowOffsetY: 1,
+  shadowOpacity: 1,
+  shadowBlur: 5
 }} bind:handle={ rectEl } />
 {#if isFontLoaded}
   <Text config={{
@@ -66,3 +72,9 @@
     fontFamily
   }} bind:handle={ textEl } />
 {/if}
+
+<!-- <style>
+  p {
+    font-family: 'Courier New', Courier, monospace;
+  }
+</style> -->
