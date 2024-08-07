@@ -7,12 +7,12 @@
   let textEl, rectEl;
 
   const height = 25;
+  const duration = 1;
   let y =  -height;
 
-  $: text = `${$totalPoints} pts`;
+  $: text = `${$totalPoints} mins`;
   
   $: if (reveal) {
-    const duration = Math.PI;
     const newY = 0;
     rectEl.to({ duration, y: newY });
     textEl.to({ 
@@ -23,7 +23,6 @@
   }
 
   $: if (hide) {
-    const duration = Math.PI / 10;
     const newY = -height;
     rectEl.to({ duration, y: newY });
     textEl.to({ 
@@ -49,13 +48,9 @@
   y,
   width: window.innerWidth,
   height,
-  fill: 'white',
-  storke: 'white',
-  strokeWidth: 1,
-  shadowColor: 'gold',
-  shadowOffsetY: 1,
-  shadowOpacity: 1,
-  shadowBlur: 5
+  fill: 'black',
+  stroke: 'dimgrey',
+  strokeWidth: 2
 }} bind:handle={ rectEl } />
 {#if isFontLoaded}
   <Text config={{
@@ -67,14 +62,8 @@
     verticalAlign: 'middle',
     fontSize: 15,
     padding: 10,
-    fill: 'black',
+    fill: 'white',
     text,
     fontFamily
   }} bind:handle={ textEl } />
 {/if}
-
-<!-- <style>
-  p {
-    font-family: 'Courier New', Courier, monospace;
-  }
-</style> -->
