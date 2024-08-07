@@ -107,7 +107,7 @@
         </Group>
         <PiWatch isStart={ $isReaderEngaged } isStop={ isFinished } />  
         <Punctuation on:punctuated={ postPunctuation } />
-        <Scoreboard />
+        <Scoreboard reveal={ isReading } hide={ isFinished } />
       {/if}
     </Layer>
   </Stage>
