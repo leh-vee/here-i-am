@@ -6,8 +6,9 @@ export const isReaderEngaged = writable(false);
 
 export const nPiesScored = writable(0);
 export const millisecsElapsedByVerse = writable([]); 
-export const totalMillisecondsElapsed = derived(
+export const totalPoints = derived(
   [millisecsElapsedByVerse], ([$millisecsElapsedByVerse]) => {
-    return $millisecsElapsedByVerse.reduce((a, c) => a + c, 0)
+    const totalMillisecs = $millisecsElapsedByVerse.reduce((a, c) => a + c, 0)
+    return Math.floor(totalMillisecs / 1000);
   }
 );

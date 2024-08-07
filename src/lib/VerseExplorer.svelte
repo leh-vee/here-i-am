@@ -4,6 +4,7 @@
   import Notepad from './Notepad.svelte';
   import VerseMap from './VerseMap.svelte';
   import StreetMap from './StreetMap.svelte';
+  import Scoreboard from './Scoreboard.svelte';
   import PiWatch from './PiWatch.svelte';
   import { isReaderEngaged } from '../stores/base';
   import { channelBlocks, blocksForCurrentChannel, 
@@ -106,6 +107,7 @@
         </Group>
         <PiWatch isStart={ $isReaderEngaged } isStop={ isFinished } />  
         <Punctuation on:punctuated={ postPunctuation } />
+        <Scoreboard />
       {/if}
     </Layer>
   </Stage>
