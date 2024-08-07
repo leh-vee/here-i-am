@@ -32,12 +32,12 @@
     });
   }
 
+  const fontFamily = "digital";
   let isFontLoaded = false;
-  const fontFamily = "Wellfleet";
   document.fonts.ready.then((fontFaceSet) => {
     const fontFaces = [...fontFaceSet];
-    const wellFleetFontFaces = fontFaces.filter(f => f.family === fontFamily);
-    Promise.all(wellFleetFontFaces.map(ff => ff.load())).then(() => { 
+    const fontFamilyFaces = fontFaces.filter(f => f.family === fontFamily);
+    Promise.all(fontFamilyFaces.map(ff => ff.load())).then(() => { 
       isFontLoaded = true;
     });
   });
@@ -48,7 +48,7 @@
   y,
   width: window.innerWidth,
   height,
-  fill: 'gold',
+  fill: 'white',
   strokeWidth: 0
 }} bind:handle={ rectEl } />
 {#if isFontLoaded}
@@ -63,6 +63,6 @@
     padding: 10,
     fill: 'black',
     text,
-    fontFamily: 'Wellfleet'
+    fontFamily
   }} bind:handle={ textEl } />
 {/if}
