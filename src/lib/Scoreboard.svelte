@@ -10,7 +10,7 @@
   const duration = 1;
   let y =  -height;
 
-  $: text = `${$totalPoints} mins`;
+  $: text = `${$totalPoints} MIN READ`;
   
   $: if (reveal) {
     const newY = 0;
@@ -32,7 +32,7 @@
     });
   }
 
-  const fontFamily = 'Courier New';
+  const fontFamily = 'Arial';
   let isFontLoaded = false;
   document.fonts.ready.then((fontFaceSet) => {
     const fontFaces = [...fontFaceSet];
@@ -62,7 +62,7 @@
     verticalAlign: 'middle',
     fontSize: 15,
     padding: 10,
-    fill: 'white',
+    fill: 'lightgrey',
     text,
     fontFamily
   }} bind:handle={ textEl } />
