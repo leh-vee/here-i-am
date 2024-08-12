@@ -1,10 +1,10 @@
 <script>
-  import { Rect, Text } from 'svelte-konva';
+  import { Rect, Text, Group } from 'svelte-konva';
   import { totalPoints } from '../stores/base';
 
-  export let reveal = false;
-  export let hide = false;
-  let textEl, rectEl;
+  // export let reveal = false;
+  // export let hide = false;
+  let scoreboardEl;
 
   const height = 25;
   const duration = 0.5;
@@ -12,58 +12,54 @@
 
   $: text = `${$totalPoints} MIN READ`;
   
-  $: if (reveal) {
-    const newY = 0;
-    rectEl.to({ duration, y: newY });
-    textEl.to({ 
-      duration, 
-      y: newY,
-      onFinish: () => { y = newY }
-    });
-  }
+  // $: if (reveal) {
+  //   const newY = 0;
+  //   scoreboardEl.to({ 
+  //     duration, 
+  //     y: newY,
+  //     onFinish: () => { y = newY }
+  //   });
+  // }
 
-  $: if (hide) {
-    const newY = -height;
-    rectEl.to({ duration, y: newY });
-    textEl.to({ 
-      duration, 
-      y: newY,
-      onFinish: () => { y = newY }
-    });
-  }
-
-  const fontFamily = 'Arial';
-  let isFontLoaded = false;
-  document.fonts.ready.then((fontFaceSet) => {
-    const fontFaces = [...fontFaceSet];
-    const fontFamilyFaces = fontFaces.filter(f => f.family === fontFamily);
-    Promise.all(fontFamilyFaces.map(ff => ff.load())).then(() => { 
-      isFontLoaded = true;
-    });
-  });
+  // $: if (hide) {
+  //   const newY = -height;
+  //   scoreboardEl.to({ 
+  //     duration, 
+  //     y: newY,
+  //     onFinish: () => { y = newY }
+  //   });
+  // }
 </script>
 
-<Rect config={{
-  x: 0,
-  y,
-  width: window.innerWidth,
-  height,
-  fill: 'black',
-  stroke: 'dimgrey',
-  strokeWidth: 2
-}} bind:handle={ rectEl } />
-{#if isFontLoaded}
+<Group config={{ x: 0, y: 0 }} bind:handle={ scoreboardEl }>
+  <Rect config={{
+    width: window.innerWidth,
+    height,
+    fill: 'black',
+    stroke: 'dimgrey',
+    strokeWidth: 2
+  }} />
   <Text config={{
-    x: 0,
-    y,
     height, 
     width: window.innerWidth,
-    align: 'right',
+    align: 'left',
     verticalAlign: 'middle',
     fontSize: 15,
     padding: 10,
     fill: 'lightgrey',
     text,
-    fontFamily
-  }} bind:handle={ textEl } />
-{/if}
+    fontFamily: 'Arial'
+  }} />
+  <Text config={{
+    height,
+    y: -2,
+    width: window.innerWidth,
+    fontSize: 20,
+    padding: 10,
+    align: 'right',
+    verticalAlign: 'middle',
+    opacity: 0.5,
+    fillEnabled: true,
+    text: "🥧🥧🥧"
+  }} />
+</Group>

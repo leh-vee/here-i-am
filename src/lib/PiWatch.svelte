@@ -9,7 +9,6 @@
 
   const watchFontSize = Math.round(window.innerWidth / 30);
   const isPiSecondsFontSize = Math.round(window.innerWidth / 8);
-  const piScoreBoardFontSize = Math.round(window.innerWidth / 16);
 
   let start = new Date();
   $: startTime = start.getTime();
@@ -57,6 +56,8 @@
 
   let interval;
 
+  const pieEmoji = "🥧";
+
   $: if (isStop) {
     clearInterval(interval);
     if (isPiSeconds) {
@@ -70,16 +71,6 @@
     interval = setInterval(() => {
 			current = new Date();
 		}, 10);
-  }
-
-  const pieEmoji = "🥧";
-
-  function getPieScoreBoardText() {
-    let text = "";
-    for (let i = 0; i < $nPiesScored; i++) {
-      text = `${text} ${pieEmoji}`;
-    }
-    return text.trim();
   }
 
   function pieSpin() {
@@ -119,14 +110,4 @@
   fillEnabled: true,
   visible: isPiSeconds
 }} bind:handle={pieEl} />
-
-<Text config={{
-  y: Math.round(window.innerHeight / 2.7),
-  text: getPieScoreBoardText(),
-  width: window.innerWidth,
-  height: window.innerHeight / 2,
-  fontSize: piScoreBoardFontSize,
-  align: "center",
-  fillEnabled: true
-}} />
 
