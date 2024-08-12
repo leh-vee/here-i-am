@@ -3,6 +3,7 @@ import { writable, derived } from 'svelte/store';
 export const isDataInitialized = writable(false);
 export const isVerseNumberVisible = writable(false);
 export const isReaderEngaged = writable(false);
+export const isVerseEllipsisLit = writable(false);
 
 export const nPiesScored = writable(0);
 export const millisecsElapsedByVerse = writable([]); 

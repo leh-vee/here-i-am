@@ -6,7 +6,7 @@
   import StreetMap from './StreetMap.svelte';
   import Scoreboard from './Scoreboard.svelte';
   import PiWatch from './PiWatch.svelte';
-  import { isReaderEngaged } from '../stores/base';
+  import { isReaderEngaged, isVerseEllipsisLit } from '../stores/base';
   import { channelBlocks, blocksForCurrentChannel, 
     currentChannelProjection } from '../stores/treeOfLife';
   import { wordIndices, isPunctuationNext, isGroundZero,
@@ -107,7 +107,7 @@
         </Group>
         <PiWatch isStart={ $isReaderEngaged } isStop={ isFinished } />  
         <Punctuation on:punctuated={ postPunctuation } />
-        <Scoreboard reveal={ isReading } hide={ isFinished } />
+        <Scoreboard reveal={ $isVerseEllipsisLit } hide={ isFinished } />
       {/if}
     </Layer>
   </Stage>

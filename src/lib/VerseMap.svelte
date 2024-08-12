@@ -7,12 +7,12 @@
     currentChannelFromSefirahCoordsPx } from '../stores/treeOfLife.js';
   import { currentVerse, likePiSlices,
     currentVerseIndex } from '../stores/text.js';
+  import { isVerseEllipsisLit } from '../stores/base';
 
   export let revealEllipsis = false;
   export let fadeEllipsis = false;
   let triggerVerseRun = false;
   let triggerRadiate = false;
-  let isLit = false;
 
   const nMarkersVisible = { a: 0, b: 0 }
 
@@ -54,7 +54,7 @@
   }
 
   export function click() {
-    if (isLit) fadeEllipsis = true;
+    if ($isVerseEllipsisLit) fadeEllipsis = true;
 	}
 
 </script>
@@ -84,6 +84,6 @@
   reveal={ revealEllipsis }
   on:revealed={ () => { triggerVerseRun = true } }
   light={ triggerRadiate }
-  on:lit={ () => { isLit = true } }
+  on:lit={ () => { isVerseEllipsisLit.set(true) } }
   fadeAway={ fadeEllipsis }
 />
