@@ -7,7 +7,7 @@
   let textEl, rectEl;
 
   const height = 25;
-  const duration = 1;
+  const duration = 0.5;
   let y =  -height;
 
   $: text = `${$totalPoints} MIN READ`;
