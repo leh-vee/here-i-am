@@ -238,6 +238,21 @@ export const isFirstVerseTriad = derived(
   }
 );
 
+export const currentPiSliceRomanized = derived(
+  [currentPiSlice, isFirstVerseTriad], 
+  ([$currentPiSlice, $isFirstVerseTriad]) => {
+    let verseNumber;
+    if ($isFirstVerseTriad) {
+      let romanNumeral = 'I';
+      for (let i = 1; i < Number($currentPiSlice); i++) { romanNumeral += 'I' };
+      verseNumber = romanNumeral;
+    } else {
+      verseNumber = String($currentPiSlice);
+    }
+    return verseNumber;
+  }
+)
+
 export const isFirstVerse = derived(
   [wordIndices], ([$wordIndices]) => {
     let isFirstVerse = false;

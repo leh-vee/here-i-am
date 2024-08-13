@@ -1,23 +1,14 @@
 <script>
-    import { isFirstVerseTriad, currentPiSlice } from '../stores/text.js';
+    import { currentPiSliceRomanized } from '../stores/text.js';
     import { isVerseNumberVisible } from '../stores/base.js';
 
     const verseNumberFontSize = Math.round(window.innerWidth / 2);
-    
-    let verseNumber;
-    $: if ($isFirstVerseTriad) {
-      let romanNumeral = 'I';
-      for (let i = 1; i < Number($currentPiSlice); i++) { romanNumeral += 'I' };
-      verseNumber = romanNumeral;
-    } else {
-      verseNumber = String($currentPiSlice);
-    }
 </script>
 
 {#if $isVerseNumberVisible}
   <div id='verse-number-wrapper'>
     <span id='verse-number' style='--fontSize:{verseNumberFontSize};'>
-      { verseNumber }
+      { $currentPiSliceRomanized }
     </span>
   </div>
 {/if}

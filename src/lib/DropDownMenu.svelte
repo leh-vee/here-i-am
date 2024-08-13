@@ -1,5 +1,6 @@
 <script>
   import { totalPoints, nPiesScored } from '../stores/base';
+  import { currentPiSliceRomanized } from '../stores/text.js';
 
   let isPieEaten = [];
   $: {
@@ -8,6 +9,7 @@
 </script>
 
 <div id='menu'>
+  <div id='verse-number'>VERSE { $currentPiSliceRomanized }</div>
   <div id='score'>{ $totalPoints } MIN READ</div> 
   <div id='pies'>
     {#each isPieEaten as eaten}
@@ -29,12 +31,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: lightgrey;
+    font-family: Arial, Helvetica, sans-serif;
   }
   
-  #menu #score {
+  #menu #verse-number {
     margin: 0 10px;
-    font-family: Arial, Helvetica, sans-serif;
-    color: lightgrey;
   }
   
   #menu #pies {
