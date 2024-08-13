@@ -56,11 +56,9 @@
 
   let interval;
 
-  const pieEmoji = "🥧";
-
   $: if (isStop) {
     clearInterval(interval);
-    if (isPiSeconds) {
+    if ($nPiesScored < 3 && isPiSeconds) {
       pieSpin();
       nPiesScored.set($nPiesScored + 1); 
     }
@@ -101,7 +99,7 @@
   offsetY: window.innerHeight / 4,
   x: window.innerWidth / 2,
   y: window.innerHeight / 4,
-  text: pieEmoji,
+  text: "🥧",
   width: window.innerWidth,
   height: window.innerHeight / 2,
   align: 'center',
