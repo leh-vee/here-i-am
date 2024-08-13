@@ -1,6 +1,16 @@
 const piCountDown = '32114159265358979323846264338327950';
 const punctuationRegEx = /([^\w\s'])/g;
 
+export function serializeCountDown(romanized=true) {
+  let countDown = piCountDown.split('');
+  if (romanized) {
+    countDown[0] = "III";
+    countDown[1] = "II";
+    countDown[2] = "I";
+  }
+  return countDown;
+}
+
 export async function serializePoem(poemLines) {
   const poemJson = [];
   piCountDown.split('').forEach((piSlice, i) => {
