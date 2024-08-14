@@ -19,9 +19,9 @@
 </script>
 
 <div id='drop-down' class='menu'>
+  <div id='score'>{ $totalPoints } MIN READ</div> 
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div id='verse-number' on:click={ togglePiMenu }>VERSE { $currentPiSliceRomanized }</div>
-  <div id='score'>{ $totalPoints } MIN READ</div> 
   <div id='pies'>
     {#each isPieEaten as eaten}
       <span class:eaten>🥧</span>
@@ -100,22 +100,22 @@
     font-family: Arial, Helvetica, sans-serif;
   }
   
-  .menu #verse-number {
+  .menu #score {
     margin: 0 10px;
   }
   
   .menu #pies {
     margin: 0 10px;
-    font-size: 25px;
+    font-size: 20px;
     position: relative;
     bottom: 3px;
   }
 
   #pies span {
-    padding-left: 5px;
+    padding-left: 1px;
   }
 
   #pies span:not(.eaten) {
-    opacity: 0.5;
+    opacity: 0.3;
   }
 </style>
