@@ -5,7 +5,7 @@
   import VerseMap from './VerseMap.svelte';
   import StreetMap from './StreetMap.svelte';
   import PiWatch from './PiWatch.svelte';
-  import DropDownMenu from './DropDownMenu.svelte';
+  import Menu from './Menu.svelte';
   import { isReaderEngaged, isVerseEllipsisLit } from '../stores/base';
   import { channelBlocks, blocksForCurrentChannel, 
     currentChannelProjection } from '../stores/treeOfLife';
@@ -92,7 +92,7 @@
 </script>
 
 <div id='verse-explorer'>
-  <DropDownMenu />
+  <Menu />
   <Stage config={{ width: window.innerWidth, height: window.innerHeight, 
     visible: isReading }} on:pointerclick={ click } >
     <Layer>
