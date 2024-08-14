@@ -12,13 +12,15 @@
     for (let i = 0; i < 3; i++) isPieEaten[i] = $nPiesScored > i;
   }
 
-  $: if (isPiMenuVisible && piSliceEl !== undefined) piSliceEl.scrollIntoView({ behavior: "smooth", block: "start" });
+  $: if (isPiMenuVisible) piSliceEl.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  function togglePiMenu() { isPiMenuVisible = !isPiMenuVisible }
 
 </script>
 
 <div id='drop-down' class='menu'>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div id='verse-number' on:click={ () => { isPiMenuVisible = true } }>VERSE { $currentPiSliceRomanized }</div>
+  <div id='verse-number' on:click={ togglePiMenu }>VERSE { $currentPiSliceRomanized }</div>
   <div id='score'>{ $totalPoints } MIN READ</div> 
   <div id='pies'>
     {#each isPieEaten as eaten}
@@ -26,22 +28,21 @@
     {/each}
   </div>
 </div>
-{#if isPiMenuVisible}
+<div id='pi' class='menu' class:hide={!isPiMenuVisible}>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div id='close-btn' on:click={ () => { isPiMenuVisible = false } }>x</div>
-  <div id='pi' class='menu'>
-    {#each piCountDown as piSlice, i}
-      {#if $currentVerseIndex === i}
-        <div class='current slice' bind:this={piSliceEl}>{ piSlice }</div>
-      {:else}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class='slice' on:click={ () => { wordIndices.goToVerseIndex(i) } }>
-          { piSlice }
-        </div>
-      {/if}
-    {/each}
-  </div>
-{/if}
+  <div id='close-btn' on:click={ togglePiMenu }>x</div>
+  {#each piCountDown as piSlice, i}
+    {#if $currentVerseIndex === i}
+      <div class='current slice' bind:this={piSliceEl}>{ piSlice }</div>
+    {:else}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <div class='slice' on:click={ () => { wordIndices.goToVerseIndex(i) } }>
+        { piSlice }
+      </div>
+    {/if}
+  {/each}
+</div>
+
 
 <style>
   .menu {
@@ -68,12 +69,16 @@
     color: white;
   }
 
+  #pi.menu.hide {
+    visibility: hidden;
+  }
+
   #pi.menu .current.slice {
     color: gold;
   }
 
   #close-btn {
-    position: absolute;
+    position: fixed;
     top: 40px;
     right: 30px; 
     font-size: 30px;
