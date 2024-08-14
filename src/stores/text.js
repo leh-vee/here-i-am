@@ -33,6 +33,13 @@ function createWordIndicesStore() {
         wordIndex: nextWordIndex
       }
     }),
+    goToVerseIndex: (i) => update(() => {
+      return {
+        verseIndex: i,
+        line: 'a',
+        wordIndex: 0 
+      }
+    }),
     nextLine: () => update(({verseIndex, line, wordIndex}) => {
       let nextLine = line;
       let nextWordIndex = wordIndex;

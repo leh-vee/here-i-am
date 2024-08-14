@@ -1,6 +1,6 @@
 <script>
   import { totalPoints, nPiesScored } from '../stores/base';
-  import { currentPiSliceRomanized, currentVerseIndex } from '../stores/text.js';
+  import { currentPiSliceRomanized, currentVerseIndex, wordIndices } from '../stores/text.js';
   import { serializeCountDown } from '../utils/textJson.js';
 
   const piCountDown = serializeCountDown(); 
@@ -12,15 +12,13 @@
     for (let i = 0; i < 3; i++) isPieEaten[i] = $nPiesScored > i;
   }
 
-  function piMenuToggle() { isPiMenuVisible = !isPiMenuVisible }
-
   $: if (isPiMenuVisible && piSliceEl !== undefined) piSliceEl.scrollIntoView({ behavior: "smooth", block: "start" });
 
 </script>
 
 <div id='drop-down' class='menu'>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div id='verse-number' on:click={ piMenuToggle }>VERSE { $currentPiSliceRomanized }</div>
+  <div id='verse-number' on:click={ () => { isPiMenuVisible = true } }>VERSE { $currentPiSliceRomanized }</div>
   <div id='score'>{ $totalPoints } MIN READ</div> 
   <div id='pies'>
     {#each isPieEaten as eaten}
@@ -30,13 +28,16 @@
 </div>
 {#if isPiMenuVisible}
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div id='close-btn' on:click={ piMenuToggle }>x</div>
+  <div id='close-btn' on:click={ () => { isPiMenuVisible = false } }>x</div>
   <div id='pi' class='menu'>
     {#each piCountDown as piSlice, i}
       {#if $currentVerseIndex === i}
         <div class='current slice' bind:this={piSliceEl}>{ piSlice }</div>
       {:else}
-        <div class='slice'>{ piSlice }</div>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class='slice' on:click={ () => { wordIndices.goToVerseIndex(i) } }>
+          { piSlice }
+        </div>
       {/if}
     {/each}
   </div>
