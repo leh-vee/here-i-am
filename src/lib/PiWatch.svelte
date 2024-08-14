@@ -39,6 +39,8 @@
     isPiSeconds = elapsedMillisecs === 194159;
   }
   
+  $: isPieTrick = $nPiesScored === 3;
+  $: piEmojiVisible = isPiSeconds && !isPieTrick; 
   
   function zeroPadded(number) {
     return number >= 10 ? number.toString() : `0${number}`;
@@ -106,6 +108,6 @@
   verticalAlign: 'middle',
   fontSize: isPiSecondsFontSize,
   fillEnabled: true,
-  visible: isPiSeconds
+  visible: piEmojiVisible,
 }} bind:handle={pieEl} />
 
