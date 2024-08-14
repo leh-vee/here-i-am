@@ -3,6 +3,8 @@
   import { currentPiSliceRomanized, currentVerseIndex, wordIndices } from '../stores/text.js';
   import { serializeCountDown } from '../utils/textJson.js';
 
+  export let isDropDownVisible = false;
+
   const piCountDown = serializeCountDown(); 
   let isPiMenuVisible = false;
   let piSliceEl;
@@ -18,7 +20,7 @@
 
 </script>
 
-<div id='drop-down' class='menu'>
+<div id='drop-down' class='menu' class:hide={!isDropDownVisible}>
   <div id='score'>{ $totalPoints } MIN READ</div> 
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div id='verse-number' on:click={ togglePiMenu }>VERSE { $currentPiSliceRomanized }</div>
@@ -92,14 +94,19 @@
   #drop-down.menu {
     top: 0;
     left: 0;
-    width: 100%;
     height: 25px;
+    width: 100%;
     border-bottom: 2px dimgrey solid;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: lightgrey;
     font-family: Arial, Helvetica, sans-serif;
+    transition: top 1s ease-in-out;
+  }
+
+  #drop-down.menu.hide {
+    top: -27px;
   }
   
   .menu #score {

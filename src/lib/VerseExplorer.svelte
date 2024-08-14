@@ -23,6 +23,8 @@
   let isFetchingBlocks = false;
   let fadeGroupEl;
   let verseMapCom;
+
+  $: showMenu = $isVerseEllipsisLit && !isFinished;
   
   $: if ($blocksForCurrentChannel === undefined && !isFetchingBlocks) {
     isFetchingBlocks = true;
@@ -92,7 +94,7 @@
 </script>
 
 <div id='verse-explorer'>
-  <Menu />
+  <Menu isDropDownVisible={ showMenu } />
   <Stage config={{ width: window.innerWidth, height: window.innerHeight, 
     visible: isReading }} on:pointerclick={ click } >
     <Layer>
