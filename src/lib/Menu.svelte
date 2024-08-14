@@ -56,9 +56,6 @@
     left: 0;
     bottom: 0;
     width: 100%;
-  }
-
-  #pi.menu {
     color: white;
     font-family: "Wellfleet";
     display: flex;
@@ -67,10 +64,11 @@
     overflow: scroll;
     font-size: 20vh;
     color: white;
+    transition: top 500ms ease;
   }
 
   #pi.menu.hide {
-    visibility: hidden;
+    top: 100%;
   }
 
   #pi.menu .current.slice {
@@ -85,6 +83,10 @@
     color: gray;
     z-index: 3;
     font-family: monospace;
+  }
+
+  #pi.menu.hide #close-btn {
+    visibility: hidden;
   }
 
   #drop-down.menu {
