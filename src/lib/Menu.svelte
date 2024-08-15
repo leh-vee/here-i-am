@@ -7,6 +7,7 @@
 
   const piCountDown = serializeCountDown(); 
   let isPiMenuVisible = false;
+  let isInfoMenuVisible = false;
   let piSliceEl;
 
   let isPieEaten = [];
@@ -14,9 +15,10 @@
     for (let i = 0; i < 3; i++) isPieEaten[i] = $nPiesScored > i;
   }
 
-  $: if (isPiMenuVisible) piSliceEl.scrollIntoView({ behavior: "smooth", block: "start" });
+  // $: if (isPiMenuVisible) piSliceEl.scrollIntoView({ behavior: "smooth", block: "start" });
 
   function togglePiMenu() { isPiMenuVisible = !isPiMenuVisible }
+  function toggleInfoMenu() { isInfoMenuVisible = !isInfoMenuVisible }
 
 </script>
 
@@ -31,11 +33,10 @@
   </div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div id='verse-number' on:click={ togglePiMenu }>{ $currentPiSliceRomanized }</div>
-  <div id='info'>?</div>
-</div>
-<div id='pi' class='menu' class:hide={!isPiMenuVisible}>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div id='close-btn' on:click={ togglePiMenu }>x</div>
+  <div id='info' on:click={ toggleInfoMenu }>?</div>
+</div>
+<div id='pi' class='modal menu' class:hide={!isPiMenuVisible}>
   {#each piCountDown as piSlice, i}
     {#if $currentVerseIndex === i}
       <div class='current slice' bind:this={piSliceEl}>{ piSlice }</div>
@@ -47,51 +48,27 @@
     {/if}
   {/each}
 </div>
-
+<div id='info' class='modal menu' class:hide={!isInfoMenuVisible}>
+  <div>
+    <h1>Instructions</h1>
+    <p>Read the poem. Eat the pies. Have a nice time.</p>
+    <h1>Score</h1>
+    <p>The score is calculated as a function of the number of total reading minutes multiplied by the number of pies eaten.</p>
+    <h1>Here I Am</h1>
+    <p>This an adaptation of the proen that introduces the book Me & My Shadow, avaiable from Publisher X</p>
+    <h1>Playlist</h1>
+    <ul>
+      <li>Pi - Kate Bush</li>
+      <li>Falling Down; Tom Waits</li>
+    </ul>
+  </div>
+</div>
 
 <style>
   .menu {
     position: absolute;
     background-color: black;
     z-index: 2;
-  }
-
-  #pi.menu {
-    top: 27px;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    color: white;
-    font-family: "Wellfleet";
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow: scroll;
-    font-size: 20vh;
-    color: white;
-    transition: top 500ms ease;
-  }
-
-  #pi.menu.hide {
-    top: 100%;
-  }
-
-  #pi.menu .current.slice {
-    color: gold;
-  }
-
-  #close-btn {
-    position: fixed;
-    top: 40px;
-    right: 30px; 
-    font-size: 30px;
-    color: gray;
-    z-index: 3;
-    font-family: monospace;
-  }
-
-  #pi.menu.hide #close-btn {
-    visibility: hidden;
   }
 
   #drop-down.menu {
@@ -110,34 +87,34 @@
   #drop-down.menu.hide {
     top: -27px;
   }
-  
-  .menu #score {
+
+  #drop-down.menu #score {
     position: absolute;
     left: 10px;
   }
 
-  #score #min-read {
+  #drop-down.menu #score #min-read {
     color: white;    
     margin-right: 5px;
     font-size: 18px;
     font-family: "love ya like a sister";
   }
 
-  .menu #pies {
-    font-size: 16px;
+  #drop-down.menu #pies {
+    font-size: 22px;
     position: relative;
-    bottom: 3px;
+    bottom: 2px;
     font-family: monospace;
   }
 
-  .menu #verse-number {
+  #drop-down.menu #verse-number {
     font-size: 18px;
     color: gold;
     font-weight: bold;
     font-family: monospace;
   }
   
-  .menu #info {
+  #drop-down.menu #info {
     font-family: Courier, monospace;
     text-align: center;
     background-color: white;
@@ -156,5 +133,36 @@
 
   #pies span:not(.eaten) {
     opacity: 0.3;
+  }
+
+  .modal.menu {
+    top: 27px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    color: white;
+    transition: top 500ms ease;
+  }
+
+  .modal.menu.hide {
+    top: 100%;
+  }
+
+  #pi.modal.menu {
+    font-family: "Wellfleet";
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: scroll;
+    font-size: 20vh;
+  }
+
+  #pi.menu .current.slice {
+    color: gold;
+  }
+
+  #info.modal.menu {
+    font-family: 'Courier New', Courier, monospace;
+    padding: 0 10px;
   }
 </style>
