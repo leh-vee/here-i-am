@@ -21,14 +21,17 @@
 </script>
 
 <div id='drop-down' class='menu' class:hide={!isDropDownVisible}>
-  <div id='score'>{ $totalPoints } MIN READ</div> 
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div id='verse-number' on:click={ togglePiMenu }>VERSE { $currentPiSliceRomanized }</div>
-  <div id='pies'>
-    {#each isPieEaten as eaten}
+  <div id='score'>
+    <span id='min-read'>{ $totalPoints }</span>
+    <span id='pies'>
+      {#each isPieEaten as eaten}
       <span class:eaten>🥧</span>
-    {/each}
+      {/each}
+    </span>
   </div>
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <div id='verse-number' on:click={ togglePiMenu }>{ $currentPiSliceRomanized }</div>
+  <div id='info'>?</div>
 </div>
 <div id='pi' class='menu' class:hide={!isPiMenuVisible}>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -98,9 +101,8 @@
     width: 100%;
     border-bottom: 2px dimgrey solid;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    color: lightgrey;
     font-family: Arial, Helvetica, sans-serif;
     transition: top 1s ease-in-out;
   }
@@ -110,14 +112,41 @@
   }
   
   .menu #score {
-    margin: 0 10px;
+    position: absolute;
+    left: 10px;
+  }
+
+  #score #min-read {
+    color: white;    
+    margin-right: 5px;
+    font-size: 18px;
+    font-family: "love ya like a sister";
+  }
+
+  .menu #pies {
+    font-size: 18px;
+    position: relative;
+    bottom: 2px;
+  }
+
+  .menu #verse-number {
+    font-size: 18px;
+    color: gold;
+    font-weight: bold;
+    font-family: monospace;
   }
   
-  .menu #pies {
-    margin: 0 10px;
-    font-size: 20px;
-    position: relative;
-    bottom: 3px;
+  .menu #info {
+    font-family: Courier, monospace;
+    text-align: center;
+    background-color: white;
+    color: black;
+    width: 16px;
+    font-size: 14px;
+    border-radius: 50%;
+    border: 1px solid white;
+    position: absolute;
+    right: 10px;
   }
 
   #pies span {
