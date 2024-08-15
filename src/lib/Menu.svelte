@@ -124,9 +124,10 @@
   }
 
   .menu #pies {
-    font-size: 18px;
+    font-size: 16px;
     position: relative;
-    bottom: 2px;
+    bottom: 3px;
+    font-family: monospace;
   }
 
   .menu #verse-number {
