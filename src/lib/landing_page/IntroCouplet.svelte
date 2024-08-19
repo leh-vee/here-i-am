@@ -6,34 +6,32 @@
   
   const dispatch = createEventDispatcher();
 
-  let couplets, nCouplets; 
+  export let isFullStop = false;
+
+  let couplets; 
   let coupletIndex = 0;
   fetchIntroCouplets().then(lines => { 
     couplets = serializeCouplets(lines);
-    nCouplets = couplets.length;
   });
 
   export let visible = false;
   
   let couplet = { a: "", b: "" };
   let progressiveLines = { a: "", b: "" };
+
   $: if (visible) revealNextCouplet();
+  $: if (isFullStop) progressiveLines.b += '.';
 
   async function revealNextCouplet() {
     progressiveLines = { a: "", b: "" };
     await buildEllipsis();
-    if (coupletIndex < nCouplets) {
-      couplet =  structuredClone(couplets[coupletIndex]);
-      await buildLine();
-      await buildLine('b');
-      setTimeout(() => {
-        progressiveLines.b += '.';
-        coupletIndex += 1;
-        setTimeout(() => {
-          dispatch('revealed');
-        }, 750);
-      }, Math.PI * 1000); 
-    }
+    couplet =  structuredClone(couplets[coupletIndex]);
+    await buildLine();
+    await buildLine('b');
+    setTimeout(() => {
+      dispatch('revealed');
+      coupletIndex += 1;
+    }, Math.PI * 1000);
   }
 
   function buildEllipsis() {

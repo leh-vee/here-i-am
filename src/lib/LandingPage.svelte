@@ -24,6 +24,7 @@
   const coinRadius = Math.round((width / 2) * 0.8);
   const strokeWidth = 6;
   const markerRadius = 2;
+  const goButtonRaidus = coinRadius / 2;
 
   let coinEl, coinOverflowEl, irisEl, markerEl;
   let isHeads = false;
@@ -31,6 +32,7 @@
 
   let isTileMapLoading = true; 
   let isClosedCoin = false;
+  let isGoButton = false;
 
   let coordIndex = 0;
   $: countdownNumber = 3 - coordIndex;
@@ -76,10 +78,29 @@
         isHeads = false;
         await flipCoin();
         openCoinTransition();
-      } else if (isTails && isFinalLocation) {
+      } else if (isGoButton) {
         irisIn();
       }
     } 
+  }
+
+  function postIntroReveal() {
+    if (isFinalLocation) {
+      showGoButton();
+    } else {
+      closeCoinTransition();
+    }
+  }
+
+  function showGoButton() {
+    markerEl.to({
+      duration: Math.PI / 10,
+      radius: goButtonRaidus,
+      easing: Konva.Easings.EaseIn,
+      onFinish: () => {
+        isGoButton = true;
+      }
+    })
   }
 
   function closeCoinTransition() {
@@ -183,8 +204,22 @@
       }} bind:handle={ markerEl } />
       {#if isHeads}
         <Title />
+      {:else if isGoButton}
+        <Text config={{
+          x: 0,
+          y: 0,
+          width: window.innerWidth,
+          height: window.innerHeight,
+          align: 'center',
+          verticalAlign: 'middle',
+          fontFamily: "Courier New",
+          text: 'GO',
+          fontSize: goButtonRaidus,
+          fill: 'lightgrey'
+        }} />
       {/if}
-      <IntroCouplet visible={ isTails } on:revealed={ closeCoinTransition } />
+      <IntroCouplet visible={ isTails } isFullStop={ isClosedCoin }
+        on:revealed={ postIntroReveal } />
       <Ring config={{
         x: xCentre,
         y: yCentre,
