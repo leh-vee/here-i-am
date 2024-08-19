@@ -3,7 +3,7 @@
   import Konva from 'konva';
   import Title from './landing_page/Title.svelte';
   import Number from './landing_page/Number.svelte';
-  import ArtistStatement from './landing_page/ArtistStatement.svelte';
+  import IntroCouplet from './landing_page/IntroCouplet.svelte';
   import MapTiles from './MapTiles.svelte';
   import { createEventDispatcher } from 'svelte';
   
@@ -184,7 +184,7 @@
       {#if isHeads}
         <Title />
       {/if}
-      <ArtistStatement visible={ isTails } on:revealed={ closeCoinTransition } />
+      <IntroCouplet visible={ isTails } on:revealed={ closeCoinTransition } />
       <Ring config={{
         x: xCentre,
         y: yCentre,

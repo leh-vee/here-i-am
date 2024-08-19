@@ -26,8 +26,8 @@ export function fetchPoemText() {
   return getLinesFromTxtFile(filePath);
 }
 
-export function fetchArtistStatements() {
-  const filePath = `${window.location.href}/artist_statement_couplets.txt`;
+export function fetchIntroCouplets() {
+  const filePath = `${window.location.href}/intro_couplets.txt`;
   return getLinesFromTxtFile(filePath);
 }
 

@@ -1,34 +1,34 @@
 <script>
   import { Text } from 'svelte-konva';
-  import { fetchArtistStatements } from '../../api/client.js';
+  import { fetchIntroCouplets } from '../../api/client.js';
   import { serializeCouplets } from '../../utils/textJson.js';
   import { createEventDispatcher } from 'svelte';
   
   const dispatch = createEventDispatcher();
 
-  let statements, nStatements; 
-  let statementIndex = 0;
-  fetchArtistStatements().then(lines => { 
-    statements = serializeCouplets(lines);
-    nStatements = statements.length;
+  let couplets, nCouplets; 
+  let coupletIndex = 0;
+  fetchIntroCouplets().then(lines => { 
+    couplets = serializeCouplets(lines);
+    nCouplets = couplets.length;
   });
 
   export let visible = false;
   
-  let statement = { a: "", b: "" };
+  let couplet = { a: "", b: "" };
   let progressiveLines = { a: "", b: "" };
-  $: if (visible) revealNextStatement();
+  $: if (visible) revealNextCouplet();
 
-  async function revealNextStatement() {
+  async function revealNextCouplet() {
     progressiveLines = { a: "", b: "" };
     await buildEllipsis();
-    if (statementIndex < nStatements) {
-      statement =  structuredClone(statements[statementIndex]);
+    if (coupletIndex < nCouplets) {
+      couplet =  structuredClone(couplets[coupletIndex]);
       await buildLine();
       await buildLine('b');
       setTimeout(() => {
         progressiveLines.b += '.';
-        statementIndex += 1;
+        coupletIndex += 1;
         setTimeout(() => {
           dispatch('revealed');
         }, 750);
@@ -54,7 +54,7 @@
   
   function buildLine(line = 'a') {
     return new Promise((resolve) => {
-      const lineText = statement[line];
+      const lineText = couplet[line];
       const nChars = lineText.length;
       let charIndex = 0;
       const addChar = () => {
