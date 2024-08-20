@@ -204,22 +204,22 @@
       }} bind:handle={ markerEl } />
       {#if isHeads}
         <Title />
-      {:else if isGoButton}
-        <Text config={{
-          x: 0,
-          y: 0,
-          width: window.innerWidth,
-          height: window.innerHeight,
-          align: 'center',
-          verticalAlign: 'middle',
-          fontFamily: "Courier New",
-          text: 'GO',
-          fontSize: goButtonRaidus,
-          fill: 'lightgrey'
-        }} />
       {/if}
       <IntroCouplet visible={ isTails } isFullStop={ isClosedCoin }
         on:revealed={ postIntroReveal } />
+      <Text config={{
+        x: 0,
+        y: 0,
+        width: window.innerWidth,
+        height: window.innerHeight,
+        align: 'center',
+        verticalAlign: 'middle',
+        fontFamily: "Courier New",
+        text: 'GO',
+        fontSize: goButtonRaidus,
+        visible: isGoButton,
+        fill: 'lightgrey'
+      }} />
       <Ring config={{
         x: xCentre,
         y: yCentre,
