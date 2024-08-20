@@ -1,26 +1,20 @@
 <script>
   import { totalPoints, nPiesScored } from '../stores/base';
-  import { currentPiSliceRomanized, currentVerseIndex, wordIndices } from '../stores/text.js';
-  import { serializeCountDown } from '../utils/textJson.js';
-  import DropDownMenu from './DropDownMenu.svelte';
+  import { currentPiSliceRomanized } from '../stores/text.js';
+  import InfoDropDownMenu from './menus/InfoDropDownMenu.svelte';
+  import PiDropDownMenu from './menus/PiDropDownMenu.svelte';
 
   export let isDropDownVisible = false;
 
-  const piCountDown = serializeCountDown(); 
-  let isPiMenuVisible = false;
   let isInfoMenuVisible = false;
-  let piSliceEl;
+  function togglePiMenu() { isPiMenuVisible = !isPiMenuVisible }
+  let isPiMenuVisible = false;
+  function toggleInfoMenu() { isInfoMenuVisible = !isInfoMenuVisible }
 
   let isPieEaten = [];
   $: {
     for (let i = 0; i < 3; i++) isPieEaten[i] = $nPiesScored > i;
   }
-
-  // $: if (isPiMenuVisible) piSliceEl.scrollIntoView({ behavior: "smooth", block: "start" });
-
-  function togglePiMenu() { isPiMenuVisible = !isPiMenuVisible }
-  function toggleInfoMenu() { isInfoMenuVisible = !isInfoMenuVisible }
-
 </script>
 
 <div id='header' class='menu' class:hide={!isDropDownVisible}>
@@ -37,35 +31,8 @@
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div id='info' on:click={ toggleInfoMenu }>?</div>
 </div>
-<DropDownMenu isHidden={ !isPiMenuVisible }>
-  <div id='pi' class='dd-content'>
-    {#each piCountDown as piSlice, i}
-      {#if $currentVerseIndex === i}
-        <div class='current slice' bind:this={piSliceEl}>{ piSlice }</div>
-      {:else}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class='slice' on:click={ () => { wordIndices.goToVerseIndex(i) } }>
-          { piSlice }
-        </div>
-      {/if}
-    {/each}
-  </div>
-</DropDownMenu>
-<DropDownMenu isHidden={ !isInfoMenuVisible }>
-  <div id='info' class='dd-content'>
-    <h1>Instructions</h1>
-    <p>Read the poem. Eat the pies. Have a nice time.</p>
-    <h1>Score</h1>
-    <p>The score is calculated as a function of the number of total reading minutes multiplied by the number of pies eaten.</p>
-    <h1>Here I Am</h1>
-    <p>This an adaptation of the proen that introduces the book Me & My Shadow, avaiable from Publisher X</p>
-    <h1>Playlist</h1>
-    <ul>
-      <li>Pi - Kate Bush</li>
-      <li>Falling Down; Tom Waits</li>
-    </ul>
-  </div>
-</DropDownMenu>
+<PiDropDownMenu isVisible={ isPiMenuVisible } />
+<InfoDropDownMenu isVisible={ isInfoMenuVisible } />
 
 <style>
   #header.menu {
@@ -134,24 +101,4 @@
   #pies span:not(.eaten) {
     opacity: 0.3;
   }
-
-
-  #pi.dd-content {
-    height: inherit;
-    font-family: "Wellfleet";
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow: scroll;
-    font-size: 20vh;
-  } 
-
-  #pi.dd-content .current.slice {
-    color: gold;
-  }
-
-  #info.dd-content {
-    font-family: 'Courier New', Courier, monospace;
-    padding: 0 10px;
-  } 
 </style>
