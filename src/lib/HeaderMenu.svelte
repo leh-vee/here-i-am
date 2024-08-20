@@ -2,7 +2,7 @@
   import { totalPoints, nPiesScored } from '../stores/base';
   import { currentPiSliceRomanized, currentVerseIndex, wordIndices } from '../stores/text.js';
   import { serializeCountDown } from '../utils/textJson.js';
-  import DropDown from './DropDown.svelte';
+  import DropDownMenu from './DropDownMenu.svelte';
 
   export let isDropDownVisible = false;
 
@@ -37,7 +37,7 @@
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div id='info' on:click={ toggleInfoMenu }>?</div>
 </div>
-<DropDown isHidden={ !isPiMenuVisible }>
+<DropDownMenu isHidden={ !isPiMenuVisible }>
   <div id='pi' class='dd-content'>
     {#each piCountDown as piSlice, i}
       {#if $currentVerseIndex === i}
@@ -50,8 +50,8 @@
       {/if}
     {/each}
   </div>
-</DropDown>
-<DropDown isHidden={ !isInfoMenuVisible }>
+</DropDownMenu>
+<DropDownMenu isHidden={ !isInfoMenuVisible }>
   <div id='info' class='dd-content'>
     <h1>Instructions</h1>
     <p>Read the poem. Eat the pies. Have a nice time.</p>
@@ -65,7 +65,7 @@
       <li>Falling Down; Tom Waits</li>
     </ul>
   </div>
-</DropDown>
+</DropDownMenu>
 
 <style>
   #header.menu {
