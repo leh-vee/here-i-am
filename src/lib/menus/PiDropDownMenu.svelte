@@ -49,8 +49,8 @@
   }
 
   .pi-slice:active {
-    background-color: rgba(255,215,0, 0.25);
-    border: grey 1px solid;
+    background-color: gold;
+    border: black 1px solid;
   }
 
   .pi-slice#current {
