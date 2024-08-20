@@ -30,9 +30,13 @@
   }
 
   .drop-down.menu #close-button {
-    position: absolute;
+    position: fixed;
     right: 5%;
     font-family: monospace;
     font-size: 4vh;
+  }
+
+  .drop-down.menu.hide #close-button {
+    visibility: hidden;
   }
 </style>
