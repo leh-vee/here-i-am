@@ -3,6 +3,10 @@
 </script>
 
 <div class='drop-down menu' class:hide={ isHidden }>
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <span id='close-button' on:click={ () => { isHidden = true } }>
+    &times;
+  </span>
   <slot></slot>
 </div>
 
@@ -23,5 +27,12 @@
   .drop-down.menu.hide {
     overflow: hidden;
     bottom: 100%;
+  }
+
+  .drop-down.menu #close-button {
+    position: absolute;
+    right: 5%;
+    font-family: monospace;
+    font-size: 4vh;
   }
 </style>
