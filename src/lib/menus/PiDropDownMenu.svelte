@@ -5,20 +5,21 @@
 
   export let isVisible = false;
   const piCountDown = serializeCountDown();
-  let isPiMenuVisible = false;
   let piSliceEl;
 
-  $: if (isPiMenuVisible) piSliceEl.scrollIntoView({ behavior: "smooth", block: "start" });
+  $: if (isVisible) piSliceEl.scrollIntoView({ behavior: "smooth", block: "start" });
 </script>
 
 <DropDownMenu isHidden={ !isVisible }>
-  <div id='pi' class='dd-content'>
+  <div id='slices'>
     {#each piCountDown as piSlice, i}
       {#if $currentVerseIndex === i}
-        <div class='current slice' bind:this={piSliceEl}>{ piSlice }</div>
+        <div id='current' bind:this={piSliceEl}>
+          { piSlice }
+        </div>
       {:else}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class='slice' on:click={ () => { wordIndices.goToVerseIndex(i) } }>
+        <div on:click={ () => { wordIndices.goToVerseIndex(i) } }>
           { piSlice }
         </div>
       {/if}
@@ -27,7 +28,7 @@
 </DropDownMenu>
 
 <style>
-  #pi.dd-content {
+  #slices {
     height: inherit;
     font-family: "Wellfleet";
     display: flex;
@@ -37,7 +38,7 @@
     font-size: 20vh;
   } 
 
-  #pi.dd-content .current.slice {
+  #slices #current {
     color: gold;
   }
 </style>

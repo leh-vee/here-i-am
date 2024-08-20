@@ -5,7 +5,7 @@
 </script>
 
 <DropDownMenu isHidden={ !isVisible }>
-  <div id='info' class='dd-content'>
+  <div id='info'>
     <h1>Instructions</h1>
     <p>Read the poem. Eat the pies. Have a nice time.</p>
     <h1>Score</h1>
@@ -21,7 +21,7 @@
 </DropDownMenu>
 
 <style>
-  #info.dd-content {
+  #info {
     font-family: 'Courier New', Courier, monospace;
     padding: 0 10px;
   } 
