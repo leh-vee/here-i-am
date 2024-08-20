@@ -2,6 +2,7 @@
   import { totalPoints, nPiesScored } from '../stores/base';
   import { currentPiSliceRomanized, currentVerseIndex, wordIndices } from '../stores/text.js';
   import { serializeCountDown } from '../utils/textJson.js';
+  import DropDown from './DropDown.svelte';
 
   export let isDropDownVisible = false;
 
@@ -22,7 +23,7 @@
 
 </script>
 
-<div id='drop-down' class='menu' class:hide={!isDropDownVisible}>
+<div id='header' class='menu' class:hide={!isDropDownVisible}>
   <div id='score'>
     <span id='min-read'>{ $totalPoints }</span>
     <span id='pies'>
@@ -36,20 +37,22 @@
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div id='info' on:click={ toggleInfoMenu }>?</div>
 </div>
-<div id='pi' class='modal menu' class:hide={!isPiMenuVisible}>
-  {#each piCountDown as piSlice, i}
-    {#if $currentVerseIndex === i}
-      <div class='current slice' bind:this={piSliceEl}>{ piSlice }</div>
-    {:else}
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <div class='slice' on:click={ () => { wordIndices.goToVerseIndex(i) } }>
-        { piSlice }
-      </div>
-    {/if}
-  {/each}
-</div>
-<div id='info' class='modal menu' class:hide={!isInfoMenuVisible}>
-  <div>
+<DropDown isHidden={ !isPiMenuVisible }>
+  <div id='pi' class='dd-content'>
+    {#each piCountDown as piSlice, i}
+      {#if $currentVerseIndex === i}
+        <div class='current slice' bind:this={piSliceEl}>{ piSlice }</div>
+      {:else}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class='slice' on:click={ () => { wordIndices.goToVerseIndex(i) } }>
+          { piSlice }
+        </div>
+      {/if}
+    {/each}
+  </div>
+</DropDown>
+<DropDown isHidden={ !isInfoMenuVisible }>
+  <div id='info' class='dd-content'>
     <h1>Instructions</h1>
     <p>Read the poem. Eat the pies. Have a nice time.</p>
     <h1>Score</h1>
@@ -62,16 +65,10 @@
       <li>Falling Down; Tom Waits</li>
     </ul>
   </div>
-</div>
+</DropDown>
 
 <style>
-  .menu {
-    position: absolute;
-    background-color: black;
-    z-index: 2;
-  }
-
-  #drop-down.menu {
+  #header.menu {
     top: 0;
     left: 0;
     height: 25px;
@@ -82,39 +79,42 @@
     align-items: center;
     font-family: Arial, Helvetica, sans-serif;
     transition: top 1s ease-in-out;
+    position: absolute;
+    background-color: black;
+    z-index: 2;
   }
 
-  #drop-down.menu.hide {
+  #header.menu.hide {
     top: -27px;
   }
 
-  #drop-down.menu #score {
+  #header.menu #score {
     position: absolute;
     left: 10px;
   }
 
-  #drop-down.menu #score #min-read {
+  #header.menu #score #min-read {
     color: white;    
     margin-right: 5px;
     font-size: 18px;
     font-family: "love ya like a sister";
   }
 
-  #drop-down.menu #pies {
+  #header.menu #score #pies {
     font-size: 22px;
     position: relative;
     bottom: 2px;
     font-family: monospace;
   }
 
-  #drop-down.menu #verse-number {
+  #header.menu #verse-number {
     font-size: 18px;
     color: gold;
     font-weight: bold;
     font-family: monospace;
   }
   
-  #drop-down.menu #info {
+  #header.menu #info {
     font-family: Courier, monospace;
     text-align: center;
     background-color: white;
@@ -135,34 +135,23 @@
     opacity: 0.3;
   }
 
-  .modal.menu {
-    top: 27px;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    color: white;
-    transition: top 500ms ease;
-  }
 
-  .modal.menu.hide {
-    top: 100%;
-  }
-
-  #pi.modal.menu {
+  #pi.dd-content {
+    height: inherit;
     font-family: "Wellfleet";
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow: scroll;
     font-size: 20vh;
-  }
+  } 
 
-  #pi.menu .current.slice {
+  #pi.dd-content .current.slice {
     color: gold;
   }
 
-  #info.modal.menu {
+  #info.dd-content {
     font-family: 'Courier New', Courier, monospace;
     padding: 0 10px;
-  }
+  } 
 </style>
