@@ -33,7 +33,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 8vh;
+    font-size: 14vh;
   } 
   
   .pi-slice {
