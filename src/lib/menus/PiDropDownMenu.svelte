@@ -11,15 +11,15 @@
 </script>
 
 <DropDownMenu isHidden={ !isVisible }>
-  <div id='slices'>
+  <div id='countdown'>
     {#each piCountDown as piSlice, i}
       {#if $currentVerseIndex === i}
-        <div id='current' bind:this={piSliceEl}>
+        <div id='current' class='pi-slice' bind:this={ piSliceEl }>
           { piSlice }
         </div>
       {:else}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div on:click={ () => { wordIndices.goToVerseIndex(i) } }>
+        <div class='pi-slice' on:click={ () => { wordIndices.goToVerseIndex(i) } }>
           { piSlice }
         </div>
       {/if}
@@ -28,17 +28,32 @@
 </DropDownMenu>
 
 <style>
-  #slices {
-    height: inherit;
+  #countdown {
     font-family: "Wellfleet";
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow: scroll;
-    font-size: 20vh;
+    font-size: 8vh;
   } 
+  
+  .pi-slice {
+    width: 1lh;
+    height: 1lh;
+    margin: 20px;
+    padding: 20px;
+    text-align: center;
+    color: black;
+    background-color: grey;
+    border-radius: 50%;
+    border: dimgrey 5px solid;
+  }
 
-  #slices #current {
-    color: gold;
+  .pi-slice:active {
+    background-color: rgba(255,215,0, 0.25);
+    border: grey 1px solid;
+  }
+
+  .pi-slice#current {
+    background-color: gold;
   }
 </style>
