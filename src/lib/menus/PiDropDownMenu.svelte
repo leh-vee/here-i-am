@@ -49,7 +49,7 @@
   }
 
   .pi-slice:active {
-    background-color: gold;
+    color: gold;
     border: black 1px solid;
   }
 
