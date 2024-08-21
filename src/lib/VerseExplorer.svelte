@@ -18,6 +18,13 @@
   
   const dispatch = createEventDispatcher();
 
+  import { onDestroy } from 'svelte';
+
+	onDestroy(() => {
+    console.log('destroy verse explorer component');
+    isReaderEngaged.set(false);
+	});
+
   export let isReading = false;
   let isFinished = false;
   let isFetchingBlocks = false;
