@@ -7,7 +7,11 @@
   const piCountDown = serializeCountDown();
   let piSliceEl;
 
-  $: if (isVisible) piSliceEl.scrollIntoView({ behavior: "smooth", block: "start" });
+  $: if (isVisible) {
+    setTimeout(()=> {
+      piSliceEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 500)
+  }
 </script>
 
 <DropDownMenu isHidden={ !isVisible }>
