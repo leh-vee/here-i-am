@@ -36,19 +36,18 @@
 
 <style>
   #header.menu {
+    position: absolute;
     top: 0;
     left: 0;
     height: 25px;
     width: 100%;
-    border-bottom: 2px dimgrey solid;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: Arial, Helvetica, sans-serif;
-    transition: top 1s ease-in-out;
-    position: absolute;
     background-color: black;
+    border-bottom: 2px dimgrey solid;
     z-index: 2;
+    transition: top 1s ease-in-out;
   }
 
   #header.menu.hide {
