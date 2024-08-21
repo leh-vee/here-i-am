@@ -12,6 +12,12 @@
       piSliceEl.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 500)
   }
+
+  function goToVerse(index) {
+    setTimeout(() => {
+      wordIndices.goToVerseIndex(index);
+    }, 500);
+  }
 </script>
 
 <DropDownMenu isHidden={ !isVisible }>
@@ -23,7 +29,7 @@
         </div>
       {:else}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class='pi-slice' on:click={ () => { wordIndices.goToVerseIndex(i) } }>
+        <div class='pi-slice' on:click={ () => { goToVerse(i) } }>
           { piSlice }
         </div>
       {/if}
