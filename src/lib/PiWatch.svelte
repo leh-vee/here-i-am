@@ -49,8 +49,8 @@
   }
 
   function getMillisecsText(elapsedText) {
-    const truncateIndex = 3 - $nPiesScored;
-    return elapsedText.slice(-3, -truncateIndex);
+    let text = $nPiesScored === 3 ? elapsedText.slice(-3) : elapsedText.slice(-3, $nPiesScored - 3);
+    return text;
   }
 
   let interval;
