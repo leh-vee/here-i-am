@@ -59,8 +59,7 @@
   }
 
   .pi-slice:active {
-    color: gold;
-    border: black 1px solid;
+    border: 0px;
   }
 
   .pi-slice#current {
