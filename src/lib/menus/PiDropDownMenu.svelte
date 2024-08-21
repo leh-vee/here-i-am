@@ -56,10 +56,11 @@
     background-color: grey;
     border-radius: 50%;
     border: dimgrey 5px solid;
+    transition: border-color 300ms ease;
   }
 
   .pi-slice:active {
-    border: 0px;
+    border-color: black;
   }
 
   .pi-slice#current {
