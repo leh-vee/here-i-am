@@ -21,7 +21,7 @@
     background-color: black;
     z-index: 2;
     transition: bottom 500ms ease;
-    overflow: scroll;
+    overflow-y: scroll;
   }
   
   .drop-down.menu.hide {
