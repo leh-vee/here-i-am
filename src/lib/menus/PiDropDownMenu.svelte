@@ -33,11 +33,11 @@
 
 <style>
   #countdown {
-    font-family: "Wellfleet";
+    font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 14vh;
+    font-size: 10vh;
   } 
   
   .pi-slice {
