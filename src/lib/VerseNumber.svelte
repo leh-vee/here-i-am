@@ -29,6 +29,6 @@
   #verse-number {
     color: black;
     font-size: calc( var(--fontSize) * 1px );
-    font-family: "Wellfleet", monospace;
+    font-family: Arial, Helvetica, sans-serif;
   }
 </style>
