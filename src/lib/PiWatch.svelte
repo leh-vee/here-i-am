@@ -16,7 +16,12 @@
   let current = start;
   $: currentTime = current.getTime();
 
-  $: elapsedMillisecs = currentTime - startTime;
+  let mSecsAlreadyElapsedForVerse = 0;
+  if ($millisecsElapsedByVerse[$currentVerseIndex] !== undefined) {
+    mSecsAlreadyElapsedForVerse = $millisecsElapsedByVerse[$currentVerseIndex];
+  };
+
+  $: elapsedMillisecs = (currentTime - startTime) + mSecsAlreadyElapsedForVerse;
   $: isZero = elapsedMillisecs === 0;
 
 	$: minutes = Math.floor(elapsedMillisecs / 1000 / 60);
