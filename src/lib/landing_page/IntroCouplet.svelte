@@ -6,8 +6,6 @@
   
   const dispatch = createEventDispatcher();
 
-  export let isFullStop = false;
-
   let couplets; 
   let coupletIndex = 0;
   fetchIntroCouplets().then(lines => { 
@@ -20,7 +18,6 @@
   let progressiveLines = { a: "", b: "" };
 
   $: if (visible) revealNextCouplet();
-  $: if (isFullStop) progressiveLines.b += '.';
 
   async function revealNextCouplet() {
     progressiveLines = { a: "", b: "" };
@@ -28,10 +25,9 @@
     couplet =  structuredClone(couplets[coupletIndex]);
     await buildLine();
     await buildLine('b');
-    setTimeout(() => {
-      dispatch('revealed');
-      coupletIndex += 1;
-    }, Math.PI * 1000);
+    progressiveLines.b += '.';
+    coupletIndex += 1;
+    dispatch('revealed');
   }
 
   function buildEllipsis() {

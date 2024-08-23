@@ -205,8 +205,7 @@
       {#if isHeads}
         <Title />
       {/if}
-      <IntroCouplet visible={ isTails } isFullStop={ isClosedCoin }
-        on:revealed={ postIntroReveal } />
+      <IntroCouplet visible={ isTails } on:revealed={ postIntroReveal } />
       <Text config={{
         x: 0,
         y: 0,
