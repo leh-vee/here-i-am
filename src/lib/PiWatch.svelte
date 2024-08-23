@@ -7,8 +7,8 @@
   export let isStart = false;
   export let isStop = false;
 
-  const watchFontSize = Math.round(window.innerWidth / 30);
-  const isPiSecondsFontSize = Math.round(window.innerWidth / 8);
+  const watchFontSize = Math.round(window.innerHeight / 20);
+  const pieEmojiFontSize = Math.round(window.innerHeight / 18);
 
   let start = new Date();
   $: startTime = start.getTime();
@@ -47,7 +47,7 @@
   }
   
   $: isPieTrick = $nPiesScored === 3;
-  $: piEmojiVisible = isPiSeconds && !isPieTrick; 
+  $: isPiEmojiVisible = isPiSeconds && !isPieTrick; 
   
   function zeroPadded(number) {
     return number >= 10 ? number.toString() : `0${number}`;
@@ -85,10 +85,9 @@
 </script>
 
 <Text config={{
-  y: Math.round(window.innerHeight / 6),
   text: formattedElapsed,
   width: window.innerWidth,
-  height: window.innerHeight / 2,
+  height: window.innerHeight / 3,
   align: 'center',
   verticalAlign: 'middle',
   fontSize: watchFontSize,
@@ -100,16 +99,16 @@
 
 <Text config={{
   offsetX: window.innerWidth / 2,
-  offsetY: window.innerHeight / 4,
+  offsetY: window.innerHeight / 3,
   x: window.innerWidth / 2,
-  y: window.innerHeight / 4,
+  y: window.innerHeight / 3,
   text: "🥧",
   width: window.innerWidth,
-  height: window.innerHeight / 2,
+  height: window.innerHeight / 1.5,
   align: 'center',
   verticalAlign: 'middle',
-  fontSize: isPiSecondsFontSize,
+  fontSize: pieEmojiFontSize,
   fillEnabled: true,
-  visible: piEmojiVisible,
+  visible: isPiEmojiVisible,
 }} bind:handle={pieEl} />
 

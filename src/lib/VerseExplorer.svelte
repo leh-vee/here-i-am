@@ -114,8 +114,8 @@
             bind:this={ verseMapCom } 
           />
           <Notepad visible={ $isReaderEngaged } />
+          <PiWatch isStart={ $isReaderEngaged } isStop={ isFinished } />  
         </Group>
-        <PiWatch isStart={ $isReaderEngaged } isStop={ isFinished } />  
         <Punctuation on:punctuated={ postPunctuation } />
       {/if}
     </Layer>
