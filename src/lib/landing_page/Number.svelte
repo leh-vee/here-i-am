@@ -1,23 +1,11 @@
 <script>
   export let number;
   export let isVisible = false;
-
-  let isFontLoaded = false;
-
-  const fontSize = Math.round(window.innerWidth / 2);
-  const fontFamily = "Wellfleet";
-  document.fonts.ready.then((fontFaceSet) => {
-    const fontFaces = [...fontFaceSet];
-    const wellFleetFontFaces = fontFaces.filter(f => f.family === fontFamily);
-    Promise.all(wellFleetFontFaces.map(ff => ff.load())).then(() => { 
-      isFontLoaded = true;
-    });
-  });
 </script>
 
-{#if isVisible && isFontLoaded}
+{#if isVisible}
 <div id='number-wrapper'>
-  <span id='verse-number' style='--fontSize:{fontSize};'>
+  <span id='verse-number'>
     { number }
   </span>
 </div>
@@ -38,7 +26,7 @@
 
 #verse-number {
   color: white;
-  font-size: calc( var(--fontSize) * 1px );
-  font-family: "Wellfleet";
+  font-size: 25vh;
+  font-family: Helvetica, sans-serif;
 }
 </style>
