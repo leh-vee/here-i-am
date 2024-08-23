@@ -57,10 +57,12 @@
     border-radius: 50%;
     border: dimgrey 5px solid;
     transition: border-color 300ms ease;
+    transition: color 300ms ease;
   }
 
   .pi-slice:active {
     border-color: black;
+    color: gold;
   }
 
   .pi-slice#current {
