@@ -1,8 +1,9 @@
 <script>
   import { Circle } from 'svelte-konva';
-  import { currentWordId, isLineBreak, isCaesura } from '../stores/text.js';
+  import { currentWordId, isLineBreak, isCaesura, 
+    wordIndices } from '../stores/text.js';
   import { isReaderEngaged } from '../stores/base';
-
+  
   export let x;
   export let y;
   export let wordId;
@@ -43,6 +44,15 @@
     }
   }
 
+  function goToWord() {
+    if (!isCurrentWord) {
+      const wordIdArr = wordId.split('-');
+      const line = wordIdArr[1];
+      const wordIndex = parseInt(wordIdArr[2]);
+      wordIndices.goToWord(line, wordIndex);
+    }
+  }
+
 </script>
 
 <Circle config={{ 
@@ -50,4 +60,6 @@
   radius: 3,
   visible: isVisible, 
   fill: 'dimgrey'
-}} bind:handle={markerEl} />
+  }} bind:handle={markerEl} 
+  on:pointerclick={ goToWord }
+/>
