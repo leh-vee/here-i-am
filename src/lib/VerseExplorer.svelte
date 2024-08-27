@@ -89,7 +89,7 @@
 
   function click() {
     if ($isReaderEngaged && !isFinished) {
-      nextWord();
+      // nextWord();
     } else {
       verseMapCom.click();
     }
