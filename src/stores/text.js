@@ -40,6 +40,13 @@ function createWordIndicesStore() {
         wordIndex: 0 
       }
     }),
+    goToWord: (line, wordIndex) => update(({verseIndex}) => {
+      return {
+        verseIndex,
+        line,
+        wordIndex 
+      }
+    }),
     nextLine: () => update(({verseIndex, line, wordIndex}) => {
       let nextLine = line;
       let nextWordIndex = wordIndex;
