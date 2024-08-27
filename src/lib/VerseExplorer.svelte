@@ -1,5 +1,5 @@
 <script>
-  import { Stage, Layer, Group } from 'svelte-konva';
+  import { Stage, Layer } from 'svelte-konva';
   import Punctuation from './Punctuation.svelte';
   import Notepad from './Notepad.svelte';
   import VerseMap from './VerseMap.svelte';
@@ -14,29 +14,25 @@
     currentPiSlice, lastPiSlice, likePiSlices } from '../stores/text';
   import { fetchBlocksWithinRadius } from '../api/client.js';
   import distance from "@turf/distance";
+  import { onDestroy } from 'svelte';
   import { createEventDispatcher } from 'svelte';
   
   const dispatch = createEventDispatcher();
 
-  import { onDestroy } from 'svelte';
-
 	onDestroy(() => {
-    console.log('destroy verse explorer component');
     isReaderEngaged.set(false);
 	});
 
   export let isReading = false;
   let isFinished = false;
-  let isFetchingBlocks = false;
-  let fadeGroupEl;
+  let layerEl;
   let verseMapCom;
 
+  $: isFetchingBlocks = $blocksForCurrentChannel === undefined;
+  $: if (isFetchingBlocks) fetchBlocksForProjection();
+
+  $: showExplorer = isReading && !isFetchingBlocks;
   $: showMenu = $isVerseEllipsisLit && !isFinished;
-  
-  $: if ($blocksForCurrentChannel === undefined && !isFetchingBlocks) {
-    isFetchingBlocks = true;
-    fetchBlocksForProjection();
-  } 
 
   function fetchBlocksForProjection() {
     const pCentre = $currentChannelProjection.center();
@@ -75,7 +71,7 @@
     } else {
       isFinished = true;
     }
-    fadeGroupEl.to({
+    layerEl.to({
       duration: Math.PI,
       opacity: 0,
       onFinish: () => {
@@ -102,22 +98,18 @@
 
 <div id='verse-explorer'>
   <HeaderMenu isDropDownVisible={ showMenu } />
-  <Stage config={{ width: window.innerWidth, height: window.innerHeight, 
-    visible: isReading }} on:pointerclick={ click } >
-    <Layer>
-      {#if $blocksForCurrentChannel}
-        <Group bind:handle={ fadeGroupEl }>
-          <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
-            projection={ $currentChannelProjection } />
-          <VerseMap 
-            revealEllipsis={ isReading }
-            bind:this={ verseMapCom } 
-          />
-          <Notepad visible={ $isReaderEngaged } />
-          <PiWatch isStart={ $isReaderEngaged } isStop={ isFinished } />  
-        </Group>
-        <Punctuation on:punctuated={ postPunctuation } />
-      {/if}
+  <Stage config={{ width: window.innerWidth, height: window.innerHeight }} 
+    on:pointerclick={ click } >
+    <Layer config={{ visible: showExplorer }} bind:handle={ layerEl }>
+      <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
+        projection={ $currentChannelProjection } />
+      <Notepad visible={ $isReaderEngaged } />
+      <Punctuation on:punctuated={ postPunctuation } />
+      <PiWatch isStart={ $isReaderEngaged } isStop={ isFinished } /> 
+      <VerseMap 
+        revealEllipsis={ isReading }
+        bind:this={ verseMapCom } 
+      /> 
     </Layer>
   </Stage>
 </div>
