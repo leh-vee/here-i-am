@@ -48,7 +48,7 @@
   fontSize: Math.round(window.innerWidth / 8),
   fontFamily: "Courgette",
   fillEnabled: true,
-  fill: 'dimgrey',
+  fill: 'silver',
   strokeWidth: 0,
   visible
 }} bind:handle={ dotEl } />
