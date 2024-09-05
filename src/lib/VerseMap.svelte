@@ -34,7 +34,7 @@
   } 
 
   const xMarginPx = Math.round(window.innerWidth * 0.1);
-  const yOffsetPx = Math.round(window.innerHeight * 0.02);
+  const yOffsetPx = Math.round(window.innerHeight * 0.03);
   $: nSpacesLineA = $currentVerse['a'].length - 1;
   $: nSpacesLineB = $currentVerse['b'].length - 1;
   $: xLineDeltaPx = $currentChannelCoordsPx[1][0] - $currentChannelCoordsPx[0][0] - xMarginPx * 2;

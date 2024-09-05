@@ -9,7 +9,10 @@
   export let wordId;
   export let isVisible = false;
 
-  let markerEl; 
+  const markerRadius = 3;
+  const expandMarkerRadius = 5;
+  let markerEl;
+  let hitMarkerEl;
   $: isCurrentWord = wordId === $currentWordId;
   
   $: duration = $isLineBreak ? Math.PI / 2 : Math.PI / 10;
@@ -20,25 +23,25 @@
     contractMarker();
   }
 
-  $: if ($isCaesura && markerEl.radius() === 5) {
+  $: if ($isCaesura && markerEl.radius() === expandMarkerRadius) {
     contractMarker();
   }
 
   function expandMarker() {
-    if (markerEl.radius() < 5) {
+    if (markerEl.radius() < expandMarkerRadius) {
       markerEl.to({
         duration,
-        radius: 5,
+        radius: expandMarkerRadius,
         fill: 'gold'
       });
     }
   }
 
   function contractMarker() {
-    if (markerEl.radius() > 3) {
+    if (markerEl.radius() > markerRadius) {
       markerEl.to({
         duration,
-        radius: 3,
+        radius: markerRadius,
         fill: 'dimgrey'
       });
     }
@@ -57,9 +60,18 @@
 
 <Circle config={{ 
   x, y, 
-  radius: 3,
+  radius: markerRadius,
   visible: isVisible, 
   fill: 'dimgrey'
   }} bind:handle={markerEl} 
+/>
+
+<Circle config={{ 
+  x, y, 
+  radius: expandMarkerRadius * 2,
+  visible: isVisible, 
+  fill: 'white',
+  opacity: 0
+  }} bind:handle={hitMarkerEl} 
   on:pointerclick={ goToWord }
 />
