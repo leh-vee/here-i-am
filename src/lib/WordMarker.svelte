@@ -10,6 +10,7 @@
   export let isVisible = false;
 
   const markerRadius = 3;
+  const markerColour = 'silver';
   const expandMarkerRadius = 5;
   let markerEl;
   let hitMarkerEl;
@@ -42,7 +43,7 @@
       markerEl.to({
         duration,
         radius: markerRadius,
-        fill: 'dimgrey'
+        fill: markerColour
       });
     }
   }
@@ -62,7 +63,7 @@
   x, y, 
   radius: markerRadius,
   visible: isVisible, 
-  fill: 'lightgray'
+  fill: markerColour,
   }} bind:handle={markerEl} 
 />
 
