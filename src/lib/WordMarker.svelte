@@ -62,7 +62,7 @@
   x, y, 
   radius: markerRadius,
   visible: isVisible, 
-  fill: 'dimgrey'
+  fill: 'lightgray'
   }} bind:handle={markerEl} 
 />
 
