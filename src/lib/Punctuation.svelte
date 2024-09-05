@@ -44,5 +44,5 @@
   fill: 'black',
   opacity: 0,
   strokeWidth: 1,
-  stroke: 'grey'
+  stroke: 'silver'
 }} bind:handle={punctuationEl} />
