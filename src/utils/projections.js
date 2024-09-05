@@ -26,7 +26,7 @@ function projectionForChannel(channel, screenPx) {
   
   const { width, height } = screenPx;
   projection.center(geoPath().centroid(channel));
-  projection.translate([width / 2, Math.round(height * 0.6666)]);
+  projection.translate([width / 2, Math.round(height * 0.75)]);
   scaleProjection(projection, boundsFrameRatio);
 
   return projection;
