@@ -16,6 +16,7 @@
   import distance from "@turf/distance";
   import { onDestroy } from 'svelte';
   import { createEventDispatcher } from 'svelte';
+  import { swipe } from 'svelte-gestures';
   
   const dispatch = createEventDispatcher();
 
@@ -59,6 +60,24 @@
       wordIndices.nextWord();
     }
   }
+
+  function click() {
+    if ($isReaderEngaged && !isFinished) {
+      // nextWord();
+    } else {
+      verseMapCom.click();
+    }
+  }
+
+  function swiped(event) {
+    if (!$isReaderEngaged && isFinished) return null;
+    const direction = event.detail.direction;
+    if (direction === 'left') {
+      nextWord();
+    } else {
+      // previousWord();
+    }
+  }
   
   function postPunctuation() {
     isCaesura.set(false);
@@ -86,17 +105,10 @@
       }
     });
   }
-
-  function click() {
-    if ($isReaderEngaged && !isFinished) {
-      // nextWord();
-    } else {
-      verseMapCom.click();
-    }
-  }
 </script>
 
-<div id='verse-explorer'>
+<div id='verse-explorer' use:swipe={{ timeframe: 300, minSwipeDistance: 60 }} 
+  on:swipe={(e) => { swiped(e) }}>
   <HeaderMenu isDropDownVisible={ showMenu } />
   <Stage config={{ width: window.innerWidth, height: window.innerHeight }} 
     on:pointerclick={ click } >
