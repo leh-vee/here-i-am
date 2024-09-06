@@ -39,7 +39,7 @@
   y: coordsPx[1],
   radius: 5,
   fill: 'black',
-  stroke: 'dimgrey',
+  stroke: 'silver',
   strokeWidth: 2
 }} />
 <Circle config={{
