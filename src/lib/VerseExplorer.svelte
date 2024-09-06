@@ -50,7 +50,7 @@
   }
 
   function nextWord() {
-    if ($isInBetweenWords || isFinished) return null;
+    if (!$isReaderEngaged || $isInBetweenWords || isFinished) return null;
     if ($isPunctuationNext) {
       isCaesura.set(true);
     } else if ($isLastVerseWord) {
@@ -65,7 +65,6 @@
   }
 
   function swiped(event) {
-    if (!$isReaderEngaged && isFinished) return null;
     const direction = event.detail.direction;
     if (direction === 'left') {
       nextWord();
