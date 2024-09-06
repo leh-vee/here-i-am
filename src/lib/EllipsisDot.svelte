@@ -2,14 +2,28 @@
   import { Text } from "svelte-konva";
   import Konva from 'konva';
   import { isReaderEngaged } from '../stores/base';
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
   
   export let dotIndex = 0;
   export let show = false;
   export let light = false;
-  export let isFade = false;
+  export let isVanishing = false;
 
+  const fontSize = Math.round(window.innerHeight / 10);
+ 
   let text = "   ";
   let dotEl;
+
+  $: if (dotEl !== undefined && dotIndex === 2) {
+    const ellipsisRectParams = {
+      width: dotEl.getTextWidth(),
+      height: dotEl.measureSize().height / 2
+    }
+    dispatch('ellipsis-rect', ellipsisRectParams)
+  }
+  
   $: visible = show && !$isReaderEngaged;
 
   $: {
@@ -25,7 +39,9 @@
     });
   }
 
-  $: if (isFade && dotEl !== undefined) {
+  $: if (isVanishing && dotEl !== undefined) vanishAnime();
+
+  function vanishAnime() {
     dotEl.to({
       duration: 1,
       fill: 'black',
@@ -45,10 +61,11 @@
   height: window.innerHeight,
   align: 'center',
   verticalAlign: 'middle',
-  fontSize: Math.round(window.innerWidth / 8),
+  fontSize,
   fontFamily: "Courgette",
   fillEnabled: true,
   fill: 'silver',
   strokeWidth: 0,
   visible
-}} bind:handle={ dotEl } />
+  }} bind:handle={ dotEl } 
+/>

@@ -27,7 +27,6 @@
   export let isReading = false;
   let isFinished = false;
   let layerEl;
-  let verseMapCom;
 
   $: isFetchingBlocks = $blocksForCurrentChannel === undefined;
   $: if (isFetchingBlocks) fetchBlocksForProjection();
@@ -60,13 +59,9 @@
       wordIndices.nextWord();
     }
   }
-
+  
   function click() {
-    if ($isReaderEngaged && !isFinished) {
-      // nextWord();
-    } else {
-      verseMapCom.click();
-    }
+    // implementation to come
   }
 
   function swiped(event) {
@@ -118,10 +113,7 @@
       <Notepad visible={ $isReaderEngaged } />
       <Punctuation on:punctuated={ postPunctuation } />
       <PiWatch isStart={ $isReaderEngaged } isStop={ isFinished } /> 
-      <VerseMap 
-        revealEllipsis={ isReading }
-        bind:this={ verseMapCom } 
-      /> 
+      <VerseMap revealEllipsis={ isReading } /> 
     </Layer>
   </Stage>
 </div>

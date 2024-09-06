@@ -1,16 +1,29 @@
 <script>
   import EllipsisDot from "./EllipsisDot.svelte";
+  import { Rect } from "svelte-konva";
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
 
   export let reveal = false;
   export let light = false;
-  export let fadeAway = false;
+  let vanishAway = false;
 
   const piFractionSecs = (Math.PI - 3) * 1000;
   const showDots = [false, false, false];
   const lightDots = [false, false, false];
+
+  const hitAreaX = window.innerWidth / 2;
+  let hitAreaY = (window.innerHeight / 2);
+  let hitAreaWidth = 0;
+  let hitAreaHeight = 0;
+  
+  function setHitBoxParams(e) {
+    const params = e.detail;
+    hitAreaWidth = params.width;
+    hitAreaHeight = params.height;
+    hitAreaY += params.height / 2.5;
+  }
 
   $: if (reveal) setTimeout(slowReveal, piFractionSecs);
 
@@ -43,13 +56,29 @@
     }
     lightDot(0);
   }
+
+  function click() {
+    vanishAway = true;
+  }
+
 </script>
 
 {#each showDots as showDot, i (i)}
   <EllipsisDot 
     dotIndex={i} 
     show={showDot}
-    light={ lightDots[i] } 
-    isFade={ fadeAway }
+    light={ lightDots[i] }
+    isVanishing={ vanishAway }
+    on:ellipsis-rect={ setHitBoxParams }
   />
 {/each}
+<Rect config={{ 
+  x: hitAreaX, 
+  y: hitAreaY,
+  offsetX: hitAreaWidth / 2,
+  offsetY: hitAreaHeight / 2, 
+  width: hitAreaWidth,
+  height: hitAreaHeight,
+  fill: 'white',
+  opacity: 0
+}} on:pointerclick={ click } />
