@@ -53,7 +53,7 @@
   }
 
   function nextWord() {
-    if (!verseState || $isInBetweenWords || isFinished) return null;
+    if (!$isReaderEngaged || $isInBetweenWords || isFinished) return null;
     if ($isPunctuationNext) {
       isCaesura.set(true);
     } else if ($isLastVerseWord) {
@@ -124,9 +124,9 @@
         light={ isVerseMapReaveled }
         on:lit={ () => { verseState.set('ellipsisLit') } }
       />
+      <Notepad visible={ $isReaderEngaged } />
       <VerseMap reveal={ isEllipsisReaveled }
         on:revealed={ () => { verseState.set('verseMapReaveled') } } />
-      <Notepad visible={ $isReaderEngaged } />
     </Layer>
   </Stage>
 </div>
