@@ -68,6 +68,10 @@
   }
 
   function swiped(event) {
+    const yPointerPosition =  layerEl.getRelativePointerPosition().y;
+    const yLowerBound = window.innerHeight * 0.4;
+    const yUpperBound = window.innerHeight * 0.6;
+    if (yPointerPosition < yLowerBound || yPointerPosition > yUpperBound) return null;
     const direction = event.detail.direction;
     if (direction === 'left') {
       nextWord();
