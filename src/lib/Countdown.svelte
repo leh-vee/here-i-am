@@ -4,7 +4,6 @@
   import CountdownLeader from './CountdownLeader.svelte';
   import Pathways from './Pathways.svelte';
   import VerseExplorer from './VerseExplorer.svelte';
-  import { isVerseEllipsisLit } from '../stores/base';
 
   
   let aPrioriLayerEl;
@@ -14,7 +13,6 @@
 
   $: if (aPrioriLayerEl !== undefined) {
     console.log('countdown cycle for verse at index', $currentVerseIndex);
-    isVerseEllipsisLit.set(false);
     isRemembering = false;
     aPrioriLayerEl.opacity(1);
     setTimeout(() => {

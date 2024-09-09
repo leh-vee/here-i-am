@@ -6,7 +6,8 @@
   import StreetMap from './StreetMap.svelte';
   import PiWatch from './PiWatch.svelte';
   import HeaderMenu from './HeaderMenu.svelte';
-  import { isReaderEngaged, isVerseEllipsisLit } from '../stores/base';
+  import Ellipsis from './Ellipsis.svelte';
+  import { verseState, isReaderEngaged } from '../stores/base';
   import { channelBlocks, blocksForCurrentChannel, 
     currentChannelProjection } from '../stores/treeOfLife';
   import { wordIndices, isPunctuationNext, isGroundZero,
@@ -20,19 +21,21 @@
   
   const dispatch = createEventDispatcher();
 
-	onDestroy(() => {
-    isReaderEngaged.set(false);
-	});
-
   export let isReading = false;
-  let isFinished = false;
+  
+  $: isEllipsisReaveled = $verseState === 'ellipsisRevealed';
+  $: isVerseMapReaveled = $verseState === 'verseMapReaveled';
+  $: isEllipsisLit = $verseState === 'ellipsisLit';
+  $: isFinished = $verseState === 'finished';
+	onDestroy(() => { verseState.set(''); });
+  
   let layerEl;
 
   $: isFetchingBlocks = $blocksForCurrentChannel === undefined;
   $: if (isFetchingBlocks) fetchBlocksForProjection();
 
   $: showExplorer = isReading && !isFetchingBlocks;
-  $: showMenu = $isVerseEllipsisLit && !isFinished;
+  $: showMenu = isEllipsisLit && !isFinished;
 
   function fetchBlocksForProjection() {
     const pCentre = $currentChannelProjection.center();
@@ -50,7 +53,7 @@
   }
 
   function nextWord() {
-    if (!$isReaderEngaged || $isInBetweenWords || isFinished) return null;
+    if (!verseState || $isInBetweenWords || isFinished) return null;
     if ($isPunctuationNext) {
       isCaesura.set(true);
     } else if ($isLastVerseWord) {
@@ -82,14 +85,14 @@
     if (isFinished) {
       return null;
     } else {
-      isFinished = true;
+      verseState.set('finished');
     }
     layerEl.to({
       duration: Math.PI,
       opacity: 0,
       onFinish: () => {
         setTimeout(() => {
-          isReaderEngaged.set(false);
+          verseState.set('');
           if ($isGroundZero) {
             dispatch('groundZero');
           } else {
@@ -109,10 +112,17 @@
     <Layer config={{ visible: showExplorer }} bind:handle={ layerEl }>
       <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
         projection={ $currentChannelProjection } />
-      <Notepad visible={ $isReaderEngaged } />
       <Punctuation on:punctuated={ postPunctuation } />
-      <PiWatch isStart={ $isReaderEngaged } isStop={ isFinished } /> 
-      <VerseMap revealEllipsis={ isReading } /> 
+      <PiWatch isStart={ $isReaderEngaged } isStop={ isFinished } />  
+      <Ellipsis
+        reveal={ isReading }
+        on:revealed={ () => { verseState.set('ellipsisRevealed') } }
+        light={ isVerseMapReaveled }
+        on:lit={ () => { verseState.set('ellipsisLit') } }
+      />
+      <VerseMap reveal={ isEllipsisReaveled }
+        on:revealed={ () => { verseState.set('verseMapReaveled') } } />
+      <Notepad visible={ $isReaderEngaged } />
     </Layer>
   </Stage>
 </div>

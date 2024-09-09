@@ -2,20 +2,22 @@
   import { Group } from 'svelte-konva';
   import SefirahMarker from './SefirahMarker.svelte';
   import WordMarker from './WordMarker.svelte';
-  import Ellipsis from './Ellipsis.svelte';
   import { currentChannelCoordsPx, currentChannelToSefirahCoordsPx,
     currentChannelFromSefirahCoordsPx } from '../stores/treeOfLife.js';
   import { currentVerse, likePiSlices,
     currentVerseIndex } from '../stores/text.js';
-  import { isReaderEngaged, isVerseEllipsisLit } from '../stores/base';
+  import { createEventDispatcher } from 'svelte';
 
-  export let revealEllipsis = false;
-  let triggerVerseRun = false;
-  let triggerRadiate = false;
+  const dispatch = createEventDispatcher();
+
+  export let reveal = false;
+  let isRevealed = false;;
+
+  $: if (isRevealed) dispatch('revealed');
 
   const nMarkersVisible = { a: 0, b: 0 }
 
-  $: if (triggerVerseRun) incrementVisibleMarkers();
+  $: if (reveal) incrementVisibleMarkers();
 
   function incrementVisibleMarkers() {
     const plusOne = (line = 'a') => {
@@ -26,7 +28,7 @@
       } else if (line === 'a') {
         setTimeout(() => { plusOne('b') }, duration);
       } else {
-        triggerRadiate = true;
+        isRevealed = true;
       }
     }
     plusOne();
@@ -55,7 +57,7 @@
 </script>
 
 <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } 
-    isLit={ triggerRadiate } />
+    isLit={ isRevealed } />
 {#if !$likePiSlices}
   <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
     isFromSefirah={ false } isLit={ true } />
@@ -75,9 +77,3 @@
       isVisible={ i < nMarkersVisible.b } />
   {/each}
 </Group>
-<Ellipsis
-  reveal={ revealEllipsis }
-  on:revealed={ () => { triggerVerseRun = true } }
-  light={ triggerRadiate }
-  on:lit={ () => { isVerseEllipsisLit.set(true) } }
-/>

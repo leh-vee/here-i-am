@@ -1,7 +1,7 @@
 <script>
   import { Text } from "svelte-konva";
   import Konva from 'konva';
-  import { isReaderEngaged } from '../stores/base';
+  import { verseState, isReaderEngaged } from '../stores/base';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
@@ -23,7 +23,7 @@
     }
     dispatch('ellipsis-rect', ellipsisRectParams)
   }
-  
+
   $: visible = show && !$isReaderEngaged;
 
   $: {
@@ -48,7 +48,7 @@
       fontSize: 0,
       easing: Konva.Easings.EaseOut,
       onFinish: () => { 
-        if (dotIndex === 0) isReaderEngaged.set(true);
+        if (dotIndex === 0) verseState.set('readerEngaged');
       }
     });
   }
