@@ -55,3 +55,9 @@ export const isExploring = derived(
     return $verseState === 'exploring';
   }
 );
+
+export const isCountingDown = derived(
+  [verseState], ([$verseState]) => {
+    return $verseState === 'counting';
+  }
+);

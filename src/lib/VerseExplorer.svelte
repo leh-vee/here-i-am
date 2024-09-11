@@ -7,7 +7,7 @@
   import PiWatch from './PiWatch.svelte';
   import HeaderMenu from './HeaderMenu.svelte';
   import Ellipsis from './Ellipsis.svelte';
-  import { verseState, isReaderEngaged, isFinished, isExploring } from '../stores/base';
+  import { verseState, isReaderEngaged, isFinished, isCountingDown } from '../stores/base';
   import { channelBlocks, blocksForCurrentChannel, currentChannelProjection } from '../stores/treeOfLife';
   import { wordIndices, isPunctuationNext, isLastVerseWord, isInBetweenWords,
     isCaesura, currentPiSlice, lastPiSlice, likePiSlices, isGroundZero } from '../stores/text';
@@ -20,10 +20,9 @@
 
   $: isFetchingBlocks = $blocksForCurrentChannel === undefined;
   $: if (isFetchingBlocks) fetchBlocksForProjection();  
+  $: showExplorer = !isFetchingBlocks && !$isCountingDown;
   
   let layerEl;
-  let showExplorer = false;
-  $: if ($isExploring && !isFetchingBlocks) showExplorer = true;
   
   function fetchBlocksForProjection() {
     const pCentre = $currentChannelProjection.center();
