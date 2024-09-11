@@ -1,7 +1,7 @@
 <script>
   import { Text } from "svelte-konva";
   import Konva from 'konva';
-  import { verseState, isReaderEngaged } from '../stores/base';
+  import { verseState, isStartSefirah } from '../stores/base';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
@@ -24,7 +24,7 @@
     dispatch('ellipsis-rect', ellipsisRectParams)
   }
 
-  $: visible = show && !$isReaderEngaged;
+  $: visible = show && $isStartSefirah;
 
   $: {
     let ellipsisArray = [" ", " ", " "];
