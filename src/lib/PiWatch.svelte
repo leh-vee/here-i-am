@@ -4,7 +4,7 @@
   import { currentVerseIndex } from '../stores/text.js';
   import { isReaderEngaged, isFinished } from '../stores/base';
 
-  const watchFontSize = Math.round(window.innerHeight / 20);
+  const watchFontSize = Math.round(window.innerWidth / 5);
   const pieEmojiFontSize = Math.round(window.innerHeight / 18);
   let pieEl;
 
