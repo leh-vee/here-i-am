@@ -29,7 +29,8 @@
   $: zeroMsText = "000".slice(0, $nPiesScored); 
   $: ms = isZero ? zeroMsText : getMillisecsText(elapsedMillisecs.toString());
 
-  $: $millisecsElapsedByVerse[$currentVerseIndex] = elapsedMillisecs; 
+  const initialVerseIndex = $currentVerseIndex;
+  $: $millisecsElapsedByVerse[initialVerseIndex] = elapsedMillisecs; 
 
   $: formattedElapsed = $nPiesScored > 0 ? `${mm}:${ss}.${ms}`: `${mm}:${ss}`;
 
