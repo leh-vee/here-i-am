@@ -1,19 +1,17 @@
 <script>
   import EllipsisDot from "./EllipsisDot.svelte";
-  import { verseState, isVerseMapReaveled } from '../stores/base';
+  import { verseState, isVerseMapReaveled, isExploring } from '../stores/base';
   import { Rect } from "svelte-konva";
-
-  export let reveal = false;
-  let vanishAway = false;
 
   const piFractionSecs = (Math.PI - 3) * 1000;
   const showDots = [false, false, false];
-  const lightDots = [false, false, false];
-
+  const lightDots = [false, false, false]; 
   const hitAreaX = window.innerWidth / 2;
   let hitAreaY = (window.innerHeight / 2);
   let hitAreaWidth = 0;
   let hitAreaHeight = 0;
+
+  let vanishAway = false;
   
   function setHitBoxParams(e) {
     const params = e.detail;
@@ -22,7 +20,7 @@
     hitAreaY += params.height / 2.5;
   }
 
-  $: if (reveal) setTimeout(slowReveal, piFractionSecs);
+  $: if ($isExploring) setTimeout(slowReveal, piFractionSecs);
 
   function slowReveal() {
     const nDots = showDots.length;

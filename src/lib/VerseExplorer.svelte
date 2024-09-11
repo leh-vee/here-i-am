@@ -7,28 +7,23 @@
   import PiWatch from './PiWatch.svelte';
   import HeaderMenu from './HeaderMenu.svelte';
   import Ellipsis from './Ellipsis.svelte';
-  import { verseState, isReaderEngaged, isFinished } from '../stores/base';
-  import { channelBlocks, blocksForCurrentChannel, 
-    currentChannelProjection } from '../stores/treeOfLife';
-  import { wordIndices, isPunctuationNext, isGroundZero,
-    isLastVerseWord, isInBetweenWords, isCaesura,
-    currentPiSlice, lastPiSlice, likePiSlices } from '../stores/text';
+  import { verseState, isReaderEngaged, isFinished, isExploring } from '../stores/base';
+  import { channelBlocks, blocksForCurrentChannel, currentChannelProjection } from '../stores/treeOfLife';
+  import { wordIndices, isPunctuationNext, isLastVerseWord, isInBetweenWords,
+    isCaesura, currentPiSlice, lastPiSlice, likePiSlices, isGroundZero } from '../stores/text';
   import { fetchBlocksWithinRadius } from '../api/client.js';
   import distance from "@turf/distance";
-  import { onDestroy } from 'svelte';
   import { swipe } from 'svelte-gestures';
   import { createEventDispatcher } from 'svelte';
-  
+
   const dispatch = createEventDispatcher();
-  export let isReading = false;
-  let layerEl;
 
   $: isFetchingBlocks = $blocksForCurrentChannel === undefined;
-  $: if (isFetchingBlocks) fetchBlocksForProjection();
+  $: if (isFetchingBlocks) fetchBlocksForProjection();  
   
-  $: showExplorer = isReading && !isFetchingBlocks;
-  
-	onDestroy(() => { verseState.set(''); });
+  let layerEl;
+  let showExplorer = false;
+  $: if ($isExploring && !isFetchingBlocks) showExplorer = true;
   
   function fetchBlocksForProjection() {
     const pCentre = $currentChannelProjection.center();
@@ -89,12 +84,11 @@
       opacity: 0,
       onFinish: () => {
         setTimeout(() => {
-          verseState.set('');
           if ($isGroundZero) {
             dispatch('groundZero');
           } else {
             wordIndices.nextVerse();
-          }
+          }  
         }, 3000);
       }
     });
@@ -111,7 +105,7 @@
         projection={ $currentChannelProjection } />
       <Punctuation on:punctuated={ postPunctuation } />
       <PiWatch />  
-      <Ellipsis reveal={ isReading } />
+      <Ellipsis />
       <Notepad />
       <VerseMap />
     </Layer>

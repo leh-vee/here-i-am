@@ -1,6 +1,7 @@
 <script>
   import { Layer } from 'svelte-konva';
   import { currentVerseIndex } from '../stores/text.js';
+  import { verseState } from '../stores/base';
   import CountdownLeader from './CountdownLeader.svelte';
   import Pathways from './Pathways.svelte';
   import VerseExplorer from './VerseExplorer.svelte';
@@ -10,9 +11,10 @@
   let isMurmuring = false;
   let isBlazing = false;
   let isRemembering = false;
-
+  
   $: if (aPrioriLayerEl !== undefined) {
     console.log('countdown cycle for verse at index', $currentVerseIndex);
+    verseState.set('counting'); 
     isRemembering = false;
     aPrioriLayerEl.opacity(1);
     setTimeout(() => {
@@ -26,7 +28,7 @@
   }
 
   function remember() {
-    isRemembering = true;
+    verseState.set('exploring');
     aPrioriLayerEl.to({
       duration: Math.PI,
       opacity: 0,
@@ -46,5 +48,5 @@
   {/if}
 </Layer>
 {#key $currentVerseIndex}
-  <VerseExplorer isReading={ isRemembering } on:groundZero />
+  <VerseExplorer on:groundZero />
 {/key}

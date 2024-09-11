@@ -49,3 +49,9 @@ export const isVerseMapReaveled = derived(
     return $verseState === 'verseMapReaveled';
   }
 );
+
+export const isExploring = derived(
+  [verseState], ([$verseState]) => {
+    return $verseState === 'exploring';
+  }
+);
