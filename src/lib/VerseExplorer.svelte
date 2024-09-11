@@ -67,11 +67,6 @@
       // previousWord();
     }
   }
-  
-  function postPunctuation() {
-    isCaesura.set(false);
-    wordIndices.nextWord();
-  }
 
   function fadeOut() {
     if ($isFinished) {
@@ -103,7 +98,7 @@
     <Layer config={{ visible: showExplorer }} bind:handle={ layerEl }>
       <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
         projection={ $currentChannelProjection } />
-      <Punctuation on:punctuated={ postPunctuation } />
+      <Punctuation />
       <PiWatch />  
       <Ellipsis />
       <Notepad />

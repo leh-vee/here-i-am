@@ -1,12 +1,10 @@
 <script>
   import { Text } from 'svelte-konva';
-  import { createEventDispatcher } from 'svelte';
-  import { punctuationMark, isCaesura } from '../stores/text.js';
+  import { wordIndices, punctuationMark, isCaesura } from '../stores/text.js';
 
-  let punctuationEl;
-  const dispatch = createEventDispatcher();
   const duration = Math.PI / 2;
-  const fontSize = Math.round(window.innerWidth / 6);
+  const fontSize = Math.round(window.innerHeight / 6);
+  let punctuationEl;
 
   $: if ($isCaesura) animateIn();
 
@@ -25,7 +23,8 @@
       opacity: 0,
       onFinish: () => { 
         punctuationEl.fillEnabled(false);
-        dispatch('punctuated') 
+        isCaesura.set(false);
+        wordIndices.nextWord();
       }
     });
   }
