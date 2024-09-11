@@ -1,10 +1,8 @@
 <script>
-  import { totalPoints, nPiesScored } from '../stores/base';
+  import { totalPoints, nPiesScored, isMenuVisible } from '../stores/base';
   import { currentPiSliceRomanized } from '../stores/text.js';
   import InfoDropDownMenu from './menus/InfoDropDownMenu.svelte';
   import PiDropDownMenu from './menus/PiDropDownMenu.svelte';
-
-  export let isDropDownVisible = false;
 
   let isInfoMenuVisible = false;
   function togglePiMenu() { isPiMenuVisible = !isPiMenuVisible }
@@ -17,7 +15,7 @@
   }
 </script>
 
-<div id='header' class='menu' class:hide={!isDropDownVisible}>
+<div id='header' class='menu' class:hide={!$isMenuVisible}>
   <div id='score'>
     <span id='min-read'>{ $totalPoints }</span>
     <span id='pies'>

@@ -12,10 +12,22 @@ export const totalPoints = derived(
   }
 );
 
+// verse state stores
+
 export const verseState = writable('');
 
 export const isReaderEngaged = derived(
   [verseState], ([$verseState]) => {
     return $verseState === 'readerEngaged';
+  }
+)
+
+export const isMenuVisible = derived(
+  [verseState], ([$verseState]) => {
+    let isMenuVisible = false;
+    if ($verseState === 'ellipsisLit' || $verseState === 'readerEngaged') {
+      isMenuVisible = true;
+    } 
+    return isMenuVisible;
   }
 );

@@ -25,7 +25,6 @@
   
   $: isEllipsisReaveled = $verseState === 'ellipsisRevealed';
   $: isVerseMapReaveled = $verseState === 'verseMapReaveled';
-  $: isEllipsisLit = $verseState === 'ellipsisLit';
   $: isFinished = $verseState === 'finished';
 	onDestroy(() => { verseState.set(''); });
   
@@ -35,7 +34,6 @@
   $: if (isFetchingBlocks) fetchBlocksForProjection();
 
   $: showExplorer = isReading && !isFetchingBlocks;
-  $: showMenu = isEllipsisLit && !isFinished;
 
   function fetchBlocksForProjection() {
     const pCentre = $currentChannelProjection.center();
@@ -110,7 +108,7 @@
 
 <div id='verse-explorer' use:swipe={{ timeframe: 300, minSwipeDistance: 60 }} 
   on:swipe={(e) => { swiped(e) }}>
-  <HeaderMenu isDropDownVisible={ showMenu } />
+  <HeaderMenu />
   <Stage config={{ width: window.innerWidth, height: window.innerHeight }} 
     on:pointerclick={ click } >
     <Layer config={{ visible: showExplorer }} bind:handle={ layerEl }>
