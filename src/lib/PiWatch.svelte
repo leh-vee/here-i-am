@@ -2,13 +2,11 @@
   import { Text } from 'svelte-konva';  
   import { millisecsElapsedByVerse, nPiesScored } from '../stores/base';
   import { currentVerseIndex } from '../stores/text.js';
-
-  let pieEl;
-  export let isStart = false;
-  export let isStop = false;
+  import { isReaderEngaged, isFinished } from '../stores/base';
 
   const watchFontSize = Math.round(window.innerHeight / 20);
   const pieEmojiFontSize = Math.round(window.innerHeight / 18);
+  let pieEl;
 
   let start = new Date();
   $: startTime = start.getTime();
@@ -60,14 +58,14 @@
 
   let interval;
 
-  $: if (isStop) {
+  $: if ($isFinished) {
     clearInterval(interval);
     if ($nPiesScored < 3 && isPiSeconds) {
       pieSpin();
       nPiesScored.set($nPiesScored + 1); 
     }
   }
-  $: if (isStart) {
+  $: if ($isReaderEngaged) {
     start = new Date();
     current = start;
     interval = setInterval(() => {

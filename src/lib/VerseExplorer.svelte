@@ -7,7 +7,7 @@
   import PiWatch from './PiWatch.svelte';
   import HeaderMenu from './HeaderMenu.svelte';
   import Ellipsis from './Ellipsis.svelte';
-  import { verseState, isReaderEngaged } from '../stores/base';
+  import { verseState, isReaderEngaged, isFinished } from '../stores/base';
   import { channelBlocks, blocksForCurrentChannel, 
     currentChannelProjection } from '../stores/treeOfLife';
   import { wordIndices, isPunctuationNext, isGroundZero,
@@ -16,25 +16,20 @@
   import { fetchBlocksWithinRadius } from '../api/client.js';
   import distance from "@turf/distance";
   import { onDestroy } from 'svelte';
-  import { createEventDispatcher } from 'svelte';
   import { swipe } from 'svelte-gestures';
+  import { createEventDispatcher } from 'svelte';
   
   const dispatch = createEventDispatcher();
-
   export let isReading = false;
-  
-  $: isEllipsisReaveled = $verseState === 'ellipsisRevealed';
-  $: isVerseMapReaveled = $verseState === 'verseMapReaveled';
-  $: isFinished = $verseState === 'finished';
-	onDestroy(() => { verseState.set(''); });
-  
   let layerEl;
 
   $: isFetchingBlocks = $blocksForCurrentChannel === undefined;
   $: if (isFetchingBlocks) fetchBlocksForProjection();
-
+  
   $: showExplorer = isReading && !isFetchingBlocks;
-
+  
+	onDestroy(() => { verseState.set(''); });
+  
   function fetchBlocksForProjection() {
     const pCentre = $currentChannelProjection.center();
     const pRadius = distance(pCentre, $currentChannelProjection.invert([0,0]));
@@ -51,7 +46,7 @@
   }
 
   function nextWord() {
-    if (!$isReaderEngaged || $isInBetweenWords || isFinished) return null;
+    if (!$isReaderEngaged || $isInBetweenWords || $isFinished) return null;
     if ($isPunctuationNext) {
       isCaesura.set(true);
     } else if ($isLastVerseWord) {
@@ -84,7 +79,7 @@
   }
 
   function fadeOut() {
-    if (isFinished) {
+    if ($isFinished) {
       return null;
     } else {
       verseState.set('finished');
@@ -115,16 +110,10 @@
       <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
         projection={ $currentChannelProjection } />
       <Punctuation on:punctuated={ postPunctuation } />
-      <PiWatch isStart={ $isReaderEngaged } isStop={ isFinished } />  
-      <Ellipsis
-        reveal={ isReading }
-        on:revealed={ () => { verseState.set('ellipsisRevealed') } }
-        light={ isVerseMapReaveled }
-        on:lit={ () => { verseState.set('ellipsisLit') } }
-      />
-      <Notepad visible={ $isReaderEngaged } />
-      <VerseMap reveal={ isEllipsisReaveled }
-        on:revealed={ () => { verseState.set('verseMapReaveled') } } />
+      <PiWatch />  
+      <Ellipsis reveal={ isReading } />
+      <Notepad />
+      <VerseMap />
     </Layer>
   </Stage>
 </div>

@@ -1,12 +1,9 @@
 <script>
   import EllipsisDot from "./EllipsisDot.svelte";
+  import { verseState, isVerseMapReaveled } from '../stores/base';
   import { Rect } from "svelte-konva";
-  import { createEventDispatcher } from 'svelte';
-
-  const dispatch = createEventDispatcher();
 
   export let reveal = false;
-  export let light = false;
   let vanishAway = false;
 
   const piFractionSecs = (Math.PI - 3) * 1000;
@@ -34,13 +31,13 @@
       if (i < nDots - 1) {
         setTimeout(() => { revealDot(i + 1) }, 1000);
       } else { 
-        setTimeout(() => { dispatch('revealed') }, piFractionSecs);
+        setTimeout(() => { verseState.set('ellipsisRevealed') }, piFractionSecs);
       }
     }
     revealDot(0);
   }  
 
-  $: if (light) setTimeout(slowLight, piFractionSecs);
+  $: if ($isVerseMapReaveled) setTimeout(slowLight, piFractionSecs);
 
   function slowLight() {
     const nDotsToLight = lightDots.length;
@@ -49,9 +46,7 @@
       if (i < nDotsToLight - 1) {
         setTimeout(() => { lightDot(i + 1) }, 1000);
       } else { 
-        setTimeout(() => {
-          dispatch('lit');
-        }, 1000);
+        setTimeout(() => { verseState.set('ellipsisLit') }, 1000);
       }
     }
     lightDot(0);

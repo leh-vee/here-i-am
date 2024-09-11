@@ -6,18 +6,15 @@
     currentChannelFromSefirahCoordsPx } from '../stores/treeOfLife.js';
   import { currentVerse, likePiSlices,
     currentVerseIndex } from '../stores/text.js';
-  import { createEventDispatcher } from 'svelte';
+  import { verseState, isEllipsisReaveled } from '../stores/base';
 
-  const dispatch = createEventDispatcher();
+  let isRevealed = false;
 
-  export let reveal = false;
-  let isRevealed = false;;
-
-  $: if (isRevealed) dispatch('revealed');
+  $: if (isRevealed) verseState.set('verseMapReaveled');
 
   const nMarkersVisible = { a: 0, b: 0 }
 
-  $: if (reveal) incrementVisibleMarkers();
+  $: if ($isEllipsisReaveled) incrementVisibleMarkers();
 
   function incrementVisibleMarkers() {
     const plusOne = (line = 'a') => {

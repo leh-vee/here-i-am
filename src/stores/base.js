@@ -31,3 +31,21 @@ export const isMenuVisible = derived(
     return isMenuVisible;
   }
 );
+
+export const isEllipsisReaveled = derived(
+  [verseState], ([$verseState]) => {
+    return $verseState === 'ellipsisRevealed';
+  }
+);
+
+export const isFinished = derived(
+  [verseState], ([$verseState]) => {
+    return $verseState === 'finished';
+  }
+);
+
+export const isVerseMapReaveled = derived(
+  [verseState], ([$verseState]) => {
+    return $verseState === 'verseMapReaveled';
+  }
+);

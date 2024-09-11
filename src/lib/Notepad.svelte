@@ -2,9 +2,8 @@
   import { Group, Text } from 'svelte-konva';
   import { currentVerse, wordIndices, currentWordId,
       currentVerseIndex, isCaesura, isInBetweenWords, isLineA, likePiSlices } from '../stores/text.js';
-      
-  export let visible = false;
-  
+  import { isReaderEngaged } from '../stores/base';
+
   let stashedWordEl = null;
   let padEl;
 
@@ -37,7 +36,7 @@
 
   let xPositionWidth;
   $: if (padEl !== undefined) xPositionWidth = padEl.width() - textElWidth;
-  $: if (visible) {
+  $: if ($isReaderEngaged) {
     const xCurrentPosition = padEl.position()['x'];
     const xDistance = Math.abs(xCurrentPosition - xPadPosition);
     const xDistancePercent = xDistance / xPositionWidth;
@@ -90,7 +89,8 @@
 <Group config={{ 
   width: groupWidth, 
   height: window.innerHeight * 2,
-  x: textElWidth, y: 0, visible
+  x: textElWidth, y: 0,
+  visible: $isReaderEngaged
 }} bind:handle={padEl}>
   {#each $currentVerse['a'] as word, i}
     <Text config={{
