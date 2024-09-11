@@ -32,6 +32,7 @@ export const isMenuVisible = derived(
   }
 );
 
+
 export const isStartSefirah = derived(
   [verseState], ([$verseState]) => {
     let isStartSefirah = false;
@@ -45,6 +46,12 @@ export const isStartSefirah = derived(
 export const isEllipsisReaveled = derived(
   [verseState], ([$verseState]) => {
     return $verseState === 'ellipsisRevealed';
+  }
+);
+
+export const isEllipsisLit = derived(
+  [verseState], ([$verseState]) => {
+    return $verseState === 'ellipsisLit';
   }
 );
 

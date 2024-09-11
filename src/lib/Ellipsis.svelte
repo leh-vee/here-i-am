@@ -1,6 +1,6 @@
 <script>
   import EllipsisDot from "./EllipsisDot.svelte";
-  import { verseState, isVerseMapReaveled, isExploring } from '../stores/base';
+  import { verseState, isVerseMapReaveled, isExploring, isEllipsisLit } from '../stores/base';
   import { Rect } from "svelte-konva";
 
   const piFractionSecs = (Math.PI - 3) * 1000;
@@ -51,7 +51,7 @@
   }
 
   function click() {
-    vanishAway = true;
+    if ($isEllipsisLit) vanishAway = true;
   }
 
 </script>
