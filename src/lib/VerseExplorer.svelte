@@ -7,10 +7,10 @@
   import PiWatch from './PiWatch.svelte';
   import HeaderMenu from './HeaderMenu.svelte';
   import Ellipsis from './Ellipsis.svelte';
-  import { verseState, isReaderEngaged, isFinished, isCountingDown } from '../stores/verseState';
+  import { verseState, isFinished, isNavigable, isCountingDown } from '../stores/verseState';
   import { channelBlocks, blocksForCurrentChannel, currentChannelProjection } from '../stores/treeOfLife';
-  import { wordIndices, isPunctuationNext, isLastVerseWord, isInBetweenWords,
-    isCaesura, currentPiSlice, lastPiSlice, likePiSlices, isGroundZero } from '../stores/text';
+  import { wordIndices, isPunctuationNext, isLastVerseWord, isCaesura, 
+    currentPiSlice, lastPiSlice, likePiSlices, isGroundZero } from '../stores/text';
   import { fetchBlocksWithinRadius } from '../api/client.js';
   import distance from "@turf/distance";
   import { swipe } from 'svelte-gestures';
@@ -40,13 +40,14 @@
   }
 
   function nextWord() {
-    if (!$isReaderEngaged || $isInBetweenWords || $isFinished) return null;
-    if ($isPunctuationNext) {
-      isCaesura.set(true);
-    } else if ($isLastVerseWord) {
-      fadeOut();
-    } else {
-      wordIndices.nextWord();
+    if ($isNavigable) {
+      if ($isPunctuationNext) {
+        isCaesura.set(true);
+      } else if ($isLastVerseWord) {
+        fadeOut();
+      } else {
+        wordIndices.nextWord();
+      }
     }
   }
   
@@ -54,16 +55,21 @@
     // implementation to come
   }
 
+  const h = window.innerHeight;
+  const ySwipeBounds = { lower: h * 0.4, upper: h * 0.6 };
+  function isPointerWithinBounds() {
+    const yPos =  layerEl.getRelativePointerPosition().y;
+    return yPos > ySwipeBounds.lower && yPos < ySwipeBounds.upper;
+  }
+
   function swiped(event) {
-    const yPointerPosition =  layerEl.getRelativePointerPosition().y;
-    const yLowerBound = window.innerHeight * 0.4;
-    const yUpperBound = window.innerHeight * 0.6;
-    if (yPointerPosition < yLowerBound || yPointerPosition > yUpperBound) return null;
-    const direction = event.detail.direction;
-    if (direction === 'left') {
-      nextWord();
-    } else {
-      // previousWord();
+    if (isPointerWithinBounds()) {
+      const direction = event.detail.direction;
+      if (direction === 'left') {
+        nextWord();
+      } else {
+        // previousWord();
+      }
     }
   }
 

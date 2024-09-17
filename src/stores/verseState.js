@@ -1,4 +1,5 @@
 import { writable, derived } from 'svelte/store';
+import { isInBetweenWords } from './text.js';
 
 export const verseState = writable('');
 export const isVerseNumberVisible = writable(false);
@@ -63,5 +64,12 @@ export const isExploring = derived(
 export const isCountingDown = derived(
   [verseState], ([$verseState]) => {
     return $verseState === 'counting';
+  }
+);
+
+export const isNavigable = derived(
+  [isReaderEngaged, isInBetweenWords, isFinished], 
+  ([$isReaderEngaged, $isInBetweenWords, $isFinished]) => {
+    return $isReaderEngaged && !$isInBetweenWords && !$isFinished;
   }
 );
