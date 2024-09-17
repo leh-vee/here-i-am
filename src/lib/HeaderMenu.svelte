@@ -1,6 +1,7 @@
 <script>
-  import { totalPoints, nPiesScored, isMenuVisible } from '../stores/base';
-  import { currentPiSliceRomanized } from '../stores/text.js';
+  import { totalPoints, nPiesScored } from '../stores/base';
+  import { isMenuVisible } from '../stores/verseState';
+  import { currentPiSliceRomanized } from '../stores/text';
   import InfoDropDownMenu from './menus/InfoDropDownMenu.svelte';
   import PiDropDownMenu from './menus/PiDropDownMenu.svelte';
 

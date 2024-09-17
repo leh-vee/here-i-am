@@ -1,8 +1,7 @@
 <script>
   import { Circle } from 'svelte-konva';
-  import { currentWordId, isLineBreak, isCaesura, 
-    wordIndices } from '../stores/text.js';
-  import { isReaderEngaged } from '../stores/base';
+  import { currentWordId, isLineBreak, isCaesura, wordIndices } from '../stores/text';
+  import { isReaderEngaged } from '../stores/verseState.js';
   
   export let x;
   export let y;

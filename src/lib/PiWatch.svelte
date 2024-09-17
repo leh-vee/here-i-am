@@ -1,8 +1,8 @@
 <script>
   import { Text } from 'svelte-konva';  
+  import { isReaderEngaged, isFinished } from '../stores/verseState.js';
   import { millisecsElapsedByVerse, nPiesScored } from '../stores/base';
-  import { currentVerseIndex } from '../stores/text.js';
-  import { isReaderEngaged, isFinished } from '../stores/base';
+  import { currentVerseIndex } from '../stores/text';
 
   const watchFontSize = Math.round(window.innerWidth / 5);
   const pieEmojiFontSize = Math.round(window.innerHeight / 18);

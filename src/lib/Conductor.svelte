@@ -4,7 +4,7 @@
   import Countdown from './Countdown.svelte';
   import SwanSong from './SwanSong.svelte';
   import VerseNumber from './VerseNumber.svelte';
-  import { isDataInitialized } from '../stores/base.js';
+  import { isDataInitialized } from '../stores/base';
 
   const movements = ['overture', 'countdown', 'swanSong'];
   let movementIndex = 0;

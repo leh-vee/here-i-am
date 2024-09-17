@@ -2,7 +2,7 @@
   // @ts-nocheck
   import { Circle } from 'svelte-konva';
   import { percentOfVerseRead, likePiSlices, isLineA } from '../stores/text';
-  import { isReaderEngaged } from '../stores/base';
+  import { isReaderEngaged } from '../stores/verseState';
   
   export let coordsPx;
   export let isLit = false;

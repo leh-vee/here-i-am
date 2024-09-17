@@ -1,7 +1,7 @@
 <script>
   import { Circle } from 'svelte-konva';
   import Konva from 'konva';
-  import { isDataInitialized } from '../stores/base.js';
+  import { isDataInitialized } from '../stores/base';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();

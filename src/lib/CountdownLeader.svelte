@@ -1,8 +1,8 @@
 <script>
     import { Circle, Wedge } from 'svelte-konva';
-    import { ilanProjection, ilanBlocks, sefirotPoints } from '../stores/treeOfLife.js';
-    import { isVerseNumberVisible } from '../stores/base.js';
-    import { currentPiSlice } from '../stores/text.js';
+    import { ilanProjection, ilanBlocks, sefirotPoints } from '../stores/treeOfLife';
+    import { isVerseNumberVisible } from '../stores/verseState';
+    import { currentPiSlice } from '../stores/text';
     import StreetMap from './StreetMap.svelte';
     import { createEventDispatcher } from 'svelte';
 

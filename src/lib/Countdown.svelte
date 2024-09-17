@@ -1,7 +1,7 @@
 <script>
   import { Layer } from 'svelte-konva';
-  import { currentVerseIndex } from '../stores/text.js';
-  import { verseState } from '../stores/base';
+  import { currentVerseIndex } from '../stores/text';
+  import { verseState } from '../stores/verseState';
   import CountdownLeader from './CountdownLeader.svelte';
   import Pathways from './Pathways.svelte';
   import VerseExplorer from './VerseExplorer.svelte';

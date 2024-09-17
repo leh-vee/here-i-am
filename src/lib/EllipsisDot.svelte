@@ -1,7 +1,7 @@
 <script>
   import { Text } from "svelte-konva";
   import Konva from 'konva';
-  import { verseState, isStartSefirah } from '../stores/base';
+  import { verseState, isStartSefirah } from '../stores/verseState';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();

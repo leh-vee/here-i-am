@@ -1,6 +1,6 @@
 <script>
-    import { currentPiSliceRomanized } from '../stores/text.js';
-    import { isVerseNumberVisible } from '../stores/base.js';
+    import { currentPiSliceRomanized } from '../stores/text';
+    import { isVerseNumberVisible } from '../stores/verseState';
 </script>
 
 {#if $isVerseNumberVisible}

@@ -1,6 +1,6 @@
 <script>
   import EllipsisDot from "./EllipsisDot.svelte";
-  import { verseState, isVerseMapReaveled, isExploring, isEllipsisLit } from '../stores/base';
+  import { verseState, isVerseMapReaveled, isExploring, isEllipsisLit } from '../stores/verseState';
   import { Rect } from "svelte-konva";
 
   const piFractionSecs = (Math.PI - 3) * 1000;

@@ -3,10 +3,9 @@
   import SefirahMarker from './SefirahMarker.svelte';
   import WordMarker from './WordMarker.svelte';
   import { currentChannelCoordsPx, currentChannelToSefirahCoordsPx,
-    currentChannelFromSefirahCoordsPx } from '../stores/treeOfLife.js';
-  import { currentVerse, likePiSlices,
-    currentVerseIndex } from '../stores/text.js';
-  import { verseState, isEllipsisReaveled } from '../stores/base';
+    currentChannelFromSefirahCoordsPx } from '../stores/treeOfLife';
+  import { currentVerse, likePiSlices, currentVerseIndex } from '../stores/text';
+  import { verseState, isEllipsisReaveled } from '../stores/verseState.js';
 
   let isRevealed = false;
 

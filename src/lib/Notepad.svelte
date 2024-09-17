@@ -1,8 +1,8 @@
 <script>
   import { Group, Text } from 'svelte-konva';
-  import { currentVerse, wordIndices, currentWordId,
-      currentVerseIndex, isCaesura, isInBetweenWords, isLineA, likePiSlices } from '../stores/text.js';
-  import { isReaderEngaged } from '../stores/base';
+  import { currentVerse, wordIndices, currentWordId, isLineA,
+    currentVerseIndex, isCaesura, isInBetweenWords, likePiSlices } from '../stores/text';
+  import { isReaderEngaged } from '../stores/verseState';
 
   let stashedWordEl = null;
   let padEl;
