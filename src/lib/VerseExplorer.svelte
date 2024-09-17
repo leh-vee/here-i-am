@@ -10,7 +10,7 @@
   import { verseState, isFinished, isNavigable, isCountingDown } from '../stores/verseState';
   import { channelBlocks, blocksForCurrentChannel, currentChannelProjection } from '../stores/treeOfLife';
   import { wordIndices, isPunctuationNext, isLastVerseWord, isCaesura, 
-    currentPiSlice, lastPiSlice, likePiSlices, isGroundZero } from '../stores/text';
+    currentPiSlice, lastPiSlice, likePiSlices, isGroundZero, isFirstVerseWord } from '../stores/text';
   import { fetchBlocksWithinRadius } from '../api/client.js';
   import distance from "@turf/distance";
   import { swipe } from 'svelte-gestures';
@@ -50,6 +50,10 @@
       }
     }
   }
+
+  function previousWord() {
+    if ($isNavigable && !$isFirstVerseWord) wordIndices.previousWord();
+  }
   
   function click() {
     // implementation to come
@@ -68,7 +72,7 @@
       if (direction === 'left') {
         nextWord();
       } else {
-        // previousWord();
+        previousWord();
       }
     }
   }
