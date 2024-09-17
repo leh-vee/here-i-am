@@ -1,7 +1,7 @@
 <script>
   import { Text } from "svelte-konva";
   import Konva from 'konva';
-  import { verseState, isStartSefirah } from '../stores/verseState';
+  import { verseState } from '../stores/verseState';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
@@ -23,8 +23,6 @@
     }
     dispatch('ellipsis-rect', ellipsisRectParams)
   }
-
-  $: visible = show && $isStartSefirah;
 
   $: {
     let ellipsisArray = [" ", " ", " "];
@@ -66,6 +64,6 @@
   fillEnabled: true,
   fill: 'silver',
   strokeWidth: 0,
-  visible
+  visible: show
   }} bind:handle={ dotEl } 
 />

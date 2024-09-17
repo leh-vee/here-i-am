@@ -20,14 +20,13 @@ export const isMenuVisible = derived(
   }
 );
 
-
-export const isStartSefirah = derived(
+export const isNotepadVisible = derived(
   [verseState], ([$verseState]) => {
-    let isStartSefirah = false;
-    if ($verseState !== 'finished' && $verseState !== 'readerEngaged') {
-      isStartSefirah = true;
+    let isMenuVisible = false;
+    if ($verseState === 'readerEngaged' || $verseState === 'full-stop') {
+      isMenuVisible = true;
     } 
-    return isStartSefirah;
+    return isMenuVisible;
   }
 );
 
@@ -43,9 +42,9 @@ export const isEllipsisLit = derived(
   }
 );
 
-export const isFinished = derived(
+export const isFullStop = derived(
   [verseState], ([$verseState]) => {
-    return $verseState === 'finished';
+    return $verseState === 'full-stop';
   }
 );
 
@@ -68,8 +67,8 @@ export const isCountingDown = derived(
 );
 
 export const isNavigable = derived(
-  [isReaderEngaged, isInBetweenWords, isFinished], 
-  ([$isReaderEngaged, $isInBetweenWords, $isFinished]) => {
-    return $isReaderEngaged && !$isInBetweenWords && !$isFinished;
+  [isReaderEngaged, isInBetweenWords, isFullStop], 
+  ([$isReaderEngaged, $isInBetweenWords, $isFullStop]) => {
+    return $isReaderEngaged && !$isInBetweenWords && !$isFullStop;
   }
 );

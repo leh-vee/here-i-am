@@ -2,7 +2,7 @@
   // @ts-nocheck
   import { Circle } from 'svelte-konva';
   import { percentOfVerseRead, likePiSlices, isLineA } from '../stores/text';
-  import { isReaderEngaged } from '../stores/verseState';
+  import { isReaderEngaged, isFullStop } from '../stores/verseState';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
@@ -14,15 +14,15 @@
   const radius = 5;
   let goldFillEl;
 
-  $: if (isLit && goldFillEl !== undefined) animateOpacity($percentOfVerseRead, $isReaderEngaged);
+  $: if (isLit && goldFillEl !== undefined) animateOpacity($percentOfVerseRead, $isReaderEngaged, $isFullStop);
   
-  function animateOpacity(percentRead, isEngaged) {
-    const opacity = isFromSefirah ? fromOpacity(percentRead, isEngaged) : toOpacity(percentRead);
+  function animateOpacity(percentRead, isEngaged, isFullStop) {
+    const opacity = isFromSefirah ? fromOpacity(percentRead, isEngaged) : toOpacity(percentRead, isFullStop);
     goldFillEl.to({ duration: Math.PI, opacity });
   }
 
   function fromOpacity(p, isEngaged) {
-    let o = 1;
+    let o = 0;
     if (isEngaged) {
       if ($likePiSlices && !$isLineA) {
         o = toOpacity(p);
@@ -33,8 +33,14 @@
     return o;
   }
 
-  function toOpacity(p) { 
-    return Math.max(p - (Math.PI - 3), 0);
+  function toOpacity(p, isFullStop) { 
+    let o = 0;
+    if (isFullStop) {
+      o = 1;
+    } else {
+      o = Math.max(p - (Math.PI - 3), 0);
+    }
+    return o;
   }
 
   function incrementWord() {

@@ -1,6 +1,6 @@
 <script>
   import { Text } from 'svelte-konva';  
-  import { isReaderEngaged, isFinished } from '../stores/verseState.js';
+  import { isReaderEngaged, isFullStop } from '../stores/verseState.js';
   import { millisecsElapsedByVerse, nPiesScored } from '../stores/base';
   import { currentVerseIndex } from '../stores/text';
 
@@ -59,7 +59,7 @@
 
   let interval;
 
-  $: if ($isFinished) {
+  $: if ($isFullStop) {
     clearInterval(interval);
     if ($nPiesScored < 3 && isPiSeconds) {
       pieSpin();

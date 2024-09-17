@@ -2,7 +2,7 @@
   import { Group, Text } from 'svelte-konva';
   import { currentVerse, wordIndices, currentWordId, isLineA,
     currentVerseIndex, isCaesura, isInBetweenWords, likePiSlices } from '../stores/text';
-  import { isReaderEngaged } from '../stores/verseState';
+  import { isReaderEngaged, isFullStop, isNotepadVisible } from '../stores/verseState';
 
   let stashedWordEl = null;
   let padEl;
@@ -56,7 +56,7 @@
     }
   }
 
-  $: if ($isCaesura) stashWord();
+  $: if ($isCaesura || $isFullStop) stashWord();
 
   function stashWord() {
     const duration = Math.PI / 10;
@@ -90,7 +90,7 @@
   width: groupWidth, 
   height: window.innerHeight * 2,
   x: textElWidth, y: 0,
-  visible: $isReaderEngaged
+  visible: $isNotepadVisible
 }} bind:handle={padEl}>
   {#each $currentVerse['a'] as word, i}
     <Text config={{

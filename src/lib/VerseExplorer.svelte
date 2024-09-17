@@ -7,7 +7,7 @@
   import PiWatch from './PiWatch.svelte';
   import HeaderMenu from './HeaderMenu.svelte';
   import Ellipsis from './Ellipsis.svelte';
-  import { verseState, isFinished, isNavigable, isCountingDown } from '../stores/verseState';
+  import { verseState, isNavigable, isCountingDown, isFullStop } from '../stores/verseState';
   import { channelBlocks, blocksForCurrentChannel, currentChannelProjection } from '../stores/treeOfLife';
   import { wordIndices, isPunctuationNext, isLastVerseWord, isCaesura, 
     currentPiSlice, lastPiSlice, likePiSlices, isGroundZero, isFirstVerseWord, 
@@ -46,12 +46,14 @@
         isInBetweenWords.set(true);
         isCaesura.set(true);
       } else if ($isLastVerseWord) {
-        fadeOut();
+        verseState.set('full-stop');
       } else {
         wordIndices.nextWord();
       }
     }
   }
+
+  $: if ($isFullStop) setTimeout(fadeOut, Math.PI * 1000);
 
   function previousWord() {
     if ($isNavigable && !$isFirstVerseWord) wordIndices.previousWord();
@@ -76,11 +78,6 @@
   }
 
   function fadeOut() {
-    if ($isFinished) {
-      return null;
-    } else {
-      verseState.set('finished');
-    }
     layerEl.to({
       duration: Math.PI,
       opacity: 0,
