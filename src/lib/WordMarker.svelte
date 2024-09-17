@@ -1,7 +1,7 @@
 <script>
   import { Circle } from 'svelte-konva';
   import { currentWordId, isLineBreak, isCaesura, wordIndices } from '../stores/text';
-  import { isReaderEngaged } from '../stores/verseState.js';
+  import { isReaderEngaged, isNavigable } from '../stores/verseState.js';
   
   export let x;
   export let y;
@@ -47,7 +47,7 @@
   }
 
   function goToWord() {
-    if (!isCurrentWord) {
+    if ($isNavigable && !isCurrentWord) {
       const wordIdArr = wordId.split('-');
       const line = wordIdArr[1];
       const wordIndex = parseInt(wordIdArr[2]);

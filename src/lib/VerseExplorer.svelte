@@ -10,7 +10,8 @@
   import { verseState, isFinished, isNavigable, isCountingDown } from '../stores/verseState';
   import { channelBlocks, blocksForCurrentChannel, currentChannelProjection } from '../stores/treeOfLife';
   import { wordIndices, isPunctuationNext, isLastVerseWord, isCaesura, 
-    currentPiSlice, lastPiSlice, likePiSlices, isGroundZero, isFirstVerseWord } from '../stores/text';
+    currentPiSlice, lastPiSlice, likePiSlices, isGroundZero, isFirstVerseWord, 
+    isInBetweenWords } from '../stores/text';
   import { fetchBlocksWithinRadius } from '../api/client.js';
   import distance from "@turf/distance";
   import { swipe } from 'svelte-gestures';
@@ -42,6 +43,7 @@
   function nextWord() {
     if ($isNavigable) {
       if ($isPunctuationNext) {
+        isInBetweenWords.set(true);
         isCaesura.set(true);
       } else if ($isLastVerseWord) {
         fadeOut();

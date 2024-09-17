@@ -1,6 +1,7 @@
 <script>
   import { Text } from 'svelte-konva';
-  import { wordIndices, punctuationMark, isCaesura } from '../stores/text.js';
+  import { wordIndices, punctuationMark, isCaesura, 
+    isInBetweenWords } from '../stores/text.js';
 
   const duration = Math.PI / 2;
   const fontSize = Math.round(window.innerHeight / 6);
@@ -24,6 +25,7 @@
       onFinish: () => { 
         punctuationEl.fillEnabled(false);
         isCaesura.set(false);
+        isInBetweenWords.set(false);
         wordIndices.nextWord();
       }
     });
