@@ -53,10 +53,10 @@
 </script>
 
 <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } 
-    isLit={ isRevealed } />
+    isLit={ isRevealed } on:previous-word />
 {#if !$likePiSlices}
   <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
-    isFromSefirah={ false } isLit={ true } />
+    isFromSefirah={ false } isLit={ true } on:next-word />
 {/if}
 <Group config={{ 
   x: lineStartX, 

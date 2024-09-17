@@ -12,7 +12,6 @@
   const markerColour = 'silver';
   const expandMarkerRadius = 5;
   let markerEl;
-  let hitMarkerEl;
   $: isCurrentWord = wordId === $currentWordId;
   
   $: duration = $isLineBreak ? Math.PI / 2 : Math.PI / 10;
@@ -68,10 +67,9 @@
 
 <Circle config={{ 
   x, y, 
-  radius: expandMarkerRadius * 2,
+  radius: expandMarkerRadius * 3,
   visible: isVisible, 
   fill: 'white',
   opacity: 0
-  }} bind:handle={hitMarkerEl} 
-  on:pointerclick={ goToWord }
+  }} on:pointerclick={ goToWord }
 />

@@ -54,10 +54,6 @@
   function previousWord() {
     if ($isNavigable && !$isFirstVerseWord) wordIndices.previousWord();
   }
-  
-  function click() {
-    // implementation to come
-  }
 
   const h = window.innerHeight;
   const ySwipeBounds = { lower: h * 0.4, upper: h * 0.6 };
@@ -102,8 +98,7 @@
 <div id='verse-explorer' use:swipe={{ timeframe: 300, minSwipeDistance: 60 }} 
   on:swipe={(e) => { swiped(e) }}>
   <HeaderMenu />
-  <Stage config={{ width: window.innerWidth, height: window.innerHeight }} 
-    on:pointerclick={ click } >
+  <Stage config={{ width: window.innerWidth, height: window.innerHeight }} >
     <Layer config={{ visible: showExplorer }} bind:handle={ layerEl }>
       <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
         projection={ $currentChannelProjection } />
@@ -111,7 +106,7 @@
       <PiWatch />  
       <Ellipsis />
       <Notepad />
-      <VerseMap />
+      <VerseMap on:next-word={ nextWord } on:previous-word={ previousWord } />
     </Layer>
   </Stage>
 </div>
