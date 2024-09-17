@@ -5,7 +5,7 @@
   import { currentVerseIndex } from '../stores/text';
 
   const watchFontSize = Math.round(window.innerWidth / 5);
-  const pieEmojiFontSize = Math.round(window.innerHeight / 18);
+  const pieEmojiFontSize = Math.round(window.innerHeight / 10);
   let pieEl;
 
   let start = new Date();
@@ -86,7 +86,7 @@
 <Text config={{
   text: formattedElapsed,
   width: window.innerWidth,
-  height: window.innerHeight / 3,
+  height: window.innerHeight / 2.5,
   align: 'center',
   verticalAlign: 'middle',
   fontSize: watchFontSize,
@@ -103,7 +103,7 @@
   y: window.innerHeight / 3,
   text: "🥧",
   width: window.innerWidth,
-  height: window.innerHeight / 1.5,
+  height: window.innerHeight,
   align: 'center',
   verticalAlign: 'middle',
   fontSize: pieEmojiFontSize,
