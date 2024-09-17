@@ -66,6 +66,12 @@ export const isCountingDown = derived(
   }
 );
 
+export const isPostVerse = derived(
+  [verseState], ([$verseState]) => {
+    return $verseState === 'post';
+  }
+);
+
 export const isNavigable = derived(
   [isReaderEngaged, isInBetweenWords, isFullStop], 
   ([$isReaderEngaged, $isInBetweenWords, $isFullStop]) => {

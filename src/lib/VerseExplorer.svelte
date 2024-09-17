@@ -53,7 +53,10 @@
     }
   }
 
-  $: if ($isFullStop) setTimeout(fadeOut, Math.PI * 1000);
+  $: if ($isFullStop) setTimeout(() => {
+    verseState.set('post');
+    fadeOut();
+  }, Math.PI * 1000);
 
   function previousWord() {
     if ($isNavigable && !$isFirstVerseWord) wordIndices.previousWord();

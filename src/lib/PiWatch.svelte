@@ -1,6 +1,6 @@
 <script>
   import { Text } from 'svelte-konva';  
-  import { isReaderEngaged, isFullStop } from '../stores/verseState.js';
+  import { isReaderEngaged, isFullStop, isPostVerse } from '../stores/verseState.js';
   import { millisecsElapsedByVerse, nPiesScored } from '../stores/base';
   import { currentVerseIndex } from '../stores/text';
 
@@ -59,13 +59,14 @@
 
   let interval;
 
-  $: if ($isFullStop) {
-    clearInterval(interval);
-    if ($nPiesScored < 3 && isPiSeconds) {
-      pieSpin();
-      nPiesScored.set($nPiesScored + 1); 
-    }
+  $: if ($isFullStop) clearInterval(interval);
+
+  $: if ($isPostVerse && $nPiesScored < 3 && isPiSeconds) {
+    pieSpin();
+    nPiesScored.set($nPiesScored + 1); 
   }
+
+
   $: if ($isReaderEngaged) {
     start = new Date();
     current = start;
@@ -91,23 +92,21 @@
   verticalAlign: 'middle',
   fontSize: watchFontSize,
   fontFamily: 'digital',
-  fillEnabled: true,
   fill: 'white',
   strokeWidth: 0
 }} />
 
 <Text config={{
   offsetX: window.innerWidth / 2,
-  offsetY: window.innerHeight / 3,
+  offsetY: window.innerHeight / 2.6,
   x: window.innerWidth / 2,
-  y: window.innerHeight / 3,
+  y: window.innerHeight / 2.6,
   text: "🥧",
   width: window.innerWidth,
-  height: window.innerHeight,
+  height: window.innerHeight / 1.3,
   align: 'center',
   verticalAlign: 'middle',
   fontSize: pieEmojiFontSize,
-  fillEnabled: true,
-  visible: isPiEmojiVisible,
+  visible: isPiEmojiVisible
 }} bind:handle={pieEl} />
 
