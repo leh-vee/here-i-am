@@ -10,9 +10,9 @@ export const isCountingDown = derived(
   }
 );
 
-export const isExploring = derived(
+export const isRemembering = derived(
   [verseState], ([$verseState]) => {
-    return $verseState === 'exploring';
+    return $verseState === 'remember';
   }
 );
 

@@ -1,6 +1,6 @@
 <script>
   import EllipsisDot from "./EllipsisDot.svelte";
-  import { verseState, isVerseMapReaveled, isExploring, isEllipsisLit } from '../stores/verseState';
+  import { verseState, isVerseMapReaveled, isRemembering, isEllipsisLit } from '../stores/verseState';
   import { Rect } from "svelte-konva";
 
   const piFractionSecs = (Math.PI - 3) * 1000;
@@ -20,7 +20,7 @@
     hitAreaY += params.height / 2.5;
   }
 
-  $: if ($isExploring) setTimeout(slowReveal, piFractionSecs);
+  $: if ($isRemembering) setTimeout(slowReveal, piFractionSecs);
 
   function slowReveal() {
     const nDots = showDots.length;

@@ -28,7 +28,7 @@
   }
 
   function remember() {
-    verseState.set('exploring');
+    verseState.set('remember');
     aPrioriLayerEl.to({
       duration: Math.PI,
       opacity: 0,
