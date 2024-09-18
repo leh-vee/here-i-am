@@ -34,6 +34,7 @@
     return new Promise((resolve) => {
       const addDotToLineA = () => { 
         progressiveLines.a += '.';
+        dispatch('dot');
         setTimeout(()=> {
           if (progressiveLines.a === '...') {
             resolve(true);

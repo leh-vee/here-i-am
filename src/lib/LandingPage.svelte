@@ -23,7 +23,6 @@
   const diagonalRadius = Math.hypot(xCentre, yCentre);
   const coinRadius = Math.round((width / 2) * 0.8);
   const strokeWidth = 6;
-  const markerRadius = 2;
   const goButtonRaidus = coinRadius / 2;
 
   let coinEl, coinOverflowEl, irisEl, markerEl;
@@ -146,11 +145,7 @@
         outerRadius: diagonalRadius, 
         easing: Konva.Easings.EaseOut,
         onFinish: () => {
-          isTails = true,
-          markerEl.to({
-            duration: Math.PI,
-            radius: markerRadius
-          });
+          isTails = true
         }
       });
     }
@@ -159,6 +154,14 @@
       innerRadius: coinRadius,
       easing: Konva.Easings.EaseIn,
       onFinish: () => { coinOlverflow() }
+    });
+  }
+
+  function infalteSelf() {
+    const currentRadius = markerEl.radius();
+    markerEl.to({
+      duration: Math.PI / 10,
+      radius: currentRadius + 3
     });
   }
 
@@ -205,7 +208,8 @@
       {#if isHeads}
         <Title />
       {/if}
-      <IntroCouplet visible={ isTails } on:revealed={ postIntroReveal } />
+      <IntroCouplet visible={ isTails } on:revealed={ postIntroReveal }
+        on:dot={ infalteSelf } />
       <Text config={{
         x: 0,
         y: 0,
