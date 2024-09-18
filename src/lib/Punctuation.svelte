@@ -4,7 +4,7 @@
     isInBetweenWords } from '../stores/text.js';
 
   const duration = Math.PI / 2;
-  const fontSize = Math.round(window.innerHeight / 6);
+  const fontSize = Math.round(window.innerHeight / 4);
   let punctuationEl;
 
   $: if ($isCaesura) animateIn();
@@ -44,6 +44,6 @@
   fontSize,
   fill: 'black',
   opacity: 0,
-  strokeWidth: 1,
+  strokeWidth: 2,
   stroke: 'silver'
 }} bind:handle={punctuationEl} />
