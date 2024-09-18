@@ -161,7 +161,7 @@
     const currentRadius = markerEl.radius();
     markerEl.to({
       duration: Math.PI / 10,
-      radius: currentRadius + 3
+      radius: currentRadius + 1
     });
   }
 
