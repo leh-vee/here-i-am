@@ -36,24 +36,30 @@
 
   let xPositionWidth;
   $: if (padEl !== undefined) xPositionWidth = padEl.width() - textElWidth;
-  $: if ($isReaderEngaged) {
+  $: if ($isReaderEngaged && padEl !== undefined) movePadToCurrentWord(xPadPosition, yPadPosition);
+
+  function movePadToCurrentWord(x, y) {
+    isInBetweenWords.set(true);
+    padEl.to({ 
+      duration: movePadDuration(), 
+      x, y,
+      onFinish: () => {
+        if (stashedWordEl !== null) unstashWord();
+        isInBetweenWords.set(false);
+      }
+    });
+  }
+
+  function movePadDuration() {
     const xCurrentPosition = padEl.position()['x'];
     const xDistance = Math.abs(xCurrentPosition - xPadPosition);
     const xDistancePercent = xDistance / xPositionWidth;
-    movePadToCurrentWord(xPadPosition, yPadPosition, xDistancePercent);
-  } 
 
-  function movePadToCurrentWord(x, y, duration) {
-    if (padEl !== undefined) {
-      isInBetweenWords.set(true);
-      padEl.to({ 
-        duration, x, y,
-        onFinish: () => {
-          if (stashedWordEl !== null) unstashWord();
-          isInBetweenWords.set(false);
-        }
-      });
-    }
+    const yCurrentPosition = padEl.position()['y'];
+    const yIsChanging = yCurrentPosition !== yPadPosition;
+
+    const duration = yIsChanging ? xDistancePercent + 0.1 : xDistancePercent;
+    return duration;
   }
 
   $: if ($isCaesura || $isFullStop) stashWord();
