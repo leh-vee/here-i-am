@@ -2,45 +2,38 @@
   // @ts-nocheck
   import { Circle } from 'svelte-konva';
   import { percentOfVerseRead, likePiSlices, isLineA } from '../stores/text';
-  import { isReaderEngaged, isFullStop } from '../stores/verseState';
+  import { isReaderEngaged, isFullStop, isVerseMapReaveled } from '../stores/verseState';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
   
   export let coordsPx;
-  export let isLit = false;
   export let isFromSefirah = true;
 
   const radius = 5;
+  const piFractions = Math.PI - 3;
   let goldFillEl;
-
-  $: if (isLit && goldFillEl !== undefined) animateOpacity($percentOfVerseRead, $isReaderEngaged, $isFullStop);
   
-  function animateOpacity(percentRead, isEngaged, isFullStop) {
-    const opacity = isFromSefirah ? fromOpacity(percentRead, isEngaged) : toOpacity(percentRead, isFullStop);
-    goldFillEl.to({ duration: Math.PI, opacity });
-  }
+  $: isToSefriah = !isFromSefirah;
 
-  function fromOpacity(p, isEngaged) {
-    let o = 0;
-    if (isEngaged) {
+  $: if (isFromSefirah && $isVerseMapReaveled) fadeFillToOpacity(1, Math.PI);
+  $: if (isToSefriah && $isFullStop) fadeFillToOpacity(1);
+  
+  $: if ($isReaderEngaged && $percentOfVerseRead) {
+    if (isFromSefirah) {
       if ($likePiSlices && !$isLineA) {
-        o = toOpacity(p);
+        fadeFillToOpacity($percentOfVerseRead);
       } else {
-        o = Math.max(1 - p - (Math.PI - 3), 0); 
+        fadeFillToOpacity(Math.min(1 - $percentOfVerseRead, 0.95));
       }
+    } else {
+      fadeFillToOpacity(Math.max($percentOfVerseRead, 0.05));
     }
-    return o;
   }
 
-  function toOpacity(p, isFullStop) { 
-    let o = 0;
-    if (isFullStop) {
-      o = 1;
-    } else {
-      o = Math.max(p - (Math.PI - 3), 0);
-    }
-    return o;
+  function fadeFillToOpacity(opacity, duration = piFractions) {
+    console.log('set opacity of sefirah to', opacity);
+    goldFillEl.to({ duration, opacity });
   }
 
   function incrementWord() {

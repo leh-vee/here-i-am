@@ -4,11 +4,56 @@ import { isInBetweenWords } from './text.js';
 export const verseState = writable('');
 export const isVerseNumberVisible = writable(false);
 
+export const isCountingDown = derived(
+  [verseState], ([$verseState]) => {
+    return $verseState === 'counting';
+  }
+);
+
+export const isExploring = derived(
+  [verseState], ([$verseState]) => {
+    return $verseState === 'exploring';
+  }
+);
+
+export const isEllipsisReaveled = derived(
+  [verseState], ([$verseState]) => {
+    return $verseState === 'ellipsisRevealed';
+  }
+);
+
+
+export const isVerseMapReaveled = derived(
+  [verseState], ([$verseState]) => {
+    return $verseState === 'verseMapReaveled';
+  }
+);
+
+export const isEllipsisLit = derived(
+  [verseState], ([$verseState]) => {
+    return $verseState === 'ellipsisLit';
+  }
+);
+
 export const isReaderEngaged = derived(
   [verseState], ([$verseState]) => {
     return $verseState === 'readerEngaged';
   }
-)
+);
+
+export const isFullStop = derived(
+  [verseState], ([$verseState]) => {
+    return $verseState === 'full-stop';
+  }
+);
+
+export const isPostVerse = derived(
+  [verseState], ([$verseState]) => {
+    return $verseState === 'post';
+  }
+);
+
+
 
 export const isMenuVisible = derived(
   [verseState], ([$verseState]) => {
@@ -27,48 +72,6 @@ export const isNotepadVisible = derived(
       isMenuVisible = true;
     } 
     return isMenuVisible;
-  }
-);
-
-export const isEllipsisReaveled = derived(
-  [verseState], ([$verseState]) => {
-    return $verseState === 'ellipsisRevealed';
-  }
-);
-
-export const isEllipsisLit = derived(
-  [verseState], ([$verseState]) => {
-    return $verseState === 'ellipsisLit';
-  }
-);
-
-export const isFullStop = derived(
-  [verseState], ([$verseState]) => {
-    return $verseState === 'full-stop';
-  }
-);
-
-export const isVerseMapReaveled = derived(
-  [verseState], ([$verseState]) => {
-    return $verseState === 'verseMapReaveled';
-  }
-);
-
-export const isExploring = derived(
-  [verseState], ([$verseState]) => {
-    return $verseState === 'exploring';
-  }
-);
-
-export const isCountingDown = derived(
-  [verseState], ([$verseState]) => {
-    return $verseState === 'counting';
-  }
-);
-
-export const isPostVerse = derived(
-  [verseState], ([$verseState]) => {
-    return $verseState === 'post';
   }
 );
 
