@@ -22,10 +22,6 @@
     }, Math.PI * 1000);
   }
 
-  $: {
-    console.log('verse state:', $verseState);
-  }
-
   function blaze() {
     isMurmuring = false;
     isBlazing = true;

@@ -32,7 +32,6 @@
   }
 
   function fadeFillToOpacity(opacity, duration = piFractions) {
-    console.log('set opacity of sefirah to', opacity);
     goldFillEl.to({ duration, opacity });
   }
 
