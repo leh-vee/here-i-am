@@ -166,6 +166,7 @@
   }
 
   function irisIn() {
+    isHeads = false;
     irisEl.to({
       duration: 1,
       easing: Konva.Easings.EaseIn,
@@ -234,7 +235,11 @@
     </Layer>
   </Stage>
   <Number isVisible={ isClosedCoin } number={ countdownNumber } /> 
-</div> 
+</div>
+{#if isHeads}
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <button id='skip-intro' on:click={ irisIn }>Skip Intro</button>
+{/if}
 
 <style>
   #landing-page {
@@ -244,5 +249,17 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+
+  #skip-intro {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    font-size: 12px;
+    font-family: sans-serif;
+    background-color: white;
+    color: black;
+    padding: 5px;
+    border-radius: 3px;
   }
 </style>
