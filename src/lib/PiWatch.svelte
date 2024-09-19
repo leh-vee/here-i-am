@@ -61,7 +61,7 @@
 
   $: if ($isFullStop) clearInterval(interval);
 
-  $: if ($isPostVerse && $nPiesScored < 3 && isPiSeconds) {
+  $: if ($isPostVerse && isPiEmojiVisible) {
     pieSpin();
     nPiesScored.set($nPiesScored + 1); 
   }
