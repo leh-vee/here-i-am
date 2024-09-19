@@ -9,7 +9,7 @@
   import Ellipsis from './Ellipsis.svelte';
   import { verseState, isNavigable, isCountingDown, isFullStop } from '../stores/verseState';
   import { channelBlocks, blocksForCurrentChannel, currentChannelProjection } from '../stores/treeOfLife';
-  import { wordIndices, isPunctuationNext, isLastVerseWord, isCaesura, 
+  import { wordIndices, isPunctuationNext, isLastVerseWord, isCaesura, isLineA, 
     currentPiSlice, lastPiSlice, likePiSlices, isGroundZero, isFirstVerseWord, 
     isInBetweenWords } from '../stores/text';
   import { fetchBlocksWithinRadius } from '../api/client.js';
@@ -69,13 +69,15 @@
     return yPos > ySwipeBounds.lower && yPos < ySwipeBounds.upper;
   }
 
+  $: isSwipeDirectionReversed = $likePiSlices && !$isLineA;
+
   function swiped(event) {
     if (isPointerWithinBounds()) {
       const direction = event.detail.direction;
       if (direction === 'left') {
-        nextWord();
+        isSwipeDirectionReversed ? previousWord() : nextWord();
       } else {
-        previousWord();
+        isSwipeDirectionReversed ? nextWord() : previousWord();
       }
     }
   }
