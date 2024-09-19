@@ -36,7 +36,7 @@
   }
 
   function incrementWord() {
-    if (isFromSefirah) {
+    if (isFromSefirah && !$likePiSlices) {
       dispatch('previous-word');
     } else {
       dispatch('next-word');

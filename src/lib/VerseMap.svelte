@@ -53,7 +53,7 @@
 </script>
 
 <SefirahMarker coordsPx={ $currentChannelFromSefirahCoordsPx } 
-    on:previous-word />
+    on:previous-word on:next-word />
 {#if !$likePiSlices}
   <SefirahMarker coordsPx={ $currentChannelToSefirahCoordsPx } 
     isFromSefirah={ false } on:next-word />
