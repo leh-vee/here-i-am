@@ -1,22 +1,19 @@
 <script>
   import DropDownMenu from "./DropDownMenu.svelte";
+  import FAQ from "./FAQ.svelte";
 
   export let isVisible = false;
 </script>
 
 <DropDownMenu isHidden={ !isVisible }>
   <div id='info'>
-    <h1>Instructions</h1>
+    <h2>Instructions</h2>
     <p>Read the poem. Eat the pies. Have a nice time.</p>
-    <h1>Score</h1>
-    <p>The score is calculated as a function of the number of total reading minutes multiplied by the number of pies eaten.</p>
-    <h1>Here I Am</h1>
-    <p>This an adaptation of the proen that introduces the book Me & My Shadow, avaiable from Publisher X</p>
-    <h1>Playlist</h1>
-    <ul>
-      <li>Pi - Kate Bush</li>
-      <li>Falling Down; Tom Waits</li>
-    </ul>
+    <div id='faq'>
+      <h2>Frequently Asked Questions</h2>
+      <FAQ />
+    </div>
+    
   </div>
 </DropDownMenu>
 
