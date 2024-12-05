@@ -9,7 +9,6 @@
      * `import type` instead of `import` for Types.
      */
     "ignoreDeprecations": "5.0",
-    "importsNotUsedAsValues": "error",
     "isolatedModules": true,
     "resolveJsonModule": true,
     /**
