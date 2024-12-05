@@ -43,6 +43,21 @@ export function serializeCouplets(lines) {
   return coupletsJson;
 }
 
+export function serializeFaqText(lines) {
+  const faqJson = [];
+  const nQuestions = lines.length / 2; 
+  for (let i = 0; i < nQuestions; i++) {
+    const question = lines[i * 2];
+    const answer = lines[i * 2 + 1];
+    const qa = { q: question, a: answer };
+    faqJson.push(qa);
+  }
+  const finalQuestion = { q: "...", a: "" };
+  faqJson.push(finalQuestion);
+  
+  return faqJson;
+}
+
 function splitWordsStripPunctuation(str) {
   const strWithoutPunctuation = str.replaceAll(punctuationRegEx, '');
   const words = strWithoutPunctuation.split(' ');

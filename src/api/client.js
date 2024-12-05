@@ -31,6 +31,11 @@ export function fetchIntroCouplets() {
   return getLinesFromTxtFile(filePath);
 }
 
+export function fetchFaqText() {
+  const filePath = `${window.location.href}/faq.txt`;
+  return getLinesFromTxtFile(filePath);
+}
+
 async function getLinesFromTxtFile(filePath) {
   const response = await fetch(filePath);
   const text = await response.text();
