@@ -22,6 +22,7 @@
         <h4 class='question'>{ qaPair.a }</h4>
         <p>{ qaPair.b }</p>
       {/each}
+      <h4 class='question'>...</h4>
     </div>
     
   </div>
