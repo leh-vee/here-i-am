@@ -53,8 +53,6 @@ export const isPostVerse = derived(
   }
 );
 
-
-
 export const isMenuVisible = derived(
   [verseState], ([$verseState]) => {
     let isMenuVisible = false;

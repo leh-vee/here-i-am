@@ -5,6 +5,10 @@
   import InfoDropDownMenu from './menus/InfoDropDownMenu.svelte';
   import PiDropDownMenu from './menus/PiDropDownMenu.svelte';
 
+  export let isVisible = false;
+
+  $: isHeaderVisible = $isMenuVisible || isVisible;
+
   let isInfoMenuVisible = false;
   function togglePiMenu() { isPiMenuVisible = !isPiMenuVisible }
   let isPiMenuVisible = false;
@@ -16,7 +20,7 @@
   }
 </script>
 
-<div id='header' class='menu' class:hide={!$isMenuVisible}>
+<div id='header' class='menu' class:hide={!isHeaderVisible}>
   <div id='score'>
     <span id='min-read'>{ $totalPoints }</span>
     <span id='pies'>
