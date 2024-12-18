@@ -5,6 +5,9 @@
   import { groundZeroBlocks, groundZeroProjection, 
     sefirotPoints, groundZeroRotationBlocks } from '../stores/treeOfLife.js';
   import StreetMap from './StreetMap.svelte';
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
 
   let crawlLayer;
   let singularity;
@@ -39,6 +42,7 @@
       } else {
         setTimeout(() => {
           singularity.destroy();
+          dispatch('mySelf');
         }, Math.PI * 1000);
       }
     }
