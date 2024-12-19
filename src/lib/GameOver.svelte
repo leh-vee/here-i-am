@@ -1,6 +1,5 @@
 <script>
   import HeaderMenu from './HeaderMenu.svelte';
-  import { onMount } from 'svelte';
 
   const gameOverStr = "GAME OVER";
   const goStrLength = gameOverStr.length;
@@ -9,7 +8,20 @@
 
   let showHeader = false;
 
-  onMount(async () => {
+  const fontFamily = "Press Start 2P";
+  let isTitleFontLoaded = false;
+
+  document.fonts.ready.then((fontFaceSet) => {
+    const fontFaces = [...fontFaceSet];
+    const loveYaFontFaces = fontFaces.filter(f => f.family === fontFamily);
+    Promise.all(loveYaFontFaces.map(ff => ff.load())).then(() => { 
+      isTitleFontLoaded = true;
+    });
+  });
+
+  $: if (isTitleFontLoaded) typeGoStr();
+
+  function typeGoStr() {
     const addGoChar = () => {
       if (goSubstrIndex < goStrLength) {
         goSubstrIndex += 1;
@@ -19,7 +31,7 @@
       }
     }
     let addCharIntervalId = setInterval(addGoChar, Math.PI * 100);
-  });
+  }
 </script>
 
 <div id='after-words'>
