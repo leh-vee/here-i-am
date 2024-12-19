@@ -52,7 +52,7 @@
       each inspired by brief conversations between strangers, is a
       companion work to this project publishd by Parking Lot Press.
       It opens with Here I Am as it appeared printed on a flyer
-      posted around my neighbourhood in the spring of 2021.
+      posted around my Toronto neighbourhood in the spring of 2021.
     </p>
   </div>
 </div>
