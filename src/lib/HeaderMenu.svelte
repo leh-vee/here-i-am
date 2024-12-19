@@ -65,8 +65,8 @@
   #header.menu #score #min-read {
     color: white;    
     margin-right: 5px;
-    font-size: 18px;
-    font-family: "love ya like a sister";
+    font-size: 22px;
+    font-family: "digital";
   }
 
   #header.menu #score #pies {
