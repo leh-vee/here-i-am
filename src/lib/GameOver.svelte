@@ -6,7 +6,7 @@
   let goSubstrIndex = 0;
   $: goSubstr = gameOverStr.substring(0, goSubstrIndex);
 
-  let showHeader = false;
+  let isGameOverOver = false;
 
   const fontFamily = "Press Start 2P";
   let isTitleFontLoaded = false;
@@ -27,7 +27,7 @@
         goSubstrIndex += 1;
       } else {
         clearInterval(addCharIntervalId);
-        showHeader = true;
+        isGameOverOver = true;
       }
     }
     let addCharIntervalId = setInterval(addGoChar, Math.PI * 100);
@@ -35,8 +35,26 @@
 </script>
 
 <div id='after-words'>
-  <HeaderMenu isVisible={ showHeader } />
-  <h5>{ goSubstr }</h5>
+  <HeaderMenu isVisible={ isGameOverOver } />
+  <div class='passage'>
+    <p class:hide={!isGameOverOver}>
+      Here I Am was designed and developed by Leon Lukashevsky.
+      Levi, the name given to the <span class='italic'>me</span>
+      character in the help menu happeneds to be his Hebrew name.
+      The dialogue in that section called Frequently Asked Questions
+      was authored by all of us in collaboration.
+    </p>
+  </div>
+  <h5 id='game-over'>{ goSubstr }</h5>
+  <div class='passage'>
+    <p class:hide={!isGameOverOver}>
+      Intersections, a collection of intersubjective lyrical poems,
+      each inspired by brief conversations between strangers, is a
+      companion work to this project publishd by Parking Lot Press.
+      It opens with Here I Am as it appeared printed on a flyer
+      posted around my neighbourhood in the spring of 2021.
+    </p>
+  </div>
 </div>
 
 <style>
@@ -46,11 +64,40 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
   }
-  h5 {
+
+  .passage {
+    margin: 10px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  #game-over {
     margin: 0;
     color: gold;
     font-family: "Press Start 2P", serif;
     font-size: 8vw;
+  }
+
+  p {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 12px;
+    line-height: 200%;
+    color: lightgray;
+    margin: 0 20%;
+    opacity: 1;
+    transition: opacity 3s ease-in-out;
+  }
+
+  p.hide {
+    opacity: 0;
+  }
+
+  .italic {
+    font-style: italic;
   }
 </style>
