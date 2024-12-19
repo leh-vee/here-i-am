@@ -1,10 +1,30 @@
 <script>
   import HeaderMenu from './HeaderMenu.svelte';
+  import { onMount } from 'svelte';
+
+  const gameOverStr = "GAME OVER";
+  const goStrLength = gameOverStr.length;
+  let goSubstrIndex = 0;
+  $: goSubstr = gameOverStr.substring(0, goSubstrIndex);
+
+  let showHeader = false;
+
+  onMount(async () => {
+    const addGoChar = () => {
+      if (goSubstrIndex < goStrLength) {
+        goSubstrIndex += 1;
+      } else {
+        clearInterval(addCharIntervalId);
+        showHeader = true;
+      }
+    }
+    let addCharIntervalId = setInterval(addGoChar, Math.PI * 100);
+  });
 </script>
 
 <div id='after-words'>
-  <HeaderMenu isVisible={ true } />
-  <h5>Game Over</h5>
+  <HeaderMenu isVisible={ showHeader } />
+  <h5>{ goSubstr }</h5>
 </div>
 
 <style>
