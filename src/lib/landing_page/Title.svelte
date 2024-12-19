@@ -6,15 +6,6 @@
   const fontSize = Math.round(window.innerWidth / 4.5);
   const fill = 'gold';
 
-  // const subtitle = "Our\nFallen\nGang";
-  // function showSubtitle() {
-  //   titleText = subtitle;
-  //   fill = 'dimgrey';
-  //   stroke = 'gold';
-  //   buttonRadius -= strokeWidth;
-  //   fontSize = Math.round(window.innerWidth / 10)
-  // } 
-
   let isTitleFontLoaded = false;
 
   document.fonts.ready.then((fontFaceSet) => {
