@@ -39,17 +39,17 @@
   <div class='passage'>
     <p class:hide={!isGameOverOver}>
       Here I Am was designed and developed by Leon Lukashevsky.
-      Levi, the name given to the <span class='italic'>me</span>
+      Levi, the name of the <span class='italic'>me</span>
       character in the help menu happeneds to be his Hebrew name.
-      The dialogue in that section called Frequently Asked Questions
-      was authored by all of us in collaboration.
+      The Frequently Asked Questions dialogue found there  
+      was written by all of us in collaboration.
     </p>
   </div>
   <h5 id='game-over'>{ goSubstr }</h5>
   <div class='passage'>
     <p class:hide={!isGameOverOver}>
       Intersections, a collection of intersubjective lyrical poems,
-      each inspired by brief conversations between strangers, is a
+      each inspired by brief conversations between strangers is a
       companion work to this project publishd by Parking Lot Press.
       It opens with Here I Am as it appeared printed on a flyer
       posted around my Toronto neighbourhood in the spring of 2021.
