@@ -42,7 +42,9 @@
       } else {
         setTimeout(() => {
           singularity.destroy();
-          dispatch('mySelf');
+          setTimeout(() => {
+            dispatch('mySelf');
+          }, Math.PI * 1000);
         }, Math.PI * 1000);
       }
     }
