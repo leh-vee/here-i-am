@@ -29,7 +29,7 @@
 
 <style>
   #info {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     padding: 0 10px;
     overflow-y: inherit;
   } 
