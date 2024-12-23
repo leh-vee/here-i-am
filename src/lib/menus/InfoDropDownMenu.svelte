@@ -13,9 +13,6 @@
 
 <DropDownMenu isHidden={ !isVisible }>
   <div id='info'>
-    <h3>Instructions</h3>
-    <p>Read the poem. Eat the pies. Have a nice time.</p>
-    <p>The score is calculated as a function of the number of total reading minutes multiplied by the number of pies eaten.</p>
     <div id='faq'>
       <h3>Frequently Asked Questions</h3>
       {#each faqs as qaPair}
