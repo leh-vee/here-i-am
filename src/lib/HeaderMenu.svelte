@@ -1,5 +1,5 @@
 <script>
-  import { totalPoints, nPiesScored } from '../stores/base';
+  import { nPiesScored } from '../stores/base';
   import { isMenuVisible } from '../stores/verseState';
   import { currentPiSliceRomanized } from '../stores/text';
   import InfoDropDownMenu from './menus/InfoDropDownMenu.svelte';
@@ -21,14 +21,11 @@
 </script>
 
 <div id='header' class='menu' class:hide={!isHeaderVisible}>
-  <div id='score'>
-    <span id='min-read'>{ $totalPoints }</span>
-    <span id='pies'>
-      {#each isPieEaten as eaten}
-      <span class:eaten>🥧</span>
-      {/each}
-    </span>
-  </div>
+  <span id='pies'>
+    {#each isPieEaten as eaten}
+    <span class:eaten>🥧</span>
+    {/each}
+  </span>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div id='verse-number' on:click={ togglePiMenu }>{ $currentPiSliceRomanized }</div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -56,23 +53,12 @@
   #header.menu.hide {
     top: -27px;
   }
-
-  #header.menu #score {
+  
+  #header.menu #pies {
     position: absolute;
-    left: 10px;
-  }
-
-  #header.menu #score #min-read {
-    color: white;    
-    margin-right: 5px;
+    left: 5px;
     font-size: 22px;
-    font-family: "digital";
-  }
-
-  #header.menu #score #pies {
-    font-size: 22px;
-    position: relative;
-    bottom: 2px;
+    bottom: 1px;
     font-family: monospace;
   }
 
