@@ -13,11 +13,13 @@
 
 <DropDownMenu isHidden={ !isVisible }>
   <div id='info'>
+    <h3>Frequently Asked Questions</h3>
     <div id='faq'>
-      <h3>Frequently Asked Questions</h3>
       {#each faqs as qaPair}
-        <h4 class='question'>{ qaPair.a }</h4>
-        <p>{ qaPair.b }</p>
+        <span class='question'>{ qaPair.a }</span>
+        <br />
+        <span class='answer'>{ qaPair.b }</span>
+        <br />
       {/each}
     </div>
     
@@ -32,10 +34,32 @@
   } 
 
   h3 {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    text-align: center;
     color: gold;
   }
-  
-  .question {
-    color: gray;
+
+  #faq {
+    display: inline-flex;
+    flex-direction: column;
   }
+  
+  span {
+    font-family: Helvetica, sans-serif;
+    font-size: 3vw;
+    font-weight: 400;
+    color: black;
+    background-color: rgb(230	230	232);
+    padding: 5px 10px;
+    align-self: baseline;
+    max-width: 75%;
+    border-radius:10px;
+  }
+
+  .answer {
+    align-self: flex-end;
+    background-color: rgb(41, 132, 245);
+    color: white;
+  }
+
 </style>
