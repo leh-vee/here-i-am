@@ -17,9 +17,7 @@
     <div id='faq'>
       {#each faqs as qaPair}
         <span class='question'>{ qaPair.a }</span>
-        <br />
         <span class='answer'>{ qaPair.b }</span>
-        <br />
       {/each}
     </div>
     
@@ -34,14 +32,16 @@
   } 
 
   h3 {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     text-align: center;
-    color: gold;
+    font-weight: 100;
+    color: lightgoldenrodyellow;
   }
 
   #faq {
     display: inline-flex;
     flex-direction: column;
+    justify-content: space-evenly;
   }
   
   span {
@@ -51,6 +51,7 @@
     color: black;
     background-color: rgb(230	230	232);
     padding: 5px 10px;
+    margin: 8px 0;
     align-self: baseline;
     max-width: 75%;
     border-radius:10px;
