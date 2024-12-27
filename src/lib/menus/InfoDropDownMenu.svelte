@@ -46,7 +46,7 @@
   
   span {
     font-family: Helvetica, sans-serif;
-    font-size: 3vw;
+    font-size: 4vw;
     font-weight: 400;
     color: black;
     background-color: rgb(230	230	232);
