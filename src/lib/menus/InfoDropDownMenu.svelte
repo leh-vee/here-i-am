@@ -46,10 +46,10 @@
   
   span {
     font-family: Helvetica, sans-serif;
-    font-size: 4vw;
+    font-size: 3.5vw;
     font-weight: 400;
-    color: black;
-    background-color: rgb(230	230	232);
+    color: rgb(218, 218, 218);
+    background-color: rgb(52, 52, 53);
     padding: 5px 10px;
     margin: 8px 0;
     align-self: baseline;
