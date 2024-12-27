@@ -21,11 +21,11 @@
 </script>
 
 <div id='header' class='menu' class:hide={!isHeaderVisible}>
-  <span id='pies'>
+  <div id='pies'>
     {#each isPieEaten as eaten}
     <span class:eaten>🥧</span>
     {/each}
-  </span>
+  </div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div id='verse-number' on:click={ togglePiMenu }>{ $currentPiSliceRomanized }</div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
