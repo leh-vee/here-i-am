@@ -16,7 +16,7 @@
   let hasQuestionArrived = false;
   let hasAnswerArrived = false;
 
-  $: if (faqIndex) {
+  $: if (faqIndex && isVisible) {
     setTimeout(() => {
       hasQuestionArrived = true;
     }, getRandomTextInterval());
