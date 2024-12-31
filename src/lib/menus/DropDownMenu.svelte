@@ -17,7 +17,7 @@
     left: 0;
     bottom: 0;
     right: 0;
-    color: white;
+    color: darkgray;
     background-color: black;
     z-index: 2;
     transition: bottom 500ms ease;
@@ -33,7 +33,7 @@
     position: fixed;
     right: 5%;
     font-family: monospace;
-    font-size: 4vh;
+    font-size: 3vh;
   }
 
   .drop-down.menu.hide #close-button {
