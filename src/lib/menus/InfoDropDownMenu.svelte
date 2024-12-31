@@ -1,61 +1,77 @@
 <script>
   import DropDownMenu from "./DropDownMenu.svelte";
   import { fetchFaqText } from '../../api/client.js';
-  import { serializeCouplets } from '../../utils/textJson.js';
 
   export let isVisible = false;
+  let groundZeroEl;
 
-  let faqs = [];
-  let nFaqs;
+  let linesToText = [];
   fetchFaqText().then(lines => {
-    faqs = serializeCouplets(lines);
-    nFaqs = faqs.length;
+    linesToText = [...lines];
   });
 
-  let faqIndex = 1;
-  let hasQuestionArrived = false;
-  let hasAnswerArrived = false;
+  let textIndex = 0;
+  $: isTexting = isVisible && linesToText !== undefined;
+  $: textType = textIndex % 2 === 0 ? 'question' : 'answer';
+  $: isFinalAnswer = textIndex === linesToText.length - 1;
 
-  $: if (faqIndex && isVisible) {
-    setTimeout(() => {
-      hasQuestionArrived = true;
-    }, getRandomTextInterval());
+  let textCharsCount, previousTextCharsCount;
+  $: if (isTexting && textIndex < linesToText.length - 1) {
+    textCharsCount = linesToText[textIndex].length;
+    previousTextCharsCount = textIndex === 0 ? 0 : linesToText[textIndex - 1].length;
+    getNextText();
   }
 
-  $: if (hasQuestionArrived) {
-    setTimeout(() => {
-      hasAnswerArrived = true;
-    }, getRandomTextInterval());
+  let isTyping = false;
+  async function getNextText() {
+    await delay('thinking');
+    isTyping = true;
+    groundZeroEl.scrollIntoView({ behavior: "smooth", block: "end" });
+    await delay('typing');
+    isTyping = false;
+    textIndex += 1;
+    groundZeroEl.scrollIntoView({ behavior: "smooth", block: "end" });
   }
 
-  $: if (hasAnswerArrived) {
-    setTimeout(nextQuestion, 1000);
-  }
-   
-  function nextQuestion() {
-    if (faqIndex < nFaqs - 1) {
-      faqIndex += 1;
-      hasQuestionArrived = false;
-      hasAnswerArrived = false;
-    }
+  const textDelayRanges = {
+    thinking: {
+      question: [25, 50], 
+      answer: [100, 200]
+    },
+    typing: {
+      question: [100, 150], 
+      answer: [125, 200]
+    } 
   }
 
-  const flashingDotsReset = [true, false, false]
-  let flashingDots = flashingDotsReset;
+  function delay(type) {
+    return new Promise((resolve) => {
+      const delayFactor = getRandomNumber(...textDelayRanges[type][textType]);
+      let nChars = type === 'thinking' ?  previousTextCharsCount : textCharsCount;
+      const delayMillisecs = nChars * delayFactor;
+      setTimeout(() => {
+        resolve(true);
+      }, delayMillisecs)
+    });
+  }
 
+  function getRandomNumber(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  let flashingDots = [true, false, false];
   setInterval(() => {
     if (flashingDots[0]) {
       flashingDots = [false, true, false];
     } else if (flashingDots[1]) {
       flashingDots = [false, false, true];
     } else {
-      flashingDots = flashingDotsReset
+      flashingDots = [true, false, false];
     }
   }, 600);
 
-  function getRandomTextInterval() {
-    const seconds = Math.random() * (10 - 5) + 5;
-    return seconds * 1000;
+  function getTextType(index) {
+    return index % 2 === 0 ? 'question' : 'answer';
   }
 
 </script>
@@ -64,31 +80,17 @@
   <div id='info'>
     <h3>Frequently Asked Questions</h3>
     <div id='faq'>
-      {#each faqs.slice(0, faqIndex) as qaPair, i}
-        {#if i === faqIndex - 1}
-          {#if hasQuestionArrived}
-            <p class='question'>{ qaPair.a }</p>
-          {:else}
-            <p class='waiting question'>
-              {#each flashingDots as isFlashing}
-                <span class='dot' class:flash={isFlashing}>&#x2022;</span>
-              {/each}
-            </p>
-          {/if}
-          {#if hasAnswerArrived} 
-            <p class='answer'>{ qaPair.b }</p>
-          {:else if hasQuestionArrived}
-            <p class='waiting answer'>
-              {#each flashingDots as isFlashing}
-                <span class='dot' class:flash={isFlashing}>&#x2022;</span>
-              {/each}
-            </p>
-          {/if}
-        {:else}
-          <p class='question'>{ qaPair.a }</p>
-          <p class='answer'>{ qaPair.b }</p>
-        {/if}
+      {#each linesToText.slice(0, textIndex) as text, i}
+        <p class='{getTextType(i)}'>{ text }</p>
       {/each}
+      {#if isTyping || isFinalAnswer }
+        <p class='{textType} waiting'>
+          {#each flashingDots as isFlashing}
+            <span class='dot' class:flash={isFlashing}>&#x2022;</span>
+          {/each}
+        </p>
+      {/if}
+      <div class='nobody' bind:this={ groundZeroEl }></div>
     </div>
     
   </div>
@@ -117,7 +119,7 @@
   
   p {
     font-family: Helvetica, sans-serif;
-    font-size: 3.5vw;
+    font-size: 5vw;
     font-weight: 400;
     color: rgb(218, 218, 218);
     background-color: rgb(52, 52, 53);
@@ -139,13 +141,18 @@
   }
   
   .dot {
-    font-size: 2.5vh;
+    font-size: 7vw;
     color: white;
     transition: color 0.7s ease-in-out;
   }
 
   .dot.flash {
     color: darkgrey;
+  }
+
+  .nobody {
+    width: 100%;
+    height: 100px;
   }
 
 </style>
