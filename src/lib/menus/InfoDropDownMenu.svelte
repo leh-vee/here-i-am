@@ -110,6 +110,7 @@
   #help {
     padding: 0 10px;
     font-family: Helvetica, sans-serif;
+    overflow-y: inherit;
   } 
 
   h2 {
