@@ -3,7 +3,7 @@
   import { fetchFaqText } from '../../api/client.js';
 
   export let isVisible = false;
-  let groundZeroEl;
+  let nobodyEl;
 
   let linesToText = [];
   fetchFaqText().then(lines => {
@@ -15,10 +15,10 @@
   $: textType = textIndex % 2 === 0 ? 'question' : 'answer';
   $: isFinalAnswer = textIndex === linesToText.length - 1;
 
-  let textCharsCount, previousTextCharsCount;
+  let nTextChars = { current: 0, previous: 0}
   $: if (isTexting && textIndex < linesToText.length - 1) {
-    textCharsCount = linesToText[textIndex].length;
-    previousTextCharsCount = textIndex === 0 ? 0 : linesToText[textIndex - 1].length;
+    nTextChars.previous = nTextChars.current; 
+    nTextChars.current = linesToText[textIndex].length;
     getNextText();
   }
 
@@ -26,28 +26,34 @@
   async function getNextText() {
     await delay('thinking');
     isTyping = true;
-    groundZeroEl.scrollIntoView({ behavior: "smooth", block: "end" });
     await delay('typing');
     isTyping = false;
     textIndex += 1;
-    groundZeroEl.scrollIntoView({ behavior: "smooth", block: "end" });
+    scrollToEllipsis();
+  }
+  
+  function scrollToEllipsis() {
+    console.log('scroll');
+    setTimeout(() => {
+      nobodyEl.scrollIntoView({ behavior: "smooth", block: "end" });
+    }, 1)
   }
 
   const textDelayRanges = {
     thinking: {
-      question: [25, 50], 
-      answer: [100, 200]
+      question: [15, 50], 
+      answer: [30, 60]
     },
     typing: {
-      question: [100, 150], 
-      answer: [125, 200]
+      question: [15, 50], 
+      answer: [30, 60]
     } 
   }
 
   function delay(type) {
     return new Promise((resolve) => {
       const delayFactor = getRandomNumber(...textDelayRanges[type][textType]);
-      let nChars = type === 'thinking' ?  previousTextCharsCount : textCharsCount;
+      let nChars = type === 'thinking' ?  nTextChars.previous : nTextChars.current;
       const delayMillisecs = nChars * delayFactor;
       setTimeout(() => {
         resolve(true);
@@ -74,6 +80,8 @@
     return index % 2 === 0 ? 'question' : 'answer';
   }
 
+  $: isEllipsis = isTyping || isFinalAnswer;
+
 </script>
 
 <DropDownMenu isHidden={ !isVisible }>
@@ -83,14 +91,12 @@
       {#each linesToText.slice(0, textIndex) as text, i}
         <p class='{getTextType(i)}'>{ text }</p>
       {/each}
-      {#if isTyping || isFinalAnswer }
-        <p class='{textType} waiting'>
-          {#each flashingDots as isFlashing}
-            <span class='dot' class:flash={isFlashing}>&#x2022;</span>
-          {/each}
-        </p>
-      {/if}
-      <div class='nobody' bind:this={ groundZeroEl }></div>
+      <p class='{textType} ellipsis' class:show={isEllipsis}>
+        {#each flashingDots as isFlashing}
+          <span class='dot' class:flash={isFlashing}>&#x2022;</span>
+        {/each}
+      </p>
+      <div class='nobody' bind:this={ nobodyEl }></div>
     </div>
     
   </div>
@@ -136,8 +142,13 @@
     color: white;
   }
 
-  p.waiting {
+  p.ellipsis {
     padding: 0 5px;
+    visibility: hidden;
+  }
+
+  p.ellipsis.show {
+    visibility: visible;
   }
   
   .dot {
@@ -152,7 +163,7 @@
 
   .nobody {
     width: 100%;
-    height: 100px;
+    height: 10px;
   }
 
 </style>
