@@ -33,7 +33,6 @@
   }
   
   function scrollToEllipsis() {
-    console.log('scroll');
     setTimeout(() => {
       nobodyEl.scrollIntoView({ behavior: "smooth", block: "end" });
     }, 1)
@@ -85,46 +84,51 @@
 </script>
 
 <DropDownMenu isHidden={ !isVisible }>
-  <div id='info'>
-    <h3>Frequently Asked Questions</h3>
-    <div id='faq'>
-      {#each linesToText.slice(0, textIndex) as text, i}
-        <p class='{getTextType(i)}'>{ text }</p>
-      {/each}
-      <p class='{textType} ellipsis' class:show={isEllipsis}>
-        {#each flashingDots as isFlashing}
-          <span class='dot' class:flash={isFlashing}>&#x2022;</span>
-        {/each}
-      </p>
-      <div class='nobody' bind:this={ nobodyEl }></div>
+  <div id='help'>
+    <div id='me' class='section'>
+      <h2>About Me</h2>
+      <p>Hi, my name is Levi, the dark mirror that reveals what I needs it to.</p>
     </div>
-    
+    <div id='faq' class='section'>
+      <h2>Frequently Asked Questions</h2>
+      <div id='dialogue'>
+        {#each linesToText.slice(0, textIndex) as text, i}
+          <p class='text {getTextType(i)}'>{ text }</p>
+        {/each}
+        <p class='text {textType} ellipsis' class:show={isEllipsis}>
+          {#each flashingDots as isFlashing}
+            <span class='dot' class:flash={isFlashing}>&#x2022;</span>
+          {/each}
+        </p>
+        <div class='nobody' bind:this={ nobodyEl }></div>
+      </div>
+    </div>
   </div>
 </DropDownMenu>
 
 <style>
-  #info {
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  #help {
     padding: 0 10px;
-    overflow-y: inherit;
+    font-family: Helvetica, sans-serif;
   } 
 
-  h3 {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    text-align: center;
-    font-weight: 100;
-    color: lightgoldenrodyellow;
+  h2 {
+    color: gold;
   }
 
-  #faq {
+  #me p {
+    color: white;
+    font-size: 5vw;
+  }
+
+  #dialogue {
     display: inline-flex;
     flex-direction: column;
     justify-content: space-evenly;
     width: 100%;
   }
   
-  p {
-    font-family: Helvetica, sans-serif;
+  p.text {
     font-size: 5vw;
     font-weight: 400;
     color: rgb(218, 218, 218);
@@ -136,18 +140,18 @@
     border-radius:10px;
   }
 
-  p.answer {
+  p.text.answer {
     align-self: flex-end;
     background-color: rgb(41, 132, 245);
     color: white;
   }
 
-  p.ellipsis {
+  p.text.ellipsis {
     padding: 0 5px;
     visibility: hidden;
   }
 
-  p.ellipsis.show {
+  p.text.ellipsis.show {
     visibility: visible;
   }
   
