@@ -33,7 +33,7 @@
     position: fixed;
     right: 5%;
     font-family: monospace;
-    font-size: 3vh;
+    font-size: 4vh;
   }
 
   .drop-down.menu.hide #close-button {
