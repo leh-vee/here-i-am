@@ -2,7 +2,7 @@
   import { nPiesScored } from '../stores/base';
   import { isMenuVisible } from '../stores/verseState';
   import { currentPiSliceRomanized } from '../stores/text';
-  import InfoDropDownMenu from './menus/InfoDropDownMenu.svelte';
+  import HelpDropDownMenu from './menus/HelpDropDownMenu.svelte';
   import PiDropDownMenu from './menus/PiDropDownMenu.svelte';
 
   export let isVisible = false;
@@ -32,7 +32,7 @@
   <div id='info' on:click={ toggleInfoMenu }>?</div>
 </div>
 <PiDropDownMenu isVisible={ isPiMenuVisible } />
-<InfoDropDownMenu isVisible={ isInfoMenuVisible } />
+<HelpDropDownMenu isVisible={ isInfoMenuVisible } />
 
 <style>
   #header.menu {
