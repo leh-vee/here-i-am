@@ -3,7 +3,7 @@
   import { fetchFaqText } from '../../api/client.js';
 
   export let isVisible = false;
-  let nobodyEl;
+  let nobodyEl, ellipsisEl;
 
   let linesToText = [];
   fetchFaqText().then(lines => {
@@ -33,9 +33,16 @@
   }
   
   function scrollToEllipsis() {
-    setTimeout(() => {
-      nobodyEl.scrollIntoView({ behavior: "smooth", block: "end" });
-    }, 1)
+    const height = window.innerHeight;
+    const ellipsisTop = ellipsisEl.getBoundingClientRect().top;
+    const isEllipsisVisible = ellipsisTop < height;
+    const nobodyTop = nobodyEl.getBoundingClientRect().top;
+    const isNobodyAtGroundZero = (nobodyTop + 10) < height;
+    if (!isNobodyAtGroundZero && isEllipsisVisible) {
+      setTimeout(() => {
+        nobodyEl.scrollIntoView({ behavior: "smooth" });
+      }, 1)
+    }
   }
 
   const textDelayRanges = {
@@ -95,7 +102,7 @@
         {#each linesToText.slice(0, textIndex) as text, i}
           <p class='text {getTextType(i)}'>{ text }</p>
         {/each}
-        <p class='text {textType} ellipsis' class:show={isEllipsis}>
+        <p class='text {textType} ellipsis' class:show={isEllipsis} bind:this={ ellipsisEl }>
           {#each flashingDots as isFlashing}
             <span class='dot' class:flash={isFlashing}>&#x2022;</span>
           {/each}
@@ -168,7 +175,7 @@
 
   .nobody {
     width: 100%;
-    height: 10px;
+    height: 1px;
   }
 
 </style>
