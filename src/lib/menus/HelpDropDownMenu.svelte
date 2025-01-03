@@ -13,7 +13,12 @@
 
   $: isTexting = isVisible && linesToText !== undefined;
   $: textType = $faqLineIndex % 2 === 0 ? 'question' : 'answer';
-  $: isFinalAnswer = $faqLineIndex === linesToText.length - 1;
+  let isFinalAnswer = false;
+  $: if ($faqLineIndex === linesToText.length - 1) {
+    setTimeout(() => {
+      isFinalAnswer = true;
+    }, Math.PI * 1000);
+  }
 
   let nTextChars = { current: 0, previous: 0 };
   $: if (isTexting && $faqLineIndex < linesToText.length - 1) {
@@ -60,7 +65,7 @@
     return new Promise((resolve) => {
       const delayFactor = getRandomNumber(...textDelayRanges[type][textType]);
       let nChars = type === 'thinking' ?  nTextChars.previous : nTextChars.current;
-      const delayMillisecs = Math.log(nChars) * delayFactor;
+      const delayMillisecs = (Math.log(nChars) / Math.log(2)) * delayFactor;
       setTimeout(() => {
         resolve(true);
       }, delayMillisecs)
