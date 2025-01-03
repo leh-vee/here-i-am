@@ -40,9 +40,9 @@
     <p class:hide={!isGameOverOver}>
       Here I Am was designed and developed by Leon Lukashevsky. 
       My Hebrew name is Levi. Anyone keeping score will remember
-      that as also being the name of the <span class='italic'>me</span>
-      character from the help menu. The Frequently Asked
-      Questions dialogue that follows his introduction was written
+      that the <span class='italic'>me</span> character
+      in the help menu is called that too. The Frequently Asked
+      Questions dialogue that follows his introudctuon was written
       collaboratively, by all three of us at the very least.
     </p>
   </div>
