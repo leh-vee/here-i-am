@@ -40,12 +40,12 @@
 
   const textDelayRanges = {
     thinking: {
-      question: [15, 50], 
-      answer: [30, 60]
+      question: [500, 750], 
+      answer: [750, 900]
     },
     typing: {
-      question: [15, 50], 
-      answer: [30, 60]
+      question: [650, 875], 
+      answer: [750, 1000]
     } 
   }
 
@@ -53,7 +53,7 @@
     return new Promise((resolve) => {
       const delayFactor = getRandomNumber(...textDelayRanges[type][textType]);
       let nChars = type === 'thinking' ?  nTextChars.previous : nTextChars.current;
-      const delayMillisecs = nChars * delayFactor;
+      const delayMillisecs = Math.log(nChars) * delayFactor;
       setTimeout(() => {
         resolve(true);
       }, delayMillisecs)
