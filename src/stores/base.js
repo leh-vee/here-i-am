@@ -2,6 +2,8 @@ import { writable, derived } from 'svelte/store';
 
 export const isDataInitialized = writable(false);
 
+export const faqLineIndex = writable(0);
+
 export const nPiesScored = writable(0);
 export const millisecsElapsedByVerse = writable([]); 
 export const totalPoints = derived(

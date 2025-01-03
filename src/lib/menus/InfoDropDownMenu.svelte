@@ -1,6 +1,7 @@
 <script>
   import DropDownMenu from "./DropDownMenu.svelte";
   import { fetchFaqText } from '../../api/client.js';
+  import { faqLineIndex } from "../../stores/base";
 
   export let isVisible = false;
   let nobodyEl, ellipsisEl;
@@ -10,15 +11,14 @@
     linesToText = [...lines];
   });
 
-  let textIndex = 0;
   $: isTexting = isVisible && linesToText !== undefined;
-  $: textType = textIndex % 2 === 0 ? 'question' : 'answer';
-  $: isFinalAnswer = textIndex === linesToText.length - 1;
+  $: textType = $faqLineIndex % 2 === 0 ? 'question' : 'answer';
+  $: isFinalAnswer = $faqLineIndex === linesToText.length - 1;
 
-  let nTextChars = { current: 0, previous: 0}
-  $: if (isTexting && textIndex < linesToText.length - 1) {
+  let nTextChars = { current: 0, previous: 0 };
+  $: if (isTexting && $faqLineIndex < linesToText.length - 1) {
     nTextChars.previous = nTextChars.current; 
-    nTextChars.current = linesToText[textIndex].length;
+    nTextChars.current = linesToText[$faqLineIndex].length;
     getNextText();
   }
 
@@ -28,7 +28,7 @@
     isTyping = true;
     await delay('typing');
     isTyping = false;
-    textIndex += 1;
+    $faqLineIndex += 1;
     scrollToEllipsis();
   }
   
@@ -99,7 +99,7 @@
     <div id='faq' class='section'>
       <h2>Frequently Asked Questions</h2>
       <div id='dialogue'>
-        {#each linesToText.slice(0, textIndex) as text, i}
+        {#each linesToText.slice(0, $faqLineIndex) as text, i}
           <p class='text {getTextType(i)}'>{ text }</p>
         {/each}
         <p class='text {textType} ellipsis' class:show={isEllipsis} bind:this={ ellipsisEl }>
