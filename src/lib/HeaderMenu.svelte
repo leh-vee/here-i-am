@@ -17,7 +17,7 @@
   let isInfoMenuVisible = false;
   function toggleInfoMenu() { isInfoMenuVisible = !isInfoMenuVisible }
 
-  let isPieEaten = [];
+  let isPieEaten = [false, false, false];
   $: {
     if (isPiMastersMenuVisible) {
       pieBlink();
@@ -29,7 +29,6 @@
   
   let cyclePiesIntervalId;
   function pieBlink() {
-    isPieEaten = [false, false, false];
     cyclePiesIntervalId = setInterval(() => {
       const indexOfLastPieFilling = isPieEaten.lastIndexOf(true);
       if (indexOfLastPieFilling === 2) {
