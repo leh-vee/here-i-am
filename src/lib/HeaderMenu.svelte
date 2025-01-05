@@ -2,13 +2,16 @@
   import { nPiesScored } from '../stores/base';
   import { isMenuVisible } from '../stores/verseState';
   import { currentPiSliceRomanized } from '../stores/text';
-  import HelpDropDownMenu from './menus/HelpDropDownMenu.svelte';
+  import PiMastersDropDownMenu from './menus/PiMastersDropDownMenu.svelte';
   import VerseIndexDropDownMenu from './menus/VerseIndexDropDownMenu.svelte';
+  import HelpDropDownMenu from './menus/HelpDropDownMenu.svelte';
 
   export let isVisible = false;
 
   $: isHeaderVisible = $isMenuVisible || isVisible;
 
+  let isPiMastersMenuVisible = false;
+  function togglePiMastersMenu() { isPiMastersMenuVisible = !isPiMastersMenuVisible }
   let isVerseIndexMenuVisible = false;
   function toggleVerseIndexMenu() { isVerseIndexMenuVisible = !isVerseIndexMenuVisible }
   let isInfoMenuVisible = false;
@@ -21,7 +24,8 @@
 </script>
 
 <div id='header' class='menu' class:hide={!isHeaderVisible}>
-  <div id='pies'>
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <div id='pies' on:click={ togglePiMastersMenu }>
     {#each isPieEaten as eaten}
       <span class:eaten>🥧</span>
     {/each}
@@ -33,6 +37,7 @@
 </div>
 <VerseIndexDropDownMenu isVisible={ isVerseIndexMenuVisible } />
 <HelpDropDownMenu isVisible={ isInfoMenuVisible } />
+<PiMastersDropDownMenu isVisible={ isPiMastersMenuVisible } />
 
 <style>
   #header.menu {
