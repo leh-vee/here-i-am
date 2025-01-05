@@ -42,7 +42,7 @@
       My Hebrew name is Levi. Anyone keeping score will remember
       that the <span class='italic'>me</span> character
       in the help menu is called that too. The Frequently Asked
-      Questions dialogue that follows his introudctuon was written
+      Questions dialogue following his introudctuon was written
       collaboratively, by all three of us at the very least.
     </p>
   </div>
