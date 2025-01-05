@@ -6,9 +6,10 @@
 
 <DropDownMenu isHidden={ !isVisible }>
   <div id='masters'>
-    <div id='header'>
-      <h2>Masters of Pi</h2>
-    </div>
+    <h2>Masters of Pi</h2>
+    <p id='intro'>
+      Players who have collected all three pies
+    </p>
     <table>
       <tbody>
         <tr>
@@ -43,7 +44,6 @@
           <td>Noah</td>
           <td>121:44.665</td>
         </tr>
-        
         <tr>
           <td>Billie</td>
           <td>150:15.936</td>
@@ -88,12 +88,16 @@
     overflow-y: inherit;
   } 
   
-  #header {
+  h2 {
     text-align: center;
+    color: gold;
+    margin-bottom: 0;
   }
   
-  #header h2 {
-    color: gold;
+  #intro {
+    margin-top: 2px;
+    text-align: center;
+    color: lightyellow;
   }
 
   table {
@@ -118,4 +122,5 @@
     font-family: 'digital';
     text-align: center;
   }
+
 </style>
