@@ -8,7 +8,7 @@
   <div id='masters'>
     <h2>Masters of Pi</h2>
     <p id='intro'>
-      Players who have collected all three pies
+      Players who have collected all three pies...
     </p>
     <table>
       <tbody>
