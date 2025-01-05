@@ -3,15 +3,15 @@
   import { isMenuVisible } from '../stores/verseState';
   import { currentPiSliceRomanized } from '../stores/text';
   import HelpDropDownMenu from './menus/HelpDropDownMenu.svelte';
-  import PiDropDownMenu from './menus/PiDropDownMenu.svelte';
+  import VerseIndexDropDownMenu from './menus/VerseIndexDropDownMenu.svelte';
 
   export let isVisible = false;
 
   $: isHeaderVisible = $isMenuVisible || isVisible;
 
+  let isVerseIndexMenuVisible = false;
+  function toggleVerseIndexMenu() { isVerseIndexMenuVisible = !isVerseIndexMenuVisible }
   let isInfoMenuVisible = false;
-  function togglePiMenu() { isPiMenuVisible = !isPiMenuVisible }
-  let isPiMenuVisible = false;
   function toggleInfoMenu() { isInfoMenuVisible = !isInfoMenuVisible }
 
   let isPieEaten = [];
@@ -23,15 +23,15 @@
 <div id='header' class='menu' class:hide={!isHeaderVisible}>
   <div id='pies'>
     {#each isPieEaten as eaten}
-    <span class:eaten>🥧</span>
+      <span class:eaten>🥧</span>
     {/each}
   </div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div id='verse-number' on:click={ togglePiMenu }>{ $currentPiSliceRomanized }</div>
+  <div id='verse-number' on:click={ toggleVerseIndexMenu }>{ $currentPiSliceRomanized }</div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div id='info' on:click={ toggleInfoMenu }>?</div>
 </div>
-<PiDropDownMenu isVisible={ isPiMenuVisible } />
+<VerseIndexDropDownMenu isVisible={ isVerseIndexMenuVisible } />
 <HelpDropDownMenu isVisible={ isInfoMenuVisible } />
 
 <style>
