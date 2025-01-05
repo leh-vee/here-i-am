@@ -19,7 +19,25 @@
 
   let isPieEaten = [];
   $: {
-    for (let i = 0; i < 3; i++) isPieEaten[i] = $nPiesScored > i;
+    if (isPiMastersMenuVisible) {
+      pieBlink();
+    } else {
+      clearInterval(cyclePiesIntervalId);
+      for (let i = 0; i < 3; i++) isPieEaten[i] = $nPiesScored > i;
+    }
+  }
+  
+  let cyclePiesIntervalId;
+  function pieBlink() {
+    isPieEaten = [false, false, false];
+    cyclePiesIntervalId = setInterval(() => {
+      const indexOfLastPieFilling = isPieEaten.lastIndexOf(true);
+      if (indexOfLastPieFilling === 2) {
+        isPieEaten = [false, false, false];
+      } else {
+        isPieEaten[indexOfLastPieFilling + 1] = true;
+      }
+    }, 1000);
   }
 </script>
 
