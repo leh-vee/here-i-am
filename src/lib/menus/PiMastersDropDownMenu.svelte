@@ -6,9 +6,9 @@
 
 <DropDownMenu isHidden={ !isVisible }>
   <div id='masters'>
-    <h2>Masters of Pi</h2>
+    <h2>Masters of &Pi;</h2>
     <p id='intro'>
-      Everyone to have filled all three pies...
+      Those who've filled all 3 pies in record time...
     </p>
     <table>
       <tbody>
