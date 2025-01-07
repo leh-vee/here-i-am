@@ -36,7 +36,7 @@
     helpText = "To read a verse swipe its words or tap their markers.";
     hasHadWordHelp();
   } else if (isFillPieHelp) {
-    helpText = "Closing a verse at the stroke of π fills one of the pies on high.";
+    helpText = "Closing a verse at the stroke of π fills a pie on high.";
     hasHadPieHelp();
   }
 
