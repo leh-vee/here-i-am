@@ -1,10 +1,11 @@
 <script>
   import { isEllipsisLit, isReaderEngaged } from '../stores/verseState';
-  import { isFirstVerse, isFirstVerseWord } from '../stores/text';
+  import { isFirstVerse, isFirstVerseWord, isLastVerseWord } from '../stores/text';
+  import { millisecsElapsedForCurrentVerse } from '../stores/base';
 
   let isEllipsisDiscoveryWindow = true;
   $: isFirstEllipsisLit = $isFirstVerse && $isEllipsisLit;
-  $: isEllipsisHelp = isFirstEllipsisLit && !isEllipsisDiscoveryWindow;
+  $: isEllipsisNavHelp = isFirstEllipsisLit && !isEllipsisDiscoveryWindow;
 
   $: if (isFirstEllipsisLit) {
     setTimeout(() => {
@@ -15,7 +16,7 @@
   let isFirstWordDiscoveryWindow = true;
   let hadWordHelp = false;
   $: isFirstWord = $isFirstVerse && $isFirstVerseWord && $isReaderEngaged;
-  $: isWordHelp = isFirstWord && !isFirstWordDiscoveryWindow && !hadWordHelp;
+  $: isWordNavHelp = isFirstWord && !isFirstWordDiscoveryWindow && !hadWordHelp;
 
   $: if (isFirstWord) {
     setTimeout(() => {
@@ -23,19 +24,31 @@
     }, Math.PI * 1000) 
   }
 
+  let hadPieHelp = false;
+  $: isPiWatchDiscoveryWindow = $millisecsElapsedForCurrentVerse > 150000 &&
+    $millisecsElapsedForCurrentVerse < 210000; 
+  $: isFillPieHelp = (isPiWatchDiscoveryWindow || $isLastVerseWord) && !hadPieHelp;
+
   let helpText = "";
-  $: if (isEllipsisHelp) {
-    helpText = "Tap on the ellipsis to open a verse.";
-  } else if (isWordHelp) {
-    helpText = "Swipe over words or tap on markers to step through a verse.";
+  $: if (isEllipsisNavHelp) {
+    helpText = "To open a verse tap the ellipsis.";
+  } else if (isWordNavHelp) {
+    helpText = "To read a verse swipe its words or tap their markers.";
     hasHadWordHelp();
+  } else if (isFillPieHelp) {
+    helpText = "Closing a verse at the stroke of π fills one of the pies on high.";
+    hasHadPieHelp();
   }
 
   function hasHadWordHelp() {
     hadWordHelp = true;
   }
 
-  $: isVisible = isEllipsisHelp || isWordHelp;
+  function hasHadPieHelp() {
+    hadPieHelp = true;
+  }
+
+  $: isVisible = isEllipsisNavHelp || isWordNavHelp || isFillPieHelp;
 
 </script>
 
