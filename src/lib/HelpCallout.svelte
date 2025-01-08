@@ -31,12 +31,12 @@
 
   let helpText = "";
   $: if (isEllipsisNavHelp) {
-    helpText = "To open a verse tap the ellipsis.";
+    helpText = "Tap the ellipsis to depart";
   } else if (isWordNavHelp) {
-    helpText = "To read a verse swipe its words or tap their markers.";
+    helpText = "Swipe the word or tap the markers to continue";
     hasHadWordHelp();
   } else if (isFillPieHelp) {
-    helpText = "Closing a verse at the stroke of π fills a pie on high.";
+    helpText = "Arrive at the stroke of π to score";
     hasHadPieHelp();
   }
 
@@ -48,26 +48,42 @@
     hadPieHelp = true;
   }
 
-  $: isVisible = isEllipsisNavHelp || isWordNavHelp || isFillPieHelp;
+  $: visible = isEllipsisNavHelp || isWordNavHelp || isFillPieHelp;
 
 </script>
 
-{#if isVisible}
-  <div id='callout'>
+
+<div id='callout' class:visible>
+  <p>
     { helpText }
-  </div>
-{/if}
+  </p>
+</div>
 
 <style>
     #callout {
       position: absolute;
-      bottom: 3%;
-      left: 10%;
-      right: 10%;
-      background-color: dimgrey;
-      color: gold;
-      font-size: larger;
-      padding: 5px 12px;
+      bottom: 0px;
+      left: 0px;
+      right: 0px;
+      height: 20%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.1s ease-in-out;
+    }
+    
+    #callout p {
+      margin: 0;
+      font-size: 4vw;
+      color: white;
+      text-align: center;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #callout.visible {
+      opacity: 1;
     }
 
 </style>
