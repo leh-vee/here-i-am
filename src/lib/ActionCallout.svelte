@@ -1,7 +1,9 @@
 <script>
   import { isEllipsisLit, isReaderEngaged } from '../stores/verseState';
-  import { isFirstVerse, isFirstVerseWord, isLastVerseWord, isFirstVerseTriad } from '../stores/text';
-  import { millisecsElapsedForCurrentVerse, hasVerseNumberMenuOpened } from '../stores/base';
+  import { isFirstVerse, isFirstVerseWord, isLastVerseWord, 
+    isFirstVerseTriad } from '../stores/text';
+  import { millisecsElapsedForCurrentVerse, hasVerseNumberMenuOpened, 
+    isScoreCallout } from '../stores/base';
 
   const actionsCalledOut = [];
 
@@ -27,10 +29,10 @@
 
   $: isPiWatchDiscoveryWindow = $millisecsElapsedForCurrentVerse > 150000 &&
     $millisecsElapsedForCurrentVerse < 210000; 
-  $: isScoreCall = (isPiWatchDiscoveryWindow || $isLastVerseWord) && !actionsCalledOut.includes('score');
+  $: $isScoreCallout = (isPiWatchDiscoveryWindow || $isLastVerseWord) && !actionsCalledOut.includes('score');
 
   $: isVerseCallTime = !$isFirstVerseTriad && $isEllipsisLit && !$hasVerseNumberMenuOpened; 
-  $: isVerseCall =  isVerseCallTime && !actionsCalledOut.includes('verse');
+  $: isVerseCallout =  isVerseCallTime && !actionsCalledOut.includes('verse');
 
 
   let helpText = "";
@@ -39,15 +41,15 @@
   } else if (isWordNavHelp) {
     helpText = "Swipe the word or tap the markers to continue";
     actionsCalledOut.push('word');
-  } else if (isScoreCall) {
+  } else if ($isScoreCallout) {
     helpText = "Arrive at the stroke of π to score";
     actionsCalledOut.push('score');
-  } else if (isVerseCall) {
+  } else if (isVerseCallout) {
     helpText = "Tap the current verse number for a list of all of them";
     actionsCalledOut.push('verse');
   }
 
-  $: visible = isEllipsisNavHelp || isWordNavHelp || isScoreCall || isVerseCall;
+  $: visible = isEllipsisNavHelp || isWordNavHelp || $isScoreCallout || isVerseCallout;
 
 </script>
 

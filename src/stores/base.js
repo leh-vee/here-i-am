@@ -5,6 +5,10 @@ export const isDataInitialized = writable(false);
 
 export const hasVerseNumberMenuOpened = writable(false);
 
+export const isVerseNumberMenuOpened = writable(false);
+
+export const isScoreCallout = writable(false);
+
 export const faqLineIndex = writable(0);
 
 export const nPiesScored = writable(0);
