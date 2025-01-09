@@ -1,7 +1,7 @@
 <script>
   import { isEllipsisLit, isReaderEngaged } from '../stores/verseState';
   import { isFirstVerse, isFirstVerseWord, isLastVerseWord, isFirstVerseTriad } from '../stores/text';
-  import { millisecsElapsedForCurrentVerse } from '../stores/base';
+  import { millisecsElapsedForCurrentVerse, hasVerseNumberMenuOpened } from '../stores/base';
 
   const actionsCalledOut = [];
 
@@ -29,7 +29,7 @@
     $millisecsElapsedForCurrentVerse < 210000; 
   $: isScoreCall = (isPiWatchDiscoveryWindow || $isLastVerseWord) && !actionsCalledOut.includes('score');
 
-  $: isVerseCallTime = !$isFirstVerseTriad && $isEllipsisLit
+  $: isVerseCallTime = !$isFirstVerseTriad && $isEllipsisLit && !$hasVerseNumberMenuOpened; 
   $: isVerseCall =  isVerseCallTime && !actionsCalledOut.includes('verse');
 
 

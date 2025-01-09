@@ -3,6 +3,8 @@ import { currentVerseIndex } from '../stores/text';
 
 export const isDataInitialized = writable(false);
 
+export const hasVerseNumberMenuOpened = writable(false);
+
 export const faqLineIndex = writable(0);
 
 export const nPiesScored = writable(0);

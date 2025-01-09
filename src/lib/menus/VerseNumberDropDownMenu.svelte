@@ -1,6 +1,7 @@
 <script>
   import DropDownMenu from "./DropDownMenu.svelte";
   import { currentVerseIndex, wordIndices } from '../../stores/text.js';
+  import { hasVerseNumberMenuOpened } from "../../stores/base";
   import { serializeCountDown } from '../../utils/textJson.js';
 
   export let isVisible = false;
@@ -8,6 +9,7 @@
   let piSliceEl;
 
   $: if (isVisible) {
+    $hasVerseNumberMenuOpened = true;
     setTimeout(()=> {
       piSliceEl.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 500)
