@@ -1,7 +1,9 @@
 <script>
   import { isEllipsisLit, isReaderEngaged } from '../stores/verseState';
-  import { isFirstVerse, isFirstVerseWord, isLastVerseWord } from '../stores/text';
+  import { isFirstVerse, isFirstVerseWord, isLastVerseWord, isFirstVerseTriad } from '../stores/text';
   import { millisecsElapsedForCurrentVerse } from '../stores/base';
+
+  const actionsCalledOut = [];
 
   let isEllipsisDiscoveryWindow = true;
   $: isFirstEllipsisLit = $isFirstVerse && $isEllipsisLit;
@@ -14,9 +16,8 @@
   }
 
   let isFirstWordDiscoveryWindow = true;
-  let hadWordHelp = false;
   $: isFirstWord = $isFirstVerse && $isFirstVerseWord && $isReaderEngaged;
-  $: isWordNavHelp = isFirstWord && !isFirstWordDiscoveryWindow && !hadWordHelp;
+  $: isWordNavHelp = isFirstWord && !isFirstWordDiscoveryWindow && !actionsCalledOut.includes('score');
 
   $: if (isFirstWord) {
     setTimeout(() => {
@@ -24,31 +25,29 @@
     }, Math.PI * 1000) 
   }
 
-  let hadPieHelp = false;
   $: isPiWatchDiscoveryWindow = $millisecsElapsedForCurrentVerse > 150000 &&
     $millisecsElapsedForCurrentVerse < 210000; 
-  $: isFillPieHelp = (isPiWatchDiscoveryWindow || $isLastVerseWord) && !hadPieHelp;
+  $: isScoreCall = (isPiWatchDiscoveryWindow || $isLastVerseWord) && !actionsCalledOut.includes('score');
+
+  $: isVerseCallTime = !$isFirstVerseTriad && $isEllipsisLit
+  $: isVerseCall =  isVerseCallTime && !actionsCalledOut.includes('verse');
+
 
   let helpText = "";
   $: if (isEllipsisNavHelp) {
     helpText = "Tap the ellipsis to depart";
   } else if (isWordNavHelp) {
     helpText = "Swipe the word or tap the markers to continue";
-    hasHadWordHelp();
-  } else if (isFillPieHelp) {
+    actionsCalledOut.push('word');
+  } else if (isScoreCall) {
     helpText = "Arrive at the stroke of π to score";
-    hasHadPieHelp();
+    actionsCalledOut.push('score');
+  } else if (isVerseCall) {
+    helpText = "Tap the current verse number for a list of all of them";
+    actionsCalledOut.push('verse');
   }
 
-  function hasHadWordHelp() {
-    hadWordHelp = true;
-  }
-
-  function hasHadPieHelp() {
-    hadPieHelp = true;
-  }
-
-  $: visible = isEllipsisNavHelp || isWordNavHelp || isFillPieHelp;
+  $: visible = isEllipsisNavHelp || isWordNavHelp || isScoreCall || isVerseCall;
 
 </script>
 
