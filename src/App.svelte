@@ -8,7 +8,6 @@
   import { channelFeatures } from './utils/geoJson.js';
   import Conductor from './lib/Conductor.svelte';
   import LandingPage from './lib/LandingPage.svelte';
-  import HelpCallout from './lib/HelpCallout.svelte';
   import { onMount } from 'svelte';
 
   const screenPx = {
@@ -53,7 +52,6 @@
     <LandingPage on:go={ () => { isLandingPage = false }  } />
   {:else}
     <Conductor />
-    <HelpCallout />
   {/if}
 </div>
 

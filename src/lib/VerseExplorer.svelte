@@ -1,6 +1,7 @@
 <script>
   import { Stage, Layer } from 'svelte-konva';
   import Punctuation from './Punctuation.svelte';
+  import ActionCallout from './ActionCallout.svelte';
   import Notepad from './Notepad.svelte';
   import VerseMap from './VerseMap.svelte';
   import StreetMap from './StreetMap.svelte';
@@ -113,6 +114,7 @@
       <VerseMap on:next-word={ nextWord } on:previous-word={ previousWord } />
     </Layer>
   </Stage>
+  <ActionCallout />
 </div>
 
 <style>
