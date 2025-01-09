@@ -3,7 +3,7 @@
   import { isMenuVisible } from '../stores/verseState';
   import { currentPiSliceRomanized } from '../stores/text';
   import PiMastersDropDownMenu from './menus/PiMastersDropDownMenu.svelte';
-  import VerseIndexDropDownMenu from './menus/VerseIndexDropDownMenu.svelte';
+  import VerseNumberDropDownMenu from './menus/VerseNumberDropDownMenu.svelte';
   import HelpDropDownMenu from './menus/HelpDropDownMenu.svelte';
 
   export let isVisible = false;
@@ -52,7 +52,7 @@
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div id='info' on:click={ toggleInfoMenu }>?</div>
 </div>
-<VerseIndexDropDownMenu isVisible={ isVerseIndexMenuVisible } />
+<VerseNumberDropDownMenu isVisible={ isVerseIndexMenuVisible } />
 <HelpDropDownMenu isVisible={ isInfoMenuVisible } />
 <PiMastersDropDownMenu isVisible={ isPiMastersMenuVisible } />
 
