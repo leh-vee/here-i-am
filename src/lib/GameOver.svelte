@@ -41,7 +41,7 @@
       Here I Am was designed and developed by Leon Lukashevsky. 
       My Hebrew name is Levi. Anyone keeping score will remember
       that the <span class='italic'>me</span> character
-      in the help menu is called that too. The Frequently Asked
+      in the user menu is called that too. The Frequently Asked
       Questions dialogue following his introudctuon was written
       collaboratively, by all three of us at the very least.
     </p>
@@ -53,7 +53,7 @@
       is a companion work to this game. It opens with a reproduction of
       Here I Am as it appeared on flyers posted around my Toronto neighbourhood
       in the spring of 2021. Each poem in the book is inspired by a brief
-      conversation between imperfect strangers.
+      encounter between imperfect strangers.
     </p>
   </div>
 </div>
