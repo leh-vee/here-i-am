@@ -65,7 +65,7 @@
     { $currentPiSliceRomanized }
   </div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div id='info' on:click={ toggleInfoMenu }>&#128528;</div>
+  <div id='info' on:click={ toggleInfoMenu }>&#128529;</div>
 </div>
 <VerseNumberDropDownMenu isVisible={ isVerseIndexMenuVisible } />
 <HelpDropDownMenu isVisible={ isInfoMenuVisible } />
@@ -116,7 +116,7 @@
     color: black;
     font-size: 17px;
     position: absolute;
-    right: 10px;
+    right: 5px;
   }
 
   #pies span {
