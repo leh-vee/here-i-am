@@ -65,7 +65,7 @@
     { $currentPiSliceRomanized }
   </div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div id='info' on:click={ toggleInfoMenu }>?</div>
+  <div id='info' on:click={ toggleInfoMenu }>&#128528;</div>
 </div>
 <VerseNumberDropDownMenu isVisible={ isVerseIndexMenuVisible } />
 <HelpDropDownMenu isVisible={ isInfoMenuVisible } />
@@ -113,12 +113,8 @@
   #header.menu #info {
     font-family: Courier, monospace;
     text-align: center;
-    background-color: white;
     color: black;
-    width: 16px;
-    font-size: 14px;
-    border-radius: 50%;
-    border: 1px solid white;
+    font-size: 18px;
     position: absolute;
     right: 10px;
   }
