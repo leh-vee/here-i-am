@@ -36,11 +36,11 @@
 
   let isPiSeconds = false;
   $: if ($nPiesScored === 0) {
-    isPiSeconds = elapsedMillisecs > 194000 && elapsedMillisecs < 194999;
+    isPiSeconds = elapsedMillisecs >= 194000 && elapsedMillisecs <= 194999;
   } else if ($nPiesScored === 1) {
-    isPiSeconds = elapsedMillisecs > 194100 && elapsedMillisecs < 194199;
+    isPiSeconds = elapsedMillisecs >= 194100 && elapsedMillisecs <= 194199;
   } else if ($nPiesScored === 2) {
-    isPiSeconds = elapsedMillisecs > 194150 && elapsedMillisecs < 194159;
+    isPiSeconds = elapsedMillisecs >= 194150 && elapsedMillisecs <= 194159;
   } else if ($nPiesScored === 3) {
     isPiSeconds = elapsedMillisecs === 194159;
   }

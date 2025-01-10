@@ -23,7 +23,7 @@
   function verseFlash() {
     flashVerseNumberIntervalId = setInterval(() => {
       isVerseCalloutClass = !isVerseCalloutClass;
-    }, 500);
+    }, 1000);
   }
 
   let isVerseIndexMenuVisible = false;
@@ -103,12 +103,10 @@
     color: gold;
     font-weight: bold;
     font-family: monospace;
-    transition: color 0.5s ease-in-out;
-    transition: opacity 0.5s ease-in-out;
+    transition: opacity 1s ease-in-out;
   }
 
   #header.menu #verse-number.callout {
-    color: white;
     opacity: 0;
   }
   

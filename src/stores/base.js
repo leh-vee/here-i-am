@@ -5,9 +5,9 @@ export const isDataInitialized = writable(false);
 
 export const isVerseNumberMenuOpened = writable(false);
 export const hasVerseNumberMenuOpened = writable(false);
-
 export const isVerseCallout = writable(false);
 export const isScoreCallout = writable(false);
+export const hasCalledOutScoreAction = writable(false);
 
 export const faqLineIndex = writable(0);
 

@@ -1,9 +1,9 @@
 <script>
-  import { isEllipsisLit, isReaderEngaged } from '../stores/verseState';
+  import { isEllipsisLit, isReaderEngaged, isFullStop } from '../stores/verseState';
   import { isFirstVerse, isFirstVerseWord, isLastVerseWord, 
     isFirstVerseTriad } from '../stores/text';
-  import { millisecsElapsedForCurrentVerse, hasVerseNumberMenuOpened, 
-    isScoreCallout, isVerseCallout } from '../stores/base';
+  import { hasVerseNumberMenuOpened, isScoreCallout, 
+    isVerseCallout, hasCalledOutScoreAction } from '../stores/base';
 
   const actionsCalledOut = [];
 
@@ -19,7 +19,7 @@
 
   let isFirstWordDiscoveryWindow = true;
   $: isFirstWord = $isFirstVerse && $isFirstVerseWord && $isReaderEngaged;
-  $: isWordNavHelp = isFirstWord && !isFirstWordDiscoveryWindow && !actionsCalledOut.includes('score');
+  $: isWordNavHelp = isFirstWord && !isFirstWordDiscoveryWindow && !actionsCalledOut.includes('word');
 
   $: if (isFirstWord) {
     setTimeout(() => {
@@ -27,13 +27,13 @@
     }, Math.PI * 1000) 
   }
 
-  $: isPiWatchDiscoveryWindow = $millisecsElapsedForCurrentVerse > 150000 &&
-    $millisecsElapsedForCurrentVerse < 210000; 
-  $: $isScoreCallout = (isPiWatchDiscoveryWindow || $isLastVerseWord) && !actionsCalledOut.includes('score');
+  $: $isScoreCallout = $isLastVerseWord && $isReaderEngaged && !$hasCalledOutScoreAction;
+  $: if ($isFullStop && actionsCalledOut.includes('score')) {
+    $hasCalledOutScoreAction = true;
+  }
 
   $: isVerseCallTime = !$isFirstVerseTriad && $isEllipsisLit && !$hasVerseNumberMenuOpened; 
   $: $isVerseCallout =  isVerseCallTime && !actionsCalledOut.includes('verse');
-
 
   let helpText = "";
   $: if (isEllipsisNavHelp) {
@@ -42,10 +42,10 @@
     helpText = "Swipe the word or tap the markers to continue";
     actionsCalledOut.push('word');
   } else if ($isScoreCallout) {
-    helpText = "Arrive at the stroke of π to score";
+    helpText = "Arrive at 03:14, the stroke of π, to score";
     actionsCalledOut.push('score');
   } else if ($isVerseCallout) {
-    helpText = "Tap the current verse number to see them all listed";
+    helpText = "Tap the current verse number to list them all";
     actionsCalledOut.push('verse');
   }
 
