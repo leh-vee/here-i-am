@@ -114,7 +114,7 @@
     font-family: Courier, monospace;
     text-align: center;
     color: black;
-    font-size: 18px;
+    font-size: 17px;
     position: absolute;
     right: 10px;
   }
