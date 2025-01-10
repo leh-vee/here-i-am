@@ -3,7 +3,7 @@
   import { isFirstVerse, isFirstVerseWord, isLastVerseWord, 
     isFirstVerseTriad } from '../stores/text';
   import { millisecsElapsedForCurrentVerse, hasVerseNumberMenuOpened, 
-    isScoreCallout } from '../stores/base';
+    isScoreCallout, isVerseCallout } from '../stores/base';
 
   const actionsCalledOut = [];
 
@@ -32,7 +32,7 @@
   $: $isScoreCallout = (isPiWatchDiscoveryWindow || $isLastVerseWord) && !actionsCalledOut.includes('score');
 
   $: isVerseCallTime = !$isFirstVerseTriad && $isEllipsisLit && !$hasVerseNumberMenuOpened; 
-  $: isVerseCallout =  isVerseCallTime && !actionsCalledOut.includes('verse');
+  $: $isVerseCallout =  isVerseCallTime && !actionsCalledOut.includes('verse');
 
 
   let helpText = "";
@@ -44,12 +44,12 @@
   } else if ($isScoreCallout) {
     helpText = "Arrive at the stroke of π to score";
     actionsCalledOut.push('score');
-  } else if (isVerseCallout) {
-    helpText = "Tap the current verse number for a list of all of them";
+  } else if ($isVerseCallout) {
+    helpText = "Tap the current verse number to see them all listed";
     actionsCalledOut.push('verse');
   }
 
-  $: visible = isEllipsisNavHelp || isWordNavHelp || $isScoreCallout || isVerseCallout;
+  $: visible = isEllipsisNavHelp || isWordNavHelp || $isScoreCallout || $isVerseCallout;
 
 </script>
 

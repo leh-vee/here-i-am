@@ -1,8 +1,7 @@
 <script>
-  import { nPiesScored, isScoreCallout } from '../stores/base';
+  import { nPiesScored, isScoreCallout, isVerseCallout } from '../stores/base';
   import { isMenuVisible } from '../stores/verseState';
   import { currentPiSliceRomanized } from '../stores/text';
-  import PiMastersDropDownMenu from './menus/PiMastersDropDownMenu.svelte';
   import VerseNumberDropDownMenu from './menus/VerseNumberDropDownMenu.svelte';
   import HelpDropDownMenu from './menus/HelpDropDownMenu.svelte';
 
@@ -10,11 +9,29 @@
 
   $: isHeaderVisible = $isMenuVisible || isVisible;
 
+  let isVerseCalloutClass = false;
+  $: {
+    if ($isVerseCallout) {
+      verseFlash();
+    } else {
+      isVerseCalloutClass = false;
+      clearInterval(flashVerseNumberIntervalId);
+    }
+  }
+
+  let flashVerseNumberIntervalId;
+  function verseFlash() {
+    flashVerseNumberIntervalId = setInterval(() => {
+      isVerseCalloutClass = !isVerseCalloutClass;
+    }, 500);
+  }
+
   let isVerseIndexMenuVisible = false;
   function toggleVerseIndexMenu() { isVerseIndexMenuVisible = !isVerseIndexMenuVisible }
   let isInfoMenuVisible = false;
   function toggleInfoMenu() { isInfoMenuVisible = !isInfoMenuVisible }
 
+  let cyclePiesIntervalId;
   let isPieEaten = [false, false, false];
   $: {
     if ($isScoreCallout) {
@@ -25,7 +42,6 @@
     }
   }
   
-  let cyclePiesIntervalId;
   function pieBlink() {
     cyclePiesIntervalId = setInterval(() => {
       const indexOfLastPieFilling = isPieEaten.lastIndexOf(true);
@@ -45,7 +61,9 @@
     {/each}
   </div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div id='verse-number' on:click={ toggleVerseIndexMenu }>{ $currentPiSliceRomanized }</div>
+  <div id='verse-number' class:callout={isVerseCalloutClass} on:click={ toggleVerseIndexMenu }>
+    { $currentPiSliceRomanized }
+  </div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div id='info' on:click={ toggleInfoMenu }>?</div>
 </div>
@@ -85,6 +103,13 @@
     color: gold;
     font-weight: bold;
     font-family: monospace;
+    transition: color 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
+  }
+
+  #header.menu #verse-number.callout {
+    color: white;
+    opacity: 0;
   }
   
   #header.menu #info {
