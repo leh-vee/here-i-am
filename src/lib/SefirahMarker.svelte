@@ -64,7 +64,7 @@
 <Circle config={{ 
   x: coordsPx[0],
   y: coordsPx[1],
-  radius: radius * 3,
+  radius: radius * 4,
   fill: 'white',
   opacity: 0
   }} on:pointerclick={ incrementWord }
