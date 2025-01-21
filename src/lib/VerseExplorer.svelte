@@ -13,6 +13,7 @@
   import { wordIndices, isPunctuationNext, isLastVerseWord, isCaesura, isLineA, 
     currentPiSlice, lastPiSlice, likePiSlices, isGroundZero, isFirstVerseWord, 
     isInBetweenWords } from '../stores/text';
+  import { hasReadAhead, hasCompletedVerse } from '../stores/base';
   import { fetchBlocksWithinRadius } from '../api/client.js';
   import distance from "@turf/distance";
   import { swipe } from 'svelte-gestures';
@@ -48,9 +49,11 @@
         isCaesura.set(true);
       } else if ($isLastVerseWord) {
         verseState.set('full-stop');
+        if (!$hasCompletedVerse) $hasCompletedVerse = true;
       } else {
         wordIndices.nextWord();
       }
+      if (!$hasReadAhead) $hasReadAhead = true;
     }
   }
 

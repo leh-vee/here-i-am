@@ -1,67 +1,85 @@
 <script>
-  import { isEllipsisLit, isReaderEngaged, isFullStop } from '../stores/verseState';
-  import { isFirstVerse, isFirstVerseWord, isLastVerseWord, 
-    isFirstVerseTriad } from '../stores/text';
-  import { hasVerseNumberMenuOpened, isScoreCallout, 
-    isVerseCallout, hasCalledOutScoreAction } from '../stores/base';
+  import { isEllipsisLit, isReaderEngaged } from '../stores/verseState';
+  import { isLastVerseWord, isFirstVerseTriad } from '../stores/text';
+  import { hasVerseNumberMenuOpened, isScoreCallout, isVerseCallout,
+    hasReadAhead, hasTappedEllipsis, hasCompletedVerse } from '../stores/base';
 
-  const actionsCalledOut = [];
-
-  let isEllipsisDiscoveryWindow = true;
-  $: isFirstEllipsisLit = $isFirstVerse && $isEllipsisLit;
-  $: isEllipsisNavHelp = isFirstEllipsisLit && !isEllipsisDiscoveryWindow;
-
-  $: if (isFirstEllipsisLit) {
-    setTimeout(() => {
-      isEllipsisDiscoveryWindow = false;
-    }, Math.PI * 1000) 
+  let calloutIndex;
+  $: {
+    calloutIndex = undefined;
+    if (!$hasTappedEllipsis && $isEllipsisLit) {
+      calloutIndex = 0;
+    } else if (!$hasReadAhead && $isReaderEngaged) {
+      calloutIndex = 1;
+    } else if (!$hasCompletedVerse && $isLastVerseWord && $isReaderEngaged) {
+      calloutIndex = 2;
+    } else if (!$isFirstVerseTriad && $isEllipsisLit && !$hasVerseNumberMenuOpened) {
+      calloutIndex = 3;
+    } else {
+      calloutIndex = undefined;
+    }
   }
 
-  let isFirstWordDiscoveryWindow = true;
-  $: isFirstWord = $isFirstVerse && $isFirstVerseWord && $isReaderEngaged;
-  $: isWordNavHelp = isFirstWord && !isFirstWordDiscoveryWindow && !actionsCalledOut.includes('word');
+  const callouts = [
+    {
+      id: 'ellipsis',
+      text: 'Tap the ellipsis to depart'
+    },
+    {
+      id: 'word',
+      text: 'Swipe the word or tap the markers to continue'
+    },
+    {
+      id: 'score',
+      text: "Arrive at 03:14, the stroke of <span id='pi'>π</span>, to score"
+    },
+    {
+      id: 'verse',
+      text: 'Tap the current verse number to list them all'
+    }
+  ]
 
-  $: if (isFirstWord) {
-    setTimeout(() => {
-      isFirstWordDiscoveryWindow = false;
-    }, Math.PI * 1000) 
+  let calloutText = '';
+  let calloutId = '';
+  $: if (calloutIndex !== undefined) {
+    let callout = callouts[calloutIndex];
+    calloutText = callout.text;
+    calloutId = callout.id;
+  } else {
+    calloutText = '';
+    calloutId = '';
   }
 
-  $: $isScoreCallout = $isLastVerseWord && $isReaderEngaged && !$hasCalledOutScoreAction;
-  $: if ($isFullStop && actionsCalledOut.includes('score')) {
-    $hasCalledOutScoreAction = true;
-  }
-
-  $: isVerseCallTime = !$isFirstVerseTriad && $isEllipsisLit && !$hasVerseNumberMenuOpened; 
-  $: $isVerseCallout =  isVerseCallTime && !actionsCalledOut.includes('verse');
-
-  let helpText = "";
-  $: if (isEllipsisNavHelp) {
-    helpText = "Tap the ellipsis to depart";
-  } else if (isWordNavHelp) {
-    helpText = "Swipe the word or tap the markers to continue";
-    actionsCalledOut.push('word');
-  } else if ($isScoreCallout) {
-    helpText = "Arrive at 03:14, the stroke of π, to score";
-    actionsCalledOut.push('score');
-  } else if ($isVerseCallout) {
-    helpText = "Tap the current verse number to list them all";
-    actionsCalledOut.push('verse');
-  }
-
-  $: visible = isEllipsisNavHelp || isWordNavHelp || $isScoreCallout || $isVerseCallout;
+  $: $isScoreCallout = calloutId === 'score';
+  $: $isVerseCallout = calloutId === 'verse';
+  
+  $: visible = calloutIndex !== undefined;
 
 </script>
 
 
-<div id='callout' class:visible>
-  <p>
-    { helpText }
-  </p>
+<div id={ calloutId } class='callout' class:visible> 
+  <p>{@html calloutText }</p>
 </div>
 
 <style>
-    #callout {
+    .callout#ellipsis {
+      transition: opacity 1s ease-in 10s;
+    }
+
+    .callout#word {
+      transition: opacity 1s ease-in 15s;
+    }
+
+    .callout#score {
+      transition: opacity 1s ease-in 0.5s;
+    }
+
+    .callout#verse {
+      transition: opacity 1s ease-in;
+    }
+
+    .callout {
       position: absolute;
       bottom: 0px;
       left: 0px;
@@ -72,10 +90,13 @@
       justify-content: center;
       align-items: center;
       opacity: 0;
-      transition: opacity 0.1s ease-in-out;
+    }
+
+    .callout.visible {
+      opacity: 1;
     }
     
-    #callout p {
+    .callout p {
       margin: 0;
       font-size: 4vw;
       color: white;
@@ -83,8 +104,6 @@
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    #callout.visible {
-      opacity: 1;
-    }
+    
 
 </style>

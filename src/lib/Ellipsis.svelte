@@ -1,6 +1,7 @@
 <script>
   import EllipsisDot from "./EllipsisDot.svelte";
   import { verseState, isVerseMapReaveled, isRemembering, isEllipsisLit } from '../stores/verseState';
+  import { hasTappedEllipsis } from "../stores/base";
   import { Rect } from "svelte-konva";
 
   const piFractionSecs = (Math.PI - 3) * 1000;
@@ -51,7 +52,10 @@
   }
 
   function click() {
-    if ($isEllipsisLit) vanishAway = true;
+    if ($isEllipsisLit) {
+      vanishAway = true;
+      if (!$hasTappedEllipsis) $hasTappedEllipsis = true;
+    } 
   }
 
 </script>
@@ -59,12 +63,13 @@
 {#each showDots as showDot, i (i)}
   <EllipsisDot 
     dotIndex={i} 
-    show={showDot}
+    show={ showDot }
     light={ lightDots[i] }
     isVanishing={ vanishAway }
     on:ellipsis-rect={ setHitBoxParams }
   />
 {/each}
+
 <Rect config={{ 
   x: hitAreaX, 
   y: hitAreaY,

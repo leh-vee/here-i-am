@@ -2,6 +2,7 @@
   import { Circle } from 'svelte-konva';
   import { currentWordId, isLineBreak, isCaesura, wordIndices } from '../stores/text';
   import { isReaderEngaged, isNavigable } from '../stores/verseState.js';
+  import { hasReadAhead } from '../stores/base';
   
   export let x;
   export let y;
@@ -52,6 +53,7 @@
       const line = wordIdArr[1];
       const wordIndex = parseInt(wordIdArr[2]);
       wordIndices.goToWord(line, wordIndex);
+      if (!$hasReadAhead) $hasReadAhead = true;
     }
   }
 
