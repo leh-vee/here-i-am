@@ -22,7 +22,7 @@
   }
 </script>
 
-<DropDownMenu isHidden={ !isVisible }>
+<DropDownMenu isHidden={ !isVisible } on:close>
   <div id='countdown'>
     {#each piCountDown as piSlice, i}
       {#if $currentVerseIndex === i}

@@ -95,7 +95,7 @@
 
 </script>
 
-<DropDownMenu isHidden={ !isVisible }>
+<DropDownMenu isHidden={ !isVisible } on:close>
   <div id='help'>
     <div id='me' class='section'>
       <h2>About Me</h2>

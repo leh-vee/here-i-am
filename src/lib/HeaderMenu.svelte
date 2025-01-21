@@ -28,8 +28,8 @@
 
   let isVerseIndexMenuVisible = false;
   function toggleVerseIndexMenu() { isVerseIndexMenuVisible = !isVerseIndexMenuVisible }
-  let isInfoMenuVisible = false;
-  function toggleInfoMenu() { isInfoMenuVisible = !isInfoMenuVisible }
+  let isUserMenuVisible = false;
+  function toggleUserMenu() { isUserMenuVisible = !isUserMenuVisible }
 
   let cyclePiesIntervalId;
   let isPieEaten = [false, false, false];
@@ -52,6 +52,7 @@
       }
     }, 750);
   }
+
 </script>
 
 <div id='header' class='menu' class:hide={!isHeaderVisible}>
@@ -65,10 +66,12 @@
     { $currentPiSliceRomanized }
   </div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div id='info' on:click={ toggleInfoMenu }>&#128529;</div>
+  <div id='user' on:click={ toggleUserMenu }>&#128529;</div>
 </div>
-<VerseNumberDropDownMenu isVisible={ isVerseIndexMenuVisible } />
-<UserDropDownMenu isVisible={ isInfoMenuVisible } />
+<VerseNumberDropDownMenu isVisible={ isVerseIndexMenuVisible }
+  on:close={ () => isVerseIndexMenuVisible = false } />
+<UserDropDownMenu isVisible={ isUserMenuVisible } 
+  on:close={ () => isUserMenuVisible = false } />
 
 <style>
   #header.menu {
@@ -110,7 +113,7 @@
     opacity: 0;
   }
   
-  #header.menu #info {
+  #header.menu #user {
     font-family: Courier, monospace;
     text-align: center;
     color: black;

@@ -1,10 +1,18 @@
 <script>
+  import { createEventDispatcher } from 'svelte';
+  const dispatch = createEventDispatcher();
+
   export let isHidden = true;
+
+  function closeMenu() {
+    isHidden = true;
+    dispatch('close');
+  }
 </script>
 
 <div class='drop-down menu' class:hide={ isHidden }>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <span id='close-button' on:click={ () => { isHidden = true } }>
+  <span id='close-button' on:click={ closeMenu }>
     &times;
   </span>
   <slot></slot>
