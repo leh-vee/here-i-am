@@ -3,7 +3,7 @@
   import { isMenuVisible } from '../stores/verseState';
   import { currentPiSliceRomanized } from '../stores/text';
   import VerseNumberDropDownMenu from './menus/VerseNumberDropDownMenu.svelte';
-  import HelpDropDownMenu from './menus/HelpDropDownMenu.svelte';
+  import UserDropDownMenu from './menus/UserDropDownMenu.svelte';
 
   export let isVisible = false;
 
@@ -68,7 +68,7 @@
   <div id='info' on:click={ toggleInfoMenu }>&#128529;</div>
 </div>
 <VerseNumberDropDownMenu isVisible={ isVerseIndexMenuVisible } />
-<HelpDropDownMenu isVisible={ isInfoMenuVisible } />
+<UserDropDownMenu isVisible={ isInfoMenuVisible } />
 
 <style>
   #header.menu {
