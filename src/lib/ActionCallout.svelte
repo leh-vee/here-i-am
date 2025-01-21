@@ -12,7 +12,9 @@
     } else if (!$hasReadAhead && $isReaderEngaged) {
       calloutIndex = 1;
     } else if (!$hasCompletedVerse && $isLastVerseWord && $isReaderEngaged) {
-      calloutIndex = 2;
+      setTimeout(() => {
+        calloutIndex = 2;
+      }, 1000); // janky way of creating a pause between calls 1 & 2 when reader proceeds immediately to last word from first 
     } else if (!$isFirstVerseTriad && $isEllipsisLit && !$hasVerseNumberMenuOpened) {
       calloutIndex = 3;
     } else {
@@ -31,7 +33,7 @@
     },
     {
       id: 'score',
-      text: "Arrive at 03:14, the stroke of <span id='pi'>π</span>, to score"
+      text: "Arrive at 03:14, the stroke of <span style='font-family: Times New Roman'>π</span>, to score"
     },
     {
       id: 'verse',
@@ -63,22 +65,6 @@
 </div>
 
 <style>
-    .callout#ellipsis {
-      transition: opacity 1s ease-in 10s;
-    }
-
-    .callout#word {
-      transition: opacity 1s ease-in 15s;
-    }
-
-    .callout#score {
-      transition: opacity 1s ease-in 0.5s;
-    }
-
-    .callout#verse {
-      transition: opacity 1s ease-in;
-    }
-
     .callout {
       position: absolute;
       bottom: 0px;
@@ -90,6 +76,7 @@
       justify-content: center;
       align-items: center;
       opacity: 0;
+      transition: opacity 1s ease-in;
     }
 
     .callout.visible {
@@ -103,7 +90,4 @@
       text-align: center;
       font-family: Arial, Helvetica, sans-serif;
     }
-
-    
-
 </style>
