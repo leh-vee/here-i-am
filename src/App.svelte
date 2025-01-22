@@ -10,16 +10,16 @@
   import LandingPage from './lib/LandingPage.svelte';
 
   let isLandingPage = true;
-  let isGroundZeroFetched = false;
-  let screenPx; 
+  let screenElHieght, screenElWidth; 
 
-  $: if (!isGroundZeroFetched) {
-    screenPx = { width: $screenWidth, height: $screenHeight };
-    console.log('screen dimensions set to', screenPx);
+  $: if (isLandingPage) {
+    $screenWidth = screenElWidth;
+    $screenHeight = screenElHieght;
   }
-
+  
   async function setIlanData() {
-    isGroundZeroFetched = true;
+    isLandingPage = false;
+    const screenPx = { width: $screenWidth, height: $screenHeight };
     const sefirotGeoJson = await fetchSefirot();
     sefirotPoints.set(sefirotGeoJson);
     
@@ -45,11 +45,12 @@
 </script>
 
 
-<div id='screen' bind:clientWidth={ $screenWidth } 
-  bind:clientHeight={ $screenHeight }>
+<div id='screen' bind:clientWidth={ screenElWidth } 
+  bind:clientHeight={ screenElHieght }>
   {#if isLandingPage}
-    <LandingPage on:groundZeroFetched={ setIlanData } 
-      on:go={ () => { isLandingPage = false }  } />
+    {#key $screenWidth * $screenHeight}
+      <LandingPage on:go={ setIlanData } />
+    {/key}
   {:else}
     <Conductor />
   {/if}

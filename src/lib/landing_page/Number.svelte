@@ -26,7 +26,7 @@
 
 #verse-number {
   color: white;
-  font-size: 25vh;
+  font-size: 70vw;
   font-family: Helvetica, sans-serif;
 }
 </style>

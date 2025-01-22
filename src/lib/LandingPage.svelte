@@ -5,9 +5,14 @@
   import Number from './landing_page/Number.svelte';
   import IntroCouplet from './landing_page/IntroCouplet.svelte';
   import MapTiles from './MapTiles.svelte';
+  import { screenWidth, screenHeight } from '../stores/base'; 
+  import { onDestroy } from 'svelte';
   import { createEventDispatcher } from 'svelte';
   
   const dispatch = createEventDispatcher();
+
+  let isDestroyed = false;
+	onDestroy(() => { isDestroyed = true });
 
   const coordFixtures = [
     [-79.386788067996605, 43.670226390504098],
@@ -16,14 +21,12 @@
     [-79.466850201826205, 43.657227646269199]
   ];
 
-  const height = window.innerHeight;
-  const width = window.innerWidth;
-  const yCentre = height / 2;
-  const xCentre = width / 2;
-  const diagonalRadius = Math.hypot(xCentre, yCentre);
-  const coinRadius = Math.round((width / 2) * 0.8);
+  $: yCentre = $screenHeight / 2;
+  $: xCentre = $screenWidth / 2;
+  $: diagonalRadius = Math.hypot(xCentre, yCentre);
+  $: coinRadius = Math.round(xCentre * 0.8);
+  $: goButtonRaidus = coinRadius / 2;
   const strokeWidth = 6;
-  const goButtonRaidus = coinRadius / 2;
 
   let coinEl, coinOverflowEl, irisEl, markerEl;
   let isHeads = false;
@@ -38,15 +41,12 @@
   $: groundZeroCoordsGcs = coordFixtures[coordIndex];
   $: isFinalLocation = coordIndex === 3;
 
-  $: if (isFinalLocation) {
-    dispatch('groundZeroFetched', groundZeroCoordsGcs);
-  }
-
   $: if (coinEl !== undefined) almostThereFlip();
 
   function almostThereFlip() {
     let nTotalFlips = 0;
     const flip = async () => { 
+      if (isDestroyed) return null;
       nTotalFlips += 1;
       await flipCoin();
       if (isTileMapLoading || nTotalFlips < 3) {
@@ -60,6 +60,7 @@
   }
   
   function flipCoin() {
+    if (isDestroyed) return null;
     return new Promise((resolve) => {
       coinEl.to({
         duration: 1,
@@ -96,6 +97,7 @@
   }
 
   function showGoButton() {
+    if (isDestroyed) return null; 
     markerEl.to({
       duration: Math.PI / 10,
       radius: goButtonRaidus,
@@ -108,6 +110,7 @@
 
   function closeCoinTransition() {
     const duration = Math.PI / 10;
+    if (isDestroyed) return null;
     markerEl.to({
       duration,
       radius: coinRadius,
@@ -127,6 +130,7 @@
   }
 
   function retractCoinOverflow() {
+    if (isDestroyed) return null;
     coinOverflowEl.to({
       duration: Math.PI / 10,
       innerRadius: diagonalRadius,
@@ -142,6 +146,7 @@
 
   function openCoinTransition() {
     const duration = Math.PI / 10;
+    if (isDestroyed) return null;
     coinOverflowEl.innerRadius(coinRadius).outerRadius(coinRadius);
     const coinOlverflow = () => {
       coinOverflowEl.to({
@@ -163,6 +168,7 @@
 
   function infalteSelf() {
     const currentRadius = markerEl.radius();
+    if (isDestroyed) return null;
     markerEl.to({
       duration: Math.PI / 10,
       radius: currentRadius + 1
@@ -171,6 +177,7 @@
 
   function irisIn() {
     isHeads = false;
+    if (isDestroyed) return null;
     irisEl.to({
       duration: 1,
       easing: Konva.Easings.EaseIn,
@@ -185,7 +192,7 @@
 <MapTiles centreCoordsGcs={ groundZeroCoordsGcs } 
   on:loaded={ () => { isTileMapLoading = false } } />
 <div id='landing-page'>
-  <Stage config={{ width, height }} on:pointerclick={ click }>
+  <Stage config={{ width: $screenWidth, height: $screenHeight }} on:pointerclick={ click }>
     <Layer>
       <Ring config={{
         x: xCentre,
@@ -218,8 +225,8 @@
       <Text config={{
         x: 0,
         y: 0,
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width: $screenWidth,
+        height: $screenHeight,
         align: 'center',
         verticalAlign: 'middle',
         fontFamily: "Courier New",
@@ -240,10 +247,6 @@
   </Stage>
   <Number isVisible={ isClosedCoin } number={ countdownNumber } /> 
 </div>
-{#if isHeads}
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <button id='skip-intro' on:click={ irisIn }>Skip Intro</button>
-{/if}
 
 <style>
   #landing-page {
@@ -253,17 +256,5 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  }
-
-  #skip-intro {
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
-    font-size: 12px;
-    font-family: sans-serif;
-    background-color: white;
-    color: black;
-    padding: 5px;
-    border-radius: 3px;
   }
 </style>
