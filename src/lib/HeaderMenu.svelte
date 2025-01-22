@@ -27,9 +27,15 @@
   }
 
   let isVerseIndexMenuVisible = false;
-  function toggleVerseIndexMenu() { isVerseIndexMenuVisible = !isVerseIndexMenuVisible }
+  function toggleVerseIndexMenu() {
+    if (isUserMenuVisible && !isVerseIndexMenuVisible) isUserMenuVisible = false;
+    isVerseIndexMenuVisible = !isVerseIndexMenuVisible;
+  }
   let isUserMenuVisible = false;
-  function toggleUserMenu() { isUserMenuVisible = !isUserMenuVisible }
+  function toggleUserMenu() {
+    if (isVerseIndexMenuVisible && !isUserMenuVisible) isVerseIndexMenuVisible = false;
+    isUserMenuVisible = !isUserMenuVisible 
+  }
 
   let cyclePiesIntervalId;
   let isPieEaten = [false, false, false];
@@ -62,7 +68,7 @@
     {/each}
   </div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div id='verse-number' class:callout={isVerseCalloutClass} on:click={ toggleVerseIndexMenu }>
+  <div id='verse-number' class:callout={ isVerseCalloutClass } on:click={ toggleVerseIndexMenu }>
     { $currentPiSliceRomanized }
   </div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
