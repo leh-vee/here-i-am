@@ -1,6 +1,9 @@
 import { writable, derived } from 'svelte/store';
 import { currentVerseIndex } from '../stores/text';
 
+export const screenWidth  = writable(undefined);
+export const screenHeight  = writable(undefined);
+
 export const isDataInitialized = writable(false);
 
 export const hasTappedEllipsis = writable(false);
@@ -8,7 +11,6 @@ export const hasReadAhead = writable(false);
 export const hasCompletedVerse = writable(false);
 export const isScoreCallout = writable(false);
 export const isVerseCallout = writable(false);
-
 export const hasVerseNumberMenuOpened = writable(false);
 
 export const faqLineIndex = writable(0);
@@ -28,7 +30,7 @@ export const millisecsElapsedForCurrentVerse = derived(
   }
 );
 
-export const totalPoints = derived(
+export const totalReadingSeconds = derived(
   [millisecsElapsedByVerse], ([$millisecsElapsedByVerse]) => {
     const totalMillisecs = $millisecsElapsedByVerse.reduce((a, c) => a + c, 0)
     return Math.floor(totalMillisecs / 60000);

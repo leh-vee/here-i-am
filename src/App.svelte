@@ -2,27 +2,24 @@
   import { sefirotPoints, channelLines, channelProjections, 
     ilanProjection, ilanBlocks, groundZeroProjection, 
     groundZeroBlocks, groundZeroRotationBlocks } from './stores/treeOfLife.js';
-  import { isDataInitialized } from './stores/base.js'; 
+  import { screenWidth, screenHeight, isDataInitialized } from './stores/base'; 
   import { projectionForGroundZero, projectionsForChannels, projectionForIlan } from './utils/projections.js';
   import { fetchSefirot, fetchBlocksForProjection } from './api/client.js';
   import { channelFeatures } from './utils/geoJson.js';
   import Conductor from './lib/Conductor.svelte';
   import LandingPage from './lib/LandingPage.svelte';
-  import { onMount } from 'svelte';
-
-  const screenPx = {
-    width: window.innerWidth,
-    height: window.innerHeight
-  }
 
   let isLandingPage = true;
+  let isGroundZeroFetched = false;
+  let screenPx; 
 
-  onMount(async () => {
-    await setIlanData(screenPx);
-    isDataInitialized.set(true);  
-  });
+  $: if (!isGroundZeroFetched) {
+    screenPx = { width: $screenWidth, height: $screenHeight };
+    console.log('screen dimensions set to', screenPx);
+  }
 
-  async function setIlanData(screenPx) {
+  async function setIlanData() {
+    isGroundZeroFetched = true;
     const sefirotGeoJson = await fetchSefirot();
     sefirotPoints.set(sefirotGeoJson);
     
@@ -42,14 +39,17 @@
     ilanProjection.set(iProjection);
     const iBlocks = await fetchBlocksForProjection(iProjection, screenPx);
     ilanBlocks.set(iBlocks);
+    $isDataInitialized = true; 
     console.log('ilan data set');
   }
 </script>
 
 
-<div id='screen'>
+<div id='screen' bind:clientWidth={ $screenWidth } 
+  bind:clientHeight={ $screenHeight }>
   {#if isLandingPage}
-    <LandingPage on:go={ () => { isLandingPage = false }  } />
+    <LandingPage on:groundZeroFetched={ setIlanData } 
+      on:go={ () => { isLandingPage = false }  } />
   {:else}
     <Conductor />
   {/if}

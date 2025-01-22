@@ -38,6 +38,10 @@
   $: groundZeroCoordsGcs = coordFixtures[coordIndex];
   $: isFinalLocation = coordIndex === 3;
 
+  $: if (isFinalLocation) {
+    dispatch('groundZeroFetched', groundZeroCoordsGcs);
+  }
+
   $: if (coinEl !== undefined) almostThereFlip();
 
   function almostThereFlip() {
