@@ -6,6 +6,7 @@
     currentChannelFromSefirahCoordsPx } from '../stores/treeOfLife';
   import { currentVerse, likePiSlices, currentVerseIndex } from '../stores/text';
   import { verseState, isEllipsisReaveled } from '../stores/verseState.js';
+  import { screenWidth, screenHeight } from '../stores/base';
 
   let isRevealed = false;
 
@@ -30,8 +31,8 @@
     plusOne();
   } 
 
-  const xMarginPx = Math.round(window.innerWidth * 0.1);
-  const yOffsetPx = Math.round(window.innerHeight * 0.03);
+  $: xMarginPx = Math.round($screenWidth * 0.1);
+  $: yOffsetPx = Math.round($screenHeight * 0.03);
   $: nSpacesLineA = $currentVerse['a'].length - 1;
   $: nSpacesLineB = $currentVerse['b'].length - 1;
   $: xLineDeltaPx = $currentChannelCoordsPx[1][0] - $currentChannelCoordsPx[0][0] - xMarginPx * 2;

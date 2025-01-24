@@ -1,14 +1,14 @@
 <script>
   import EllipsisDot from "./EllipsisDot.svelte";
   import { verseState, isVerseMapReaveled, isRemembering, isEllipsisLit } from '../stores/verseState';
-  import { hasTappedEllipsis } from "../stores/base";
+  import { hasTappedEllipsis, screenWidth, screenHeight } from "../stores/base";
   import { Rect } from "svelte-konva";
 
   const piFractionSecs = (Math.PI - 3) * 1000;
   const showDots = [false, false, false];
   const lightDots = [false, false, false]; 
-  const hitAreaX = window.innerWidth / 2;
-  let hitAreaY = (window.innerHeight / 2);
+  $: hitAreaX = $screenWidth / 2;
+  $: hitAreaY = $screenHeight / 2;
   let hitAreaWidth = 0;
   let hitAreaHeight = 0;
 

@@ -2,9 +2,10 @@
   import { Text } from 'svelte-konva';
   import { wordIndices, punctuationMark, isCaesura, 
     isInBetweenWords } from '../stores/text.js';
+  import { screenWidth, screenHeight } from '../stores/base';
 
   const duration = Math.PI / 2;
-  const fontSize = Math.round(window.innerHeight / 4);
+  $: fontSize = Math.round($screenHeight / 4);
   let punctuationEl;
 
   $: if ($isCaesura) animateIn();
@@ -37,8 +38,8 @@
   text: $punctuationMark,
   x: 0,
   y: 0, 
-  width: window.innerWidth,
-  height: window.innerHeight,
+  width: $screenWidth,
+  height: $screenHeight,
   align: 'center',
   verticalAlign: 'middle',
   fontSize,

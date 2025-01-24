@@ -1,7 +1,7 @@
 <script>
   import DropDownMenu from "./DropDownMenu.svelte";
   import { fetchFaqText } from '../../api/client.js';
-  import { faqLineIndex } from "../../stores/base";
+  import { faqLineIndex, screenHeight } from "../../stores/base";
 
   export let isVisible = false;
   let nobodyEl, ellipsisEl;
@@ -38,7 +38,7 @@
   }
   
   function scrollToEllipsis() {
-    const height = window.innerHeight;
+    const height = $screenHeight;
     const ellipsisTop = ellipsisEl.getBoundingClientRect().top;
     const isEllipsisVisible = ellipsisTop < height;
     const nobodyTop = nobodyEl.getBoundingClientRect().top;
@@ -96,23 +96,25 @@
 </script>
 
 <DropDownMenu isHidden={ !isVisible } on:close>
-  <div id='help'>
-    <div id='me' class='section'>
-      <h2>About Me</h2>
-      <p>Hi, my name is Levi, the dark mirror that reveals what I needs it to.</p>
-    </div>
-    <div id='faq' class='section'>
-      <h2>Frequently Asked Questions</h2>
-      <div id='dialogue'>
-        {#each linesToText.slice(0, $faqLineIndex) as text, i}
-          <p class='text {getTextType(i)}'>{ text }</p>
-        {/each}
-        <p class='text {textType} ellipsis' class:show={isEllipsis} bind:this={ ellipsisEl }>
-          {#each flashingDots as isFlashing}
-            <span class='dot' class:flash={isFlashing}>&#x2022;</span>
+  <div>
+    <div id='help'>
+      <div id='me' class='section'>
+        <h2>About Me</h2>
+        <p>Hi, my name is Levi, the dark mirror that reveals what I needs it to.</p>
+      </div>
+      <div id='faq' class='section'>
+        <h2>Frequently Asked Questions</h2>
+        <div id='dialogue'>
+          {#each linesToText.slice(0, $faqLineIndex) as text, i}
+            <p class='text {getTextType(i)}'>{ text }</p>
           {/each}
-        </p>
-        <div class='nobody' bind:this={ nobodyEl }></div>
+          <p class='text {textType} ellipsis' class:show={isEllipsis} bind:this={ ellipsisEl }>
+            {#each flashingDots as isFlashing}
+              <span class='dot' class:flash={isFlashing}>&#x2022;</span>
+            {/each}
+          </p>
+          <div class='nobody' bind:this={ nobodyEl }></div>
+        </div>
       </div>
     </div>
   </div>

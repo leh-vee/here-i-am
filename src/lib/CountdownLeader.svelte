@@ -3,15 +3,16 @@
     import { ilanProjection, ilanBlocks, sefirotPoints } from '../stores/treeOfLife';
     import { isVerseNumberVisible } from '../stores/verseState';
     import { currentPiSlice } from '../stores/text';
+    import { screenWidth, screenHeight } from '../stores/base'; 
     import StreetMap from './StreetMap.svelte';
     import { createEventDispatcher } from 'svelte';
 
     const dispatch = createEventDispatcher();
 
-    const xCentre = window.innerWidth / 2;
-    const yCentre = window.innerHeight / 2;
-    const diagonalRadius = Math.hypot(xCentre, yCentre);
-    const vesselRadius = Math.round(xCentre * 0.7);
+    $: xCentre = $screenWidth / 2;
+    $: yCentre = $screenHeight / 2;
+    $: diagonalRadius = Math.hypot(xCentre, yCentre);
+    $: vesselRadius = Math.round(xCentre * 0.7);
 
     $: toCoordsGsc = $sefirotPoints.features[$currentPiSlice].geometry.coordinates;
     $: toCoordsPx = $ilanProjection(toCoordsGsc);

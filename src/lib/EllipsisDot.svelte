@@ -2,6 +2,7 @@
   import { Text } from "svelte-konva";
   import Konva from 'konva';
   import { verseState } from '../stores/verseState';
+  import { screenWidth, screenHeight } from '../stores/base';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
@@ -11,7 +12,7 @@
   export let light = false;
   export let isVanishing = false;
 
-  const fontSize = Math.round(window.innerHeight / 10);
+  $: fontSize = Math.round($screenWidth / 5);
  
   let text = "   ";
   let dotEl;
@@ -55,8 +56,8 @@
 
 <Text config={{
   text,
-  width: window.innerWidth,
-  height: window.innerHeight,
+  width: $screenWidth,
+  height: $screenHeight,
   align: 'center',
   verticalAlign: 'middle',
   fontSize,

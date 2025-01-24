@@ -3,12 +3,13 @@
   import EllipticalCollapse from './EllipticalCollapse.svelte';
   import StreetMap from './StreetMap.svelte';
   import { ilanProjection, ilanBlocks } from '../stores/treeOfLife.js';
+  import { screenWidth, screenHeight } from '../stores/base';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
-  const xCentre = window.innerWidth / 2;
-  const yCentre = window.innerHeight / 2;
-  const diagonalRadius = Math.hypot(xCentre, yCentre);
+  $: xCentre = $screenWidth / 2;
+  $: yCentre = $screenHeight / 2;
+  $: diagonalRadius = Math.hypot(xCentre, yCentre);
 
   let ellipsisCollapsed = false;
 

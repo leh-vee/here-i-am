@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { Image } from 'svelte-konva';
   import { geoPath } from "d3";
+  import { screenWidth, screenHeight } from '../stores/base'; 
 
   export let blocksGeoJson;
   export let projection;
@@ -10,8 +11,8 @@
   export let lineWidth = 2;
   export let opacity = 1;
 
-  const xCentre = window.innerWidth / 2;
-  const yCentre = window.innerHeight / 2;
+  $: xCentre = $screenWidth / 2;
+  $: yCentre = $screenHeight / 2;
   const rotationRadAngle = (degreesRotation * Math.PI) / 180;
 
   let isMounted = false;
@@ -20,8 +21,8 @@
   const ctx = canvas.getContext('2d');
 
   onMount(async () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = $screenWidth;
+    canvas.height = $screenHeight;
 
     ctx.lineWidth = lineWidth;
     ctx.strokeStyle = colour;

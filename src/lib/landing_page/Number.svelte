@@ -16,17 +16,16 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: inherit;
+  height: inherit;
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
 
 #verse-number {
   color: white;
-  font-size: 70vw;
+  font-size: 50vmin;
   font-family: Helvetica, sans-serif;
 }
 </style>

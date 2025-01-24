@@ -1,9 +1,10 @@
 <script>
   import { Text } from 'svelte-konva';
+  import { screenWidth, screenHeight } from '../../stores/base';
 
   const title = "Here\nI Am";
   const fontFamily = "Love Ya Like A Sister";
-  const fontSize = Math.round(window.innerWidth / 4.5);
+  const fontSize = Math.round($screenWidth / 4.5);
   const fill = 'gold';
 
   let isTitleFontLoaded = false;
@@ -21,8 +22,8 @@
   <Text config={{
     x: 0,
     y: 0,
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: $screenWidth,
+    height: $screenHeight,
     align: 'center',
     verticalAlign: 'middle',
     text: title,

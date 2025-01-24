@@ -13,7 +13,7 @@
   import { wordIndices, isPunctuationNext, isLastVerseWord, isCaesura, isLineA, 
     currentPiSlice, lastPiSlice, likePiSlices, isGroundZero, isFirstVerseWord, 
     isInBetweenWords } from '../stores/text';
-  import { hasReadAhead, hasCompletedVerse } from '../stores/base';
+  import { hasReadAhead, hasCompletedVerse, screenWidth, screenHeight } from '../stores/base';
   import { fetchBlocksWithinRadius } from '../api/client.js';
   import distance from "@turf/distance";
   import { swipe } from 'svelte-gestures';
@@ -66,7 +66,7 @@
     if ($isNavigable && !$isFirstVerseWord) wordIndices.previousWord();
   }
 
-  const h = window.innerHeight;
+  const h = $screenHeight;
   const ySwipeBounds = { lower: h * 0.4, upper: h * 0.6 };
   function isPointerWithinBounds() {
     const yPos =  layerEl.getRelativePointerPosition().y;
@@ -106,7 +106,7 @@
 <div id='verse-explorer' use:swipe={{ timeframe: 300, minSwipeDistance: 60 }} 
   on:swipe={(e) => { swiped(e) }}>
   <HeaderMenu />
-  <Stage config={{ width: window.innerWidth, height: window.innerHeight }} >
+  <Stage config={{ width: $screenWidth, height: $screenHeight }} >
     <Layer config={{ visible: showExplorer }} bind:handle={ layerEl }>
       <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
         projection={ $currentChannelProjection } />

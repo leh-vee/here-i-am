@@ -2,6 +2,7 @@
   import { Text } from 'svelte-konva';
   import { fetchIntroCouplets } from '../../api/client.js';
   import { serializeCouplets } from '../../utils/textJson.js';
+  import { screenWidth, screenHeight } from '../../stores/base';
   import { createEventDispatcher } from 'svelte';
   
   const dispatch = createEventDispatcher();
@@ -65,19 +66,18 @@
     });
   }
   
-  const width = window.innerWidth;
   const questionTextAttrs = {
     x: 5,
-    width: width - 5,
+    width: $screenWidth - 5,
     fontFamily: '"Homemade Apple", sans-serif',
-    fontSize: Math.round(width / 22),
+    fontSize: Math.round($screenWidth / 22),
     fill: 'black'
   }
 </script>
 
 <Text config={{
   y: 0,
-  height: window.innerHeight / 3,
+  height: $screenHeight / 3,
   align: 'center',
   verticalAlign: 'middle',
   text: progressiveLines.a,
@@ -85,8 +85,8 @@
   ...questionTextAttrs
 }} />
 <Text config={{
-  y: window.innerHeight - window.innerHeight / 3,
-  height: window.innerHeight / 3,
+  y: $screenHeight - $screenHeight / 3,
+  height: $screenHeight / 3,
   align: 'center',
   verticalAlign: 'middle',
   text: progressiveLines.b,

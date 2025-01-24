@@ -1,7 +1,7 @@
 <script>
   import { Circle } from 'svelte-konva';
   import Konva from 'konva';
-  import { isDataInitialized } from '../stores/base';
+  import { isDataInitialized, screenWidth, screenHeight } from '../stores/base';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
@@ -19,8 +19,8 @@
   }
 
   const ellipsisStopDelta = ellipsisStopAttrs.radius * 3;
-  const yCentre = window.innerHeight / 2;
-  const xCentre = window.innerWidth / 2;
+  $: yCentre = $screenHeight / 2;
+  $: xCentre = $screenWidth / 2;
 
   const ellipsisStops = new Array(3);
 

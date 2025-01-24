@@ -3,16 +3,17 @@
   import { currentVerse, wordIndices, currentWordId, isLineA,
     currentVerseIndex, isCaesura, isInBetweenWords, likePiSlices } from '../stores/text';
   import { isReaderEngaged, isFullStop, isNotepadVisible } from '../stores/verseState';
+  import { screenWidth, screenHeight } from '../stores/base';
 
   let stashedWordEl = null;
   let padEl;
 
   const wordAttrs = {
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: $screenWidth,
+    height: $screenHeight,
     align: 'center',
     verticalAlign: 'middle',
-    fontSize: Math.round(window.innerWidth / 9),
+    fontSize: Math.round($screenWidth / 9),
     fontFamily: 'Love Ya Like A Sister',
     fillEnabled: true,
     fill: 'gold',
@@ -22,15 +23,15 @@
   $: nWordsLineA = $currentVerse['a'].length;
   $: nWordsLineB = $currentVerse['b'].length;
   $: maxWordsPerLine = Math.max(nWordsLineA, nWordsLineB); 
-  $: groupWidth = maxWordsPerLine * window.innerWidth;
-  $: wordBoxMarginA = Math.round(groupWidth / nWordsLineA - window.innerWidth);
-  $: wordBoxMarginB = Math.round(groupWidth / nWordsLineB - window.innerWidth);
+  $: groupWidth = maxWordsPerLine * $screenWidth;
+  $: wordBoxMarginA = Math.round(groupWidth / nWordsLineA - $screenWidth);
+  $: wordBoxMarginB = Math.round(groupWidth / nWordsLineB - $screenWidth);
 
   $: isLineBAndLikeSlices = !$isLineA && $likePiSlices;
   $: margin = $isLineA ? wordBoxMarginA : wordBoxMarginB;
-  $: textElWidth = (window.innerWidth + margin);
+  $: textElWidth = ($screenWidth + margin);
   $: xPadPosition =  isLineBAndLikeSlices ? ($wordIndices.wordIndex - (nWordsLineB - 1)) * textElWidth : -$wordIndices.wordIndex * textElWidth;
-  $: yPadPosition =  $isLineA ? 0 : -window.innerHeight; 
+  $: yPadPosition =  $isLineA ? 0 : -$screenHeight; 
 
   $: lineBWords = $likePiSlices ? structuredClone($currentVerse['b']).reverse() : $currentVerse['b'];
 
@@ -94,14 +95,14 @@
 
 <Group config={{ 
   width: groupWidth, 
-  height: window.innerHeight * 2,
+  height: $screenHeight * 2,
   x: textElWidth, y: 0,
   visible: $isNotepadVisible
 }} bind:handle={padEl}>
   {#each $currentVerse['a'] as word, i}
     <Text config={{
       text: word,
-      x: i * (window.innerWidth + wordBoxMarginA),
+      x: i * ($screenWidth + wordBoxMarginA),
       id: `${$currentVerseIndex}-a-${i}`,
       ...wordAttrs
     }} />
@@ -109,8 +110,8 @@
   {#each lineBWords as word, i}
     <Text config={{
       text: word,
-      x: i * (window.innerWidth + wordBoxMarginB),
-      y: window.innerHeight,
+      x: i * ($screenWidth + wordBoxMarginB),
+      y: $screenHeight,
       id: wordId(i),
       ...wordAttrs
     }} />

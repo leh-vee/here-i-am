@@ -1,5 +1,23 @@
-html, body, #here-i-am {
+html {
   height: 100%;
+  width: 100%;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  overflow-y: hidden;
+}
+
+#here-i-am {
+  height: 100%;
+  width: 100%;
+  max-width: 70vh;
 }
 
 body {

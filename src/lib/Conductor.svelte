@@ -5,7 +5,7 @@
   import SwanSong from './SwanSong.svelte';
   import VerseNumber from './VerseNumber.svelte';
   import GameOver from './GameOver.svelte';
-  import { isDataInitialized } from '../stores/base';
+  import { isDataInitialized, screenWidth, screenHeight } from '../stores/base';
 
   const movements = ['overture', 'countdown', 'swanSong', 'gameOver'];
   let movementIndex = 0;
@@ -15,7 +15,7 @@
 </script>
 
 {#if movement !== 'gameOver' }
-  <Stage config={{ width: window.innerWidth, height: window.innerHeight }}>
+  <Stage config={{ width: $screenWidth, height: $screenHeight }}>
     {#if movement === 'overture' }
       <Overture on:goneNova={ nextMovement } />
     {:else if movement === 'countdown' }

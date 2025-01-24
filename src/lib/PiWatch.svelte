@@ -1,11 +1,11 @@
 <script>
   import { Text } from 'svelte-konva';  
   import { isReaderEngaged, isFullStop, isPostVerse } from '../stores/verseState.js';
-  import { millisecsElapsedByVerse, nPiesScored } from '../stores/base';
+  import { millisecsElapsedByVerse, nPiesScored, screenWidth, screenHeight } from '../stores/base';
   import { currentVerseIndex } from '../stores/text';
 
-  const watchFontSize = Math.round(window.innerWidth / 5);
-  const pieEmojiFontSize = Math.round(window.innerHeight / 10);
+  $: watchFontSize = Math.round($screenWidth / 5);
+  $: pieEmojiFontSize = Math.round($screenHeight / 10);
   let pieEl;
 
   let start = new Date();
@@ -86,8 +86,8 @@
 
 <Text config={{
   text: formattedElapsed,
-  width: window.innerWidth,
-  height: window.innerHeight / 2.5,
+  width: $screenWidth,
+  height: $screenHeight / 2.5,
   align: 'center',
   verticalAlign: 'middle',
   fontSize: watchFontSize,
@@ -97,13 +97,13 @@
 }} />
 
 <Text config={{
-  offsetX: window.innerWidth / 2,
-  offsetY: window.innerHeight / 2.6,
-  x: window.innerWidth / 2,
-  y: window.innerHeight / 2.6,
+  offsetX: $screenWidth / 2,
+  offsetY: $screenHeight / 2.6,
+  x: $screenWidth / 2,
+  y: $screenHeight / 2.6,
   text: "🥧",
-  width: window.innerWidth,
-  height: window.innerHeight / 1.3,
+  width: $screenWidth,
+  height: $screenHeight / 1.3,
   align: 'center',
   verticalAlign: 'middle',
   fontSize: pieEmojiFontSize,
