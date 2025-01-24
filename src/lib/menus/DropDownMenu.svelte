@@ -39,7 +39,7 @@
 
   .drop-down.menu #close-button {
     position: fixed;
-    right: 5%;
+    right: 2%;
     font-family: monospace;
     font-size: 4vh;
   }
