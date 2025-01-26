@@ -79,6 +79,10 @@
       transition: opacity 1s ease-in;
     }
 
+    .callout#ellipsis {
+      transition: opacity 1s ease-in 1s;
+    }
+
     .callout.visible {
       opacity: 1;
     }
