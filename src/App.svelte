@@ -10,11 +10,23 @@
   import LandingPage from './lib/LandingPage.svelte';
 
   let isLandingPage = true;
-  let screenElHieght, screenElWidth; 
+  let screenEl, screenElHieght, screenElWidth; 
+
+  $: isConducting = !isLandingPage && screenEl !== undefined;
+  $: isDimensionsStored = $screenWidth !== undefined && $screenHeight !== undefined;
 
   $: if (isLandingPage) {
-    $screenWidth = screenElWidth;
-    $screenHeight = screenElHieght;
+    storeDimensions(screenElWidth, screenElHieght);
+  } else if (isConducting && isDimensionsStored) {
+    setIlanData();
+  } else if (isConducting && !isDimensionsStored) {
+    storeDimensions();
+    setIlanData();
+  }
+
+  function storeDimensions(w = screenElWidth, h = screenElHieght) {
+    $screenWidth = w;
+    $screenHeight = h;
   }
   
   async function setIlanData() {
@@ -45,11 +57,10 @@
 </script>
 
 
-<div id='screen' bind:clientWidth={ screenElWidth } 
-  bind:clientHeight={ screenElHieght }>
+<div id='screen' bind:this={ screenEl } bind:clientWidth={ screenElWidth } bind:clientHeight={ screenElHieght }>
   {#if isLandingPage}
     {#key $screenWidth * $screenHeight}
-      <LandingPage on:go={ setIlanData } />
+      <LandingPage on:go={ () => { isLandingPage = false } } />
     {/key}
   {:else}
     <Conductor />
