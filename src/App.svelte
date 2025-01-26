@@ -12,16 +12,17 @@
   let isLandingPage = true;
   let screenEl, screenElHieght, screenElWidth; 
 
-  $: isConducting = !isLandingPage && screenEl !== undefined;
   $: isDimensionsStored = $screenWidth !== undefined && $screenHeight !== undefined;
 
   $: if (isLandingPage) {
     storeDimensions(screenElWidth, screenElHieght);
-  } else if (isConducting && isDimensionsStored) {
+  } else if (!isLandingPage && isDimensionsStored) {
     setIlanData();
-  } else if (isConducting && !isDimensionsStored) {
-    storeDimensions();
-    setIlanData();
+  } else if (!isLandingPage && !isDimensionsStored) {
+    if (screenEl !== undefined) {
+      storeDimensions();
+      setIlanData();
+    } 
   }
 
   function storeDimensions(w = screenElWidth, h = screenElHieght) {
