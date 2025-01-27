@@ -9,38 +9,16 @@
   import HeaderMenu from './HeaderMenu.svelte';
   import Ellipsis from './Ellipsis.svelte';
   import { verseState, isNavigable, isCountingDown, isFullStop } from '../stores/verseState';
-  import { channelBlocks, blocksForCurrentChannel, currentChannelProjection } from '../stores/treeOfLife';
+  import { blocksForCurrentChannel, currentChannelProjection } from '../stores/treeOfLife';
   import { wordIndices, isPunctuationNext, isLastVerseWord, isCaesura, isLineA, 
-    currentPiSlice, lastPiSlice, likePiSlices, isGroundZero, isFirstVerseWord, 
-    isInBetweenWords } from '../stores/text';
+    likePiSlices, isGroundZero, isFirstVerseWord, isInBetweenWords } from '../stores/text';
   import { hasReadAhead, hasCompletedVerse, screenWidth, screenHeight } from '../stores/base';
-  import { fetchBlocksWithinRadius } from '../api/client.js';
-  import distance from "@turf/distance";
   import { swipe } from 'svelte-gestures';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
 
-  $: isFetchingBlocks = $blocksForCurrentChannel === undefined;
-  $: if (isFetchingBlocks) fetchBlocksForProjection();  
-  $: showExplorer = !isFetchingBlocks && !$isCountingDown;
-  
   let layerEl;
-  
-  function fetchBlocksForProjection() {
-    const pCentre = $currentChannelProjection.center();
-    const pRadius = distance(pCentre, $currentChannelProjection.invert([0,0]));
-    fetchBlocksWithinRadius(pCentre, pRadius).then(blocks => {
-      console.log('blocks for current channel projection fetched');
-      if (!$likePiSlices) {
-        channelBlocks.setForIndices($lastPiSlice, $currentPiSlice, blocks);
-      // @ts-ignore
-      } else if ($lastPiSlice !== 0) {
-        channelBlocks.setForIndices($lastPiSlice, 0, blocks);
-      }
-    });
-    return true;
-  }
 
   function nextWord() {
     if ($isNavigable) {
@@ -107,7 +85,7 @@
   on:swipe={(e) => { swiped(e) }}>
   <HeaderMenu />
   <Stage config={{ width: $screenWidth, height: $screenHeight }} >
-    <Layer config={{ visible: showExplorer }} bind:handle={ layerEl }>
+    <Layer config={{ visible: !$isCountingDown }} bind:handle={ layerEl }>
       <StreetMap blocksGeoJson={ $blocksForCurrentChannel } 
         projection={ $currentChannelProjection } />
       <Punctuation />

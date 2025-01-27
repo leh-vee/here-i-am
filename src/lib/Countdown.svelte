@@ -2,11 +2,15 @@
   import { Layer } from 'svelte-konva';
   import { currentVerseIndex } from '../stores/text';
   import { verseState } from '../stores/verseState';
+  import { channelBlocks, currentChannelProjection,
+    isBlocksForCurrentChannelFetched } from '../stores/treeOfLife';
+  import { currentPiSlice, lastPiSlice, likePiSlices } from '../stores/text';
   import CountdownLeader from './CountdownLeader.svelte';
   import Pathways from './Pathways.svelte';
   import VerseExplorer from './VerseExplorer.svelte';
+  import { fetchBlocksWithinRadius } from '../api/client.js';
+  import distance from "@turf/distance";
 
-  
   let aPrioriLayerEl;
   let isMurmuring = false;
   let isBlazing = false;
@@ -34,6 +38,21 @@
       opacity: 0,
       onFinish: () => {
         isBlazing = false;
+      }
+    });
+  }
+
+  $: if (!$isBlocksForCurrentChannelFetched) {
+    console.log('fetching blocks for current channel');
+    const pCentre = $currentChannelProjection.center();
+    const pRadius = distance(pCentre, $currentChannelProjection.invert([0,0]));
+    fetchBlocksWithinRadius(pCentre, pRadius).then(blocks => {
+      console.log('blocks for current channel projection fetched');
+      if (!$likePiSlices) {
+        channelBlocks.setForIndices($lastPiSlice, $currentPiSlice, blocks);
+      // @ts-ignore
+      } else if ($lastPiSlice !== 0) {
+        channelBlocks.setForIndices($lastPiSlice, 0, blocks);
       }
     });
   }
