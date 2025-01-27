@@ -53,7 +53,6 @@
     const iBlocks = await fetchBlocksForProjection(iProjection, screenPx);
     ilanBlocks.set(iBlocks);
     $isDataInitialized = true; 
-    console.log('ilan data set');
   }
 </script>
 

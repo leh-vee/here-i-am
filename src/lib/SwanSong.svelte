@@ -26,7 +26,6 @@
     const groundZeroSefirahId = $sefirotPoints.features[0].id;
     setTimeout(() => {
       crawler.drawBlocksFromNode(groundZeroSefirahId).then(orphanedBlocks => {
-        console.log('all blocks have been drawn but for...', orphanedBlocks);
         theFall();
       });
     }, 200);

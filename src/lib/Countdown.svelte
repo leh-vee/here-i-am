@@ -16,8 +16,7 @@
   let isBlazing = false;
   let isRemembering = false;
   
-  $: if (aPrioriLayerEl !== undefined) {
-    console.log('countdown cycle for verse at index', $currentVerseIndex);
+  $: if (aPrioriLayerEl !== undefined && $currentVerseIndex >= 0) {
     verseState.set('counting'); 
     isRemembering = false;
     aPrioriLayerEl.opacity(1);
@@ -43,11 +42,9 @@
   }
 
   $: if (!$isBlocksForCurrentChannelFetched) {
-    console.log('fetching blocks for current channel');
     const pCentre = $currentChannelProjection.center();
     const pRadius = distance(pCentre, $currentChannelProjection.invert([0,0]));
     fetchBlocksWithinRadius(pCentre, pRadius).then(blocks => {
-      console.log('blocks for current channel projection fetched');
       if (!$likePiSlices) {
         channelBlocks.setForIndices($lastPiSlice, $currentPiSlice, blocks);
       // @ts-ignore
