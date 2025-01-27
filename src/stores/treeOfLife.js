@@ -53,6 +53,12 @@ export const blocksForCurrentChannel = derived(
   }
 );
 
+export const isBlocksForCurrentChannelFetched = derived(
+  [blocksForCurrentChannel], ([$blocksForCurrentChannel]) => {
+    return $blocksForCurrentChannel !== undefined;
+  }
+);
+
 export const currentChannelLine = derived(
   [channelLines, lastPiSlice, currentPiSlice, likePiSlices], 
   ([$channelLines, $lastPiSlice, $currentPiSlice, $likePiSlices]) => {

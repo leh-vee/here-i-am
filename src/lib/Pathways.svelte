@@ -1,7 +1,8 @@
 <script>
   import { Line, Circle, Ring } from 'svelte-konva';
   import { tick } from 'svelte';
-  import { ilanProjection, ilanBlocks, sefirotPoints } from '../stores/treeOfLife.js';
+  import { ilanProjection, ilanBlocks, sefirotPoints, 
+    isBlocksForCurrentChannelFetched } from '../stores/treeOfLife.js';
   import { lastPiSlice, currentPiSlice, likePiSlices } from '../stores/text.js';
   import { screenWidth, screenHeight } from '../stores/base';
   import StreetMap from './StreetMap.svelte';
@@ -32,13 +33,19 @@
   $: irisCoordsX = $likePiSlices ? fromCoordsPx[0] : toCoordsPx[0];
   $: irisCoordsY = $likePiSlices ? fromCoordsPx[1] : toCoordsPx[1];
 
+  let isReadyToSendCharge = false;
+
   $: if (fromSefirahEl !== undefined) {
     iris.to({
       duration: Math.PI / 2,
       innerRadius: diagonalLength,
-      onFinish: sendCharge
+      onFinish: () => {
+        isReadyToSendCharge = true;
+      }
     });
   }
+
+  $: if (isReadyToSendCharge && $isBlocksForCurrentChannelFetched) sendCharge();
 
   async function sendCharge() {
     let endCoords = [...fromCoordsPx, ...toCoordsPx];
