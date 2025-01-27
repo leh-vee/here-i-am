@@ -13,6 +13,7 @@ export const isScoreCallout = writable(false);
 export const isVerseCallout = writable(false);
 export const hasVerseNumberMenuOpened = writable(false);
 
+export const faqLinesToText = writable([]);
 export const faqLineIndex = writable(0);
 
 export const nPiesScored = writable(0);

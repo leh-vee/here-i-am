@@ -1,29 +1,34 @@
 <script>
   import DropDownMenu from "./DropDownMenu.svelte";
   import { fetchFaqText } from '../../api/client.js';
-  import { faqLineIndex, screenHeight } from "../../stores/base";
+  import { faqLinesToText, faqLineIndex, screenHeight } from "../../stores/base";
 
   export let isVisible = false;
   let nobodyEl, ellipsisEl;
 
-  let linesToText = [];
-  fetchFaqText().then(lines => {
-    linesToText = [...lines];
-  });
+  $: isFaqLinesLoaded = $faqLinesToText.length > 0;
+  $: if (!isFaqLinesLoaded) loadFaq();
 
-  $: isTexting = isVisible && linesToText !== undefined;
+  function loadFaq() {
+    fetchFaqText().then(lines => {
+      $faqLinesToText = [...lines];
+    });
+  }
+
+  $: isTexting = isVisible && isFaqLinesLoaded;
   $: textType = $faqLineIndex % 2 === 0 ? 'question' : 'answer';
   let isFinalAnswer = false;
-  $: if ($faqLineIndex === linesToText.length - 1) {
+
+  $: if (isFaqLinesLoaded && $faqLineIndex === $faqLinesToText.length - 1) {
     setTimeout(() => {
       isFinalAnswer = true;
     }, Math.PI * 1000);
   }
 
   let nTextChars = { current: 0, previous: 0 };
-  $: if (isTexting && $faqLineIndex < linesToText.length - 1) {
+  $: if (isTexting && $faqLineIndex < $faqLinesToText.length - 1) {
     nTextChars.previous = nTextChars.current; 
-    nTextChars.current = linesToText[$faqLineIndex].length;
+    nTextChars.current = $faqLinesToText[$faqLineIndex].length;
     getNextText();
   }
 
@@ -105,7 +110,7 @@
       <div id='faq' class='section'>
         <h2>Frequently Asked Questions</h2>
         <div id='dialogue'>
-          {#each linesToText.slice(0, $faqLineIndex) as text, i}
+          {#each $faqLinesToText.slice(0, $faqLineIndex) as text, i}
             <p class='text {getTextType(i)}'>{ text }</p>
           {/each}
           <p class='text {textType} ellipsis' class:show={isEllipsis} bind:this={ ellipsisEl }>
