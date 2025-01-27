@@ -13,16 +13,13 @@
   let screenEl, screenElHieght, screenElWidth; 
 
   $: isDimensionsStored = $screenWidth !== undefined && $screenHeight !== undefined;
+  $: isScreenElMounted = screenEl !== undefined;
 
-  $: if (isLandingPage) {
-    storeDimensions(screenElWidth, screenElHieght);
-  } else if (!isLandingPage && isDimensionsStored) {
+  $: if (isLandingPage && isScreenElMounted) storeDimensions(screenElWidth, screenElHieght);
+  $: if (!isLandingPage && isDimensionsStored) setIlanData();
+  $: if (!isLandingPage && !isDimensionsStored && isScreenElMounted) {
+    storeDimensions();
     setIlanData();
-  } else if (!isLandingPage && !isDimensionsStored) {
-    if (screenEl !== undefined) {
-      storeDimensions();
-      setIlanData();
-    } 
   }
 
   function storeDimensions(w = screenElWidth, h = screenElHieght) {
