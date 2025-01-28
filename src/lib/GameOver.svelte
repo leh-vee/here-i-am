@@ -49,7 +49,7 @@
   <h5 id='game-over'>{ goSubstr }</h5>
   <div class='passage'>
     <p class:hide={!isGameOverOver}>
-      Intersections, our poetry collection published by Parking Lot Press
+      Intersections, our poetry collection published by Placeholder Press
       is a companion work to this game. It opens with a reproduction of
       Here I Am as it appeared on flyers posted around my Toronto neighbourhood
       in the spring of 2021. Each poem in the book is inspired by a brief
