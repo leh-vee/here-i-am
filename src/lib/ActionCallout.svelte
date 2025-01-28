@@ -5,21 +5,23 @@
     hasReadAhead, hasTappedEllipsis, hasCompletedVerse } from '../stores/base';
 
   let calloutIndex;
-  $: {
+  $: if (!$hasTappedEllipsis && $isEllipsisLit) {
+    updateCalloutIndex(0);
+  } else if (!$hasReadAhead && $isReaderEngaged) {
+    updateCalloutIndex(1);
+  } else if (!$hasCompletedVerse && $isLastVerseWord && $isReaderEngaged) {
+    updateCalloutIndex(2);
+  } else if (!$isFirstVerseTriad && $isEllipsisLit && !$hasVerseNumberMenuOpened) {
+    updateCalloutIndex(3);
+  } else {
+    updateCalloutIndex(undefined);
+  }
+
+  function updateCalloutIndex(i) {
     calloutIndex = undefined;
-    if (!$hasTappedEllipsis && $isEllipsisLit) {
-      calloutIndex = 0;
-    } else if (!$hasReadAhead && $isReaderEngaged) {
-      calloutIndex = 1;
-    } else if (!$hasCompletedVerse && $isLastVerseWord && $isReaderEngaged) {
-      setTimeout(() => {
-        calloutIndex = 2;
-      }, 1000); // janky way of creating a pause between calls 1 & 2 when reader proceeds immediately to last word from first 
-    } else if (!$isFirstVerseTriad && $isEllipsisLit && !$hasVerseNumberMenuOpened) {
-      calloutIndex = 3;
-    } else {
-      calloutIndex = undefined;
-    }
+    setTimeout(() => {
+        calloutIndex = i;
+      }, 250); // add delay between consecutive callout states for css transition
   }
 
   const callouts = [
@@ -76,11 +78,7 @@
       justify-content: center;
       align-items: center;
       opacity: 0;
-      transition: opacity 1s ease-in;
-    }
-
-    .callout#ellipsis {
-      transition: opacity 1s ease-in 1s;
+      transition: opacity 200ms ease-in;
     }
 
     .callout.visible {
