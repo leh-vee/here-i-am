@@ -41,7 +41,9 @@
     });
   }
 
-  $: if (!$isBlocksForCurrentChannelFetched) {
+  $: if (!$isBlocksForCurrentChannelFetched) fetchBlocksForCurrentProjection();
+
+  function fetchBlocksForCurrentProjection() {
     const pCentre = $currentChannelProjection.center();
     const pRadius = distance(pCentre, $currentChannelProjection.invert([0,0]));
     fetchBlocksWithinRadius(pCentre, pRadius).then(blocks => {
