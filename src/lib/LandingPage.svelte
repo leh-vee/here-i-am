@@ -25,6 +25,7 @@
   $: xCentre = $screenWidth / 2;
   $: diagonalRadius = Math.hypot(xCentre, yCentre);
   $: coinRadius = Math.round(xCentre * 0.8);
+  $: footerHeight = Math.round(($screenHeight - coinRadius * 2) / 2); 
   $: goButtonRaidus = coinRadius / 2;
   const strokeWidth = 6;
 
@@ -220,8 +221,8 @@
       {#if isHeads}
         <Title />
       {/if}
-      <IntroCouplet visible={ isTails } on:revealed={ postIntroReveal }
-        on:dot={ infalteSelf } />
+      <IntroCouplet visible={ isTails } headerHeight={ footerHeight }
+        on:revealed={ postIntroReveal } on:dot={ infalteSelf } />
       <Text config={{
         x: 0,
         y: 0,

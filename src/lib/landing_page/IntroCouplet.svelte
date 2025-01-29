@@ -7,13 +7,15 @@
   
   const dispatch = createEventDispatcher();
 
+  export let visible = false;
+  export let headerHeight;
+
   let couplets; 
   let coupletIndex = 0;
   fetchIntroCouplets().then(lines => { 
     couplets = serializeCouplets(lines);
   });
 
-  export let visible = false;
   
   let couplet = { a: "", b: "" };
   let progressiveLines = { a: "", b: "" };
@@ -77,7 +79,7 @@
 
 <Text config={{
   y: 0,
-  height: $screenHeight / 3,
+  height: headerHeight,
   align: 'center',
   verticalAlign: 'middle',
   text: progressiveLines.a,
@@ -85,8 +87,8 @@
   ...questionTextAttrs
 }} />
 <Text config={{
-  y: $screenHeight - $screenHeight / 3,
-  height: $screenHeight / 3,
+  y: $screenHeight - headerHeight,
+  height: headerHeight,
   align: 'center',
   verticalAlign: 'middle',
   text: progressiveLines.b,
