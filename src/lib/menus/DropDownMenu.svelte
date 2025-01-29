@@ -1,8 +1,13 @@
 <script>
+  import { screenWidth } from '../../stores/base'; 
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
   export let isHidden = true;
+
+  $: clsBtnSize = `${Math.round($screenWidth * 0.06)}px`;
+  $: gameMargin = (window.innerWidth - $screenWidth) / 2;
+  $: clsBtnRightPosition = `${gameMargin + Math.round($screenWidth * 0.02)}px`;
 
   function closeMenu() {
     isHidden = true;
@@ -12,7 +17,8 @@
 
 <div class='drop-down menu' class:hide={ isHidden }>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <span id='close-button' on:click={ closeMenu }>
+  <span id='close-button' on:click={ closeMenu } 
+    style="--clsBtnSize:{clsBtnSize}; --clsBtnRightPosition:{clsBtnRightPosition}">
     &times;
   </span>
   <slot></slot>
@@ -39,9 +45,9 @@
 
   .drop-down.menu #close-button {
     position: fixed;
-    right: 2%;
+    right: var(--clsBtnRightPosition);
     font-family: monospace;
-    font-size: 4vh;
+    font-size: var(--clsBtnSize);
   }
 
   .drop-down.menu.hide #close-button {

@@ -1,13 +1,18 @@
 <script>
   import DropDownMenu from "./DropDownMenu.svelte";
   import { fetchFaqText } from '../../api/client.js';
-  import { faqLinesToText, faqLineIndex, screenHeight } from "../../stores/base";
+  import { faqLinesToText, faqLineIndex, screenWidth, 
+    screenHeight } from "../../stores/base";
 
   export let isVisible = false;
   let nobodyEl, ellipsisEl;
 
   $: isFaqLinesLoaded = $faqLinesToText.length > 0;
   $: if (!isFaqLinesLoaded) loadFaq();
+
+  $: pFontSize = `${Math.round($screenWidth * 0.05)}px`;
+  $: hFontSize = `${Math.round($screenWidth * 0.06)}px`;
+  $: dotSize = `${Math.round($screenWidth * 0.07)}px`;
 
   function loadFaq() {
     fetchFaqText().then(lines => {
@@ -101,7 +106,7 @@
 </script>
 
 <DropDownMenu isHidden={ !isVisible } on:close>
-  <div>
+  <div style="--pFontSize:{pFontSize}; --hFontSize:{hFontSize}; --dotSize:{dotSize}">
     <div id='help'>
       <div id='me' class='section'>
         <h2>About Me</h2>
@@ -134,11 +139,12 @@
 
   h2 {
     color: gold;
+    font-size: var(--hFontSize);
   }
 
   #me p {
     color: white;
-    font-size: 5vw;
+    font-size: var(--hFontSize);
   }
 
   #dialogue {
@@ -149,7 +155,7 @@
   }
   
   p.text {
-    font-size: 5vw;
+    font-size: var(--pFontSize);
     font-weight: 400;
     color: rgb(218, 218, 218);
     background-color: rgb(52, 52, 53);
@@ -176,7 +182,7 @@
   }
   
   .dot {
-    font-size: 7vw;
+    font-size: var(--dotSize);
     color: white;
     transition: color 0.7s ease-in-out;
   }
