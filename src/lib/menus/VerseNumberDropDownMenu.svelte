@@ -8,7 +8,7 @@
   const piCountDown = serializeCountDown();
   let piSliceEl;
 
-  $: fontSize = `${Math.round($screenWidth * 0.15)}px`;
+  $: fontSize = `${Math.round($screenWidth * 0.3)}px`;
 
   $: if (isVisible) {
     $hasVerseNumberMenuOpened = true;
@@ -53,7 +53,7 @@
   .pi-slice {
     width: 1lh;
     height: 1lh;
-    margin: 20px;
+    margin: 3dvh;
     padding: 20px;
     text-align: center;
     color: black;
