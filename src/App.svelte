@@ -11,10 +11,13 @@
 
   let isLandingPage = true;
   let screenEl, screenElHieght, screenElWidth; 
+  let isSkinnyScreen = false;  
 
   $: isDimensionsStored = $screenWidth !== undefined && $screenHeight !== undefined;
   $: isScreenElMounted = screenEl !== undefined;
 
+  $: isScreenBorder = !isLandingPage && isSkinnyScreen;
+  
   $: if (isLandingPage && isScreenElMounted) storeDimensions(screenElWidth, screenElHieght);
   $: if (!isLandingPage && isDimensionsStored) setIlanData();
   $: if (!isLandingPage && !isDimensionsStored && isScreenElMounted) {
@@ -25,6 +28,7 @@
   function storeDimensions(w = screenElWidth, h = screenElHieght) {
     $screenWidth = w;
     $screenHeight = h;
+    isSkinnyScreen =  window.innerWidth - $screenWidth > 10;
   }
   
   async function setIlanData() {
@@ -54,7 +58,9 @@
 </script>
 
 
-<div id='screen' bind:this={ screenEl } bind:clientWidth={ screenElWidth } bind:clientHeight={ screenElHieght }>
+<div id='screen' class:border={isScreenBorder}
+  bind:this={ screenEl } bind:clientWidth={ screenElWidth } 
+  bind:clientHeight={ screenElHieght }>
   {#if isLandingPage}
     {#key $screenWidth * $screenHeight}
       <LandingPage on:go={ () => { isLandingPage = false } } />
@@ -69,5 +75,13 @@
     width: 100%;
     height: 100%;
     background-color: black;
+    border-color: black;
+    border-width: 0;
+    transition: border-color 3.14s ease-in;
+  }
+
+  #screen.border {
+    border-left: 1px dashed dimgrey;
+    border-right: 1px dashed dimgrey;
   }
 </style>
