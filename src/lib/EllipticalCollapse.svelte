@@ -6,21 +6,19 @@
 
   const dispatch = createEventDispatcher();
 
-  const radius = 5;
+  $: radius = Math.floor($screenWidth * 0.015);
+  $: ellipsisStopDelta = radius * 3;
+  $: yCentre = $screenHeight / 2;
+  $: xCentre = $screenWidth / 2;
   
   let isCollapsed = false;
   let isCountdownComplete = false;
 
   const ellipsisStopAttrs = {
-    radius,
     opacity: Math.PI / 10,  
     fill: 'black',
     strokeEnabled: false
   }
-
-  const ellipsisStopDelta = ellipsisStopAttrs.radius * 3;
-  $: yCentre = $screenHeight / 2;
-  $: xCentre = $screenWidth / 2;
 
   const ellipsisStops = new Array(3);
 
@@ -109,15 +107,18 @@
 <Circle config={{ 
   x: xCentre - ellipsisStopDelta,
   y: yCentre,
+  radius,
   ...ellipsisStopAttrs
 }} bind:handle={ellipsisStops[0]} />
 <Circle config={{ 
   x: xCentre,
   y: yCentre,
+  radius,
   ...ellipsisStopAttrs
 }} bind:handle={ellipsisStops[1]} />
 <Circle config={{ 
   x: xCentre + ellipsisStopDelta,
   y: yCentre,
+  radius,
   ...ellipsisStopAttrs
 }} bind:handle={ellipsisStops[2]} />
