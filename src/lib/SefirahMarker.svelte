@@ -3,6 +3,7 @@
   import { Circle } from 'svelte-konva';
   import { percentOfVerseRead, likePiSlices, isLineA } from '../stores/text';
   import { isReaderEngaged, isFullStop, isVerseMapReaveled } from '../stores/verseState';
+  import { screenWidth } from '../stores/base';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
@@ -10,7 +11,7 @@
   export let coordsPx;
   export let isFromSefirah = true;
 
-  const radius = 5;
+  $: radius = Math.floor($screenWidth * 0.015);
   const piFractions = Math.PI - 3;
   let goldFillEl;
   
