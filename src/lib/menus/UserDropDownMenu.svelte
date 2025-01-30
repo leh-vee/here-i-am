@@ -132,7 +132,7 @@
 
 <style>
   #help {
-    padding: 0 10px;
+    padding: 0 3%;
     font-family: Helvetica, sans-serif;
     overflow-y: inherit;
   } 
