@@ -2,17 +2,17 @@
   import { Circle } from 'svelte-konva';
   import { currentWordId, isLineBreak, isCaesura, wordIndices } from '../stores/text';
   import { isReaderEngaged, isNavigable } from '../stores/verseState.js';
-  import { hasReadAhead } from '../stores/base';
+  import { hasReadAhead, screenWidth } from '../stores/base';
   
   export let x;
   export let y;
   export let wordId;
   export let isVisible = false;
-
-  const markerRadius = 3;
+  
   const markerColour = 'silver';
-  const expandMarkerRadius = 5;
   let markerEl;
+  $: markerRadius = Math.floor($screenWidth * 0.01);
+  $: expandMarkerRadius = Math.round(markerRadius * 1.5);
   $: isCurrentWord = wordId === $currentWordId;
   
   $: duration = $isLineBreak ? Math.PI / 2 : Math.PI / 10;
