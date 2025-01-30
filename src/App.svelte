@@ -2,7 +2,7 @@
   import { sefirotPoints, channelLines, channelProjections, 
     ilanProjection, ilanBlocks, groundZeroProjection, 
     groundZeroBlocks, groundZeroRotationBlocks } from './stores/treeOfLife.js';
-  import { screenWidth, screenHeight, isDataInitialized } from './stores/base'; 
+  import { screenWidth, screenHeight, isScreenDimensionsStored, isDataInitialized } from './stores/base'; 
   import { projectionForGroundZero, projectionsForChannels, projectionForIlan } from './utils/projections.js';
   import { fetchSefirot, fetchBlocksForProjection } from './api/client.js';
   import { channelFeatures } from './utils/geoJson.js';
@@ -13,14 +13,12 @@
   let screenEl, screenElHieght, screenElWidth; 
   let isSkinnyScreen = false;  
 
-  $: isDimensionsStored = $screenWidth !== undefined && $screenHeight !== undefined;
   $: isScreenElMounted = screenEl !== undefined;
-
   $: isScreenBorder = !isLandingPage && isSkinnyScreen;
   
   $: if (isLandingPage && isScreenElMounted) storeDimensions(screenElWidth, screenElHieght);
-  $: if (!isLandingPage && isDimensionsStored) setIlanData();
-  $: if (!isLandingPage && !isDimensionsStored && isScreenElMounted) {
+  $: if (!isLandingPage && $isScreenDimensionsStored) setIlanData();
+  $: if (!isLandingPage && !$isScreenDimensionsStored && isScreenElMounted) {
     storeDimensions();
     setIlanData();
   }
@@ -65,7 +63,7 @@
     {#key $screenWidth * $screenHeight}
       <LandingPage on:go={ () => { isLandingPage = false } } />
     {/key}
-  {:else}
+  {:else if $isScreenDimensionsStored}
     <Conductor />
   {/if}
 </div>

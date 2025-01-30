@@ -4,6 +4,12 @@ import { currentVerseIndex } from '../stores/text';
 export const screenWidth  = writable(undefined);
 export const screenHeight  = writable(undefined);
 
+export const isScreenDimensionsStored = derived(
+  [screenWidth, screenHeight], ([$screenWidth, $screenHeight]) => {
+    return $screenWidth !== undefined && $screenHeight !== undefined;
+  }
+);
+
 export const isDataInitialized = writable(false);
 
 export const hasTappedEllipsis = writable(false);
