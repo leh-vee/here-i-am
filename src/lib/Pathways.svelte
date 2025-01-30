@@ -13,7 +13,7 @@
   const chargeDuration = Math.PI / 2;
   
   const sefirahAttrs = {
-    radius: 3,
+    radius: Math.floor($screenWidth * 0.01),
     opacity: 1,
     stroke: 'dimgrey',
     strokeWidth: 1
@@ -108,7 +108,7 @@
 <Line config={{
   points: newPathwayCoordinates,
   stroke: 'gold',
-  strokeWidth: 2,
+  strokeWidth: Math.floor($screenWidth * 0.01),
   opacity: 0,
   lineCap: 'round'
 }} bind:handle={newPathwayEl} />

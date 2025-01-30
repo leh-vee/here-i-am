@@ -75,7 +75,7 @@
     function mapVesselToSefirah() {
       vessel.to({
         duration: Math.PI / 2,
-        radius: 3,
+        radius: Math.floor($screenWidth * 0.01),
         strokeWidth: 1,
         x: toCoordsPx[0],
         y: toCoordsPx[1],
