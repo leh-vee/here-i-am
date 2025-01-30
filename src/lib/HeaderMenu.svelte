@@ -84,31 +84,34 @@
     position: absolute;
     top: 0;
     left: 0;
-    height: 25px;
+    height: 4dvh;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: black;
-    border-bottom: 2px dimgrey solid;
+    border-bottom: 0.3dvh dimgrey solid;
     z-index: 2;
     transition: top 1s ease-in-out;
   }
 
   #header.menu.hide {
-    top: -27px;
+    top: calc(-4.3dvh);
   }
   
   #header.menu #pies {
     position: absolute;
+    top: -1.4dvh;
     left: 5px;
-    font-size: 22px;
-    bottom: 1px;
-    font-family: monospace;
+    font-size: 4.3dvh;
+  }
+
+  #header.menu #pies span {
+    vertical-align: bottom;
   }
 
   #header.menu #verse-number {
-    font-size: 18px;
+    font-size: 3dvh;
     color: gold;
     font-weight: bold;
     font-family: monospace;
@@ -120,10 +123,7 @@
   }
   
   #header.menu #user {
-    font-family: Courier, monospace;
-    text-align: center;
-    color: black;
-    font-size: 17px;
+    font-size: 3.5dvh;
     position: absolute;
     right: 5px;
   }
