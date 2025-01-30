@@ -2,7 +2,9 @@
   import { isEllipsisLit, isReaderEngaged } from '../stores/verseState';
   import { isLastVerseWord, isFirstVerseTriad } from '../stores/text';
   import { hasVerseNumberMenuOpened, isScoreCallout, isVerseCallout,
-    hasReadAhead, hasTappedEllipsis, hasCompletedVerse } from '../stores/base';
+    hasReadAhead, hasTappedEllipsis, hasCompletedVerse, screenWidth } from '../stores/base';
+
+  $: fontSize = `${Math.round($screenWidth * 0.04)}px`;
 
   let calloutIndex;
   $: if (!$hasTappedEllipsis && $isEllipsisLit) {
@@ -63,7 +65,9 @@
 
 
 <div id={ calloutId } class='callout' class:visible> 
-  <p>{@html calloutText }</p>
+  <p style="--fontSize:{fontSize}">
+    {@html calloutText }
+  </p>
 </div>
 
 <style>
@@ -87,7 +91,7 @@
     
     .callout p {
       margin: 0;
-      font-size: 4vw;
+      font-size: var(--fontSize);
       color: white;
       text-align: center;
       font-family: Arial, Helvetica, sans-serif;

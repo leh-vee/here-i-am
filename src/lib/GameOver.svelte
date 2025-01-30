@@ -1,16 +1,18 @@
 <script>
   import HeaderMenu from './HeaderMenu.svelte';
+  import { screenWidth } from "../stores/base";
 
   const gameOverStr = "GAME OVER";
   const goStrLength = gameOverStr.length;
-  let goSubstrIndex = 0;
-  $: goSubstr = gameOverStr.substring(0, goSubstrIndex);
-
-  let isGameOverOver = false;
-
   const fontFamily = "Press Start 2P";
+  
+  let goSubstrIndex = 0;
+  let isGameOverOver = false;
   let isTitleFontLoaded = false;
 
+  $: goSubstr = gameOverStr.substring(0, goSubstrIndex);
+  $: fontSize = `${Math.round($screenWidth * 0.08)}px`;
+  
   document.fonts.ready.then((fontFaceSet) => {
     const fontFaces = [...fontFaceSet];
     const loveYaFontFaces = fontFaces.filter(f => f.family === fontFamily);
@@ -46,7 +48,9 @@
       collaboratively, by all three of us at the very least.
     </p>
   </div>
-  <h5 id='game-over'>{ goSubstr }</h5>
+  <h5 id='game-over' style="--fontSize:{fontSize}">
+    { goSubstr }
+  </h5>
   <div class='passage'>
     <p class:hide={!isGameOverOver}>
       Intersections, our poetry collection published by Placeholder Press
@@ -81,7 +85,7 @@
     margin: 0;
     color: gold;
     font-family: "Press Start 2P", serif;
-    font-size: 8vw;
+    font-size: var(--fontSize);
   }
 
   p {
