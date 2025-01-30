@@ -10,7 +10,7 @@ export default class StreetPainter {
     this.canvasContext.strokeStyle = 'gold';
 
     this.canvasWidth = this.canvasContext.canvas.clientWidth;
-    this.canvasHeight = this.canvasContext.canvas.client = projection
+    this.canvasHeight = this.canvasContext.canvas.client = projection;
   }
 
   drawnBlockIds = [];
