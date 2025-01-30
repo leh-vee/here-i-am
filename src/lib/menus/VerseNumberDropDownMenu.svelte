@@ -1,12 +1,14 @@
 <script>
   import DropDownMenu from "./DropDownMenu.svelte";
   import { currentVerseIndex, wordIndices } from '../../stores/text.js';
-  import { hasVerseNumberMenuOpened } from "../../stores/base";
+  import { hasVerseNumberMenuOpened, screenWidth } from "../../stores/base";
   import { serializeCountDown } from '../../utils/textJson.js';
 
   export let isVisible = false;
   const piCountDown = serializeCountDown();
   let piSliceEl;
+
+  $: fontSize = `${Math.round($screenWidth * 0.15)}px`;
 
   $: if (isVisible) {
     $hasVerseNumberMenuOpened = true;
@@ -23,7 +25,7 @@
 </script>
 
 <DropDownMenu isHidden={ !isVisible } on:close>
-  <div id='countdown'>
+  <div id='countdown' style="--fontSize:{fontSize}">
     {#each piCountDown as piSlice, i}
       {#if $currentVerseIndex === i}
         <div id='current' class='pi-slice' bind:this={ piSliceEl }>
@@ -45,7 +47,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 10vh;
+    font-size: var(--fontSize);
   } 
   
   .pi-slice {
