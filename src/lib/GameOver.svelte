@@ -86,12 +86,12 @@
     margin: 0;
     color: gold;
     font-family: "Press Start 2P", serif;
-    font-size: 6dvh;
+    font-size: 4.5dvh;
   }
   
   p {
     font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 2dvh;
+    font-size: 1.5dvh;
     line-height: 200%;
     color: lightgray;
     margin: 0 var(--margin);
