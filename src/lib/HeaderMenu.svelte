@@ -101,7 +101,7 @@
   
   #header.menu #pies {
     position: absolute;
-    bottom: -0.25dvh;
+    bottom: -2px;
     left: 5px;
     font-size: 4.3dvh;
   }
