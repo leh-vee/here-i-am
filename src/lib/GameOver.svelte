@@ -11,8 +11,6 @@
   let isTitleFontLoaded = false;
 
   $: goSubstr = gameOverStr.substring(0, goSubstrIndex);
-  $: gameOverFontSize = `${Math.round($screenWidth * 0.08)}px`;
-  $: blurbFontSize = `${Math.floor($screenWidth * 0.03)}px`;
   
   document.fonts.ready.then((fontFaceSet) => {
     const fontFaces = [...fontFaceSet];
@@ -37,7 +35,7 @@
   }
 </script>
 
-<div id='after-words' style="--blurbFontSize:{blurbFontSize}">
+<div id='after-words'>
   <HeaderMenu isVisible={ isGameOverOver } />
   <div class='passage'>
     <p class:hide={!isGameOverOver}>
@@ -49,7 +47,7 @@
       collaboratively, by all three of us at the very least.
     </p>
   </div>
-  <h5 id='game-over' style="--gameOverFontSize:{gameOverFontSize}">
+  <h5 id='game-over'>
     { goSubstr }
   </h5>
   <div class='passage'>
@@ -86,12 +84,12 @@
     margin: 0;
     color: gold;
     font-family: "Press Start 2P", serif;
-    font-size: var(--gameOverFontSize);
+    font-size: 6dvh;
   }
 
   p {
     font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: var(--blurbFontSize);
+    font-size: 2dvh;
     line-height: 200%;
     color: lightgray;
     margin: 0 20%;
