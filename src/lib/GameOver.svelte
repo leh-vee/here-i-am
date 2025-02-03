@@ -5,6 +5,8 @@
   const gameOverStr = "GAME OVER";
   const goStrLength = gameOverStr.length;
   const fontFamily = "Press Start 2P";
+
+  $: margin = `${Math.round($screenWidth * 0.1)}px`;
   
   let goSubstrIndex = 0;
   let isGameOverOver = false;
@@ -35,7 +37,7 @@
   }
 </script>
 
-<div id='after-words'>
+<div id='after-words' style="--margin:{margin}">
   <HeaderMenu isVisible={ isGameOverOver } />
   <div class='passage'>
     <p class:hide={!isGameOverOver}>
@@ -79,20 +81,20 @@
     align-items: center;
     flex-direction: column;
   }
-
+  
   #game-over {
     margin: 0;
     color: gold;
     font-family: "Press Start 2P", serif;
     font-size: 6dvh;
   }
-
+  
   p {
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 2dvh;
     line-height: 200%;
     color: lightgray;
-    margin: 0 20%;
+    margin: 0 var(--margin);
     opacity: 1;
     transition: opacity 3s ease-in-out;
   }
