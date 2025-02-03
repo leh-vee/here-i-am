@@ -29,12 +29,12 @@
     {#each piCountDown as piSlice, i}
       {#if $currentVerseIndex === i}
         <div id='current' class='pi-slice' bind:this={ piSliceEl }>
-          { piSlice }
+          <p class='number'>{ piSlice }</p>
         </div>
       {:else}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class='pi-slice' on:click={ () => { goToVerse(i) } }>
-          { piSlice }
+          <p class='number'>{ piSlice }</p>
         </div>
       {/if}
     {/each}
@@ -47,21 +47,21 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: var(--fontSize);
   } 
   
   .pi-slice {
-    width: 20dvh;
-    height: 20dvh;
+    width: 40dvw;
+    height: 40dvw;
     margin: 3dvh;
-    padding: 20px;
-    text-align: center;
-    color: black;
     background-color: grey;
     border-radius: 50%;
     border: dimgrey 5px solid;
     transition: border-color 300ms ease;
     transition: color 300ms ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
   .pi-slice:active {
@@ -71,5 +71,12 @@
 
   .pi-slice#current {
     background-color: gold;
+  }
+
+  .pi-slice p.number {
+    color: black;
+    margin: 0;
+    padding: 0;
+    font-size: var(--fontSize);
   }
 </style>
