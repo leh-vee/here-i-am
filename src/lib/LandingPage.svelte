@@ -249,6 +249,10 @@
   <Number isVisible={ isClosedCoin } number={ countdownNumber } /> 
 </div>
 {#if isHeads}
+  <div class="alpha-badge">0.8-alpha.1</div>
+  <div id='caveat'>
+    <p>This game is designed for play on small, touch screens</p>
+  </div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <button id='skip-intro' on:click={ irisIn }>Skip Intro</button>
 {/if}
@@ -273,5 +277,38 @@
     padding: 5px;
     border-radius: 3px;
     opacity: 0;
+  }
+
+  #caveat {
+    display: none;
+  }
+
+  @media (pointer: fine), (min-width: 601px) {
+     #caveat {
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      color: white;
+      background-color: red;
+      text-align: center;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 3dvw;
+    }
+  }
+
+  .alpha-badge {
+    font-family: 'Arial Narrow Bold', sans-serif;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: black;
+    color: white;
+    padding: 5px 10px;
+    font-size: 3dvw;
+    font-weight: bold;
+    border-radius: 5px;
+    z-index: 1000;
   }
 </style>
