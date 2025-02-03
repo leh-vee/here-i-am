@@ -51,8 +51,8 @@
   } 
   
   .pi-slice {
-    width: 1lh;
-    height: 1lh;
+    width: 20dvh;
+    height: 20dvh;
     margin: 3dvh;
     padding: 20px;
     text-align: center;
