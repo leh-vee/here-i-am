@@ -79,5 +79,10 @@
     margin: 0;
     padding: 0;
     font-size: var(--fontSize);
+    transition: color 100ms linear;
+  }
+
+  .pi-slice:active p.number {
+    color: gold;
   }
 </style>
