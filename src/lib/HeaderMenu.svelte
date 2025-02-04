@@ -9,23 +9,6 @@
 
   $: isHeaderVisible = $isMenuVisible || isVisible;
 
-  let isVerseCalloutClass = false;
-  $: {
-    if ($isVerseCallout) {
-      verseFlash();
-    } else {
-      isVerseCalloutClass = false;
-      clearInterval(flashVerseNumberIntervalId);
-    }
-  }
-
-  let flashVerseNumberIntervalId;
-  function verseFlash() {
-    flashVerseNumberIntervalId = setInterval(() => {
-      isVerseCalloutClass = !isVerseCalloutClass;
-    }, 1000);
-  }
-
   let isVerseIndexMenuVisible = false;
   function toggleVerseIndexMenu() {
     if (isUserMenuVisible && !isVerseIndexMenuVisible) isUserMenuVisible = false;
@@ -68,7 +51,7 @@
     {/each}
   </div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div id='verse-number' class:callout={ isVerseCalloutClass } on:click={ toggleVerseIndexMenu }>
+  <div id='verse-number' class:callout={ $isVerseCallout } on:click={ toggleVerseIndexMenu }>
     { $currentPiSliceRomanized }
   </div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -115,11 +98,19 @@
     color: gold;
     font-weight: bold;
     font-family: monospace;
-    transition: opacity 1s ease-in-out;
+  }
+  
+  #header.menu #verse-number.callout {
+    animation: 1s ease-in-out 0s infinite alternate flash;
   }
 
-  #header.menu #verse-number.callout {
-    opacity: 0;
+  @keyframes flash {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
   }
   
   #header.menu #user {
