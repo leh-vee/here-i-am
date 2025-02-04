@@ -33,7 +33,7 @@
     getNextText();
   }
 
-  $: if ($faqLineIndex >= $faqLinesToText.length && isTexting && !isFinalEllipsis) {
+  $: if ($faqLineIndex === $faqLinesToText.length && isTexting && !isFinalEllipsis) {
     setTimeout(() => {
       isFinalEllipsis = true;
     }, Math.PI * 1000);
@@ -45,7 +45,7 @@
     isTyping = true;
     await delay('typing');
     isTyping = false;
-    $faqLineIndex += 1;
+    if ($faqLineIndex < $faqLinesToText.length) $faqLineIndex += 1;
     scrollToEllipsis();
   }
   
