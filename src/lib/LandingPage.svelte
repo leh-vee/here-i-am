@@ -291,7 +291,7 @@
       left: 0;
       right: 0;
       color: white;
-      background-color: red;
+      background-color: pink;
       text-align: center;
       font-family: Arial, Helvetica, sans-serif;
       font-size: 3dvw;
