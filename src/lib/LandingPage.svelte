@@ -41,6 +41,7 @@
   $: countdownNumber = 3 - coordIndex;
   $: groundZeroCoordsGcs = coordFixtures[coordIndex];
   $: isFinalLocation = coordIndex === 3;
+  $: isFirstLocation = coordIndex === 0;
 
   $: if (coinEl !== undefined) almostThereFlip();
 
@@ -249,7 +250,9 @@
   <Number isVisible={ isClosedCoin } number={ countdownNumber } /> 
 </div>
 {#if isHeads}
-  <div class="alpha-badge">0.8-alpha.1</div>
+  {#if isFirstLocation}
+    <div class="alpha-badge">0.8-alpha.1</div>
+  {/if}
   <div id='caveat'>
     <p>This game is designed for play on small, touch screens</p>
   </div>
