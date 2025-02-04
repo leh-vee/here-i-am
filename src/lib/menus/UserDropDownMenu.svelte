@@ -5,14 +5,15 @@
     screenHeight } from "../../stores/base";
 
   export let isVisible = false;
-  let nobodyEl, ellipsisEl;
 
-  $: isFaqLinesLoaded = $faqLinesToText.length > 0;
-  $: if (!isFaqLinesLoaded) loadFaq();
+  let nobodyEl, ellipsisEl;
 
   $: pFontSize = `${Math.round($screenWidth * 0.05)}px`;
   $: hFontSize = `${Math.round($screenWidth * 0.06)}px`;
   $: dotSize = `${Math.round($screenWidth * 0.07)}px`;
+
+  $: isFaqLinesLoaded = $faqLinesToText.length > 0;
+  $: if (!isFaqLinesLoaded) loadFaq();
 
   function loadFaq() {
     fetchFaqText().then(lines => {
@@ -22,19 +23,20 @@
 
   $: isTexting = isVisible && isFaqLinesLoaded;
   $: textType = $faqLineIndex % 2 === 0 ? 'question' : 'answer';
-  let isFinalAnswer = false;
-
-  $: if (isFaqLinesLoaded && $faqLineIndex === $faqLinesToText.length - 1) {
-    setTimeout(() => {
-      isFinalAnswer = true;
-    }, Math.PI * 1000);
-  }
-
+  
   let nTextChars = { current: 0, previous: 0 };
-  $: if (isTexting && $faqLineIndex <= ($faqLinesToText.length - 1)) {
+  let isFinalEllipsis = false;
+  
+  $: if ($faqLineIndex < $faqLinesToText.length && isTexting) {
     nTextChars.previous = nTextChars.current; 
     nTextChars.current = $faqLinesToText[$faqLineIndex].length;
     getNextText();
+  }
+
+  $: if ($faqLineIndex >= $faqLinesToText.length && isTexting && !isFinalEllipsis) {
+    setTimeout(() => {
+      isFinalEllipsis = true;
+    }, Math.PI * 1000);
   }
 
   let isTyping = false;
@@ -101,7 +103,7 @@
     return index % 2 === 0 ? 'question' : 'answer';
   }
 
-  $: isEllipsis = isTyping || isFinalAnswer;
+  $: isEllipsis = isTyping || isFinalEllipsis;
 
 </script>
 
