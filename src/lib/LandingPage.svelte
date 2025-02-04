@@ -306,17 +306,16 @@
   }
 
   .alpha-badge {
-    font-family: 'Arial Narrow Bold', sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     position: absolute;
     top: 10px;
     right: 10px;
-    background: lightyellow;
+    background: white;
     color: black;
-    padding: 5px;
+    padding: 0.5dvh;
     font-size: 1dvh;
-    font-weight: bold;
     border-radius: 5px;
-    border: 1px solid yellowgreen;
+    border: solid 1px black;
     z-index: 1000;
   }
 </style>
