@@ -43,6 +43,8 @@
   $: isFinalLocation = coordIndex === 3;
   $: isFirstLocation = coordIndex === 0;
 
+  $: caveatFontSize = `${Math.round($screenWidth * 0.04)}px`;
+
   $: if (coinEl !== undefined) almostThereFlip();
 
   function almostThereFlip() {
@@ -251,8 +253,10 @@
 </div>
 {#if isHeads}
   {#if isFirstLocation}
-    <div class="alpha-badge">0.8-alpha.1</div>
-    <div id='caveat'>
+    <div class="alpha-badge">
+      0.8-alpha.1
+    </div>
+    <div id='caveat' style="--caveatFontSize:{caveatFontSize}">
       <p>This game plays best on small, touch screens</p>
     </div>
   {/if}
@@ -297,22 +301,22 @@
       background-color: red;
       text-align: center;
       font-family: Arial, Helvetica, sans-serif;
-      font-size: 3dvw;
+      font-size: var(--caveatFontSize);
     }
   }
 
   .alpha-badge {
     font-family: 'Arial Narrow Bold', sans-serif;
-    position: fixed;
+    position: absolute;
     top: 10px;
     right: 10px;
     background: lightyellow;
     color: black;
-    padding: 5px 10px;
-    font-size: 3dvw;
+    padding: 5px;
+    font-size: 1dvh;
     font-weight: bold;
     border-radius: 5px;
-    border: 1px solid dimgray;
+    border: 1px solid yellowgreen;
     z-index: 1000;
   }
 </style>
