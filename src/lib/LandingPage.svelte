@@ -313,7 +313,7 @@
     background: white;
     color: black;
     padding: 0.5dvh;
-    font-size: 1dvh;
+    font-size: 1.5dvh;
     border-radius: 5px;
     border: solid 1px black;
     z-index: 1000;
