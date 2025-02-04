@@ -31,7 +31,7 @@
   }
 
   let nTextChars = { current: 0, previous: 0 };
-  $: if (isTexting && $faqLineIndex < $faqLinesToText.length - 1) {
+  $: if (isTexting && $faqLineIndex <= ($faqLinesToText.length - 1)) {
     nTextChars.previous = nTextChars.current; 
     nTextChars.current = $faqLinesToText[$faqLineIndex].length;
     getNextText();
