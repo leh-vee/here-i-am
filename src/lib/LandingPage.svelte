@@ -252,10 +252,10 @@
 {#if isHeads}
   {#if isFirstLocation}
     <div class="alpha-badge">0.8-alpha.1</div>
+    <div id='caveat'>
+      <p>This game plays best on small, touch screens</p>
+    </div>
   {/if}
-  <div id='caveat'>
-    <p>This game is designed for play on small, touch screens</p>
-  </div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <button id='skip-intro' on:click={ irisIn }>Skip Intro</button>
 {/if}
@@ -286,7 +286,7 @@
     display: none;
   }
 
-  @media (pointer: fine), (min-width: 601px) {
+  @media (pointer: fine), (orientation: portrait) and (min-width: 601px) {
      #caveat {
       display: block;
       position: absolute;
@@ -294,7 +294,7 @@
       left: 0;
       right: 0;
       color: white;
-      background-color: pink;
+      background-color: red;
       text-align: center;
       font-family: Arial, Helvetica, sans-serif;
       font-size: 3dvw;
@@ -306,12 +306,13 @@
     position: fixed;
     top: 10px;
     right: 10px;
-    background: black;
-    color: white;
+    background: lightyellow;
+    color: black;
     padding: 5px 10px;
     font-size: 3dvw;
     font-weight: bold;
     border-radius: 5px;
+    border: 1px solid dimgray;
     z-index: 1000;
   }
 </style>
