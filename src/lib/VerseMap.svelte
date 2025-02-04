@@ -12,13 +12,13 @@
 
   $: if (isRevealed) verseState.set('verseMapReaveled');
 
-  const nMarkersVisible = { a: 0, b: 0 }
+  const nMarkersVisible = { a: 0, b: 0 };
 
   $: if ($isEllipsisReaveled) incrementVisibleMarkers();
 
   function incrementVisibleMarkers() {
     const plusOne = (line = 'a') => {
-      const duration = Math.PI * 100;
+      const duration = 200;
       nMarkersVisible[line] += 1;
       if (nMarkersVisible[line] < $currentVerse[line].length) {
         setTimeout(() => { plusOne(line) }, duration);
