@@ -59,8 +59,10 @@
 </div>
 <VerseNumberDropDownMenu isVisible={ isVerseIndexMenuVisible }
   on:close={ () => isVerseIndexMenuVisible = false } />
-<UserDropDownMenu isVisible={ isUserMenuVisible } 
-  on:close={ () => isUserMenuVisible = false } />
+{#key isUserMenuVisible}
+  <UserDropDownMenu isVisible={ isUserMenuVisible } 
+    on:close={ () => isUserMenuVisible = false } />
+{/key}
 
 <style>
   #header.menu {

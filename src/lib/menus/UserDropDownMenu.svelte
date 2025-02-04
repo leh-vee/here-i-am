@@ -27,11 +27,7 @@
   let nTextChars = { current: 0, previous: 0 };
   let isFinalEllipsis = false;
   
-  $: if ($faqLineIndex < $faqLinesToText.length && isTexting) {
-    nTextChars.previous = nTextChars.current; 
-    nTextChars.current = $faqLinesToText[$faqLineIndex].length;
-    getNextText();
-  }
+  $: if ($faqLineIndex < $faqLinesToText.length && isTexting) getNextText();
 
   $: if ($faqLineIndex === $faqLinesToText.length && isTexting && !isFinalEllipsis) {
     setTimeout(() => {
@@ -39,12 +35,18 @@
     }, Math.PI * 1000);
   }
 
+  let isProcessingNextText = false;
   let isTyping = false;
   async function getNextText() {
+    if (isProcessingNextText) return false;
+    isProcessingNextText = true;
+    nTextChars.previous = nTextChars.current; 
+    nTextChars.current = $faqLinesToText[$faqLineIndex].length;
     await delay('thinking');
     isTyping = true;
     await delay('typing');
     isTyping = false;
+    isProcessingNextText = false;
     if ($faqLineIndex < $faqLinesToText.length) $faqLineIndex += 1;
     scrollToEllipsis();
   }
