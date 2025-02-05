@@ -1,5 +1,5 @@
 <script>
-  import DropDownMenu from "./DropDownMenu.svelte";
+  import DropDownMenu from "./menus/DropDownMenu.svelte";
 
   export let isVisible = false;
 </script>
