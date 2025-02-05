@@ -3,6 +3,11 @@
   import { fetchFaqText } from '../../api/client.js';
   import { faqLinesToText, faqLineIndex, screenWidth, 
     screenHeight } from "../../stores/base";
+  import { tick, onMount } from 'svelte';
+
+  onMount(() => {
+    scrollLastTextIntoView();
+  });
 
   export let isVisible = false;
 
@@ -35,32 +40,30 @@
     }, Math.PI * 1000);
   }
 
-  let isProcessingNextText = false;
   let isTyping = false;
+  let isWaitingOnNextText = false;
   async function getNextText() {
-    if (isProcessingNextText) return false;
-    isProcessingNextText = true;
     nTextChars.previous = nTextChars.current; 
     nTextChars.current = $faqLinesToText[$faqLineIndex].length;
     await delay('thinking');
     isTyping = true;
     await delay('typing');
+    if (ellipsisEl === null) return null;
+    isWaitingOnNextText = ellipsisEl.getBoundingClientRect().top < $screenHeight;
     isTyping = false;
-    isProcessingNextText = false;
-    if ($faqLineIndex < $faqLinesToText.length) $faqLineIndex += 1;
-    scrollToEllipsis();
+    if ($faqLineIndex < $faqLinesToText.length) {
+      $faqLineIndex += 1;
+      await tick();
+      if (isWaitingOnNextText) scrollLastTextIntoView();
+    }
   }
   
-  function scrollToEllipsis() {
-    const height = $screenHeight;
-    const ellipsisTop = ellipsisEl.getBoundingClientRect().top;
-    const isEllipsisVisible = ellipsisTop < height;
-    const nobodyTop = nobodyEl.getBoundingClientRect().top;
-    const isNobodyAtGroundZero = (nobodyTop + 10) < height;
-    if (!isNobodyAtGroundZero && isEllipsisVisible) {
-      setTimeout(() => {
-        nobodyEl.scrollIntoView({ behavior: "smooth" });
-      }, 1)
+  function scrollLastTextIntoView() {
+    if (nobodyEl === null) return null;
+    const nobodyElBottom = nobodyEl.getBoundingClientRect().bottom;
+    const isLastTextBelowFold = nobodyElBottom > $screenHeight;
+    if (isLastTextBelowFold) {
+      nobodyEl.scrollIntoView({ behavior: "smooth" });
     }
   }
 
