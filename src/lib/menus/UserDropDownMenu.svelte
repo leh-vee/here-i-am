@@ -5,7 +5,8 @@
     screenHeight } from "../../stores/base";
   import { tick, onMount } from 'svelte';
 
-  onMount(() => {
+  onMount(async () => {
+    await tick();
     scrollLastTextIntoView();
   });
 
