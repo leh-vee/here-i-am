@@ -1,17 +1,28 @@
 <script>
   import HeaderMenu from './HeaderMenu.svelte';
   import GameOver from './GameOver.svelte';
+  import { swipe } from 'svelte-gestures';
 
   let isGameOverScreen = true;
   let isGameOverReady = false;
 
   $: isHighScoreScreen = !isGameOverScreen;
 
+  function swiped(event) {
+    const direction = event.detail.direction;
+    if (direction === 'left') {
+      isGameOverScreen = false;
+    } else {
+      isGameOverScreen = true;
+    }
+  }
+
 </script>
 
 <div id='postscript'>
   <HeaderMenu isVisible={ isGameOverReady } />
-  <div id='slider-container' class:high-score={ isHighScoreScreen }>
+  <div id='slider-container' class:high-score={ isHighScoreScreen }
+    use:swipe={{ timeframe: 300, minSwipeDistance: 60 }} on:swipe={(e) => { swiped(e) }}>
     <div class='pane'>
       <GameOver on:visible={ () => { isGameOverReady = true } } />
     </div>
