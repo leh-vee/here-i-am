@@ -77,7 +77,7 @@
     right: 0;
     color: white;
     text-align: center;
-    font-size: 20px;
+    font-size: 5dvh;
   }
 
   .bullet {
