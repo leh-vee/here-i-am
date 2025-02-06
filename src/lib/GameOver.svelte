@@ -9,7 +9,7 @@
   const goStrLength = gameOverStr.length;
   const fontFamily = "Press Start 2P";
 
-  $: margin = `${Math.round($screenWidth * 0.1)}px`;
+  $: margin = `${Math.round($screenWidth * 0.08)}px`;
   
   let goSubstrIndex = 0;
   let isHeaderVisible = false;
@@ -78,12 +78,10 @@
   }
 
   .passage {
-    margin: 10px;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
   }
   
   #title {
@@ -95,8 +93,8 @@
   
   p {
     font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 1.5dvh;
-    line-height: 200%;
+    font-size: 2dvh;
+    line-height: 180%;
     color: lightgray;
     margin: 0 var(--margin);
     opacity: 1;
