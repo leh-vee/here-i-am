@@ -41,7 +41,7 @@
   }
 </script>
 
-<div id='after-words' style="--margin:{margin}">
+<div id='game-over' style="--margin:{margin}">
   <HeaderMenu isVisible={ isHeaderVisible } />
   <div class='passage'>
     <p class:hide={!isHeaderVisible}>
@@ -53,7 +53,7 @@
       collaboratively, by all three of us at the very least.
     </p>
   </div>
-  <h5 id='game-over'>
+  <h5 id='title'>
     { goSubstr }
   </h5>
   <div class='passage'>
@@ -68,7 +68,7 @@
 </div>
 
 <style>
-  #after-words {
+  #game-over {
     height: 100%;
     width: 100%;
     display: flex;
@@ -86,7 +86,7 @@
     flex-direction: column;
   }
   
-  #game-over {
+  #title {
     margin: 0;
     color: gold;
     font-family: "Press Start 2P", serif;

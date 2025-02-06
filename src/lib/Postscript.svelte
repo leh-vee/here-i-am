@@ -1,6 +1,7 @@
 <script>
   import HeaderMenu from './HeaderMenu.svelte';
   import GameOver from './GameOver.svelte';
+  import HighPiScores from './HighPiScores.svelte';
   import { swipe } from 'svelte-gestures';
 
   let isGameOverScreen = true;
@@ -27,7 +28,7 @@
       <GameOver on:visible={ () => { isGameOverReady = true } } />
     </div>
     <div class='pane'>
-      <h3>Masters of Pi</h3>
+      <HighPiScores />
     </div>
   </div>
   {#if isGameOverReady} 
@@ -54,9 +55,9 @@
   }
 
   #slider-container {
-    display: flex; 
-    width: 200%;
     height: 100%;
+    width: 200%;
+    display: flex;
     transition: transform 500ms ease-in-out;
   }
   
@@ -67,16 +68,6 @@
   .pane {
     height: 100%;
     width: 100%;
-  }
-
-  .pane h3 {
-    color: white;
-    font-size: xx-large;
-    margin: 0;
-    position: relative;
-    top: 50dvh;
-    width: 100%;
-    text-align: center;
   }
 
   #footer {
