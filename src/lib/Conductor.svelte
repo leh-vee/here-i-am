@@ -4,17 +4,17 @@
   import Countdown from './Countdown.svelte';
   import SwanSong from './SwanSong.svelte';
   import VerseNumber from './VerseNumber.svelte';
-  import GameOver from './GameOver.svelte';
+  import Postscript from './Postscript.svelte';
   import { isDataInitialized, screenWidth, screenHeight } from '../stores/base';
 
-  const movements = ['overture', 'countdown', 'swanSong', 'gameOver'];
+  const movements = ['overture', 'countdown', 'swanSong', 'postscript'];
   let movementIndex = 0;
   $: movement = movements[movementIndex];
 
   function nextMovement() { movementIndex += 1 }
 </script>
 
-{#if movement !== 'gameOver' }
+{#if movement !== 'postscript' }
   <Stage config={{ width: $screenWidth, height: $screenHeight }}>
     {#if movement === 'overture' }
       <Overture on:goneNova={ nextMovement } />
@@ -25,7 +25,7 @@
     {/if}
   </Stage>
 {:else} 
-  <GameOver />
+  <Postscript />
 {/if}
 {#if isDataInitialized}
   <VerseNumber />

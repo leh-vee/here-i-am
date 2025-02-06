@@ -1,6 +1,9 @@
 <script>
   import HeaderMenu from './HeaderMenu.svelte';
   import { screenWidth } from "../stores/base";
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
 
   const gameOverStr = "GAME OVER";
   const goStrLength = gameOverStr.length;
@@ -9,7 +12,7 @@
   $: margin = `${Math.round($screenWidth * 0.1)}px`;
   
   let goSubstrIndex = 0;
-  let isGameOverOver = false;
+  let isHeaderVisible = false;
   let isTitleFontLoaded = false;
 
   $: goSubstr = gameOverStr.substring(0, goSubstrIndex);
@@ -30,7 +33,8 @@
         goSubstrIndex += 1;
       } else {
         clearInterval(addCharIntervalId);
-        isGameOverOver = true;
+        dispatch('visible');
+        isHeaderVisible = true;
       }
     }
     let addCharIntervalId = setInterval(addGoChar, Math.PI * 100);
@@ -38,9 +42,9 @@
 </script>
 
 <div id='after-words' style="--margin:{margin}">
-  <HeaderMenu isVisible={ isGameOverOver } />
+  <HeaderMenu isVisible={ isHeaderVisible } />
   <div class='passage'>
-    <p class:hide={!isGameOverOver}>
+    <p class:hide={!isHeaderVisible}>
       Here I Am was designed and developed by Leon Lukashevsky. 
       My Hebrew name is Levi. Anyone keeping score will remember
       that the <span class='italic'>me</span> character
@@ -53,7 +57,7 @@
     { goSubstr }
   </h5>
   <div class='passage'>
-    <p class:hide={!isGameOverOver}>
+    <p class:hide={!isHeaderVisible}>
       Intersections, our poetry collection published by Placeholder Press
       is a companion work to this game. It opens with a reproduction of
       Here I Am as it appeared on flyers posted around my Toronto neighbourhood
