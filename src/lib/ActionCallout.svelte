@@ -37,7 +37,8 @@
     },
     {
       id: 'score',
-      text: "Arrive at 03:14, the stroke of <span style='font-family: Times New Roman; font-size: xx-large'>π</span>, to score"
+      text: "Arrive at <span style='font-family: digital; font-size: larger'>03:14</span>, the stroke of " +
+        "<span style='font-family: Times New Roman; font-size: xx-large'>π</span>, to score"
     },
     {
       id: 'verse',
