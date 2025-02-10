@@ -50,7 +50,7 @@
 
   #high-scores #subtitle {
     margin-top: 0;
-    margin-bottom: 25dvw;
+    margin-bottom: 20dvw;
     font-size: 1dvh;
     font-family: 'Press Start 2P';
     color: white;
