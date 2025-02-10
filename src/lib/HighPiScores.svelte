@@ -44,14 +44,14 @@
   #high-scores #title {
     margin: 0;
     font-family: 'Press Start 2P';
-    font-size: 2.5dvh;
+    font-size: 3dvh;
     color: lightgoldenrodyellow;
   }
 
   #high-scores #subtitle {
     margin-top: 0;
-    margin-bottom: 20dvw;
-    font-size: 1dvh;
+    margin-bottom: 15dvw;
+    font-size: 1.5dvh;
     font-family: 'Press Start 2P';
     color: white;
   }
@@ -71,7 +71,7 @@
   }
 
   .leader .name {
-    font-size: 3dvh;
+    font-size: 3.5dvh;
     font-family: 'Love Ya Like A Sister';
   } 
 
@@ -88,14 +88,14 @@
   }
 
   .leader .time {
-    font-size: 3.5dvh;
+    font-size: 4dvh;
     color: white;
     font-family: 'digital';
   }
 
   .leader .date {
     font-family: 'Homemade Apple';
-    font-size: 2dvh;
+    font-size: 2.5dvh;
     margin: 0;
     color: lightgray;
   }
