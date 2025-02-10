@@ -51,8 +51,8 @@
   #high-scores #subtitle {
     margin-top: 0;
     margin-bottom: 10dvw;
-    font-size: 1.5dvh;
-    font-family: monospace;
+    font-size: 1dvh;
+    font-family: 'Press Start 2P';
     color: white;
   }
   
