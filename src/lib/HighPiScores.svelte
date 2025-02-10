@@ -44,13 +44,13 @@
   #high-scores #title {
     margin: 0;
     font-family: 'Press Start 2P';
-    font-size: 2dvh;
+    font-size: 2.5dvh;
     color: lightgoldenrodyellow;
   }
 
   #high-scores #subtitle {
     margin-top: 0;
-    margin-bottom: 10dvw;
+    margin-bottom: 30dvw;
     font-size: 1dvh;
     font-family: 'Press Start 2P';
     color: white;
@@ -71,7 +71,7 @@
   }
 
   .leader .name {
-    font-size: 4dvh;
+    font-size: 2.5dvh;
     font-family: 'Love Ya Like A Sister';
   } 
 
