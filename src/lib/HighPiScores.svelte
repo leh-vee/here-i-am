@@ -44,7 +44,7 @@
   #high-scores #title {
     margin: 0;
     font-family: 'Press Start 2P';
-    font-size: 2.5dvh;
+    font-size: 2dvh;
     color: lightgoldenrodyellow;
   }
 
@@ -57,7 +57,7 @@
   }
   
   #title #pies {
-    font-size: 5dvh;
+    font-size: 4.5dvh;
   } 
 
   #high-scores .leader {
