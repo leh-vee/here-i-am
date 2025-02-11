@@ -61,13 +61,13 @@
 
   #titles #sub {
     margin-top: 0;
-    font-size: 1dvh;
+    font-size: 0.8dvh;
     font-family: 'Press Start 2P';
     color: white;
   }
   
   #super #pie {
-    font-size: 6dvh;
+    font-size: 5dvh;
     vertical-align: 10%;
   } 
 
@@ -89,11 +89,11 @@
   
   .leader h1 {
     margin-top: 0;
-    margin-bottom: 2dvw;
+    margin-bottom: 1dvh;
   }
 
   .leader .name {
-    font-size: 3.5dvh;
+    font-size: 5dvh;
     font-family: 'Love Ya Like A Sister';
   } 
 
@@ -110,14 +110,14 @@
   }
 
   .leader .time {
-    font-size: 4dvh;
+    font-size: 7dvh;
     color: white;
     font-family: 'digital';
   }
 
   .leader .date {
     font-family: 'Homemade Apple';
-    font-size: 2.5dvh;
+    font-size: 2dvh;
     margin: 0;
     color: lightgray;
   }
