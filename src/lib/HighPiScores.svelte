@@ -21,7 +21,7 @@
 
 <div id='high-scores'>
   <h1 id='title'>Masters of <span id='pie'>🥧</span></h1>
-  <h5 id='subtitle'>(those quickest to score a hat trick)</h5>
+  <h5 id='subtitle'>(all time quickest hat tricks)</h5>
   {#each leaders as leader, i}
     <div class='leader'>
       <h1 class='name'>{ leader.name }</h1>
