@@ -1,17 +1,17 @@
 <script>
   const leaders = [
     {
-      name: 'Richard',
+      name: 'Mia',
       time: '13:07.956',
       date: '04/02/25'
     },
     {
-      name: 'Tobias',
+      name: 'Jack',
       time: '25:21.112',
       date: '03/01/25'
     },
     {
-      name: 'Maya',
+      name: 'Richard',
       time: '31:21.654',
       date: '21/11/24'
     }
