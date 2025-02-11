@@ -20,15 +20,19 @@
 </script>
 
 <div id='high-scores'>
-  <h1 id='title'>Masters of <span id='pie'>🥧</span></h1>
-  <h5 id='subtitle'>(all time quickest hat tricks)</h5>
-  {#each leaders as leader, i}
-    <div class='leader'>
-      <h1 class='name'>{ leader.name }</h1>
-      <h1 class='time'>{ leader.time }</h1>
-      <h1 class='date'>{ leader.date }</h1>
-    </div>
-  {/each}
+  <div id='titles'>
+    <h1 id='super'>Masters of <span id='pie'>🥧</span></h1>
+    <h5 id='sub'>(all time quickest hat tricks)</h5>
+  </div>
+  <div id='leaders'>
+    {#each leaders as leader, i}
+      <div class='leader'>
+        <h1 class='name'>{ leader.name }</h1>
+        <h1 class='time'>{ leader.time }</h1>
+        <h1 class='date'>{ leader.date }</h1>
+      </div>
+    {/each}
+  </div>
 </div>
 
 <style>
@@ -37,33 +41,50 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+  } 
+  
+  #high-scores #titles {
+    flex: 1;
+    margin-top: 4.3dvh;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-  } 
+  }
 
-  #high-scores #title {
+  #titles #super {
     margin: 0;
     font-family: 'Press Start 2P';
     font-size: 3dvh;
     color: lightgoldenrodyellow;
   }
 
-  #high-scores #subtitle {
+  #titles #sub {
     margin-top: 0;
-    margin-bottom: 15dvw;
     font-size: 1dvh;
     font-family: 'Press Start 2P';
     color: white;
   }
   
-  #title #pie {
-    font-size: 7dvh;
+  #super #pie {
+    font-size: 6dvh;
     vertical-align: 10%;
   } 
 
+  #high-scores #leaders {
+    flex: 6;
+    margin-bottom: 5dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
   #high-scores .leader {
+    flex: 1;
     text-align: center;
-    margin-bottom: 10dvw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   
   .leader h1 {
