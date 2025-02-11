@@ -27,7 +27,7 @@
 <style>
   .drop-down.menu {
     position: absolute;
-    top: calc(4.3dvh);
+    top: 4.3dvh;
     left: 0;
     bottom: 0;
     right: 0;
