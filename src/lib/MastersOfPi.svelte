@@ -19,9 +19,9 @@
 
 </script>
 
-<div id='high-scores'>
+<div id='leader-board'>
   <div id='titles'>
-    <h1 id='super'>Masters of <span id='pie'>🥧</span></h1>
+    <h1 id='main'>Masters of <span id='pie'>🥧</span></h1>
     <h5 id='sub'><sup>*</sup>all time quickest hat tricks</h5>
   </div>
   <div id='leaders'>
@@ -36,14 +36,14 @@
 </div>
 
 <style>
-  #high-scores {
+  #leader-board {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
   } 
   
-  #high-scores #titles {
+  #leader-board #titles {
     flex: 1;
     margin-top: 4.3dvh;
     display: flex;
@@ -52,7 +52,7 @@
     justify-content: center;
   }
 
-  #titles #super {
+  #titles #main {
     margin: 0;
     font-family: 'Press Start 2P';
     font-size: 3dvh;
@@ -66,19 +66,19 @@
     color: white;
   }
   
-  #super #pie {
+  #main #pie {
     font-size: 5dvh;
     vertical-align: 10%;
   } 
 
-  #high-scores #leaders {
+  #leader-board #leaders {
     flex: 6;
     margin-bottom: 5dvh;
     display: flex;
     flex-direction: column;
   }
 
-  #high-scores .leader {
+  #leader-board .leader {
     flex: 1;
     text-align: center;
     display: flex;

@@ -1,13 +1,13 @@
 <script>
   import HeaderMenu from './HeaderMenu.svelte';
   import GameOver from './GameOver.svelte';
-  import HighPiScores from './HighPiScores.svelte';
+  import MastersOfPi from './MastersOfPi.svelte';
   import { swipe } from 'svelte-gestures';
 
   let isGameOverScreen = true;
   let isGameOverReady = false;
 
-  $: isHighScoreScreen = !isGameOverScreen;
+  $: isLeaderBoard = !isGameOverScreen;
 
   function swiped(event) {
     const direction = event.detail.direction;
@@ -22,13 +22,13 @@
 
 <div id='postscript'>
   <HeaderMenu isVisible={ isGameOverReady } />
-  <div id='slider-container' class:high-score={ isHighScoreScreen }
+  <div id='slider-container' class:high-scores={ isLeaderBoard }
     use:swipe={{ timeframe: 300, minSwipeDistance: 60 }} on:swipe={(e) => { swiped(e) }}>
     <div class='pane'>
       <GameOver on:visible={ () => { isGameOverReady = true } } />
     </div>
     <div class='pane'>
-      <HighPiScores />
+      <MastersOfPi />
     </div>
   </div> 
   <div class='footer' class:visible={ isGameOverReady }>
@@ -38,7 +38,7 @@
       &bull;
     </span>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <span class='bullet' class:selected={ isHighScoreScreen }
+    <span class='bullet' class:selected={ isLeaderBoard }
       on:click={ () => { isGameOverScreen = false } }>
       &bull;
     </span>
@@ -59,7 +59,7 @@
     transition: transform 500ms ease-in-out;
   }
   
-  #slider-container.high-score {
+  #slider-container.high-scores {
     transform: translateX(-50%);
   }
 
