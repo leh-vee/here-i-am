@@ -9,7 +9,7 @@ export async function fetchSefirot() {
 export async function fetchBlocksWithinRadius(centroidCoords, radiusKm) {
   const json = { centroidCoords, radiusKm }
   const blocksJson = await fetchData('street-edges/within-radius', 
-    { method: "post", body: JSON.stringify(json) }
+    { method: "post", body: JSON.stringify(json) }, 10
   );
   return JSON.parse(blocksJson);
 }
