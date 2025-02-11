@@ -6,7 +6,7 @@
       date: '04/02/25'
     },
     {
-      name: 'Jack',
+      name: 'Adisa',
       time: '25:21.112',
       date: '03/01/25'
     },
