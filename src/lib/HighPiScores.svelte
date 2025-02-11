@@ -20,7 +20,7 @@
 </script>
 
 <div id='high-scores'>
-  <h1 id='title'>Masters of <span id='pies'>🥧🥧🥧</span></h1>
+  <h1 id='title'>Masters of <span id='pie'>🥧</span></h1>
   <h5 id='subtitle'><sup>*</sup>those quickest to score 3x</h5>
   {#each leaders as leader, i}
     <div class='leader'>
@@ -51,13 +51,14 @@
   #high-scores #subtitle {
     margin-top: 0;
     margin-bottom: 15dvw;
-    font-size: 1.5dvh;
+    font-size: 1dvh;
     font-family: 'Press Start 2P';
     color: white;
   }
   
-  #title #pies {
-    font-size: 4.5dvh;
+  #title #pie {
+    font-size: 7dvh;
+    vertical-align: 10%;
   } 
 
   #high-scores .leader {
