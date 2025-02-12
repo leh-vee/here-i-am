@@ -22,7 +22,7 @@
 <div id='leader-board'>
   <div id='titles'>
     <h1 id='main'>Masters of <span id='pie'>🥧</span></h1>
-    <h5 id='sub'><sup>*</sup>all time quickest hat tricks</h5>
+    <h5 id='sub'>&mdash; all time quickest hat tricks &mdash;</h5>
   </div>
   <div id='leaders'>
     {#each leaders as leader, i}
@@ -61,8 +61,8 @@
 
   #titles #sub {
     margin-top: 0;
-    font-size: 0.8dvh;
-    font-family: 'Press Start 2P';
+    font-size: 1.5dvh;
+    font-family: 'courgette';
     color: white;
   }
   
