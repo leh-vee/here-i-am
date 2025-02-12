@@ -47,7 +47,7 @@
 <div id='header' class='menu' class:hide={!isHeaderVisible}>
   <div id='pies'>
     {#each isPieEaten as eaten}
-      <span class:eaten>🥧</span>
+      <span class:eaten>&#129383;</span>
     {/each}
   </div>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
