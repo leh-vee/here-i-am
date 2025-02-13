@@ -28,7 +28,7 @@
     {#each leaders as leader, i}
       <div class='leader'>
         <h1 class='name'>{ leader.name }</h1>
-        <h1 class='time'>{ leader.time }</h1>
+        <h1 class='time'>{ leader.time }...</h1>
         <h1 class='date'>{ leader.date }</h1>
       </div>
     {/each}
