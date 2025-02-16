@@ -17,7 +17,7 @@
     ellipsisCollapsed = true;
     const singularity = event.detail;
     singularity.to({
-      duration: Math.PI / 10,
+      duration: 0.3,
       radius: diagonalRadius,
       fill: 'black',
       onFinish: () => {
