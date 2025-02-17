@@ -63,9 +63,7 @@
   
 </script>
 
-{#key centreCoordsGcs}
-  <div id='map' use:initializeMap={centreCoordsGcs} />
-{/key}
+<div id='map' use:initializeMap={centreCoordsGcs} />
 
 <style>
   #map {

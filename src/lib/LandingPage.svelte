@@ -192,9 +192,10 @@
   }
 
 </script>
-
-<MapTiles centreCoordsGcs={ groundZeroCoordsGcs } 
-  on:loaded={ () => { isTileMapLoading = false } } />
+{#key coordIndex}
+  <MapTiles centreCoordsGcs={ groundZeroCoordsGcs } 
+    on:loaded={ () => { isTileMapLoading = false } } />
+{/key}
 <div id='landing-page'>
   <Stage config={{ width: $screenWidth, height: $screenHeight }} on:pointerclick={ click }>
     <Layer>
