@@ -21,7 +21,7 @@
 
 <div id='leader-board'>
   <div id='titles'>
-    <h1 id='main'>Masters of Pi</h1>
+    <h1 id='main'>Masters of π</h1>
     <h5 id='sub'>&mdash; all time quickest hat tricks &mdash;</h5>
   </div>
   <div id='leaders'>
