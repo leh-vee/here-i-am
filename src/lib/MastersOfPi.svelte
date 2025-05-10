@@ -21,7 +21,7 @@
 
 <div id='leader-board'>
   <div id='titles'>
-    <h1 id='main'>Masters of <span id='pie'>&#129383;</span></h1>
+    <h1 id='main'>Masters of Pi</h1>
     <h5 id='sub'>&mdash; all time quickest hat tricks &mdash;</h5>
   </div>
   <div id='leaders'>
@@ -65,11 +65,6 @@
     font-family: 'courgette';
     color: white;
   }
-  
-  #main #pie {
-    font-size: 5dvh;
-    vertical-align: 10%;
-  } 
 
   #leader-board #leaders {
     flex: 6;
