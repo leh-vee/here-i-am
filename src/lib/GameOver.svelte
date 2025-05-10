@@ -60,9 +60,9 @@
     <p class:hide={!isHeaderVisible}>
       Intersections, our poetry collection published by Placeholder Press
       is a companion work to this game. It opens with a reproduction of
-      Here I Am as it appeared on flyers posted around my Toronto neighbourhood
-      in the spring of 2021. Each poem in the book is inspired by a brief
-      encounter between imperfect strangers.
+      Here I Am as it appeared on flyers anonymously posted around my Toronto
+      neighbourhood in the spring of 2021. Each poem in the book is inspired
+      by a brief encounter between imperfect strangers.
     </p>
   </div>
 </div>
