@@ -70,12 +70,12 @@
 
   const textDelayRanges = {
     thinking: {
-      question: [500, 750], 
-      answer: [750, 900]
+      question: [1000, 1500], 
+      answer: [1500, 1800]
     },
     typing: {
-      question: [650, 875], 
-      answer: [750, 1000]
+      question: [1300, 1650], 
+      answer: [1500, 2000]
     } 
   }
 
