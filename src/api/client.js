@@ -35,6 +35,11 @@ export function fetchFaqText() {
   return getLinesFromTxtFile(filePath);
 }
 
+export function fetchAboutMeText() {
+  const filePath = `${window.location.href}/about_me.txt`;
+  return getLinesFromTxtFile(filePath);
+}
+
 async function getLinesFromTxtFile(filePath) {
   const response = await fetch(filePath);
   const text = await response.text();

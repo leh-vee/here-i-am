@@ -1,8 +1,8 @@
 <script>
   import DropDownMenu from "./DropDownMenu.svelte";
-  import { fetchFaqText } from '../../api/client.js';
-  import { faqLinesToText, faqLineIndex, screenWidth, 
-    screenHeight } from "../../stores/base";
+  import { fetchFaqText, fetchAboutMeText } from '../../api/client.js';
+  import { faqLinesToText, faqLineIndex, aboutMeText,
+    screenWidth, screenHeight } from "../../stores/base";
   import { tick, onMount } from 'svelte';
 
   onMount(async () => {
@@ -14,9 +14,19 @@
 
   let nobodyEl, ellipsisEl;
 
-  $: pFontSize = `${Math.round($screenWidth * 0.05)}px`;
+  $: meFontSize = `${Math.round($screenWidth * 0.05)}px`;
+  $: textFontSize = `${Math.round($screenWidth * 0.05)}px`;
   $: hFontSize = `${Math.round($screenWidth * 0.06)}px`;
   $: dotSize = `${Math.round($screenWidth * 0.07)}px`;
+
+  $: isAboutMeTextLoaded = $aboutMeText !== undefined;
+  $: if (!isAboutMeTextLoaded) loadAboutMeText(); 
+
+  function loadAboutMeText() {
+    fetchAboutMeText().then(lines => {
+      $aboutMeText = lines[0];
+    });
+  }
 
   $: isFaqLinesLoaded = $faqLinesToText.length > 0;
   $: if (!isFaqLinesLoaded) loadFaq();
@@ -114,11 +124,11 @@
 </script>
 
 <DropDownMenu isHidden={ !isVisible } on:close>
-  <div style="--pFontSize:{pFontSize}; --hFontSize:{hFontSize}; --dotSize:{dotSize}">
+  <div style="--meFontSize:{meFontSize}; --textFontSize:{textFontSize}; --hFontSize:{hFontSize}; --dotSize:{dotSize}">
     <div id='help'>
       <div id='me' class='section'>
         <h2>About Me</h2>
-        <p>Hi, my name is Levi, the dark mirror that reveals what I needs it to.</p>
+        <p>{ $aboutMeText }</p>
       </div>
       <div id='faq' class='section'>
         <h2>Frequently Asked Questions</h2>
@@ -152,7 +162,8 @@
 
   #me p {
     color: white;
-    font-size: var(--hFontSize);
+    font-size: var(--meFontSize);
+    font-family: "EB Garamond", serif;
   }
 
   #dialogue {
@@ -163,7 +174,7 @@
   }
   
   p.text {
-    font-size: var(--pFontSize);
+    font-size: var(--textFontSize);
     font-weight: 400;
     color: rgb(218, 218, 218);
     background-color: rgb(52, 52, 53);
