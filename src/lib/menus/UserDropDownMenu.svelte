@@ -176,7 +176,7 @@
 
   h2.button {
     font-size: var(--hFontSize);
-    border: 1px gold solid;
+    border: 1px dimgrey solid;
     border-radius: 5px;
     padding: 3%;
     margin-right: 8%;
@@ -185,7 +185,6 @@
   h2.button.pressed {
     color: gold;
     border-width: 0;
-    text-decoration: underline;
   }
 
   .section {
