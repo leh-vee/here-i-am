@@ -48,7 +48,7 @@
       Here I Am is a concrete poetry video game
       <a href="https://github.com/leh-vee/here-i-am" target="_blank">designed and developed</a>
       by Leon Lukashevsky. It is an adaptation of a poem that was anonymously
-      posted around my neighborhood during the pandemic and is dedicated to whoever wrote it.
+      posted around my neighborhood during the pandemic, and is dedicated to whoever wrote it.
     </p>
   </div>
   <h5 id='title'>
