@@ -8,8 +8,8 @@
   const piCountDown = serializeCountDown();
   let piSliceEl;
 
-  $: fontSize = `${Math.round($screenWidth * 0.3)}px`;
-  $: buttonRadius = `${Math.round($screenWidth * 0.4)}px`;
+  $: fontSize = `${Math.round($screenWidth * 0.5)}px`;
+  $: buttonRadius = `${Math.round($screenWidth * 0.7)}px`;
 
   $: if (isVisible) {
     $hasVerseNumberMenuOpened = true;
