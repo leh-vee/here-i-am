@@ -14,6 +14,7 @@
 
   let nobodyEl, ellipsisEl;
 
+  $: meFontSize = `${Math.round($screenWidth * 0.06)}px`;
   $: textFontSize = `${Math.round($screenWidth * 0.05)}px`;
   $: hFontSize = `${Math.round($screenWidth * 0.06)}px`;
   $: dotSize = `${Math.round($screenWidth * 0.07)}px`;
@@ -131,7 +132,7 @@
 </script>
 
 <DropDownMenu isHidden={ !isVisible } on:close>
-  <div style="--textFontSize:{textFontSize}; --hFontSize:{hFontSize}; --dotSize:{dotSize}">
+  <div style="--meFontSize:{meFontSize}; --textFontSize:{textFontSize}; --hFontSize:{hFontSize}; --dotSize:{dotSize}">
     <div id='user-menu'>
       <div class='tabs'>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -195,10 +196,15 @@
     display: block;
   }
 
+  #me {
+    margin: 0 5%;
+  }
+
   #me p {
-    color: white;
+    color: ghostwhite;
+    line-height: 1.5;
     font-family: 'Love Ya Like A Sister';
-    font-size: var(--textFontSize);
+    font-size: var(--meFontSize);
   }
 
   #dialogue {
