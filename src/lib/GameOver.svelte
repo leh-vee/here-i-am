@@ -56,7 +56,7 @@
   </h5>
   <div class='passage'>
     <p class:hide={!isHeaderVisible}>
-      For the foreseeable future the countdown will be continued at
+      For the foreseeable future the countdown will be continued as
       <a href="https://github.com/leh-vee/intersections" target="_blank">Intersections</a>,
       a companion project.
     </p>
