@@ -19,7 +19,7 @@ export const isScoreCallout = writable(false);
 export const isVerseCallout = writable(false);
 export const hasVerseNumberMenuOpened = writable(false);
 
-export const aboutMeText = writable(undefined); 
+export const aboutMeText = writable([]); 
 
 export const faqLinesToText = writable([]);
 export const faqLineIndex = writable(0);

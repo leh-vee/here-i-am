@@ -19,12 +19,12 @@
   $: hFontSize = `${Math.round($screenWidth * 0.06)}px`;
   $: dotSize = `${Math.round($screenWidth * 0.07)}px`;
 
-  $: isAboutMeTextLoaded = $aboutMeText !== undefined;
+  $: isAboutMeTextLoaded = $aboutMeText.length > 0;
   $: if (!isAboutMeTextLoaded) loadAboutMeText(); 
 
   function loadAboutMeText() {
     fetchAboutMeText().then(lines => {
-      $aboutMeText = lines[0];
+      $aboutMeText = [...lines];
     });
   }
 
@@ -128,7 +128,9 @@
     <div id='help'>
       <div id='me' class='section'>
         <h2>About Me</h2>
-        <p>{ $aboutMeText }</p>
+        {#each $aboutMeText as aboutMeParagraph}
+          <p>{ aboutMeParagraph }</p>
+        {/each}
       </div>
       <div id='faq' class='section'>
         <h2>Frequently Asked Questions</h2>
