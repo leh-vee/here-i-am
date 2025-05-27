@@ -14,7 +14,7 @@
 
   let nobodyEl, ellipsisEl;
 
-  $: meFontSize = `${Math.round($screenWidth * 0.04)}px`;
+  $: meFontSize = `${Math.round($screenWidth * 0.05)}px`;
   $: textFontSize = `${Math.round($screenWidth * 0.05)}px`;
   $: hFontSize = `${Math.round($screenWidth * 0.06)}px`;
   $: dotSize = `${Math.round($screenWidth * 0.07)}px`;
