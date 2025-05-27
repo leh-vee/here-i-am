@@ -37,7 +37,7 @@
     });
   }
 
-  $: isTexting = isVisible && isFaqLinesLoaded;
+  $: isTexting = isVisible && isFaqLinesLoaded && isFaqVisible;
   $: textType = $faqLineIndex % 2 === 0 ? 'question' : 'answer';
   
   let nTextChars = { current: 0, previous: 0 };
