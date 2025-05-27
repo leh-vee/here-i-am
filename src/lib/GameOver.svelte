@@ -45,10 +45,8 @@
   <HeaderMenu isVisible={ isHeaderVisible } />
   <div class='passage'>
     <p class:hide={!isHeaderVisible}>
-      Here I Am is a concrete poetry video game
-      <a href="https://github.com/leh-vee/here-i-am" target="_blank">designed and developed</a>
-      by Leon Lukashevsky. It is an adaptation of a poem that was anonymously
-      posted around my neighborhood during the pandemic, and is dedicated to whoever wrote it.
+      Here I Am is a concrete poetry video game, an adaptation of a poem that was anonymously
+      posted around my neighborhood during the pandemic. It's dedicated to whoever wrote it.
     </p>
   </div>
   <h5 id='title'>
@@ -56,9 +54,9 @@
   </h5>
   <div class='passage'>
     <p class:hide={!isHeaderVisible}>
-      For the foreseeable future the countdown will continue as
+      For the foreseeable future I plan to continue the countdown as
       <a href="https://github.com/leh-vee/intersections" target="_blank">Intersections</a>,
-      a companion project.
+      a companion project. Both are desinged and developed by Leon Lukashevsky, the real me.
     </p>
   </div>
 </div>
