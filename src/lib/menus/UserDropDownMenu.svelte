@@ -121,19 +121,31 @@
 
   $: isEllipsis = isTyping || isFinalEllipsis;
 
+  let isMeVisible = true;
+  $: isFaqVisible = !isMeVisible;
+
+  function showSection(e) {
+    const isMeButtonClicked = e.currentTarget.classList.contains('me');
+    isMeVisible = isMeButtonClicked;
+  }
+
 </script>
 
 <DropDownMenu isHidden={ !isVisible } on:close>
   <div style="--meFontSize:{meFontSize}; --textFontSize:{textFontSize}; --hFontSize:{hFontSize}; --dotSize:{dotSize}">
-    <div id='help'>
-      <div id='me' class='section'>
-        <h2>About Me</h2>
+    <div id='user-menu'>
+      <div class='tabs'>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <h2 class='me button' class:pressed={isMeVisible} on:click={ showSection }>About Me</h2>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <h2 class='faq button' class:pressed={isFaqVisible} on:click={ showSection }>FAQ</h2>
+      </div>
+      <div id='me' class='section' class:visible={isMeVisible}>
         {#each $aboutMeText as aboutMeParagraph}
           <p>{ aboutMeParagraph }</p>
         {/each}
       </div>
-      <div id='faq' class='section'>
-        <h2>Frequently Asked Questions</h2>
+      <div id='faq' class='section' class:visible={isFaqVisible}>
         <div id='dialogue'>
           {#each $faqLinesToText.slice(0, $faqLineIndex) as text, i}
             <p class='text {getTextType(i)}'>{ text }</p>
@@ -151,15 +163,37 @@
 </DropDownMenu>
 
 <style>
-  #help {
+  #user-menu {
     padding: 0 3%;
     font-family: Helvetica, sans-serif;
     overflow-y: inherit;
   } 
 
-  h2 {
-    color: gold;
+  .tabs {
+    display: flex;
+    justify-content: center;
+  }
+
+  h2.button {
     font-size: var(--hFontSize);
+    border: 1px gold solid;
+    border-radius: 5px;
+    padding: 3%;
+    margin-right: 8%;
+  }
+  
+  h2.button.pressed {
+    color: gold;
+    border-width: 0;
+    text-decoration: underline;
+  }
+
+  .section {
+    display: none;
+  }
+
+  .section.visible {
+    display: block;
   }
 
   #me p {
