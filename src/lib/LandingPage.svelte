@@ -255,7 +255,7 @@
 {#if isHeads}
   {#if isFirstLocation}
     <div class="alpha-badge">
-      0.8-alpha.1
+      0.9-alpha.1
     </div>
     <div id='caveat' style="--caveatFontSize:{caveatFontSize}">
       <p>This game plays best on small, touch screens</p>
