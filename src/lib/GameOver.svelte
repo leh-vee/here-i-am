@@ -45,12 +45,11 @@
   <HeaderMenu isVisible={ isHeaderVisible } />
   <div class='passage'>
     <p class:hide={!isHeaderVisible}>
-      Here I Am was designed and developed by Leon Lukashevsky. 
-      My Hebrew name is Levi. Anyone keeping score will remember
-      that the <span class='italic'>me</span> character
-      in the user menu is called that too. The Frequently Asked
-      Questions dialogue following his introudctuon was written
-      collaboratively, by all three of us at the very least.
+      Here I Am is a concrete poetry video game
+      <a href="https://github.com/leh-vee/here-i-am" target="_blank">designed and developed</a>
+      by Leon Lukashevsky. It is an adaptation of a poem that was anonymously
+      posted around my neighborhood during the pandemic. It’s dedicated to
+      people whose names I won't remember.
     </p>
   </div>
   <h5 id='title'>
@@ -58,11 +57,7 @@
   </h5>
   <div class='passage'>
     <p class:hide={!isHeaderVisible}>
-      Intersections, our poetry collection published by Placeholder Press
-      is a companion work to this game. It opens with a reproduction of
-      Here I Am as it appeared on flyers anonymously posted around my Toronto
-      neighbourhood in the spring of 2021. Each poem in the book is inspired
-      by a brief encounter between imperfect strangers.
+      For the foreseeable future the countdown will continue over here.
     </p>
   </div>
 </div>
@@ -102,9 +97,5 @@
 
   p.hide {
     opacity: 0;
-  }
-
-  .italic {
-    font-style: italic;
   }
 </style>
