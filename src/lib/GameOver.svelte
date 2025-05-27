@@ -56,7 +56,8 @@
     <p class:hide={!isHeaderVisible}>
       For the foreseeable future I plan to continue the countdown at
       <a href="https://github.com/leh-vee/intersections" target="_blank">Intersections</a>,
-      a companion project. Both are desinged and developed by Leon Lukashevsky, the real me.
+      a companion project. Both are desinged and developed by Leon Lukashevsky, the real me
+      if you like.
     </p>
   </div>
 </div>
