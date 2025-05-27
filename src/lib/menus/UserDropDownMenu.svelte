@@ -183,8 +183,8 @@
   }
   
   h2.button.pressed {
+    border-color: gold;
     color: gold;
-    border-width: 0;
   }
 
   .section {
