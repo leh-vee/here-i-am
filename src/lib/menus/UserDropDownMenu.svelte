@@ -202,7 +202,6 @@
   #me p {
     color: ghostwhite;
     line-height: 1.5;
-    font-family: initial;
     font-size: var(--meFontSize);
   }
 
