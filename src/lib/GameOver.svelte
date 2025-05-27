@@ -9,7 +9,7 @@
   const goStrLength = gameOverStr.length;
   const fontFamily = "Press Start 2P";
 
-  $: margin = `${Math.round($screenWidth * 0.2)}px`;
+  $: margin = `${Math.round($screenWidth * 0.1)}px`;
   
   let goSubstrIndex = 0;
   let isHeaderVisible = false;
@@ -48,8 +48,7 @@
       Here I Am is a concrete poetry video game
       <a href="https://github.com/leh-vee/here-i-am" target="_blank">designed and developed</a>
       by Leon Lukashevsky. It is an adaptation of a poem that was anonymously
-      posted around my neighborhood during the pandemic. It’s dedicated to
-      people whose names I won't remember.
+      posted around my neighborhood during the pandemic and is dedicated to whoever wrote it.
     </p>
   </div>
   <h5 id='title'>
@@ -57,7 +56,9 @@
   </h5>
   <div class='passage'>
     <p class:hide={!isHeaderVisible}>
-      For the foreseeable future the countdown will continue over here.
+      For the foreseeable future the countdown will be continued at
+      <a href="https://github.com/leh-vee/intersections" target="_blank">Intersections</a>,
+      a companion project.
     </p>
   </div>
 </div>
