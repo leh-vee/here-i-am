@@ -178,7 +178,7 @@
     font-size: var(--hFontSize);
     border: 1px dimgrey solid;
     border-radius: 5px;
-    padding: 3%;
+    padding: 2%;
     margin-right: 8%;
   }
   
