@@ -14,7 +14,7 @@
 
   let nobodyEl, ellipsisEl;
 
-  $: meFontSize = `${Math.round($screenWidth * 0.06)}px`;
+  $: meFontSize = `${Math.round($screenWidth * 0.04)}px`;
   $: textFontSize = `${Math.round($screenWidth * 0.05)}px`;
   $: hFontSize = `${Math.round($screenWidth * 0.06)}px`;
   $: dotSize = `${Math.round($screenWidth * 0.07)}px`;
@@ -202,7 +202,7 @@
   #me p {
     color: ghostwhite;
     line-height: 1.5;
-    font-family: 'Love Ya Like A Sister';
+    font-family: initial;
     font-size: var(--meFontSize);
   }
 
