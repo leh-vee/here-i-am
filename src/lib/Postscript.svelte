@@ -100,13 +100,13 @@
   }
 
   .footer.visible {
-    font-size: 2.5dvh;
+    font-size: 3dvh;
   }
 
   .bullet {
     opacity: 0.5;
     transition: opacity 500ms ease-in-out;
-    margin: 0 1px;
+    margin: 0 1%;
   }
 
   .bullet.selected {
