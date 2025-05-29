@@ -4,25 +4,31 @@
   import MastersOfPi from './MastersOfPi.svelte';
   import { swipe } from 'svelte-gestures';
 
-  let isGameOverScreen = true;
   let isGameOverReady = false;
-
-  $: isLeaderBoard = !isGameOverScreen;
+  
+  let slides = ['gameOver', 'leaderBoard', 'credits', 'dedication'];
+  const nSlides = slides.length;
+  let currentSlideIndex = 0;
+  $: currentSlide = slides[currentSlideIndex];
 
   function swiped(event) {
     const direction = event.detail.direction;
     if (direction === 'left') {
-      isGameOverScreen = false;
+      if (currentSlideIndex < nSlides - 1) currentSlideIndex++; 
     } else {
-      isGameOverScreen = true;
+      if (currentSlideIndex > 0) currentSlideIndex--;
     }
+  }
+
+  function scrollToSlide(index) {
+    currentSlideIndex = index;
   }
 
 </script>
 
 <div id='postscript'>
   <HeaderMenu isVisible={ isGameOverReady } />
-  <div id='slider-container' class:high-scores={ isLeaderBoard }
+  <div id='slider-container' class={currentSlide}
     use:swipe={{ timeframe: 300, minSwipeDistance: 60 }} on:swipe={(e) => { swiped(e) }}>
     <div class='pane'>
       <GameOver on:visible={ () => { isGameOverReady = true } } />
@@ -30,18 +36,17 @@
     <div class='pane'>
       <MastersOfPi />
     </div>
+    <div class='pane'></div>
+    <div class='pane'></div>
   </div> 
   <div class='footer' class:visible={ isGameOverReady }>
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <span class='bullet' class:selected={ isGameOverScreen }
-      on:click={ () => { isGameOverScreen = true } }>
-      &bull;
-    </span>
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <span class='bullet' class:selected={ isLeaderBoard }
-      on:click={ () => { isGameOverScreen = false } }>
-      &bull;
-    </span>
+    {#each slides as _, i}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <span class='bullet' class:selected={ currentSlideIndex === i }
+        on:click={ () => scrollToSlide(i) }>
+        &bull;
+      </span>
+    {/each}
   </div>
 </div>
 
@@ -54,13 +59,21 @@
 
   #slider-container {
     height: 100%;
-    width: 200%;
+    width: 400%;
     display: flex;
     transition: transform 500ms ease-in-out;
   }
   
-  #slider-container.high-scores {
+  #slider-container.leaderBoard {
+    transform: translateX(-25%);
+  }
+
+  #slider-container.credits {
     transform: translateX(-50%);
+  }
+
+  #slider-container.dedication {
+    transform: translateX(-75%);
   }
 
   .pane {
