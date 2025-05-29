@@ -45,7 +45,7 @@
   <HeaderMenu isVisible={ isHeaderVisible } />
   <div class='passage'>
     <p class:hide={!isHeaderVisible}>
-      For my neighbours. 
+      For my neighbour. 
     </p>
   </div>
   <h5 id='title'>
