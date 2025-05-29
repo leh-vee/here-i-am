@@ -45,7 +45,7 @@
   <HeaderMenu isVisible={ isHeaderVisible } />
   <div class='passage'>
     <p class:hide={!isHeaderVisible}>
-      Here I Am is desinged and developed by Leon Lukashevsky.
+      For my neighbour. 
     </p>
   </div>
   <h5 id='title'>
@@ -53,8 +53,7 @@
   </h5>
   <div class='passage'>
     <p class:hide={!isHeaderVisible}>
-      It is part of a larger project called
-      <a href="https://github.com/leh-vee/intersections" target="_blank">Intersections</a>. 
+      Here I Am was desinged and developed by Leon Lukashevsky.
     </p>
   </div>
 </div>
