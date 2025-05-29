@@ -9,7 +9,7 @@
   let piSliceEl;
 
   $: fontSize = `${Math.round($screenWidth * 0.5)}px`;
-  $: buttonRadius = `${Math.round($screenWidth * 0.7)}px`;
+  $: buttonDiameter = `${Math.round($screenWidth * 0.62)}px`;
 
   $: if (isVisible) {
     $hasVerseNumberMenuOpened = true;
@@ -26,7 +26,7 @@
 </script>
 
 <DropDownMenu isHidden={ !isVisible } on:close>
-  <div id='countdown' style="--fontSize:{fontSize}; --buttonRadius:{buttonRadius}">
+  <div id='countdown' style="--fontSize:{fontSize}; --buttonDiameter:{buttonDiameter}">
     {#each piCountDown as piSlice, i}
       {#if $currentVerseIndex === i}
         <div id='current' class='pi-slice' bind:this={ piSliceEl }>
@@ -51,8 +51,8 @@
   } 
   
   .pi-slice {
-    width: var(--buttonRadius);
-    height: var(--buttonRadius);
+    width: var(--buttonDiameter);
+    height: var(--buttonDiameter);
     margin: 3dvh;
     background-color: grey;
     border-radius: 50%;
