@@ -36,8 +36,12 @@
     <div class='pane'>
       <MastersOfPi />
     </div>
-    <div class='pane'></div>
-    <div class='pane'></div>
+    <div class='pane'>
+      <p>Designed and developed by Leon Lukashevsky</p>
+    </div>
+    <div class='pane'>
+      <p>For my neighbour</p>
+    </div>
   </div> 
   <div class='footer' class:visible={ isGameOverReady }>
     {#each slides as _, i}
@@ -79,6 +83,9 @@
   .pane {
     height: 100%;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .footer {
@@ -93,7 +100,7 @@
   }
 
   .footer.visible {
-    font-size: 5dvh;
+    font-size: 2.5dvh;
   }
 
   .bullet {
@@ -104,5 +111,14 @@
 
   .bullet.selected {
     opacity: 1;
+  }
+
+  .pane p {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 1.5dvh;
+    line-height: 3dvh;
+    color: lightgray;
+    text-align: center;
+    padding: 0 5%;
   }
 </style>
