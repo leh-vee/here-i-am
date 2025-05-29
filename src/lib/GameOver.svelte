@@ -52,10 +52,9 @@
     { goSubstr }
   </h5>
   <div class='passage'>
-    <p class:hide={!isHeaderVisible}> 
-      You can find more of his work at
-      <a href="https://github.com/leh-vee/intersections" target="_blank">Intersections</a>,
-      a companion project to this one. 
+    <p class:hide={!isHeaderVisible}>
+      It is part of a larger project called
+      <a href="https://github.com/leh-vee/intersections" target="_blank">Intersections</a>. 
     </p>
   </div>
 </div>
