@@ -2,17 +2,17 @@
   const leaders = [
     {
       name: 'Richard',
-      time: '13:07.956',
+      time: '89:21.654',
       date: '04/02/25'
     },
     {
       name: 'Mia',
-      time: '25:21.112',
+      time: '75:21.112',
       date: '03/01/25'
     },
     {
       name: 'Dan',
-      time: '31:21.654',
+      time: '71:07.956',
       date: '21/11/24'
     }
   ]
@@ -22,7 +22,7 @@
 <div id='leader-board'>
   <div id='titles'>
     <h1 id='main'>Masters of π</h1>
-    <h5 id='sub'>&mdash; all time quickest hat tricks &mdash;</h5>
+    <h5 id='sub'>&mdash; all time slowest hat tricks &mdash;</h5>
   </div>
   <div id='leaders'>
     {#each leaders as leader, i}
@@ -60,9 +60,9 @@
   }
 
   #titles #sub {
-    margin-top: 0;
-    font-size: 1.5dvh;
-    font-family: 'courgette';
+    margin-top: 5px;
+    font-size: 1dvh;
+    font-family: 'Press Start 2P';
     color: white;
   }
 
@@ -88,8 +88,8 @@
   }
 
   .leader .name {
-    font-size: 5dvh;
-    font-family: 'Love Ya Like A Sister';
+    font-size: 3dvh;
+    font-family: 'Press Start 2P';
   } 
 
   .leader:nth-of-type(1) .name {
@@ -105,14 +105,14 @@
   }
 
   .leader .time {
-    font-size: 7dvh;
+    font-size: 6dvh;
     color: white;
     font-family: 'digital';
   }
 
   .leader .date {
-    font-family: 'Homemade Apple';
-    font-size: 2dvh;
+    font-family: 'Press Start 2P';
+    font-size: 1.5dvh;
     margin: 0;
     color: lightgray;
   }

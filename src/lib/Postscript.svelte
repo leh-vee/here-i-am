@@ -37,10 +37,10 @@
       <MastersOfPi />
     </div>
     <div class='pane'>
-      <p>Designed and developed by Leon Lukashevsky</p>
+      <p>For my neighbour</p>
     </div>
     <div class='pane'>
-      <p>For my neighbour</p>
+      <p>Designed and developed by Leon Lukashevsky</p>
     </div>
   </div> 
   <div class='footer' class:visible={ isGameOverReady }>
@@ -100,13 +100,13 @@
   }
 
   .footer.visible {
-    font-size: 3dvh;
+    font-size: 4dvh;
   }
 
   .bullet {
     opacity: 0.5;
     transition: opacity 500ms ease-in-out;
-    margin: 0 1%;
+    margin: 0;
   }
 
   .bullet.selected {
@@ -114,9 +114,9 @@
   }
 
   .pane p {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 1.5dvh;
-    line-height: 3dvh;
+    font-family: 'Press Start 2P';
+    line-height: 1.5;
+    font-size: 4dvw;
     color: lightgray;
     text-align: center;
     padding: 0 5%;
