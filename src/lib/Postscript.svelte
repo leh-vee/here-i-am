@@ -37,10 +37,10 @@
       <MastersOfPi />
     </div>
     <div class='pane'>
-      <p>For my neighbour</p>
+      <p>Designed and developed by Leon Lukashevsky</p>
     </div>
     <div class='pane'>
-      <p>Designed and developed by Leon Lukashevsky</p>
+      <p>For my neighbour</p>
     </div>
   </div> 
   <div class='footer' class:visible={ isGameOverReady }>
@@ -96,7 +96,7 @@
     color: white;
     text-align: center;
     font-size: 0dvh;
-    transition: font-size 1s ease-in-out 500ms;
+    transition: font-size 3.14s ease-in-out;
   }
 
   .footer.visible {
