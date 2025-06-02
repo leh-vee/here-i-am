@@ -9,7 +9,7 @@
   let piSliceEl;
 
   $: fontSize = `${Math.round($screenWidth * 0.5)}px`;
-  $: buttonDiameter = `${Math.round($screenWidth * 0.62)}px`;
+  $: buttonDiameter = `${Math.round($screenWidth * 0.7)}px`;
 
   $: if (isVisible) {
     $hasVerseNumberMenuOpened = true;
