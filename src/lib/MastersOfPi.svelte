@@ -88,7 +88,7 @@
   }
 
   .leader .name {
-    font-size: 3dvh;
+    font-size: 3.5dvh;
     font-family: 'Press Start 2P';
   } 
 
