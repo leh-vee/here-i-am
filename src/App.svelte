@@ -2,9 +2,10 @@
   import { sefirotPoints, channelLines, channelProjections, 
     ilanProjection, ilanBlocks, groundZeroProjection, 
     groundZeroBlocks, groundZeroRotationBlocks } from './stores/treeOfLife.js';
-  import { screenWidth, screenHeight, isScreenDimensionsStored, isDataInitialized } from './stores/base'; 
+  import { screenWidth, screenHeight, isScreenDimensionsStored, 
+    tossUpCoordinates, isDataInitialized } from './stores/base'; 
   import { projectionForGroundZero, projectionsForChannels, projectionForIlan } from './utils/projections.js';
-  import { fetchSefirot, fetchBlocksForProjection } from './api/client.js';
+  import { fetchSefirot, fetchBlocksForProjection, fetchRandoNodes } from './api/client.js';
   import { channelFeatures } from './utils/geoJson.js';
   import Conductor from './lib/Conductor.svelte';
   import LandingPage from './lib/LandingPage.svelte';
@@ -16,11 +17,23 @@
   $: isScreenElMounted = screenEl !== undefined;
   $: isScreenBorder = !isLandingPage && isSkinnyScreen;
   
+  $: if (isLandingPage) storeTossUpLocations();
   $: if (isLandingPage && isScreenElMounted) storeDimensions(screenElWidth, screenElHieght);
   $: if (!isLandingPage && $isScreenDimensionsStored) setIlanData();
   $: if (!isLandingPage && !$isScreenDimensionsStored && isScreenElMounted) {
     storeDimensions();
     setIlanData();
+  }
+
+  async function storeTossUpLocations() {
+    const randoIntersectionsGeoJson = await fetchRandoNodes(3);
+    const highParkAndGlenlakeCoords = [-79.466850201826205, 43.657227646269199];
+    const tossUpCoords = [];
+    randoIntersectionsGeoJson.features.forEach(feature => {
+      tossUpCoords.push(feature.geometry.coordinates);
+    });
+    tossUpCoords.push(highParkAndGlenlakeCoords);
+    $tossUpCoordinates = tossUpCoords;
   }
 
   function storeDimensions(w = screenElWidth, h = screenElHieght) {

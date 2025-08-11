@@ -5,7 +5,7 @@
   import Number from './landing_page/Number.svelte';
   import IntroCouplet from './landing_page/IntroCouplet.svelte';
   import MapTiles from './MapTiles.svelte';
-  import { screenWidth, screenHeight } from '../stores/base'; 
+  import { screenWidth, screenHeight, tossUpCoordinates } from '../stores/base'; 
   import { onDestroy } from 'svelte';
   import { createEventDispatcher } from 'svelte';
   
@@ -13,13 +13,6 @@
 
   let isDestroyed = false;
 	onDestroy(() => { isDestroyed = true });
-
-  const coordFixtures = [
-    [-79.386788067996605, 43.670226390504098],
-    [-79.497769710547999, 43.750492139210003],
-    [-79.306775909005395, 43.705856672084899],
-    [-79.466850201826205, 43.657227646269199]
-  ];
 
   $: yCentre = $screenHeight / 2;
   $: xCentre = $screenWidth / 2;
@@ -39,7 +32,8 @@
 
   let coordIndex = 0;
   $: countdownNumber = 3 - coordIndex;
-  $: groundZeroCoordsGcs = coordFixtures[coordIndex];
+  $: areTossUpCoordsFetched = $tossUpCoordinates !== false;
+  $: groundZeroCoordsGcs = areTossUpCoordsFetched ? $tossUpCoordinates[coordIndex] : null;
   $: isFinalLocation = coordIndex === 3;
   $: isFirstLocation = coordIndex === 0;
 
@@ -53,7 +47,7 @@
       if (isDestroyed) return null;
       nTotalFlips += 1;
       await flipCoin();
-      if (isTileMapLoading || nTotalFlips < 3) {
+      if (!areTossUpCoordsFetched || isTileMapLoading || nTotalFlips < 3) {
         flip();
       } else {
         retractCoinOverflow();
@@ -192,10 +186,12 @@
   }
 
 </script>
-{#key coordIndex}
-  <MapTiles centreCoordsGcs={ groundZeroCoordsGcs } 
-    on:loaded={ () => { isTileMapLoading = false } } />
-{/key}
+{#if areTossUpCoordsFetched }
+  {#key coordIndex}
+    <MapTiles centreCoordsGcs={ groundZeroCoordsGcs } 
+      on:loaded={ () => { isTileMapLoading = false } } />
+  {/key}
+{/if}
 <div id='landing-page'>
   <Stage config={{ width: $screenWidth, height: $screenHeight }} on:pointerclick={ click }>
     <Layer>

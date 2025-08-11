@@ -10,6 +10,8 @@ export const isScreenDimensionsStored = derived(
   }
 );
 
+export const tossUpCoordinates = writable(false);
+
 export const isDataInitialized = writable(false);
 
 export const hasTappedEllipsis = writable(false);

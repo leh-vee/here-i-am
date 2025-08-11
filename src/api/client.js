@@ -6,6 +6,11 @@ export async function fetchSefirot() {
   return JSON.parse(sefirotJson);
 }
 
+export async function fetchRandoNodes(n = 4) {
+  const nodeJson = await fetchData(`street-nodes/${n}`);
+  return JSON.parse(nodeJson); 
+}
+
 export async function fetchBlocksWithinRadius(centroidCoords, radiusKm) {
   const json = { centroidCoords, radiusKm }
   const blocksJson = await fetchData('street-edges/within-radius', 
