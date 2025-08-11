@@ -10,7 +10,7 @@
   const dispatch = createEventDispatcher();
 
   export let centreCoordsGcs;
-  export let zoom = 13;
+  export let zoom = 14;
 
   const mapBoxApiKey = import.meta.env.VITE_MAPBOX_API_KEY;
   const mvtId = 'le0nl.dd0rj3wo';
