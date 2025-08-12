@@ -14,7 +14,7 @@ async function fetchWithRetry(url, options, retries, delay = 3000) {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      return response.json();
+      return response.text();
     } catch (error) {
       if (i < retries - 1) {
         await new Promise(resolve => setTimeout(resolve, delay));
