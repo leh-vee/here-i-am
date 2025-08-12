@@ -7,7 +7,7 @@ export async function fetchSefirot() {
 }
 
 export async function fetchRandoNodes(n = 4) {
-  const nodeJson = await fetchData(`street-nodes/${n}`);
+  const nodeJson = await fetchData(`street-nodes/random/${n}`);
   return JSON.parse(nodeJson); 
 }
 
