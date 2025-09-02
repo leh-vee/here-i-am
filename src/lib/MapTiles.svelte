@@ -52,7 +52,7 @@
   }
 
   let tilesLoading = 0;
-  let tilesLoaded= 0;
+  let tilesLoaded = 0;
   vectorTileSource.on('tileloadstart', () => {
     tilesLoading += 1;
   });
