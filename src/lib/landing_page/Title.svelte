@@ -2,7 +2,7 @@
   import { Text } from 'svelte-konva';
   import { screenWidth, screenHeight } from '../../stores/base';
 
-  const title = "Here\nI Am";
+  const title = "Here\nI am";
   const fontFamily = "Love Ya Like A Sister";
   const fontSize = Math.round($screenWidth / 4.5);
   const fill = 'gold';
